@@ -1,0 +1,46 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - page_manager.page.access_denied
+  module:
+    - user
+id: access_denied-layout_builder-1
+label: Authenticated
+variant: layout_builder
+variant_settings:
+  id: layout_builder
+  uuid: a9d430ca-a7aa-4003-8def-1bab52b0d352
+  label: null
+  weight: 0
+  sections:
+    -
+      layout_id: barrio_col2-equal
+      layout_settings:
+        label: ''
+        context_mapping: {  }
+      components:
+        ac04e370-5810-40a0-b3da-9be7ef7da3c4:
+          uuid: ac04e370-5810-40a0-b3da-9be7ef7da3c4
+          region: top
+          configuration:
+            id: living_spaces_access_denied_block
+            label: 'Access denied'
+            provider: living_spaces
+            label_display: '0'
+            context_mapping: {  }
+          additional: {  }
+          weight: 0
+      third_party_settings: {  }
+page: access_denied
+weight: 0
+selection_criteria:
+  -
+    id: user_role
+    roles:
+      authenticated: authenticated
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+selection_logic: and
+static_context: {  }

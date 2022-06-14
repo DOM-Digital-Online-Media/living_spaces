@@ -1,0 +1,7 @@
+modules:
+  group: group
+  living_spaces_page: living_spaces_page
+  living_spaces_sections: living_spaces_sections
+  living_spaces_group_privacy: living_spaces_group_privacy
+permissions: {  }
+names: {  }

@@ -1,0 +1,54 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.profile.first_last_names
+    - field.field.profile.core.field_birthday
+    - field.field.profile.core.field_denomination
+    - field.field.profile.core.field_first_name
+    - field.field.profile.core.field_gender
+    - field.field.profile.core.field_last_name
+    - field.field.profile.core.field_occupation
+    - profile.type.core
+  module:
+    - empty_fields
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: false
+id: profile.core.first_last_names
+targetEntityType: profile
+bundle: core
+mode: first_last_names
+content:
+  field_first_name:
+    weight: 0
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings:
+      empty_fields:
+        handler: text
+        settings:
+          empty_text: 'Not released'
+    type: string
+    region: content
+  field_last_name:
+    weight: 1
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings:
+      empty_fields:
+        handler: text
+        settings:
+          empty_text: 'Not released'
+    type: string
+    region: content
+hidden:
+  field_birthday: true
+  field_denomination: true
+  field_gender: true
+  field_occupation: true
+  search_api_excerpt: true

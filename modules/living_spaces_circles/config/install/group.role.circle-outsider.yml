@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.circle
+id: circle-outsider
+label: Outsider
+weight: -101
+internal: true
+audience: outsider
+group_type: circle
+permissions_ui: true
+permissions:
+  - 'join group'
+  - 'join public group'
+  - 'view public group'

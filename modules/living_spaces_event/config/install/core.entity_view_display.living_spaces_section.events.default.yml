@@ -1,0 +1,75 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - living_spaces_sections.living_spaces_section_type.events
+    - views.view.calendar
+  module:
+    - layout_builder
+    - layout_discovery
+    - living_spaces_sections
+    - views
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+        components:
+          ad6756a6-9604-4af8-8c8b-f627d4614c8c:
+            uuid: ad6756a6-9604-4af8-8c8b-f627d4614c8c
+            region: content
+            configuration:
+              id: living_spaces_section_actions_block
+              label: 'Living Spaces section actions'
+              provider: living_spaces_sections
+              label_display: '0'
+              context_mapping:
+                section: layout_builder.entity
+            additional: {  }
+            weight: 0
+        third_party_settings: {  }
+      -
+        layout_id: layout_twocol_section
+        layout_settings:
+          label: ''
+          column_widths: 75-25
+          context_mapping: {  }
+        components:
+          2100e9f1-1aed-4059-81d2-427d634a768f:
+            uuid: 2100e9f1-1aed-4059-81d2-427d634a768f
+            region: second
+            configuration:
+              id: living_spaces_event_legend_block
+              label: 'Legend block'
+              provider: living_spaces_event
+              label_display: '0'
+              context_mapping:
+                section: layout_builder.entity
+            additional: {  }
+            weight: 0
+          72fbd6a2-919f-4d92-b95f-523e791e831d:
+            uuid: 72fbd6a2-919f-4d92-b95f-523e791e831d
+            region: first
+            configuration:
+              id: 'views_block:calendar-events'
+              label: ''
+              provider: views
+              label_display: '0'
+              views_label: ''
+              items_per_page: none
+              context_mapping: {  }
+            additional: {  }
+            weight: 0
+        third_party_settings: {  }
+id: living_spaces_section.events.default
+targetEntityType: living_spaces_section
+bundle: events
+mode: default
+content: {  }
+hidden:
+  search_api_excerpt: true

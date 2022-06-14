@@ -1,0 +1,11 @@
+living_spaces_event.add_living_spaces_event:
+  route_name: 'entity.living_spaces_event.add_page'
+  title: 'Add space event'
+  appears_on:
+    - 'entity.living_spaces_event.collection'
+
+living_spaces_event.add_group_living_spaces_event_type:
+  route_name: 'entity.living_spaces_event_type.add_form'
+  title: 'Add space event type'
+  appears_on:
+    - 'entity.living_spaces_event_type.collection'

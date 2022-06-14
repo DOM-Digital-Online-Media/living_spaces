@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_group
+id: living_space_members
+label: Members
+description: ''
+use_admin_theme: false
+path: '/group/{group}/members'
+access_logic: and
+access_conditions: {  }
+parameters:
+  group:
+    machine_name: group
+    type: 'entity:group'
+    label: group

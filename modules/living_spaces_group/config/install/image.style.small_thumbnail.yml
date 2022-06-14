@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_group
+name: small_thumbnail
+label: 'Small thumbnail'
+effects:
+  0166e22c-2df7-41fc-aa2b-4e49de010f84:
+    uuid: 0166e22c-2df7-41fc-aa2b-4e49de010f84
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 30
+      height: 30
+      anchor: center-center

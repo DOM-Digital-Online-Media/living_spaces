@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.agenda
+id: node.agenda.title
+field_name: title
+entity_type: node
+bundle: agenda
+label: 'Title of agenda'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

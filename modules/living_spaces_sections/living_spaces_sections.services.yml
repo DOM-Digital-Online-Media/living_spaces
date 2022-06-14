@@ -1,0 +1,15 @@
+services:
+  # Note that priority should be higher than route_enhancer.entity.
+  route_enhancer.living_spaces_sections:
+    class: Drupal\living_spaces_sections\Enhancer\LivingSpacesSectionsRouteEnhancer
+    arguments: ['@entity_type.manager', '@living_spaces_sections.manager']
+    tags:
+      - { name: route_enhancer, priority: 30 }
+  living_spaces_sections.manager:
+    class: Drupal\living_spaces_sections\LivingSpacesSectionsManager
+    arguments: ['@entity_type.manager', '@config.factory']
+  living_spaces_sections.group_context:
+    class: Drupal\living_spaces_sections\Context\LivingSpacesSectionsGroupContext
+    arguments: ['@living_spaces_sections.manager', '@string_translation', '@current_route_match', '@entity_type.manager']
+    tags:
+      - { name: 'context_provider' }

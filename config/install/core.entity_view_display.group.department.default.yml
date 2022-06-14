@@ -1,0 +1,141 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.group.department.field_space_denomination
+    - field.field.group.department.field_space_functions
+    - group.type.department
+    - views.view.group_content
+    - views.view.group_members
+    - views.view.message
+    - views.view.recent_discussions
+  module:
+    - layout_builder
+    - living_spaces_group
+    - living_spaces_subgroup
+    - options
+    - views
+  theme:
+    - bootstrap_barrio
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: true
+    sections:
+      -
+        layout_id: barrio_col2-equal
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+        components:
+          8d849ae2-c8bc-484e-bd0b-546dca185f0e:
+            uuid: 8d849ae2-c8bc-484e-bd0b-546dca185f0e
+            region: first
+            configuration:
+              id: living_spaces_group_tree_block
+              label: 'Group Tree'
+              provider: living_spaces_subgroup
+              label_display: visible
+              context_mapping:
+                group: layout_builder.entity
+            additional: {  }
+            weight: 1
+          3bafb8f2-2995-4fad-852e-6e25050f3e93:
+            uuid: 3bafb8f2-2995-4fad-852e-6e25050f3e93
+            region: first
+            configuration:
+              id: 'views_block:recent_discussions-posts'
+              label: ''
+              provider: views
+              label_display: visible
+              views_label: ''
+              items_per_page: '4'
+              context_mapping: {  }
+            additional: {  }
+            weight: 2
+          98a8e562-dd57-432a-ae62-1aaf7fff6c84:
+            uuid: 98a8e562-dd57-432a-ae62-1aaf7fff6c84
+            region: second
+            configuration:
+              id: 'views_block:group_content-events'
+              label: ''
+              provider: views
+              label_display: visible
+              views_label: ''
+              items_per_page: none
+              context_mapping: {  }
+            additional: {  }
+            weight: 0
+          0785fad7-e08b-4ec1-9e7f-442c7b07b432:
+            uuid: 0785fad7-e08b-4ec1-9e7f-442c7b07b432
+            region: second
+            configuration:
+              id: 'views_block:group_members-recently_online'
+              label: ''
+              provider: views
+              label_display: visible
+              views_label: ''
+              items_per_page: none
+              context_mapping: {  }
+            additional: {  }
+            weight: 1
+          ad6e3a7d-cab6-405f-b197-80f2049e6fff:
+            uuid: ad6e3a7d-cab6-405f-b197-80f2049e6fff
+            region: first
+            configuration:
+              id: 'views_block:message-space_activity'
+              label: ''
+              provider: views
+              label_display: visible
+              views_label: ''
+              items_per_page: none
+              context_mapping: {  }
+            additional: {  }
+            weight: 3
+          93d2f204-d44d-4b45-b188-406336de7635:
+            uuid: 93d2f204-d44d-4b45-b188-406336de7635
+            region: first
+            configuration:
+              id: living_spaces_group_actions_block
+              label: 'Space actions'
+              provider: living_spaces_group
+              label_display: '0'
+              context_mapping:
+                group: layout_builder.entity
+            additional: {  }
+            weight: 0
+        third_party_settings: {  }
+id: group.department.default
+targetEntityType: group
+bundle: department
+mode: default
+content:
+  field_space_denomination:
+    weight: -4
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+  field_space_functions:
+    weight: -3
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  label:
+    label: hidden
+    type: string
+    weight: -5
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+hidden:
+  changed: true
+  created: true
+  langcode: true
+  search_api_excerpt: true
+  uid: true

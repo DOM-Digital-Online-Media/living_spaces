@@ -1,0 +1,6 @@
+living space create employees:
+  title: 'Access create employees form'
+  description: 'Allow access to create employees form'
+access intranet dashboard:
+  title: 'Access intranet dashboard'
+  description: 'Allow access intranet dashboard'

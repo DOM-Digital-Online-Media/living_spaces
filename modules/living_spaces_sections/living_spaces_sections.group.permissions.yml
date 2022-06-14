@@ -1,0 +1,6 @@
+access living spaces sections settings:
+  title: 'Access living spaces sections settings'
+  description: 'Allow access to manage sections and their settings on living space'
+
+permission_callbacks:
+  - \Drupal\living_spaces_sections\LivingSpacesSectionsPermissions::sectionTypePermissions

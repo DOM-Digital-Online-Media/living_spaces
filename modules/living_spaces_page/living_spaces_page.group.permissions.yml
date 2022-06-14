@@ -1,0 +1,6 @@
+create page entities:
+  title: 'Create page entities'
+  description: 'Access to create page entities'
+view published pages:
+  title: 'View published pages'
+  description: 'Access to view published pages'

@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Install/update/uninstall hooks for menus module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function living_spaces_menus_uninstall() {
+  // Delete preinstalled content.
+  $link_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+  $link = $link_storage
+    ->loadByProperties(['uuid' => [
+      '4d89df5f-b766-4abc-a882-feeb218d61e2',
+      '74a788e1-c016-4b94-8abc-0fc0b04612fd',
+      'bfe5fcf7-5386-46ce-85b8-3bf9c392efe0',
+    ]]);
+  if (!empty($link)) {
+    $link_storage->delete($link);
+  }
+}

@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - dom_bootstrap
+    - user
+  theme:
+    - living_spaces_barrio
+id: living_spaces_barrio_collapsible_menu
+theme: living_spaces_barrio
+region: sidebar_second
+weight: 0
+provider: null
+plugin: dom_bootstrap_collapsible_menu
+settings:
+  id: dom_bootstrap_collapsible_menu
+  label: 'Collapsible menu'
+  label_display: '0'
+  menu_name: main
+  provider: dom_bootstrap
+visibility:
+  user_role:
+    id: user_role
+    roles:
+      authenticated: authenticated
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'

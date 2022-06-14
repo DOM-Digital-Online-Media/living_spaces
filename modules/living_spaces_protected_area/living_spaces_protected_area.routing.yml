@@ -1,0 +1,14 @@
+living_spaces_protected_area.protected_area:
+  path: '/protected-area'
+  defaults:
+    _form: '\Drupal\living_spaces_protected_area\Form\LivingSpacesProtectedAreaForm'
+    _title: 'Protected area'
+  requirements:
+    _access_protected_area: 'TRUE'
+living_spaces_protected_area.protected_area_settings:
+  path: '/admin/config/living-spaces/protected-area/settings'
+  defaults:
+    _form: '\Drupal\living_spaces_protected_area\Form\LivingSpacesProtectedAreaSettingsForm'
+    _title: 'Access settings'
+  requirements:
+    _permission: 'access protected area settings'

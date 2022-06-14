@@ -1,0 +1,134 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - search_api_solr
+    - taxonomy
+    - search_api
+  config:
+    - field.storage.living_spaces_event.field_end_date
+    - field.storage.living_spaces_event.field_start_date
+    - search_api.server.living_spaces
+third_party_settings:
+  search_api_solr:
+    finalize: false
+    commit_before_finalize: false
+    commit_after_finalize: false
+    multilingual:
+      limit_to_content_language: false
+      include_language_independent: true
+    highlighter:
+      maxAnalyzedChars: 51200
+      fragmenter: gap
+      regex:
+        slop: 0.5
+        pattern: blank
+        maxAnalyzedChars: 10000
+      usePhraseHighlighter: true
+      highlightMultiTerm: true
+      preserveMulti: false
+      highlight:
+        mergeContiguous: false
+        requireFieldMatch: false
+        snippets: 3
+        fragsize: 0
+    mlt:
+      mintf: 1
+      mindf: 1
+      maxdf: 0
+      maxdfpct: 0
+      minwl: 0
+      maxwl: 0
+      maxqt: 100
+      maxntp: 2000
+      boost: false
+      interestingTerms: none
+    term_modifiers:
+      slop: 3
+      fuzzy: 1
+    advanced:
+      index_prefix: ''
+      collection: ''
+      timezone: ''
+id: event_invites
+name: 'Event invites'
+description: ''
+read_only: false
+field_settings:
+  field_end_date:
+    label: 'Event » Space event » End date'
+    datasource_id: 'entity:living_spaces_event_invite'
+    property_path: 'event:entity:field_end_date'
+    type: date
+    dependencies:
+      config:
+        - field.storage.living_spaces_event.field_end_date
+      module:
+        - living_spaces_event
+  field_start_date:
+    label: 'Event » Space event » Start date'
+    datasource_id: 'entity:living_spaces_event_invite'
+    property_path: 'event:entity:field_start_date'
+    type: date
+    dependencies:
+      config:
+        - field.storage.living_spaces_event.field_start_date
+      module:
+        - living_spaces_event
+  label:
+    label: 'Event » Space event » Title'
+    datasource_id: 'entity:living_spaces_event_invite'
+    property_path: 'event:entity:label'
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      module:
+        - living_spaces_event
+  status:
+    label: Status
+    datasource_id: 'entity:living_spaces_event_invite'
+    property_path: status
+    type: integer
+    dependencies:
+      module:
+        - living_spaces_event
+  type:
+    label: 'Event » Space event » Spaces event type'
+    datasource_id: 'entity:living_spaces_event_invite'
+    property_path: 'event:entity:type'
+    type: string
+    dependencies:
+      module:
+        - living_spaces_event
+  uid:
+    label: User
+    datasource_id: 'entity:living_spaces_event_invite'
+    property_path: uid
+    type: integer
+    dependencies:
+      module:
+        - living_spaces_event
+  uuid:
+    label: 'Status » Taxonomy term » UUID'
+    datasource_id: 'entity:living_spaces_event_invite'
+    property_path: 'status:entity:uuid'
+    type: string
+    dependencies:
+      module:
+        - living_spaces_event
+        - taxonomy
+datasource_settings:
+  'entity:living_spaces_event_invite': {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  language_with_fallback: {  }
+  rendered_item: {  }
+  solr_date_range: {  }
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  index_directly: true
+  track_changes_in_references: true
+  cron_limit: 50
+server: living_spaces

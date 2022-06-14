@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_faq
+  module:
+    - user_permission_condition
+id: help_faq
+label: 'Help FAQ'
+description: ''
+use_admin_theme: false
+path: /help-faq
+access_logic: and
+access_conditions:
+  -
+    id: user_permission
+    permission: 'view paragraph content faq'
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+parameters: {  }

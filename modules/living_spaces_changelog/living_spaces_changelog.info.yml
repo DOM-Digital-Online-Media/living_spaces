@@ -1,0 +1,14 @@
+name: 'Space Changelog'
+type: module
+description: 'Provides chat functionality for living changelog.'
+core_version_requirement: ^9.0
+package: 'Living Spaces'
+dependencies:
+  - config_rewrite
+  - living_spaces_default_configs
+  - living_spaces_menus
+  - node
+
+default_content:
+  menu_link_content:
+    - 69e5de5f-5b46-495c-8cfc-6c8888fd1b66

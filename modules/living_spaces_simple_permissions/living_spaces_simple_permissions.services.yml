@@ -1,0 +1,5 @@
+services:
+  living_spaces_simple_permissions.route_subscriber:
+    class: Drupal\living_spaces_simple_permissions\Routing\LivingSpacesSimplePermissionsRouteSubscriber
+    tags:
+      - { name: event_subscriber, priority: 100 }

@@ -1,0 +1,196 @@
+<?php
+
+/**
+ * @file
+ * Contains functions and hooks for living_spaces_intranet.module.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Database\Query\AlterableInterface;
+use Drupal\Core\Database\Query\SelectInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\user\Entity\User;
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function living_spaces_intranet_user_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  /** @var \Drupal\user\UserInterface $entity */
+  $current = User::load($account->id());
+  $own_spaces = $current->get('joined_spaces')->getValue();
+  $own_spaces = array_column($own_spaces, 'target_id');
+  if ($own_spaces && ($entity->id() !== $account->id())) {
+    $user_spaces = $entity->get('joined_spaces')->getValue();
+    $user_spaces = array_column($user_spaces, 'target_id');
+
+    $same = array_intersect($own_spaces, $user_spaces);
+    if ($operation === 'view' && !empty($same)) {
+      return AccessResult::allowed();
+    }
+
+    if ($operation === 'update') {
+      foreach ($same as $group_id) {
+        /** @var \Drupal\group\Entity\GroupInterface $group */
+        $group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id);
+        if ($group->hasPermission('manage living space member account', $current)) {
+          return AccessResult::allowed();
+        }
+      }
+    }
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function living_spaces_intranet_query_entity_reference_alter(AlterableInterface $query) {
+  $account = \Drupal::currentUser();
+  if ($account->hasPermission('manage living spaces')) {
+    return;
+  }
+
+  if ($query instanceof SelectInterface && 'user' == $query->getMetaData('entity_type')) {
+    $living = \Drupal::service('living_spaces_group.manager')->getLivingSpaceGroupTypes();
+    $membership_loader = \Drupal::service('group.membership_loader');
+
+    $member = FALSE;
+    $groups = [];
+    foreach ($membership_loader->loadByUser($account) as $membership) {
+      /** @var \Drupal\group\GroupMembership $membership */
+      $group = $membership->getGroup();
+
+      if ($living && !empty($living[$group->bundle()])) {
+        $member = TRUE;
+        $groups[$group->id()] = $group;
+      }
+    }
+
+    if (!$member) {
+      return;
+    }
+
+    $uids = [];
+    foreach ($groups as $group) {
+      foreach ($group->getContent('group_membership') as $content) {
+        $id = $content->entity_id->entity->id();
+        $uids[$id] = $id;
+      }
+    }
+
+    if ($uids) {
+      $query->condition('base_table.uid', $uids, 'IN');
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_type_build().
+ */
+function living_spaces_intranet_entity_type_build(array &$entity_types) {
+  $entity_types['user']->setFormClass('employee', 'Drupal\user\RegisterForm');
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_intranet_form_user_admin_settings_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $config = \Drupal::configFactory();
+  $config_settings = $config->getEditable('user.settings');
+  $config_mail = $config->getEditable('user.mail');
+
+  $form['email_admin_created_no_email'] = [
+    '#type' => 'details',
+    '#title' => t('Welcome (new user created by administrator with no e-mail address)'),
+    '#group' => 'email',
+  ];
+
+  $form['email_admin_created_no_email']['email_admin_created_no_email_notify'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Notify user'),
+    '#default_value' => $config_settings->get('notify.email_admin_created_no_email'),
+  ];
+
+  $form['email_admin_created_no_email']['email_admin_created_no_email_subject'] = [
+    '#type' => 'textfield',
+    '#title' => t('Subject'),
+    '#default_value' => $config_mail->get('email_admin_created_no_email.subject'),
+    '#maxlength' => 180,
+    '#states' => [
+      'invisible' => [
+        'input[name="email_admin_created_no_email_notify"]' => ['checked' => FALSE],
+      ],
+    ],
+  ];
+
+  $form['email_admin_created_no_email']['email_admin_created_no_email_body'] = [
+    '#type' => 'textarea',
+    '#title' => t('Body'),
+    '#default_value' => $config_mail->get('email_admin_created_no_email.body'),
+    '#rows' => 15,
+    '#states' => [
+      'invisible' => [
+        'input[name="email_admin_created_no_email_notify"]' => ['checked' => FALSE],
+      ],
+    ],
+  ];
+
+  $form['actions']['submit']['#submit'][] = 'living_spaces_intranet_user_settings_form_submit';
+}
+
+/**
+ * Provides submit callback for user admin settings form.
+ */
+function living_spaces_intranet_user_settings_form_submit($form, FormStateInterface $form_state) {
+  \Drupal::configFactory()->getEditable('user.mail')
+    ->set('email_admin_created_no_email.subject', $form_state->getValue('email_admin_created_no_email_subject'))
+    ->set('email_admin_created_no_email.body', $form_state->getValue('email_admin_created_no_email_body'))
+    ->save();
+
+  \Drupal::configFactory()->getEditable('user.settings')
+    ->set('notify.email_admin_created_no_email', $form_state->getValue('email_admin_created_no_email_notify'))
+    ->save();
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_intranet_form_user_employee_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['account']['pass']['#required'] = FALSE;
+  $form['account']['pass']['#access'] = FALSE;
+
+  $form['account']['notify']['#default_value'] = TRUE;
+  $form['account']['notify']['#access'] = FALSE;
+
+  $form['actions']['submit']['#submit'][] = 'living_spaces_intranet_employee_form_submit';
+}
+
+/**
+ * Provides submit callback for user employee form.
+ */
+function living_spaces_intranet_employee_form_submit($form, FormStateInterface $form_state) {
+  if (!\Drupal::config('user.settings')->get('notify.email_admin_created_no_email')) {
+    return;
+  }
+
+  $account = $form_state->getFormObject()->getEntity();
+  $notify = !$form_state->isValueEmpty('notify');
+
+  if ($notify && $account->isActive() && !$account->getEmail()) {
+    $params['account'] = $account;
+    $user = \Drupal::currentUser();
+    $mail = \Drupal::config('system.site')->get('mail');
+
+    \Drupal::service('plugin.manager.mail')->mail('user', 'email_admin_created_no_email', $user->getEmail(), $user->getPreferredLangcode(), $params, $mail);
+
+    $messenger = \Drupal::messenger();
+    $messenger->deleteByType('status');
+    $messenger->addStatus(t('The new user <a href=":url">%name</a> was created without an email address.', [
+      ':url' => $account->toUrl()->toString(),
+      '%name' => $account->getAccountName(),
+    ]));
+  }
+}

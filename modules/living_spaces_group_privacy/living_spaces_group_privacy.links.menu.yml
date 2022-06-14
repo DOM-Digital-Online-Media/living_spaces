@@ -1,0 +1,5 @@
+living_spaces_group_privacy.privacy_form:
+  title: 'Privacy settings'
+  route_name: living_spaces_group_privacy.privacy_form
+  parent: system.admin_group
+  weight: 99

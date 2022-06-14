@@ -1,0 +1,9 @@
+living_spaces_simple_permissions.role_filter:
+  type: config_object
+  label: 'Role Filter'
+  mapping:
+    roles:
+      type: sequence
+      label: 'Roles'
+      sequence:
+        type: string

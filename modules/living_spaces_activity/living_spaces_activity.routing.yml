@@ -1,0 +1,8 @@
+living_spaces_activity.mark_messages:
+  path: '/living-spaces-activity/mark-messages/{user}'
+  defaults:
+    _title: 'Mark all as read'
+    _controller: '\Drupal\living_spaces_activity\Controller\LivingSpacesActivityMarkMessagesController::mark'
+  requirements:
+    _access: 'TRUE'
+    _user_is_logged_in: 'TRUE'

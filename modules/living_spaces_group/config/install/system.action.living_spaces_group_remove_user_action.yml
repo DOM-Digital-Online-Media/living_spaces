@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_group
+  module:
+    - user
+id: living_spaces_group_remove_user_action
+label: 'Remove user from the group'
+type: user
+plugin: living_spaces_group_remove_user_action
+configuration: {  }

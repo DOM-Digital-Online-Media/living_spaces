@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_agendatopic_template
+    - paragraphs.paragraphs_type.agenda_item
+  module:
+    - file
+id: paragraph.agenda_item.field_agendatopic_template
+field_name: field_agendatopic_template
+entity_type: paragraph
+bundle: agenda_item
+label: Template
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: agenda/vorlage
+  file_extensions: 'pdf odt doc docx rtf xls xlsx'
+  max_filesize: ''
+  description_field: false
+  handler: 'default:file'
+  handler_settings: {  }
+field_type: file

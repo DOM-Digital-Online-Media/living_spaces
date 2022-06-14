@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.living_spaces_access_area.entity.field_entity_bundle
+    - field.field.living_spaces_access_area.entity.field_entity_type
+    - living_spaces_protected_area.living_spaces_access_area_type.entity
+id: living_spaces_access_area.entity.default
+targetEntityType: living_spaces_access_area
+bundle: entity
+mode: default
+content:
+  field_entity_bundle:
+    weight: 1
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_entity_type:
+    weight: 0
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+hidden:
+  label: true

@@ -1,0 +1,52 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - page_manager.page.dashboard
+id: dashboard-layout_builder-0
+label: Dashboard
+variant: layout_builder
+variant_settings:
+  id: layout_builder
+  uuid: 778094ca-c871-4ba0-8122-15a0b1e0b0fb
+  label: null
+  weight: 0
+  sections:
+    -
+      layout_id: barrio_col2-equal
+      layout_settings:
+        label: ''
+        context_mapping: {  }
+      components:
+        0adbb904-ab2d-48be-8898-506f6d331f98:
+          uuid: 0adbb904-ab2d-48be-8898-506f6d331f98
+          region: first
+          configuration:
+            id: 'views_block:message-user_activity'
+            label: ''
+            provider: views
+            label_display: visible
+            views_label: ''
+            items_per_page: none
+            context_mapping: {  }
+          additional: {  }
+          weight: 0
+        3310a1ac-c5a7-42c0-a06c-2d172bae4b08:
+          uuid: 3310a1ac-c5a7-42c0-a06c-2d172bae4b08
+          region: second
+          configuration:
+            id: 'views_block:event_invites-my_events_block'
+            label: ''
+            provider: views
+            label_display: visible
+            views_label: ''
+            items_per_page: none
+            context_mapping: {  }
+          additional: {  }
+          weight: 0
+      third_party_settings: {  }
+page: dashboard
+weight: 0
+selection_criteria: {  }
+selection_logic: and
+static_context: {  }

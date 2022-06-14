@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Install/update/uninstall hooks for users module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function living_spaces_users_uninstall() {
+  // Delete preinstalled content.
+  $link_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+  $link = $link_storage
+    ->loadByProperties(['uuid' => [
+      '3dc906bb-7a4d-4d8a-809f-094d88c07f58',
+      'c7a95681-2e4c-437b-bec2-ea861497b913',
+    ]]);
+  if (!empty($link)) {
+    $link_storage->delete($link);
+  }
+}

@@ -1,0 +1,9 @@
+entity.living_spaces_event.collection:
+  title: 'Space events'
+  route_name: 'entity.living_spaces_event.collection'
+  parent: 'system.admin_content'
+
+entity.living_spaces_event_type.collection:
+  title: 'Space event types'
+  route_name: 'entity.living_spaces_event_type.collection'
+  parent: 'system.admin_structure'

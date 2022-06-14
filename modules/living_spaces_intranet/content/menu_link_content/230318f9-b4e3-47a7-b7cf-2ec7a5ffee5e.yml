@@ -1,0 +1,59 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: 230318f9-b4e3-47a7-b7cf-2ec7a5ffee5e
+  bundle: menu_link_content
+  default_langcode: en
+  depends:
+    4d89df5f-b766-4abc-a882-feeb218d61e2: menu_link_content
+default:
+  enabled:
+    -
+      value: true
+  title:
+    -
+      value: 'Create Employees'
+  menu_name:
+    -
+      value: main
+  link:
+    -
+      uri: 'internal:/employees-create'
+      title: ''
+      options: {  }
+  external:
+    -
+      value: false
+  rediscover:
+    -
+      value: true
+  weight:
+    -
+      value: -47
+  expanded:
+    -
+      value: false
+  parent:
+    -
+      value: 'menu_link_content:4d89df5f-b766-4abc-a882-feeb218d61e2'
+  revision_translation_affected:
+    -
+      value: true
+  menu_item_override_children:
+    -
+      value: false
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 1
+  content_translation_status:
+    -
+      value: true
+  content_translation_created:
+    -
+      value: 1637068337

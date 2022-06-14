@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.living_spaces_access_area.field_path_pattern
+    - living_spaces_protected_area.living_spaces_access_area_type.page
+id: living_spaces_access_area.page.field_path_pattern
+field_name: field_path_pattern
+entity_type: living_spaces_access_area
+bundle: page
+label: 'Path pattern'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

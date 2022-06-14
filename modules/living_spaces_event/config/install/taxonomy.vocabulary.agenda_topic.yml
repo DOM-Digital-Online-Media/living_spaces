@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_event
+name: 'Agenda Topic Type'
+vid: agenda_topic
+description: ''
+weight: 0

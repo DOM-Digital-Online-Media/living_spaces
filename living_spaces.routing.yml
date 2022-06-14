@@ -1,0 +1,7 @@
+living_spaces.settings_overview:
+  path: '/admin/config/living-spaces'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Living Spaces'
+  requirements:
+    _permission: 'access living spaces settings overview'

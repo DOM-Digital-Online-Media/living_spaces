@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_topic
+    - paragraphs.paragraphs_type.agenda_item
+id: paragraph.agenda_item.field_topic
+field_name: field_topic
+entity_type: paragraph
+bundle: agenda_item
+label: Topic
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

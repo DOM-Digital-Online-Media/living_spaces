@@ -1,0 +1,10 @@
+services:
+  living_spaces_group.manager:
+    class: Drupal\living_spaces_group\LivingSpacesGroupManager
+    arguments: ['@entity_type.manager']
+  living_spaces_group.checker_decorator:
+    decorates: group_permission.checker
+    class: Drupal\living_spaces_group\Access\LivingSpacesGroupPermissionChecker
+    arguments: ['@living_spaces_group.checker_decorator.inner', '@living_spaces_group.manager']
+    public: false
+    decoration_priority: 9

@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department
+    - node.type.agenda
+  module:
+    - gnode
+    - node
+id: department-group_node-agenda
+label: 'Department: Group node (Agenda)'
+description: 'Adds <em class="placeholder">Agenda</em> content to groups both publicly and privately.'
+group_type: department
+content_plugin: 'group_node:agenda'
+plugin_config:
+  group_cardinality: 0
+  entity_cardinality: 1
+  use_creation_wizard: false

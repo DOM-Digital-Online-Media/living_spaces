@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a group link with its children.
+ *
+ * Available variables:
+ * - link: The group canonical link.
+ * - include_self: Boolean indicating whether to include link to the group.
+ * - items: Groups children links array.
+ *
+ * @see template_preprocess_subgroups_list()
+ *
+ * @ingroup themeable
+ */
+#}
+{% if include_self %}
+  {{ link }}
+{% endif %}
+{% if items %}
+  <{{ type }} {{ attributes }}>
+  {% for item in items %}
+    <li {{ item_attributes }}> {{ item }} </li>
+  {% endfor %}
+  </{{ type }}>
+{% endif %}

@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_group
+id: office_manager
+label: 'Office Manager'
+weight: 10
+is_admin: false
+permissions: {  }

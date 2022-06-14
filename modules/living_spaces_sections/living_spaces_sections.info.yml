@@ -1,0 +1,9 @@
+name: 'Space Sections'
+type: module
+description: 'Provides base functionality for sections that can be enabled for any groups.'
+core_version_requirement: ^9.0
+package: 'Living Spaces'
+dependencies:
+  - config_rewrite
+  - inline_entity_form
+  - group

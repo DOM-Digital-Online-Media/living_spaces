@@ -1,0 +1,7 @@
+living_spaces_event.agenda_autocomplete:
+  path: '/living-spaces-event/autocomplete/{group}'
+  defaults:
+    _controller: '\Drupal\living_spaces_event\Controller\LivingSpacesEventAutoCompleteController::autocomplete'
+    _format: json
+  requirements:
+    _access: 'TRUE'

@@ -1,0 +1,39 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - page_manager.page.my_events
+id: my_events-layout_builder-0
+label: 'My events'
+variant: layout_builder
+variant_settings:
+  id: layout_builder
+  uuid: a69688e4-2bb2-41d5-85c4-5b663c8212f3
+  label: null
+  weight: 0
+  sections:
+    -
+      layout_id: barrio_col2-equal
+      layout_settings:
+        label: ''
+        context_mapping: {  }
+      components:
+        f20a1815-e6eb-47d9-9041-e056b8bfba31:
+          uuid: f20a1815-e6eb-47d9-9041-e056b8bfba31
+          region: top
+          configuration:
+            id: 'views_block:event_invites-my_events'
+            label: ''
+            provider: views
+            label_display: '0'
+            views_label: ''
+            items_per_page: none
+            context_mapping: {  }
+          additional: {  }
+          weight: 0
+      third_party_settings: {  }
+page: my_events
+weight: 0
+selection_criteria: {  }
+selection_logic: and
+static_context: {  }

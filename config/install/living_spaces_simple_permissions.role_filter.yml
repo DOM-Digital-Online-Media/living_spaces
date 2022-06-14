@@ -1,0 +1,7 @@
+roles:
+  client_admin: client_admin
+  full_time_employee: full_time_employee
+  volunteer: volunteer
+  external_employee: external_employee
+  trainee_intern: trainee_intern
+  office_manager: office_manager

@@ -1,0 +1,5 @@
+living_spaces_group.members:
+  title: 'Members'
+  base_route: entity.group.canonical
+  route_name: page_manager.page_view_living_space_members_living_space_members-layout_builder-0
+  weight: 6

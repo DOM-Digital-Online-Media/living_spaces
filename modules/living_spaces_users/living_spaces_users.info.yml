@@ -1,0 +1,27 @@
+name: 'Space Users'
+type: module
+description: 'Provides user fields and functionality for users in spaces.'
+core_version_requirement: ^9.0
+package: 'Living Spaces'
+dependencies:
+  - address
+  - config_rewrite
+  - dom_bootstrap
+  - dom_field_extra
+  - field_ipaddress
+  - flood_control
+  - languagefield
+  - living_spaces_default_configs
+  - living_spaces_menus
+  - pathauto
+  - profile
+  - search_api_autocomplete
+  - views_data_export
+
+default_content:
+  menu_link_content:
+    - 3dc906bb-7a4d-4d8a-809f-094d88c07f58
+    - c7a95681-2e4c-437b-bec2-ea861497b913
+
+'interface translation project': living_spaces_users
+'interface translation server pattern': profiles/custom/living_spaces/modules/living_spaces_users/translations/living_spaces_users-%language.po

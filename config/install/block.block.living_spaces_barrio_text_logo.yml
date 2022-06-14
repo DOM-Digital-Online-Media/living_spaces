@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - dom_bootstrap
+    - living_spaces_group
+  theme:
+    - living_spaces_barrio
+id: living_spaces_barrio_text_logo
+theme: living_spaces_barrio
+region: top_header
+weight: 0
+provider: null
+plugin: dom_bootstrap_text_logo
+settings:
+  id: dom_bootstrap_text_logo
+  label: 'Text Logo'
+  provider: dom_bootstrap
+  label_display: '0'
+  bold: LIVING
+  thin: SPACES
+  include_mobile: true
+visibility: { }

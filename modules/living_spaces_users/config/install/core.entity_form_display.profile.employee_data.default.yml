@@ -1,0 +1,63 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.profile.employee_data.field_employee_number
+    - field.field.profile.employee_data.field_employment_end
+    - field.field.profile.employee_data.field_employment_start
+    - field.field.profile.employee_data.field_has_key
+    - field.field.profile.employee_data.field_notes
+    - field.field.profile.employee_data.field_pseudonym
+    - profile.type.employee_data
+  module:
+    - datetime
+id: profile.employee_data.default
+targetEntityType: profile
+bundle: employee_data
+mode: default
+content:
+  field_employee_number:
+    weight: 26
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_employment_end:
+    weight: 30
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_employment_start:
+    weight: 29
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_has_key:
+    weight: 27
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_notes:
+    weight: 31
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textarea
+    region: content
+  field_pseudonym:
+    weight: 28
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+hidden:
+  is_default: true

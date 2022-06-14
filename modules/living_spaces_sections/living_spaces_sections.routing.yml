@@ -1,0 +1,25 @@
+living_spaces_sections.sections_form:
+  path: '/group/{group}/sections'
+  defaults:
+    _form: '\Drupal\living_spaces_sections\Form\LivingSpacesSectionsSettingsForm'
+    _title_callback: '\Drupal\living_spaces_sections\Form\LivingSpacesSectionsSettingsForm::getTitle'
+  requirements:
+    _custom_access: '\Drupal\living_spaces_sections\LivingSpacesSectionsRouteAccessController::checkManageAccess'
+  options:
+    _admin_route: TRUE
+    parameters:
+      group:
+        type: entity:group
+
+living_spaces_sections.sub_sections_form:
+  path: '/group/{group}/{section}/sections'
+  defaults:
+    _form: '\Drupal\living_spaces_sections\Form\LivingSpacesSectionsSettingsForm'
+    _title_callback: '\Drupal\living_spaces_sections\Form\LivingSpacesSectionsSettingsForm::getTitle'
+  requirements:
+    _custom_access: '\Drupal\living_spaces_sections\LivingSpacesSectionsRouteAccessController::checkManageAccess'
+  options:
+    _admin_route: TRUE
+    parameters:
+      group:
+        type: entity:group

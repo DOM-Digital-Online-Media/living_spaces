@@ -1,0 +1,232 @@
+<?php
+
+/**
+ * @file
+ * Hooks and various functions for living spaces group privacy.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\group\Entity\GroupInterface;
+use Drupal\group\Entity\GroupContentInterface;
+use Drupal\Core\Cache\Cache;
+
+define('LIVING_SPACES_PRIVACY_PUBLIC_GROUP', 1);
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function living_spaces_group_privacy_entity_type_alter(&$entity_types) {
+  $entity_types['group']->setHandlerClass('query_access', 'Drupal\living_spaces_group_privacy\Access\LivingSpacesGroupPrivacyGroupQueryAccessHandler');
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function living_spaces_group_privacy_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
+
+  if ('group' == $entity_type->id()) {
+    $fields['living_space_privacy'] = BaseFieldDefinition::create('list_string')
+      ->setLabel(t('Privacy'))
+      ->setCardinality(1)
+      ->setRevisionable(FALSE)
+      ->setTranslatable(FALSE)
+      ->addConstraint('LivingSpacesGroupPrivacy')
+      ->setDisplayOptions('form', [
+        'type' => 'options_buttons',
+        'weight' => 5,
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+  }
+
+  return $fields;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function living_spaces_group_privacy_group_content_presave(GroupContentInterface $content) {
+  if ('group_membership' == $content->getContentPlugin()->getPluginId()) {
+    Cache::invalidateTags(["group:{$content->getGroup()->id()}"]);
+  }
+}
+
+/**
+ * Implements hook_entity_base_field_info_alter().
+ */
+function living_spaces_group_privacy_entity_base_field_info_alter(&$fields, EntityTypeInterface $entity_type) {
+  if ('group' == $entity_type->id() && !empty($fields['living_space_privacy'])) {
+    /** @var \Drupal\living_spaces_group_privacy\Plugin\LivingSpacesGroupPrivacyManagerInterface $plugin */
+    $plugin = \Drupal::service('plugin.manager.living_spaces_group_privacy');
+
+    $options = [];
+    $default = '';
+    foreach ($plugin->getPrivacyPlugins() as $instance) {
+      $definition = $instance->getPluginDefinition();
+      $options[$definition['id']] = $definition['label'];
+
+      if (isset($definition['default']) && $definition['default']) {
+        $default = $definition['id'];
+      }
+    }
+
+    $fields['living_space_privacy']->setSetting('allowed_values', $options);
+    $fields['living_space_privacy']->setDefaultValue($default);
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_group_privacy_form_group_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['living_space_privacy']['#access'] = \Drupal::currentUser()->hasPermission('access living spaces privacy');
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function living_spaces_group_privacy_group_update(GroupInterface $entity) {
+  if ($entity->get('living_space_privacy')->getString() != $entity->original->get('living_space_privacy')->getString()) {
+    $batch = [];
+    $operation = 'living_spaces_group_privacy_acquire_grants';
+    if ($entity->hasField('content_sections')) {
+      foreach ($entity->get('content_sections')->getValue() as $item) {
+        $batch['operations'][] = [$operation, [$item['target_id']]];
+      }
+    }
+
+    $entity_manager = \Drupal::entityTypeManager();
+    $content_types = $entity_manager->getStorage('node_type')->loadMultiple();
+    foreach ($content_types as $type) {
+      if ($entity->getGroupType()->hasContentPlugin("group_node:{$type->id()}")) {
+        foreach ($entity->getContent("group_node:{$type->id()}") as $content) {
+          $nid = $content->get('entity_id')->getString();
+          $batch['operations'][] = [$operation, [$nid]];
+        }
+      }
+    }
+
+    if ($batch) {
+      batch_set($batch);
+    }
+  }
+}
+
+/**
+ * Batch callback for assigning new grants.
+ */
+function living_spaces_group_privacy_acquire_grants($nid) {
+  if ($node = \Drupal::entityTypeManager()->getStorage('node')->load($nid)) {
+    /** @var \Drupal\node\NodeAccessControlHandlerInterface $access_control_handler */
+    $access_control_handler = \Drupal::entityTypeManager()->getAccessControlHandler('node');
+
+    $grants = $access_control_handler->acquireGrants($node);
+    \Drupal::service('node.grant_storage')->write($node, $grants);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function living_spaces_group_privacy_group_access(GroupInterface $group, $operation, AccountInterface $account) {
+  /** @var \Drupal\living_spaces_group_privacy\Plugin\LivingSpacesGroupPrivacyManagerInterface $plugin */
+  $plugin = \Drupal::service('plugin.manager.living_spaces_group_privacy');
+
+  if (in_array($operation, ['view', 'update', 'delete']) && $instance = $plugin->getPrivacyPlugins($group)) {
+    return $instance->groupAccess($group, $operation, $account);
+  }
+
+  return AccessResult::allowed();
+}
+
+/**
+ * Implements hook_node_access_records().
+ */
+function living_spaces_group_privacy_node_access_records(NodeInterface $node) {
+  $grants = [];
+
+  $grants[] = [
+    'realm' => 'living_node_author',
+    'gid' => $node->getOwnerId(),
+    'grant_view' => 1,
+    'grant_update' => 1,
+    'grant_delete' => 1,
+  ];
+
+  /** @var \Drupal\living_spaces_group_privacy\Plugin\LivingSpacesGroupPrivacyManagerInterface $plugin */
+  $plugin = \Drupal::service('plugin.manager.living_spaces_group_privacy');
+  foreach ($plugin->getRelatedGroups($node) as $group) {
+    $grants[] = [
+      'realm' => 'living_node_group_admin',
+      'gid' => $group->id(),
+      'grant_view' => 1,
+      'grant_update' => 1,
+      'grant_delete' => 1,
+    ];
+
+    if ($instance = $plugin->getPrivacyPlugins($group)) {
+      $grants = array_merge($grants, $instance->getGroupNodeGrants($node, $group));
+    }
+  }
+
+  $grants = array_unique($grants, SORT_REGULAR);
+
+  return $grants;
+}
+
+/**
+ * Implements hook_node_grants().
+ */
+function living_spaces_group_privacy_node_grants(AccountInterface $account, $op) {
+  $grants = [];
+
+  if ($account->isAuthenticated()) {
+    $grants['living_node_author'][] = $account->id();
+  }
+
+  /** @var \Drupal\living_spaces_group_privacy\Plugin\LivingSpacesGroupPrivacyManagerInterface $plugin */
+  $plugin = \Drupal::service('plugin.manager.living_spaces_group_privacy');
+  foreach ($plugin->getPrivacyPlugins() as $instance) {
+    $grants = array_merge($grants, $instance->getGroupUserGrants($account, $op));
+  }
+
+  // Get group roles marked as space admin roles.
+  $space_admins = \Drupal::entityTypeManager()->getStorage('group_role')
+    ->loadByProperties(['is_space_admin' => TRUE]);
+  $space_admins_ids = [];
+  foreach ($space_admins as $space_admin) {
+    $space_admins_ids[] = $space_admin->id();
+  }
+
+  /** @var \Drupal\group\GroupMembershipLoaderInterface $membership_service */
+  $membership_service = \Drupal::service('group.membership_loader');
+  $memberships = $membership_service->loadByUser($account, $space_admins_ids);
+
+  foreach ($memberships as $membership) {
+    /** @var \Drupal\group\Entity\Group $group */
+    $group = $membership->getGroup();
+    $grants['living_node_group_admin'][] = $group->id();
+  }
+
+  return $grants;
+}
+
+/**
+ * Implements hook_group_operations_alter().
+ */
+function living_spaces_group_privacy_group_operations_alter(array &$operations, GroupInterface $group) {
+  /** @var \Drupal\living_spaces_group_privacy\Plugin\LivingSpacesGroupPrivacyManagerInterface $plugin */
+  $plugin = \Drupal::service('plugin.manager.living_spaces_group_privacy');
+  if (array_key_exists('group-join', $operations) &&
+    $instance = $plugin->getPrivacyPlugins($group)
+  ) {
+    if (!$instance->joinAccess($group, \Drupal::currentUser())) {
+      unset($operations['group-join']);
+    }
+  }
+}

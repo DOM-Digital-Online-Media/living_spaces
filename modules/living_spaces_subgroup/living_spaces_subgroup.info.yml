@@ -1,0 +1,7 @@
+name: Subspaces
+type: module
+description: 'Provides subgroups functionality for contrib group module.'
+core_version_requirement: ^9.0
+package: 'Living Spaces'
+dependencies:
+  - group

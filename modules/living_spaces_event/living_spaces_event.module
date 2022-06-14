@@ -1,0 +1,531 @@
+<?php
+
+/**
+ * @file
+ * Contains living_spaces_event.module.
+ */
+
+define('LIVING_SPACES_EVENT_OWN_STATUS', '73f46fe8-82f5-40a3-82a3-ddde450a285b');
+define('LIVING_SPACES_EVENT_INVITED_STATUS', '3ae0c24b-826e-418b-8d40-40f65ad843de');
+define('LIVING_SPACES_EVENT_DECLINED_STATUS', '4ff35c2a-1d0a-401a-80f3-929e07931ea1');
+define('LIVING_SPACES_EVENT_ACCEPTED_STATUS', 'c9e45cef-15e9-4d9e-92c9-cd67dbf1fcae');
+
+use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\group\Entity\GroupContentInterface;
+use Drupal\living_spaces_event\Entity\LivingSpaceEventTypeInterface;
+use Drupal\living_spaces_event\Entity\LivingSpaceEventInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Asset\AttachedAssetsInterface;
+use Drupal\node\NodeInterface;
+use Drupal\user\UserInterface;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Entity\Element\EntityAutocomplete;
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function living_spaces_event_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
+
+  if ('living_spaces_event' == $entity_type->id()) {
+    $fields['space'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Space'))
+      ->setSetting('target_type', 'group')
+      ->setTranslatable(FALSE);
+
+    $fields['agenda'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Agenda'))
+      ->setSetting('target_type', 'node')
+      ->setSetting('handler_settings', [
+        'target_bundles' => ['agenda' => 'agenda'],
+      ])
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
+      ->setTranslatable(FALSE)
+      ->setDisplayOptions('form', [
+        'type' => 'inline_entity_form_complex',
+        'settings' => [
+          'allow_new' => 'true',
+          'allow_existing' => 'true',
+          'match_operator' => 'CONTAINS',
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['location'] = BaseFieldDefinition::create('text_long')
+      ->setLabel(t('Location'))
+      ->setTranslatable(FALSE)
+      ->setDisplayOptions('form', [
+        'type' => 'text_textarea',
+        'settings' => [
+          'rows' => '5',
+          'placeholder' => '',
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['protocol'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Protocol'))
+      ->setSetting('target_type', 'node')
+      ->setSetting('handler_settings', ['target_bundles' => ['protocol' => 'protocol']])
+      ->setTranslatable(FALSE);
+  }
+
+  return $fields;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_event_group_content_insert(GroupContentInterface $entity) {
+  if ($entity->getEntity() instanceof LivingSpaceEventInterface) {
+    $event = $entity->getEntity();
+    $event->set('space', $entity->getGroup()->id());
+    $event->save();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_event_living_spaces_event_insert(LivingSpaceEventInterface $event) {
+  $entity_manager = \Drupal::entityTypeManager();
+
+  $terms = $entity_manager->getStorage('taxonomy_term')->loadByProperties([
+    'uuid' => LIVING_SPACES_EVENT_OWN_STATUS,
+  ]);
+
+  $invite = $entity_manager->getStorage('living_spaces_event_invite')->create([
+    'event' => $event->id(),
+    'uid' => $event->getOwnerId(),
+    'status' => $terms ? reset($terms)->id() : '',
+  ]);
+  $invite->save();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterface $event) {
+  if (!$event->get('agenda')->isEmpty() && !$event->get('space')->isEmpty()) {
+    $entity_manager = \Drupal::entityTypeManager();
+    $properties = [
+      'group_type' => $event->get('space')->entity->bundle(),
+      'content_plugin' => 'group_node:agenda',
+    ];
+
+    if ($group_content_types = $entity_manager->getStorage('group_content_type')->loadByProperties($properties)) {
+      $group_content_type = reset($group_content_types);
+
+      foreach ($event->get('agenda')->getValue() as $value) {
+        $properties = [
+          'type' => $group_content_type->id(),
+          'gid' => $event->get('space')->getString(),
+          'entity_id' => $value['target_id'],
+        ];
+
+        if (!$entity_manager->getStorage('group_content')->loadByProperties($properties)) {
+          $group_content = $entity_manager->getStorage('group_content')->create($properties);
+          $group_content->save();
+        }
+      }
+    }
+
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function living_spaces_event_living_spaces_event_delete(LivingSpaceEventInterface $event) {
+  $entity_manager = \Drupal::entityTypeManager()->getStorage('living_spaces_event_invite');
+  $query = $entity_manager->getQuery();
+  $query->condition('event', $event->id());
+
+  if ($invites = $query->execute()) {
+    /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInvite $invite */
+    foreach ($entity_manager->loadMultiple($invites) as $invite) {
+      $invite->delete();
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function living_spaces_event_user_delete(UserInterface $user) {
+  $entity_manager = \Drupal::entityTypeManager()->getStorage('living_spaces_event_invite');
+  $query = $entity_manager->getQuery();
+  $query->condition('uid', $user->id());
+
+  if ($invites = $query->execute()) {
+    /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInvite $invite */
+    foreach ($entity_manager->loadMultiple($invites) as $invite) {
+      $invite->delete();
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function living_spaces_event_entity_bundle_info_alter(&$bundles) {
+  $bundles['living_spaces_section']['events']['class'] = 'Drupal\living_spaces_event\Entity\LivingSpacesEvents';
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_event_living_spaces_event_type_insert(LivingSpaceEventTypeInterface $space_event_type) {
+  \Drupal::service('plugin.manager.group_content_enabler')->clearCachedDefinitions();
+}
+
+/**
+ * Implements hook_theme().
+ */
+function living_spaces_event_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['views_view_living_spaces_event_week'] = [
+    'file' => 'living_spaces_event.theme.inc',
+  ];
+
+  $items['living_spaces_event_fullcalendar_legend'] = [
+    'variables' => ['types' => NULL],
+    'file' => 'living_spaces_event.theme.inc',
+  ];
+
+  return $items;
+}
+
+/**
+ * Implements hook_inline_entity_form_reference_form_alter().
+ */
+function living_spaces_event_inline_entity_form_reference_form_alter(array &$reference_form, FormStateInterface $form_state) {
+  if (isset($reference_form['#ief_id']) && 'agenda-form' == $reference_form['#ief_id']) {
+    $gid = '';
+    if ($event = $form_state->getFormObject()->getEntity()) {
+      if (!$event->get('space')->isEmpty()) {
+        $gid = $event->get('space')->getString();
+      }
+    }
+
+    if (!$gid && $group = \Drupal::service('current_route_match')->getRawParameter('group')) {
+      $gid = $group;
+    }
+
+    if ($gid) {
+      $reference_form['entity_id']['#type'] = 'textfield';
+      $reference_form['entity_id']['#tags'] = FALSE;
+      $reference_form['entity_id']['#autocomplete_route_name'] = 'living_spaces_event.agenda_autocomplete';
+      $reference_form['entity_id']['#autocomplete_route_parameters'] = [
+        'group' => $gid,
+      ];
+
+      array_unshift($reference_form['#ief_element_submit'], 'living_spaces_event_inline_entity_form_reference_form_submit');
+    }
+  }
+}
+
+/**
+ * Provides submit callback for reference form.
+ */
+function living_spaces_event_inline_entity_form_reference_form_submit($reference_form, FormStateInterface $form_state) {
+  $values = $form_state->getValues();
+  $form_values = NestedArray::getValue($values, $reference_form['#parents']);
+
+  if ($match = EntityAutocomplete::extractEntityIdFromAutocompleteInput($form_values['entity_id'])) {
+    NestedArray::setValue($values, $reference_form['#parents'], ['entity_id' => $match]);
+    $form_state->setValues($values);
+
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_event_form_node_protocol_form_alter(array &$form, FormStateInterface $form_state) {
+  $uuid = \Drupal::request()->query->get('uuid');
+  $access = !empty($uuid) && \Drupal::entityTypeManager()->getStorage('living_spaces_event')->loadByProperties(['uuid' => $uuid]);
+
+  if (!$access) {
+    $form['actions']['#access'] = FALSE;
+    foreach (Element::children($form) as $element) {
+      if (isset($form[$element]['#access'])) {
+        $form[$element]['#access'] = FALSE;
+      }
+    }
+
+    $form['message'] = [
+      '#type' => 'markup',
+      '#markup' => t('To create a new log, there must be an appointment for which an agenda has already been created & assigned to it. In addition, no log must exist for this appointment.')
+      . '<br/>'
+      . t('In the following, select your desired appointment from a list of appointments to which the above criteria apply in order to create an associated log:'),
+    ];
+
+    $form['view'] = [
+      '#type' => 'view',
+      '#name' => 'events',
+      '#display_id' => 'events_without_protocol',
+    ];
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_create().
+ */
+function living_spaces_event_node_create(NodeInterface $entity) {
+  $uuid = \Drupal::request()->query->get('uuid');
+  $entity_manager = \Drupal::entityTypeManager();
+
+  if (!empty($uuid) &&
+    'protocol' == $entity->bundle() &&
+    $events = $entity_manager->getStorage('living_spaces_event')->loadByProperties(['uuid' => $uuid])
+  ) {
+    /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEvent $event */
+    $event = reset($events);
+    $entity->setTitle($event->label());
+
+    if (!$event->get('location')->isEmpty()) {
+      $entity->field_location = $event->get('location')->getValue();
+    }
+
+    $terms = $entity_manager->getStorage('taxonomy_term')->loadByProperties([
+      'uuid' => LIVING_SPACES_EVENT_ACCEPTED_STATUS,
+    ]);
+
+    $properties = [
+      'event' => $event->id(),
+      'status' => $terms ? reset($terms)->id() : '',
+    ];
+
+    if ($invites = $entity_manager->getStorage('living_spaces_event_invite')->loadByProperties($properties)) {
+      $names = [];
+      /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInvite $invite */
+      foreach ($invites as $invite) {
+        /** @var \Drupal\user\Entity\User $owner */
+        $owner = $invite->getOwner();
+        $names[$owner->id()] = $owner->getDisplayName();
+      }
+      $entity->field_attendees = implode(PHP_EOL, $names);
+    }
+
+    if (!$event->get('agenda')->isEmpty()) {
+      $tags = [];
+      foreach ($event->get('agenda') as $agenda) {
+        if (!$agenda->entity->get('field_agendatopics')->isEmpty()) {
+          foreach ($agenda->entity->get('field_agendatopics') as $item) {
+            /** @var \Drupal\paragraphs\Entity\Paragraph $topic */
+            $topic = $item->entity;
+            $entity->field_agendatopics[] = $topic->createDuplicate();
+          }
+        }
+
+        if (!$agenda->entity->get('field_tags')->isEmpty()) {
+          foreach ($agenda->entity->get('field_tags')->getValue() as $item) {
+            $tags[$item['target_id']] = $item['target_id'];
+          }
+        }
+      }
+
+      $entity->field_tags = array_values($tags);
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_event_node_insert(NodeInterface $entity) {
+  if ('protocol' == $entity->bundle() && $uuid = \Drupal::request()->query->get('uuid')) {
+    $entity_manager = \Drupal::entityTypeManager();
+    if ($events = $entity_manager->getStorage('living_spaces_event')->loadByProperties(['uuid' => $uuid])) {
+      /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEvent $event */
+      $event = reset($events);
+      $event->set('protocol', ['target_id' => $entity->id()]);
+      $event->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_living_spaces_sections_content_alter().
+ */
+function living_spaces_event_living_spaces_sections_content_alter(GroupContentInterface $content, &$section) {
+  if ($content->getEntity() instanceof NodeInterface &&
+    in_array($content->getEntity()->bundle(), ['agenda', 'protocol']) &&
+    $data = \Drupal::service('living_spaces_sections.manager')->getSectionFromGroupByType($content->getGroup(), 'events')
+  ) {
+    $section = $data;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_event_form_views_ui_config_item_form_alter(array &$form, FormStateInterface $form_state) {
+  /** @var \Drupal\views\Entity\View $view */
+  $view = $form_state->get('view');
+
+  if ('calendar' == $view->id() && $form_state->get('type') === 'filter') {
+    $configs = \Drupal::configFactory()->getEditable('living_spaces_event.calendar_filters');
+    $data = $configs->getRawData();
+    $input = $form_state->getUserInput();
+
+    $id = '';
+    if (!empty($form['options']['expose']['identifier']['#default_value'])) {
+      $id = $form['options']['expose']['identifier']['#default_value'];
+    }
+    elseif (!empty($input['options']['expose']['identifier'])) {
+      $id = $input['options']['expose']['identifier'];
+    }
+
+    $form['options']['expose']['old_identifier'] = [
+      '#type' => 'hidden',
+      '#value' => $id,
+    ];
+
+    // Filter exposed elements by fullcalendar tabs.
+    $form['options']['expose']['show_on_dispaly'] = [
+      '#type' => 'checkboxes',
+      '#title' => t('Show on display'),
+      '#options' => [
+        'dayGridMonth' => t('Month'),
+        'timeGridWeek' => t('Week'),
+        'timeGridDay' => t('Day'),
+        'listYear' => t('List'),
+      ],
+      '#default_value' => !empty($data[$form['options']['expose']['identifier']['#default_value']]) ? $data[$form['options']['expose']['identifier']['#default_value']] : '',
+      '#states' => [
+        'visible' => [
+          ':input[name="options[expose_button][checkbox][checkbox]"]' => ['checked' => TRUE],
+        ],
+        'unchecked' => [
+          ':input[name="options[expose_button][checkbox][checkbox]"]' => ['checked' => FALSE],
+        ],
+      ],
+    ];
+
+    $form['actions']['submit']['#submit'][] = 'living_spaces_event_config_item_form_submit';
+    array_unshift($form['actions']['remove']['#submit'], 'living_spaces_event_config_item_form_remove');
+  }
+}
+
+/**
+ * Provides submit callback for config item form.
+ */
+function living_spaces_event_config_item_form_submit(array &$form, FormStateInterface $form_state) {
+  $input = $form_state->getUserInput();
+
+  $id = '';
+  if (isset($input['options']['expose']['identifier'])) {
+    $id = $input['options']['expose']['identifier'];
+  }
+  elseif (isset($input['options']['expose']['old_identifier'])) {
+    $id = $input['options']['expose']['old_identifier'];
+  }
+
+  if ($id) {
+    $configs = \Drupal::configFactory()->getEditable('living_spaces_event.calendar_filters');
+    if ($input['options']['expose_button']['checkbox']['checkbox'] && isset($input['options']['expose']['show_on_dispaly'])) {
+      $configs->set($id, $input['options']['expose']['show_on_dispaly']);
+    }
+    else {
+      $configs->set($id, NULL);
+    }
+    $configs->save();
+  }
+}
+
+/**
+ * Provides remove callback for config item form.
+ */
+function living_spaces_event_config_item_form_remove(array &$form, FormStateInterface $form_state) {
+  $input = $form_state->getUserInput();
+
+  if (isset($input['options']['expose']['show_on_dispaly'], $input['options']['expose']['identifier'])) {
+    $configs = \Drupal::configFactory()->getEditable('living_spaces_event.calendar_filters');
+    $configs->set($input['options']['expose']['identifier'], NULL);
+    $configs->save();
+  }
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function living_spaces_event_js_alter(&$javascript, AttachedAssetsInterface $assets) {
+  if (isset($javascript['modules/contrib/fullcalendar_view/js/fullcalendar_view.js'])) {
+    $path = drupal_get_path('module', 'living_spaces_event') . '/js/living_spaces_event_calendar.js';
+    $javascript['modules/contrib/fullcalendar_view/js/fullcalendar_view.js']['data'] = $path;
+  }
+}
+
+/**
+ * Implements hook_views_plugins_style_alter().
+ */
+function living_spaces_event_views_plugins_style_alter(array &$plugins) {
+  if (isset($plugins['fullcalendar_view_display'])) {
+    $plugins['fullcalendar_view_display']['even empty'] = TRUE;
+  }
+}
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function living_spaces_event_field_widget_form_alter(&$element, FormStateInterface $form_state, $context) {
+  $field_definition = $context['items']->getFieldDefinition();
+
+  if ('time_range' == $field_definition->getType()) {
+    $element['from']['#title'] = t('From');
+    $element['to']['#title'] = t('Until');
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_event_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\views\Entity\View $view */
+  $view = $form_state->get('view');
+
+  if ('event_invites' == $view->id()) {
+    $time = \Drupal::time()->getRequestTime();
+    $date = \Drupal::service('date.formatter');
+    $input = $form_state->getUserInput();
+
+    if (isset($form['field_start_date'])) {
+      $start = $date->format($time, 'custom', 'Y-m-d');
+      $input['field_start_date'] = empty($input['field_start_date']) ? $start : $input['field_start_date'];
+    }
+
+    if (isset($form['field_end_date'])) {
+      $form['field_end_date']['#type'] = 'datetime';
+      $form['#after_build'][] = 'living_spaces_event_views_exposed_form_after_build';
+
+      if (!isset($input['field_end_date']['date']) || empty($input['field_end_date']['date'])) {
+        $end = $date->format(strtotime('+1 year', $time), 'custom', 'Y-m-d');
+        $end_value = &$form['field_end_date']['#value'];
+        $end_value['date'] = empty($end_value['date']) ? $end : $end_value['date'];
+        $end_value['time'] = empty($end_value['time']) ? '23:59:59' : $end_value['time'];
+        $end_value['object'] = empty($end_value['object']) ? new DrupalDateTime($end . ' 23:59:59') : $end_value['object'];
+      }
+    }
+    $form_state->setUserInput($input);
+  }
+}
+
+/**
+ * Provides after build callback for views exposed form.
+ */
+function living_spaces_event_views_exposed_form_after_build($form, FormStateInterface $form_state) {
+  array_unshift($form['field_end_date']['#element_validate'], [
+    '\Drupal\living_spaces_event\LivingSpacesEventDatetime',
+    'validateDatetime',
+  ]);
+  hide($form['field_end_date']['time']);
+
+  return $form;
+}

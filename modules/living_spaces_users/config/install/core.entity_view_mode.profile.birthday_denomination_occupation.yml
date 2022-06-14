@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_users
+  module:
+    - profile
+id: profile.birthday_denomination_occupation
+label: 'Birthday, Denomination, Occupation'
+targetEntityType: profile
+cache: true

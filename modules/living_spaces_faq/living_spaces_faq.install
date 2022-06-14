@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Install/update/uninstall hooks for FAQ module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function living_spaces_faq_install() {
+  $entity_manager = \Drupal::entityTypeManager()->getStorage('path_alias');
+
+  /** @var \Drupal\path_alias\Entity\PathAlias $alias */
+  $alias = $entity_manager->create([
+    'path' => '/help-faq',
+    'alias' => '/hilfe-faq',
+    'langcode' => 'de',
+  ]);
+
+  $alias->save();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function living_spaces_faq_uninstall() {
+  $entity_manager = \Drupal::entityTypeManager()->getStorage('path_alias');
+  $aliases = $entity_manager->loadByProperties([
+    'path' => '/help-faq',
+    'alias' => '/hilfe-faq',
+    'langcode' => 'de',
+  ]);
+
+  /** @var \Drupal\path_alias\Entity\PathAlias $alias */
+  foreach ($aliases as $alias) {
+    $alias->delete();
+  }
+}

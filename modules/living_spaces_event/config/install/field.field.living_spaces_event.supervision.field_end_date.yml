@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.living_spaces_event.field_end_date
+    - living_spaces_event.living_spaces_event_type.supervision
+  module:
+    - datetime
+id: living_spaces_event.supervision.field_end_date
+field_name: field_end_date
+entity_type: living_spaces_event
+bundle: supervision
+label: 'End date'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

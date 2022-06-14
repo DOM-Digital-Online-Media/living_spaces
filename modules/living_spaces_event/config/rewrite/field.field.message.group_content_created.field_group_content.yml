@@ -1,0 +1,19 @@
+dependencies:
+  config:
+    - group.content_type.group_content_type_a747a9d8b8479
+    - group.content_type.group_content_type_be52e1ad6ae41
+    - group.content_type.group_content_type_433311c7ab532
+    - group.content_type.group_content_type_c618dad3b19f9
+    - group.content_type.group_content_type_08c54fb9dd8aa
+    - group.content_type.living_space-group_node-agenda
+    - group.content_type.living_space-group_node-protocol
+settings:
+  handler_settings:
+    target_bundles:
+      group_content_type_a747a9d8b8479: group_content_type_a747a9d8b8479
+      group_content_type_be52e1ad6ae41: group_content_type_be52e1ad6ae41
+      group_content_type_433311c7ab532: group_content_type_433311c7ab532
+      group_content_type_c618dad3b19f9: group_content_type_c618dad3b19f9
+      group_content_type_08c54fb9dd8aa: group_content_type_08c54fb9dd8aa
+      living_space-group_node-agenda: living_space-group_node-agenda
+      living_space-group_node-protocol: living_space-group_node-protocol

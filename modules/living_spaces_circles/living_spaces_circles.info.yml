@@ -1,0 +1,17 @@
+name: 'Space Circles'
+type: module
+description: 'Provides circle functionality for living spaces.'
+core_version_requirement: ^9.0
+package: 'Living Spaces'
+dependencies:
+  - autocomplete_deluxe
+  - config_rewrite
+  - group
+  - living_spaces_group
+  - living_spaces_menus
+  - living_spaces_users
+  - views_field_view
+
+default_content:
+  menu_link_content:
+    - d3c379dc-e4c8-47d0-a59f-0f3bc51ef623

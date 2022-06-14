@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_page
+  config:
+    - filter.format.full_html
+template: page_created
+label: 'Page has been created'
+description: ''
+text:
+  -
+    value: "<h3><img src=\"[message:author:user_picture:thumbnail]\" /> <a href=\"[message:author:url]\">[message:author:display-name]</a> created <a href=\"[message:field_page:entity:url]\"><strong>[message:field_page:entity]</strong></a></h3>\r\n"
+    format: full_html
+settings:
+  'token options':
+    clear: true
+    'token replace': true
+  purge_override: false
+  purge_methods: {  }
+category: d42f2dc9-7d97-44c4-90a0-f93abf903ae0

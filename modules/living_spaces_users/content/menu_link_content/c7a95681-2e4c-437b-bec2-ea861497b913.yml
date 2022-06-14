@@ -1,0 +1,59 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: c7a95681-2e4c-437b-bec2-ea861497b913
+  bundle: menu_link_content
+  default_langcode: en
+  depends:
+    4d89df5f-b766-4abc-a882-feeb218d61e2: menu_link_content
+default:
+  enabled:
+    -
+      value: true
+  title:
+    -
+      value: 'Automatic Bans'
+  menu_name:
+    -
+      value: main
+  link:
+    -
+      uri: 'internal:/admin/people/flood-unblock'
+      title: ''
+      options: {  }
+  external:
+    -
+      value: false
+  rediscover:
+    -
+      value: true
+  weight:
+    -
+      value: -43
+  expanded:
+    -
+      value: false
+  parent:
+    -
+      value: 'menu_link_content:4d89df5f-b766-4abc-a882-feeb218d61e2'
+  revision_translation_affected:
+    -
+      value: true
+  menu_item_override_children:
+    -
+      value: false
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 1
+  content_translation_status:
+    -
+      value: true
+  content_translation_created:
+    -
+      value: 1637066930

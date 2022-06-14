@@ -1,0 +1,9 @@
+living_spaces_group_privacy.privacy_form:
+  path: '/admin/group/privacy-settings'
+  defaults:
+    _form: '\Drupal\living_spaces_group_privacy\Form\LivingSpacesGroupPrivacyForm'
+    _title: 'Privacy settings'
+  requirements:
+    _permission: 'manage living spaces'
+  options:
+    _admin_route: TRUE

@@ -1,0 +1,15 @@
+services:
+  living_spaces_page.access_checker:
+    class: Drupal\living_spaces_page\Access\LivingSpacesPageAccessCheck
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: access_check, applies_to: _living_spaces_page_access_check }
+  living_spaces_page.route_subscriber:
+    class: Drupal\living_spaces_page\Routing\LivingSpacesPageRouteSubscriber
+    tags:
+      - { name: event_subscriber, priority: 100 }
+  living_spaces_page.route_enhancer:
+    class: Drupal\living_spaces_page\Routing\LivingSpacesPageEnhancer
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: route_enhancer, priority: 100 }

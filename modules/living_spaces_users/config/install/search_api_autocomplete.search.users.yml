@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.space_users
+    - views.view.users
+  module:
+    - views
+id: users
+label: 'Users (solr)'
+index_id: space_users
+suggester_settings:
+  living_spaces_group_server:
+    fields: {  }
+suggester_weights:
+  living_spaces_group_server: 0
+suggester_limits: {  }
+search_settings:
+  'views:users':
+    displays:
+      default: false
+      selected:
+        - counselee
+        - employee
+options:
+  limit: 10
+  min_length: 1
+  show_count: false
+  autosubmit: false
+  submit_button_selector: ':submit'
+  delay: null

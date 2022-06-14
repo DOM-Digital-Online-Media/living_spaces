@@ -1,0 +1,10 @@
+permissions:
+  - 'access comments'
+  - 'access content'
+  - 'access intranet dashboard'
+  - 'access shortcuts'
+  - 'access site-wide contact form'
+  - 'post comments'
+  - 'search content'
+  - 'skip comment approval'
+  - 'use text format basic_html'

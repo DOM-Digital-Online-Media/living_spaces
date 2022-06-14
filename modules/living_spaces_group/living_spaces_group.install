@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Install/update/uninstall hooks for group module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function living_spaces_group_uninstall() {
+  // Delete preinstalled content.
+  $link_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+  $link = $link_storage
+    ->loadByProperties(['uuid' => '21f299cd-b60c-4983-b863-879297d3bcd3']);
+  if (!empty($link)) {
+    $link_storage->delete($link);
+  }
+}

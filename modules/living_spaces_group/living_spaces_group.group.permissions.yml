@@ -1,0 +1,3 @@
+manage space members:
+  title: 'Allow to manage member actions on space members page'
+  description: 'Allow user to remove users from space and manage Space admin role'

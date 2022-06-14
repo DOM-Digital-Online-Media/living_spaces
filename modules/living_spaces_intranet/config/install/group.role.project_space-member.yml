@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.project_space
+id: project_space-member
+label: Member
+weight: -100
+internal: true
+audience: member
+group_type: project_space
+permissions_ui: true
+permissions:
+  - 'view group'
+  - 'view group_membership content'
+is_space_admin: false

@@ -1,0 +1,95 @@
+name: Living Spaces
+type: profile
+description: 'Distribution for user spaces (groups) that designed for extranet/intranet workflow.'
+core_version_requirement: ^9
+
+distribution:
+  name: Living Spaces
+
+# Modules to install to support the profile.
+install:
+  # <standard profile>
+  - node
+  - history
+  - block
+  - breakpoint
+  - ckeditor
+  - config
+  - comment
+  - contextual
+  - contact
+  - menu_link_content
+  - datetime
+  - block_content
+  - quickedit
+  - editor
+  - help
+  - image
+  - menu_ui
+  - options
+  - path
+  - page_cache
+  - dynamic_page_cache
+  - big_pipe
+  - taxonomy
+  - dblog
+  - search
+  - shortcut
+  - toolbar
+  - telephone
+  - field_ui
+  - file
+  - datetime_range
+  - rdf
+  - views
+  - views_ui
+  # </standard profile>
+  # <dev>
+  - admin_toolbar
+  - admin_toolbar_tools
+  - devel
+  - config_rewrite
+  - pathauto
+  - subpathauto
+  - empty_fields
+  - redirect
+  - views_contextual_filters_or
+  # </dev>
+  - language
+  - locale
+  - content_translation
+  - config_translation
+  - layout_builder
+  - layout_discovery
+  - rest
+  - entity_reference_revisions
+  - paragraphs
+  - paragraphs_type_permissions
+  - site_settings
+  - site_settings_type_permissions
+  - dom_paragraphs_extra
+  - dom_faq
+  - living_spaces_default_configs
+  - living_spaces_users
+  - living_spaces_group
+  - living_spaces_sections
+  - living_spaces_discussions
+  - living_spaces_activity
+  - living_spaces_page
+  - living_spaces_default
+  - living_spaces_subgroup
+  - living_spaces_entity_extra
+  - living_spaces_group_privacy
+  - living_spaces_simple_permissions
+  - living_spaces_intranet
+  - dom_field_extra
+  - living_spaces_faq
+  - living_spaces_circles
+  - living_spaces_changelog
+  - living_spaces_event
+  - living_spaces_menus
+  - living_spaces_protected_area
+
+themes:
+  - living_spaces_barrio
+  - seven

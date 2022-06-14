@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_phone_private
+    - profile.type.contact_data
+  module:
+    - dom_field_extra
+    - telephone
+third_party_settings:
+  dom_field_extra:
+    private_field: true
+id: profile.contact_data.field_phone_private
+field_name: field_phone_private
+entity_type: profile
+bundle: contact_data
+label: 'Phone (private)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: telephone

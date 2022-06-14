@@ -1,0 +1,30 @@
+living_spaces_simple_permissions.global:
+  type: config_object
+  label: 'Global Permissions'
+  mapping:
+    modules:
+      type: sequence
+      label: 'Modules'
+      sequence:
+        type: string
+    permissions:
+      type: sequence
+      label: 'Hidden permissions'
+      sequence:
+        type: string
+    names:
+      type: sequence
+      label: 'Renamed permissions'
+      sequence:
+        type: mapping
+        label: 'Permission'
+        mapping:
+          old:
+            type: string
+            label: 'Old name'
+          new:
+            type: string
+            label: 'New name'
+          desc:
+            type: string
+            label: 'Description'

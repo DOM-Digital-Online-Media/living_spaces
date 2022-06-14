@@ -1,0 +1,17 @@
+name: 'Space Group Default Content'
+type: module
+description: 'Provides default content for Living Spaces profile'
+core_version_requirement: ^9.0
+package: 'Living Spaces'
+dependencies:
+  - default_content
+  - living_spaces_discussions
+  - living_spaces_event
+  - living_spaces_group
+  - living_spaces_sections
+default_content:
+  living_spaces_section:
+    - a677f43b-8ac5-4cf5-82ca-9fbd611929d4
+    - 8b58b1a7-6672-4e2c-8066-6f4c81e9ed2f
+  group:
+    - c84c2661-b8e4-4759-a479-4b8c91a25dd8

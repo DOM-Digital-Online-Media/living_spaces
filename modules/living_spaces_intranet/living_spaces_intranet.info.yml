@@ -1,0 +1,32 @@
+name: 'Space Intranet'
+type: module
+description: 'Provides intranet functionality for living spaces.'
+core_version_requirement: ^9.0
+package: 'Living Spaces'
+dependencies:
+  - config_rewrite
+  - living_spaces_activity
+  - living_spaces_default
+  - living_spaces_default_configs
+  - living_spaces_discussions
+  - living_spaces_event
+  - living_spaces_group
+  - living_spaces_menus
+  - living_spaces_users
+
+default_content:
+  living_spaces_section:
+    - f41f8f0d-ba82-463e-9aaa-df5de8164a06
+    - 7ec4e426-4ef5-4948-9817-8face23eaec0
+    - 1b83cb06-bddb-429a-8c0f-5de96ab0baae
+    - 2315af4a-a751-4137-96d9-73613e6bf82c
+  group:
+    - 5ab99cc1-45b7-45ec-a9b4-865e7958e553
+    - c7ecd1bf-9377-49cc-b0fd-a06bb246847a
+  menu_link_content:
+    - 230318f9-b4e3-47a7-b7cf-2ec7a5ffee5e
+  taxonomy_term:
+    - 54d1b714-f156-4733-a740-69f6da248470
+    - c3797544-bcc2-4f5e-8288-b77a3b819d8f
+    - cc5db547-ed81-4177-95c6-01bc4e9109ca
+    - 4813186f-dc7a-46fa-abd6-c95464c33fb7

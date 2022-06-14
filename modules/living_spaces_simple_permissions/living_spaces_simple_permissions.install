@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Install/update/uninstall hooks for simple permissions module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function living_spaces_simple_permissions_uninstall() {
+  // Delete preinstalled content.
+  $link_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+  $link = $link_storage
+    ->loadByProperties(['uuid' => '74a788e1-c016-4b94-8abc-0fc0b04612fd']);
+  if (!empty($link)) {
+    $link_storage->delete($link);
+  }
+}

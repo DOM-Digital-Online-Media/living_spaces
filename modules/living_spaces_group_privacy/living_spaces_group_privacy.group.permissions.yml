@@ -1,0 +1,6 @@
+access living spaces privacy:
+  title: 'Access living spaces privacy'
+  description: 'Allow access to manage privacy on living space'
+
+permission_callbacks:
+  - \Drupal\living_spaces_group_privacy\LivingSpacesGroupPrivacyPermissions::privacyTypePermissions

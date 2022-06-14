@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_intranet
+  module:
+    - user
+id: user.employee
+label: Employee
+targetEntityType: user
+cache: true

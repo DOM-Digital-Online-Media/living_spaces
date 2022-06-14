@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_occupation
+    - profile.type.core
+id: profile.core.field_occupation
+field_name: field_occupation
+entity_type: profile
+bundle: core
+label: Occupation
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

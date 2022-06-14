@@ -1,0 +1,13 @@
+services:
+  logger.channel.living_spaces_subgroup:
+    parent: logger.channel_base
+    arguments: ['living_spaces_subgroup']
+  living_spaces_subgroup.manager:
+    class: Drupal\living_spaces_subgroup\LivingSpacesSubgroupManager
+    arguments: ['@entity_type.manager', '@logger.channel.living_spaces_subgroup']
+  living_spaces_subgroup.checker_decorator:
+    class: Drupal\living_spaces_subgroup\LivingSpacesSubgroupPermissionChecker
+    public: false
+    decorates: group_permission.checker
+    decoration_priority: 1
+    arguments: ['@living_spaces_subgroup.checker_decorator.inner', '@living_spaces_subgroup.manager']

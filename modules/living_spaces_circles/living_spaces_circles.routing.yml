@@ -1,0 +1,20 @@
+living_spaces_circles.circle_autocomplete:
+  path: '/living-spaces-circles/autocomplete'
+  defaults:
+    _controller: '\Drupal\living_spaces_circles\Controller\LivingSpacesCirclesAutoCompleteController::autocomplete'
+    _format: json
+  requirements:
+    _access: 'TRUE'
+living_spaces_circles.remove_circle:
+  path: '/remove-circle/{group}/{circle}'
+  defaults:
+    _form: '\Drupal\living_spaces_circles\Form\LivingSpacesCirclesRemoveCircleForm'
+    _title: 'Remove circle'
+  requirements:
+    _permission: 'manage circle spaces'
+  options:
+    parameters:
+      group:
+        type: entity:group
+      circle:
+        type: entity:group

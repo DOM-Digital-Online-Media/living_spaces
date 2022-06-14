@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_favorite_spaces
+  module:
+    - user
+id: user.user.field_favorite_spaces
+field_name: field_favorite_spaces
+entity_type: user
+bundle: user
+label: 'Favorite spaces'
+description: 'Use the autocomplete to put in up to 8 spaces as your favorite spaces to your navigation. Entries have to be separated by comma.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: user_groups
+      display_name: entity_reference_user_spaces
+      arguments: {  }
+field_type: entity_reference

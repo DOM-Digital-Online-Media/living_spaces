@@ -1,0 +1,63 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: 4d89df5f-b766-4abc-a882-feeb218d61e2
+  bundle: menu_link_content
+  default_langcode: en
+default:
+  enabled:
+    -
+      value: true
+  title:
+    -
+      value: Management
+  menu_name:
+    -
+      value: main
+  link:
+    -
+      uri: 'route:<nolink>'
+      title: ''
+      options: {  }
+  external:
+    -
+      value: false
+  rediscover:
+    -
+      value: false
+  weight:
+    -
+      value: 1
+  expanded:
+    -
+      value: true
+  revision_translation_affected:
+    -
+      value: true
+  menu_item_roles:
+    -
+      target_id: administrator
+    -
+      target_id: assistant_to_the_office_manager
+    -
+      target_id: client_admin
+    -
+      target_id: office_manager
+  menu_item_override_children:
+    -
+      value: false
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 1
+  content_translation_status:
+    -
+      value: true
+  content_translation_created:
+    -
+      value: 1636541123

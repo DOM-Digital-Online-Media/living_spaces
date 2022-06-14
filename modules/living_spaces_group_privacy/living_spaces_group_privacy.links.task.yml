@@ -1,0 +1,5 @@
+living_spaces_group_privacy.privacy_form:
+  title: 'Privacy settings'
+  base_route: 'entity.group.collection'
+  route_name: 'living_spaces_group_privacy.privacy_form'
+  weight: 99

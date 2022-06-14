@@ -1,0 +1,4 @@
+living_spaces.settings_overview:
+  title: 'Living Spaces'
+  route_name: living_spaces.settings_overview
+  parent: system.admin_config

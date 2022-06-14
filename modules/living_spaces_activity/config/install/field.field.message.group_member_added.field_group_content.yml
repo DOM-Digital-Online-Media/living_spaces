@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.message.field_group_content
+    - group.content_type.living_space-group_membership
+    - message.template.group_member_added
+id: message.group_member_added.field_group_content
+field_name: field_group_content
+entity_type: message
+bundle: group_member_added
+label: 'Group content'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:group_content'
+  handler_settings:
+    target_bundles:
+      living_space-group_membership: living_space-group_membership
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

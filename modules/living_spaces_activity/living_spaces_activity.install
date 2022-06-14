@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains functions and hooks for living_spaces_activity.install.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function living_spaces_activity_uninstall($is_syncing) {
+  // Delete preinstalled content.
+  $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $term = $taxonomy_storage
+    ->loadByProperties(['uuid' => [
+      LIVING_SPACES_ACTIVITY_GENERAL,
+      LIVING_SPACES_ACTIVITY_PERSONAL,
+    ]]);
+  if (!empty($term)) {
+    $taxonomy_storage->delete($term);
+  }
+}
+
+

@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_users
+  module:
+    - profile
+id: profile.phones_address
+label: 'Phones, Address'
+targetEntityType: profile
+cache: true

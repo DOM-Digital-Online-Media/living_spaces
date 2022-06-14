@@ -1,0 +1,7 @@
+services:
+  living_spaces_circles.membership_loader_decorator:
+    class: Drupal\living_spaces_circles\LivingSpacesCirclesMembershipLoader
+    public: false
+    decorates: group.membership_loader
+    decoration_priority: 1
+    arguments: ['@living_spaces_circles.membership_loader_decorator.inner', '@entity_type.manager']

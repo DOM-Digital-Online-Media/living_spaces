@@ -1,0 +1,15 @@
+living_spaces_sections.living_spaces_section_type.*:
+  type: config_entity
+  label: 'Living space section type config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    uuid:
+      type: string
+    parent:
+      type: string
+      nullable: true

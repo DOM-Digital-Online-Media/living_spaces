@@ -1,0 +1,10 @@
+name: 'Space Default Configs'
+type: module
+description: 'Provides default configs required for profile modules like wysiwyg profiles, etc'
+core_version_requirement: ^9.0
+package: 'Living Spaces'
+dependencies:
+  - editor
+  - language
+  - search_api_solr
+  - taxonomy

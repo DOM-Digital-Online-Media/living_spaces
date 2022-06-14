@@ -1,0 +1,379 @@
+<?php
+
+/**
+ * @file
+ * Contains functions and hooks for living_spaces_sections module.
+ */
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
+use Drupal\living_spaces_sections\LivingSpacesSectionsHtmlRouteProvider;
+use Drupal\living_spaces_sections\Entity\LivingSpacesSectionInterface;
+use Drupal\group\Entity\GroupInterface;
+use Drupal\Core\Url;
+
+/**
+ * Field name on entity that contains all the enabled sections.
+ */
+define('LIVING_SPACES_SECTIONS_FIELD', 'sections');
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function living_spaces_sections_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
+
+  switch ($entity_type->id()) {
+    case 'group':
+    case 'living_spaces_section':
+      $fields[LIVING_SPACES_SECTIONS_FIELD] = BaseFieldDefinition::create('entity_reference')
+        ->setLabel(t('Sections'))
+        ->setSetting('target_type', 'living_spaces_section')
+        ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED);
+      break;
+
+    case 'group_content':
+      $fields['section'] = BaseFieldDefinition::create('entity_reference')
+        ->setLabel(t('Section'))
+        ->setSetting('target_type', 'living_spaces_section')
+        ->setCardinality(1)
+        ->setComputed(TRUE)
+        ->setCustomStorage(TRUE)
+        ->setClass('\Drupal\living_spaces_sections\Field\LivingSpacesSectionsSectionStorage');
+      break;
+
+  }
+
+  return $fields;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_sections_form_group_type_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\group\Entity\GroupTypeInterface $type */
+  $type = $form_state->getFormObject()->getEntity();
+  /** @var \Drupal\living_spaces_sections\LivingSpacesSectionsManagerInterface $manager */
+  $manager = \Drupal::service('living_spaces_sections.manager');
+
+  $form['sections_enabled'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Enable sections'),
+    '#default_value' => !$type->isNew() && $manager->isSectionsEnabled($type->id()),
+    '#access' => \Drupal::currentUser()->hasPermission('manage living spaces')
+  ];
+  $form['actions']['submit']['#submit'][] = 'living_spaces_sections_group_type_form_submit';
+}
+
+/**
+ * Submit to group type form to save sections setting.
+ *
+ * @param array $form
+ *   Form array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state.
+ */
+function living_spaces_sections_group_type_form_submit(array &$form, FormStateInterface $form_state) {
+  /** @var \Drupal\group\Entity\GroupTypeInterface $type */
+  $type = $form_state->getFormObject()->getEntity();
+  $enabled = $form_state->getValue('sections_enabled');
+
+  /** @var \Drupal\Core\Config\Config $config */
+  $config = \Drupal::service('config.factory')
+    ->getEditable('living_spaces_sections.settings');
+  $types = $config->get('group_types');
+  $types = is_array($types) ? $types : [];
+  $position = array_search($type->id(), $types);
+
+  if ($enabled) {
+    $types[] = $type->id();
+    $types = array_unique($types);
+  }
+  elseif ($position !== FALSE) {
+    unset($types[$position]);
+  }
+
+  $config->set('group_types', $types)->save();
+}
+
+/**
+ * Implements hook_inline_entity_form_entity_form_alter().
+ */
+function living_spaces_sections_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$form_state) {
+  if (!empty($entity_form['#entity_type']) &&
+    $entity_form['#entity_type'] === 'living_spaces_section'
+  ) {
+    living_spaces_sections_section_form_alter($entity_form, $entity_form['#entity']);
+    if (!empty($entity_form['#element_validate'])) {
+      $entity_form['#element_validate'] = array_merge([
+        'living_spaces_sections_inline_entity_form_section_entity_validation',
+      ], $entity_form['#element_validate']);
+    }
+    else {
+      $entity_form['#element_validate'][] = 'living_spaces_sections_inline_entity_form_section_entity_validation';
+    }
+  }
+}
+
+/**
+ * Very first validation that happens only on inline entity form for sections.
+ *
+ * @param array $element
+ *   Form element.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state object.
+ * @param array $complete_form
+ *   Form array.
+ */
+function living_spaces_sections_inline_entity_form_section_entity_validation(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  // Set group and parent section internally before all the validations, so we
+  // have those relations before it actually saved to entity reference field.
+  if ($element['#entity'] instanceof LivingSpacesSectionInterface) {
+    if ($element['#living_space'] instanceof GroupInterface) {
+      $element['#entity']->setGroup($element['#living_space']);
+    }
+    elseif ($element['#section'] instanceof LivingSpacesSectionInterface) {
+      $element['#entity']->setParentSection($element['#section']);
+    }
+  }
+}
+
+/**
+ * Form alter for section form either from inline form widget or default edit.
+ *
+ * @param array $form
+ *   Form or element array.
+ * @param \Drupal\living_spaces_sections\Entity\LivingSpacesSectionInterface $section
+ *   Section entity for which edit form is generated.
+ */
+function living_spaces_sections_section_form_alter(array &$form, LivingSpacesSectionInterface $section) {
+
+  // Remove section field from manual edit.
+  if (!empty($form[LIVING_SPACES_SECTIONS_FIELD])) {
+    $form[LIVING_SPACES_SECTIONS_FIELD]['#access'] = FALSE;
+  }
+
+  // Set default value for a tab label.
+  $form['tab']['widget'][0]['value']['#default_value'] = $section->getTabLabel();
+
+  // Make path utilise a machine name element.
+  $form['path']['widget'][0]['value']['#type'] = 'machine_name';
+  $form['path']['widget'][0]['value']['#machine_name'] = [
+    'source' => array_merge($form['#array_parents'], [
+      'tab',
+      'widget',
+      0,
+      'value',
+    ]),
+    'exists' => 'living_spaces_sections_path_exists_callback',
+    'label' => t('Path'),
+    'replace_pattern' => '[^a-z0-9-]+',
+    'replace' => '-',
+  ];
+
+  // Inner tab label only used for parent sections.
+  $form['inner_tab']['#access'] = $section->isParent();
+}
+
+/**
+ * Machine name exists callback for section path element.
+ *
+ * @param string $path
+ *   Section path.
+ *
+ * @return bool
+ *   FALSE.
+ */
+function living_spaces_sections_path_exists_callback($path) {
+
+  // We just return FALSE here to make machine name element not throw a notice.
+  // All the validation happens in LivingSpacesSectionsPathConstraint instead.
+  return FALSE;
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function living_spaces_sections_menu_local_tasks_alter(&$data, $route_name, RefinableCacheableDependencyInterface &$cacheability) {
+  static $called = FALSE;
+
+  $route_match = \Drupal::routeMatch();
+  $routes = [
+    LivingSpacesSectionsHtmlRouteProvider::SECTION_ROUTE,
+    LivingSpacesSectionsHtmlRouteProvider::SUB_SECTION_ROUTE,
+    'entity.group.canonical',
+    'entity.group.edit_form',
+    'living_spaces_sections.sections_form',
+    'living_spaces_sections.sub_sections_form',
+  ];
+
+  // Build section tabs only for those routes and only once.
+  if (!in_array($route_name, $routes) || $called) {
+    return;
+  }
+  $called = TRUE;
+
+  // Fetch living space group from route.
+  $group = $route_match->getParameter('group');
+  if (!$group instanceof GroupInterface) {
+    $group = \Drupal::entityTypeManager()->getStorage('group')->load($group);
+  }
+
+  /** @var \Drupal\living_spaces_sections\LivingSpacesSectionsManagerInterface $section_manager */
+  $section_manager = \Drupal::service('living_spaces_sections.manager');
+  if (!$section_manager->isSectionsEnabled($group->bundle())) {
+    return;
+  }
+  $cacheability->addCacheTags($group->getCacheTags());
+
+  // Retrieve current section and subsection from route.
+  $section_path = $route_match->getParameter('section');
+  $sub_section_path = $route_match->getParameter('sub_section');
+
+  // Get current section and parent sections.
+  $path = implode('/', [$section_path, $sub_section_path]);
+  $current_section = $section_manager->getSectionFromGroupByPath($group, $path);
+  $parent_section = $current_section
+    ? $current_section->getParentSection()
+    : NULL;
+
+  // If we either on section or sub-section routes we should get group tabs.
+  if ($parent_section || $current_section) {
+    /** @var \Drupal\Core\Menu\LocalTaskManagerInterface $manager */
+    $manager = \Drupal::service('plugin.manager.menu.local_task');
+
+    // Fetch top level tabs from a living space group.
+    $group_data = $manager->getLocalTasks('entity.group.canonical');
+    $data['tabs'][0] = $group_data['tabs'];
+    $cacheability->addCacheableDependency($group_data['cacheability']);
+
+    // Remove active state from all tabs and set it only to current section.
+    foreach ($data['tabs'][0] as $key => &$tab) {
+      $tab['#active'] = FALSE;
+    }
+  }
+
+  // Place enabled living space sections next to view tab.
+  $element_weight = $data['tabs'][0]['group.view']['#weight'] ?? 0;
+  $sections = $section_manager->getSectionsFromGroup($group);
+  foreach ($sections as $section) {
+    /** @var \Drupal\living_spaces_sections\Entity\LivingSpacesSectionInterface $section */
+    $element_weight += 0.01;
+    $active = $parent_section
+      ? $section->id() === $parent_section->id()
+      : $current_section && ($section->id() === $current_section->id());
+
+    $data['tabs'][0]['living_spaces_sections.' . $section->bundle()] = [
+      '#theme' => 'menu_local_task',
+      '#weight' => $element_weight,
+      '#access' => $section->access('view'),
+      '#active' => $active,
+      '#link' => [
+        'title' => $section->getTabLabel(),
+        'url' => Url::fromRoute(LivingSpacesSectionsHtmlRouteProvider::SECTION_ROUTE, [
+          'group' => $group->id(),
+          'section' => $section->getPath(),
+        ]),
+        'localized_options' => [],
+      ],
+    ];
+  }
+
+  // If we have a child section or section that can have children, build second
+  // level tabs with a view, sub section settings page and sub sections.
+  if ($parent_section || ($current_section && $current_section->isParent())) {
+    $data['tabs'][1]['living_spaces_sections.subsection.view'] = [
+      '#theme' => 'menu_local_task',
+      '#weight' => 0,
+      '#access' => $parent_section ? $parent_section->access('view') : $current_section->access('view'),
+      '#active' => $route_name === LivingSpacesSectionsHtmlRouteProvider::SECTION_ROUTE,
+      '#link' => [
+        'title' => $parent_section ? $parent_section->getInnerTabLabel() : $current_section->getInnerTabLabel(),
+        'url' => Url::fromRoute(LivingSpacesSectionsHtmlRouteProvider::SECTION_ROUTE, [
+          'group' => $group->id(),
+          'section' => $parent_section ? $parent_section->getPath() : $current_section->getPath(),
+        ]),
+        'localized_options' => [],
+      ],
+    ];
+
+    // Check for global permission, if given then we won't check the group one.
+    $manage_access = \Drupal::currentUser()
+      ->hasPermission('access living spaces sections settings');
+    $manage_access = $manage_access
+      ? $manage_access
+      : $group->hasPermission('access living spaces sections settings', \Drupal::currentUser());
+    $data['tabs'][1]['living_spaces_sections.subsection.settings'] = [
+      '#theme' => 'menu_local_task',
+      '#weight' => 1000,
+      '#active' => $route_name === 'living_spaces_sections.sub_sections_form',
+      '#access' => $manage_access,
+      '#link' => [
+        'title' => t('Sub-section settings'),
+        'url' => Url::fromRoute('living_spaces_sections.sub_sections_form', [
+          'group' => $group->id(),
+          'section' => $parent_section ? $parent_section->getPath() : $current_section->getPath(),
+        ]),
+        'localized_options' => [],
+      ],
+    ];
+
+    $element_weight = 1;
+    $subsections = $section_manager->getSubSectionsFromSection($parent_section ?? $current_section);
+    foreach ($subsections as $subsection) {
+      $data['tabs'][1]['living_spaces_sections.subsection.' . $subsection->bundle()] = [
+        '#theme' => 'menu_local_task',
+        '#weight' => $element_weight += 0.1,
+        '#access' => $subsection->access('view'),
+        '#active' => $current_section->id() === $subsection->id(),
+        '#link' => [
+          'title' => $subsection->getTabLabel(),
+          'url' => Url::fromRoute(LivingSpacesSectionsHtmlRouteProvider::SUB_SECTION_ROUTE, [
+            'group' => $group->id(),
+            'section' => $subsection->getParentSection()->getPath(),
+            'sub_section' => $subsection->getPath(),
+          ]),
+          'localized_options' => [],
+        ],
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_living_spaces_group_remove_group_content_alter().
+ */
+function living_spaces_sections_living_spaces_group_remove_group_content_alter(GroupInterface $space, array &$items) {
+  /** @var \Drupal\living_spaces_sections\LivingSpacesSectionsManagerInterface $manager */
+  $manager = \Drupal::service('living_spaces_sections.manager');
+
+  if ($manager->isSectionsEnabled($space->bundle())) {
+    // If group is removed, remove enabled sections as well.
+    foreach ($manager->getSectionsFromGroup($space) as $section) {
+      $items['living_spaces_section'][] = $section->id();
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function living_spaces_sections_group_presave(GroupInterface $group) {
+  if ($group->isNew() && $group->hasField('template') && !$group->get('template')->isEmpty() &&
+    $group->get(LIVING_SPACES_SECTIONS_FIELD)->isEmpty()
+  ) {
+    $sections = [];
+    foreach ($group->get('template')->entity->get(LIVING_SPACES_SECTIONS_FIELD)->getValue() as $value) {
+      $section = \Drupal::entityTypeManager()->getStorage('living_spaces_section')->load($value['target_id']);
+      $clone = $section->createDuplicate();
+      $clone->save();
+      $sections[] = ['target_id' => $clone->id()];
+    }
+
+    if ($sections) {
+      $group->set(LIVING_SPACES_SECTIONS_FIELD, $sections);
+    }
+  }
+}

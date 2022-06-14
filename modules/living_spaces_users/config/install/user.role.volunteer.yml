@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_users
+id: volunteer
+label: Volunteer
+weight: 5
+is_admin: false
+permissions: {  }

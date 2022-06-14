@@ -1,0 +1,9 @@
+access living spaces overview:
+  title: 'Access Living Spaces Overview'
+  description: 'Allow access to page that lists all Living Spaces'
+manage living spaces:
+  title: 'Manage Living Spaces'
+  description: 'Allow access to manage all Living Spaces'
+access living spaces settings overview:
+  title: 'Access living spaces settings overview'
+  description: 'Allow access to manage living spaces settings'

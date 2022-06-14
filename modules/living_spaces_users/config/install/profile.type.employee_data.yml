@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_users
+id: employee_data
+label: 'Employee Data'
+display_label: ''
+multiple: false
+registration: true
+roles: {  }
+allow_revisions: false
+new_revision: false

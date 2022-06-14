@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_users
+  module:
+    - user
+id: living_spaces_users_employee_export_action
+label: 'Export data'
+type: user
+plugin: living_spaces_users_employee_export_action
+configuration: {  }

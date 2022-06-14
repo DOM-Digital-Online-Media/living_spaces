@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.project_space
+    - node.type.agenda
+  module:
+    - gnode
+    - node
+id: project_space-group_node-agenda
+label: 'Project space: Group node (Agenda)'
+description: 'Adds <em class="placeholder">Agenda</em> content to groups both publicly and privately.'
+group_type: project_space
+content_plugin: 'group_node:agenda'
+plugin_config:
+  group_cardinality: 0
+  entity_cardinality: 1
+  use_creation_wizard: false

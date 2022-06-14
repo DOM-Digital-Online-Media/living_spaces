@@ -1,0 +1,44 @@
+_meta:
+  version: '1.0'
+  entity_type: group
+  uuid: 5ab99cc1-45b7-45ec-a9b4-865e7958e553
+  bundle: department
+  default_langcode: en
+  depends:
+    f41f8f0d-ba82-463e-9aaa-df5de8164a06: living_spaces_section
+    2315af4a-a751-4137-96d9-73613e6bf82c: living_spaces_section
+default:
+  revision_user:
+    -
+      target_id: 1
+  status:
+    -
+      value: true
+  uid:
+    -
+      target_id: 1
+  label:
+    -
+      value: 'Department Space'
+  created:
+    -
+      value: 1640600045
+  path:
+    -
+      alias: ''
+      langcode: en
+      pathauto: 0
+  revision_translation_affected:
+    -
+      value: true
+  is_default:
+    -
+      value: true
+  protected:
+    -
+      value: true
+  sections:
+    -
+      entity: f41f8f0d-ba82-463e-9aaa-df5de8164a06
+    -
+      entity: 2315af4a-a751-4137-96d9-73613e6bf82c

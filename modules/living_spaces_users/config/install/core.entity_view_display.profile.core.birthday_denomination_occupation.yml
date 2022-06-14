@@ -1,0 +1,67 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.profile.birthday_denomination_occupation
+    - field.field.profile.core.field_birthday
+    - field.field.profile.core.field_denomination
+    - field.field.profile.core.field_first_name
+    - field.field.profile.core.field_gender
+    - field.field.profile.core.field_last_name
+    - field.field.profile.core.field_occupation
+    - profile.type.core
+  module:
+    - datetime
+    - empty_fields
+    - layout_builder
+    - options
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: false
+id: profile.core.birthday_denomination_occupation
+targetEntityType: profile
+bundle: core
+mode: birthday_denomination_occupation
+content:
+  field_birthday:
+    weight: 0
+    label: inline
+    settings:
+      timezone_override: ''
+      format_type: long
+    third_party_settings:
+      empty_fields:
+        handler: text
+        settings:
+          empty_text: 'Not released/known'
+    type: datetime_default
+    region: content
+  field_denomination:
+    weight: 1
+    label: inline
+    settings: {  }
+    third_party_settings:
+      empty_fields:
+        handler: text
+        settings:
+          empty_text: 'Not released/known'
+    type: list_default
+    region: content
+  field_occupation:
+    weight: 2
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings:
+      empty_fields:
+        handler: text
+        settings:
+          empty_text: 'Not released/known'
+    type: string
+    region: content
+hidden:
+  field_first_name: true
+  field_gender: true
+  field_last_name: true
+  search_api_excerpt: true

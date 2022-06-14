@@ -1,0 +1,6 @@
+entity.living_spaces_section_type.collection:
+  title: 'Living space section types'
+  route_name: entity.living_spaces_section_type.collection
+  description: 'List of available living space section types'
+  parent: system.admin_structure
+  weight: 99

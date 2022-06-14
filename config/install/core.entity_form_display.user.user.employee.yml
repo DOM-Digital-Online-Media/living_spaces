@@ -1,0 +1,73 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.user.employee
+    - field.field.user.user.field_favorite_spaces
+    - field.field.user.user.field_last_ip_address
+    - field.field.user.user.field_spoken_languages
+    - field.field.user.user.user_picture
+    - image.style.thumbnail
+  module:
+    - image
+    - profile
+    - user
+id: user.user.employee
+targetEntityType: user
+bundle: user
+mode: employee
+content:
+  account:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  contact_data_profiles:
+    type: profile_form
+    weight: 3
+    region: content
+    settings:
+      form_mode: default
+    third_party_settings: {  }
+  core_profiles:
+    type: profile_form
+    weight: 2
+    region: content
+    settings:
+      form_mode: default
+    third_party_settings: {  }
+  employee_data_profiles:
+    type: profile_form
+    weight: 4
+    region: content
+    settings:
+      form_mode: default
+    third_party_settings: {  }
+  preferred_spaces:
+    type: entity_reference_autocomplete
+    weight: 1
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+      match_limit: 10
+    region: content
+    third_party_settings: {  }
+  user_picture:
+    type: image_image
+    weight: 13
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+hidden:
+  contact: true
+  field_favorite_spaces: true
+  field_last_ip_address: true
+  field_spoken_languages: true
+  langcode: true
+  language: true
+  path: true
+  timezone: true
+  voluntary_information_profiles: true

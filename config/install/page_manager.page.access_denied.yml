@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies: {  }
+id: access_denied
+label: 'Access denied'
+description: ''
+use_admin_theme: false
+path: /access-denied
+access_logic: and
+access_conditions: {  }
+parameters: {  }

@@ -1,0 +1,38 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.living_spaces_access_area.entity.field_entity_bundle
+    - field.field.living_spaces_access_area.entity.field_entity_type
+    - living_spaces_protected_area.living_spaces_access_area_type.entity
+id: living_spaces_access_area.entity.default
+targetEntityType: living_spaces_access_area
+bundle: entity
+mode: default
+content:
+  field_entity_bundle:
+    weight: 2
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_entity_type:
+    weight: 1
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  label:
+    label: inline
+    type: string
+    weight: 0
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+hidden:
+  search_api_excerpt: true

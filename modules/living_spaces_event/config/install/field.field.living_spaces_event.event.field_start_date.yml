@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.living_spaces_event.field_start_date
+    - living_spaces_event.living_spaces_event_type.event
+  module:
+    - datetime
+id: living_spaces_event.event.field_start_date
+field_name: field_start_date
+entity_type: living_spaces_event
+bundle: event
+label: 'Start date'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

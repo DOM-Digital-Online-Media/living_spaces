@@ -1,0 +1,71 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.profile.employee_data.field_employee_number
+    - field.field.profile.employee_data.field_employment_end
+    - field.field.profile.employee_data.field_employment_start
+    - field.field.profile.employee_data.field_has_key
+    - field.field.profile.employee_data.field_notes
+    - field.field.profile.employee_data.field_pseudonym
+    - profile.type.employee_data
+  module:
+    - datetime
+id: profile.employee_data.default
+targetEntityType: profile
+bundle: employee_data
+mode: default
+content:
+  field_employee_number:
+    weight: 0
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_employment_end:
+    weight: 4
+    label: above
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_employment_start:
+    weight: 3
+    label: above
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_has_key:
+    weight: 1
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_notes:
+    weight: 5
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+  field_pseudonym:
+    weight: 2
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+hidden:
+  search_api_excerpt: true

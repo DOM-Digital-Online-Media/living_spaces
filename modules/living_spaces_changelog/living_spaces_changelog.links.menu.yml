@@ -1,0 +1,5 @@
+living_spaces_changelog.admin_changelog:
+  title: 'Changelog'
+  route_name: view.content.admin_changelog
+  parent: system.admin_content
+  weight: 0

@@ -1,0 +1,20 @@
+name: 'Space Activity'
+type: module
+description: 'Provides activity functionality for living spaces.'
+core_version_requirement: ^9.0
+package: 'Living Spaces'
+dependencies:
+  - config_rewrite
+  - default_content
+  - living_spaces_default_configs
+  - living_spaces_discussions
+  - living_spaces_group
+  - living_spaces_sections
+  - message_ui
+  - nodejs
+  - token
+  - views_contextual_filters_or
+default_content:
+  taxonomy_term:
+    - 5538078f-4a95-4e4c-9924-85d05b924894
+    - d42f2dc9-7d97-44c4-90a0-f93abf903ae0

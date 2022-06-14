@@ -1,0 +1,193 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_users
+  module:
+    - living_spaces_default_configs
+    - profile
+    - search_api
+    - search_api_solr
+    - user
+  config:
+    - field.storage.profile.field_first_name
+    - field.storage.profile.field_last_name
+    - search_api.server.living_spaces
+third_party_settings:
+  search_api_solr:
+    finalize: false
+    commit_before_finalize: false
+    commit_after_finalize: false
+    multilingual:
+      limit_to_content_language: false
+      include_language_independent: true
+    highlighter:
+      maxAnalyzedChars: 51200
+      fragmenter: gap
+      regex:
+        slop: 0.5
+        pattern: blank
+        maxAnalyzedChars: 10000
+      usePhraseHighlighter: true
+      highlightMultiTerm: true
+      preserveMulti: false
+      highlight:
+        mergeContiguous: false
+        requireFieldMatch: false
+        snippets: 3
+        fragsize: 0
+    mlt:
+      mintf: 1
+      mindf: 1
+      maxdf: 0
+      maxdfpct: 0
+      minwl: 0
+      maxwl: 0
+      maxqt: 100
+      maxntp: 2000
+      boost: false
+      interestingTerms: none
+    term_modifiers:
+      slop: 3
+      fuzzy: 1
+    advanced:
+      index_prefix: ''
+      collection: ''
+      timezone: ''
+id: space_users
+name: 'Space Users'
+description: ''
+read_only: false
+field_settings:
+  access:
+    label: 'Last access'
+    datasource_id: 'entity:user'
+    property_path: access
+    type: date
+    dependencies:
+      module:
+        - user
+  created:
+    label: Created
+    datasource_id: 'entity:user'
+    property_path: created
+    type: date
+    dependencies:
+      module:
+        - user
+  field_first_name:
+    label: 'Basic Data profiles » Profile » First name'
+    datasource_id: 'entity:user'
+    property_path: 'core_profiles:entity:field_first_name'
+    type: solr_text_unstemmed
+    dependencies:
+      config:
+        - field.storage.profile.field_first_name
+      module:
+        - profile
+  field_last_name:
+    label: 'Basic Data profiles » Profile » Last name'
+    datasource_id: 'entity:user'
+    property_path: 'core_profiles:entity:field_last_name'
+    type: solr_text_unstemmed
+    dependencies:
+      config:
+        - field.storage.profile.field_last_name
+      module:
+        - profile
+  mail:
+    label: Email
+    datasource_id: 'entity:user'
+    property_path: mail
+    type: solr_text_unstemmed
+    dependencies:
+      module:
+        - user
+  name:
+    label: Name
+    datasource_id: 'entity:user'
+    property_path: name
+    type: solr_text_unstemmed
+    dependencies:
+      module:
+        - user
+  ngram_field_first_name:
+    label: 'Basic Data profiles » Profile » First name'
+    datasource_id: 'entity:user'
+    property_path: 'core_profiles:entity:field_first_name'
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      config:
+        - field.storage.profile.field_first_name
+      module:
+        - profile
+  ngram_field_last_name:
+    label: 'Basic Data profiles » Profile » Last name'
+    datasource_id: 'entity:user'
+    property_path: 'core_profiles:entity:field_last_name'
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      config:
+        - field.storage.profile.field_last_name
+      module:
+        - profile
+  ngram_mail:
+    label: Email
+    datasource_id: 'entity:user'
+    property_path: mail
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      module:
+        - user
+  ngram_name:
+    label: Name
+    datasource_id: 'entity:user'
+    property_path: name
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      module:
+        - user
+  roles:
+    label: Roles
+    datasource_id: 'entity:user'
+    property_path: roles
+    type: string
+    dependencies:
+      module:
+        - user
+  status:
+    label: 'User status'
+    datasource_id: 'entity:user'
+    property_path: status
+    type: boolean
+    dependencies:
+      module:
+        - user
+  uid:
+    label: 'User ID'
+    datasource_id: 'entity:user'
+    property_path: uid
+    type: integer
+    dependencies:
+      module:
+        - user
+datasource_settings:
+  'entity:user':
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  language_with_fallback: {  }
+  rendered_item: {  }
+  solr_date_range: {  }
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  index_directly: true
+  track_changes_in_references: true
+  cron_limit: 50
+server: living_spaces

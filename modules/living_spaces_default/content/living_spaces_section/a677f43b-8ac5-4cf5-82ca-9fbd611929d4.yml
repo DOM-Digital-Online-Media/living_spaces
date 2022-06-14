@@ -1,0 +1,15 @@
+_meta:
+  version: '1.0'
+  entity_type: living_spaces_section
+  uuid: a677f43b-8ac5-4cf5-82ca-9fbd611929d4
+  bundle: discussions
+default:
+  tab:
+    -
+      value: Discussions
+  path:
+    -
+      value: discussions
+  created:
+    -
+      value: 1640599704

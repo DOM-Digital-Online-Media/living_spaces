@@ -1,0 +1,44 @@
+_meta:
+  version: '1.0'
+  entity_type: group
+  uuid: c7ecd1bf-9377-49cc-b0fd-a06bb246847a
+  bundle: project_space
+  default_langcode: en
+  depends:
+    7ec4e426-4ef5-4948-9817-8face23eaec0: living_spaces_section
+    1b83cb06-bddb-429a-8c0f-5de96ab0baae: living_spaces_section
+default:
+  revision_user:
+    -
+      target_id: 1
+  status:
+    -
+      value: true
+  uid:
+    -
+      target_id: 1
+  label:
+    -
+      value: 'Project Space'
+  created:
+    -
+      value: 1640600119
+  path:
+    -
+      alias: ''
+      langcode: en
+      pathauto: 0
+  revision_translation_affected:
+    -
+      value: true
+  is_default:
+    -
+      value: true
+  protected:
+    -
+      value: true
+  sections:
+    -
+      entity: 7ec4e426-4ef5-4948-9817-8face23eaec0
+    -
+      entity: 1b83cb06-bddb-429a-8c0f-5de96ab0baae

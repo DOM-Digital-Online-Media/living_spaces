@@ -1,0 +1,217 @@
+<?php
+
+/**
+ * @file
+ * Contains functions and hooks for living_spaces_subgroup module.
+ */
+
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Template\Attribute;
+use Drupal\Core\Breadcrumb\Breadcrumb;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+use Drupal\group\Entity\GroupInterface;
+use Drupal\living_spaces_subgroup\LivingSpacesSubgroupAccessControlHandler;
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function living_spaces_subgroup_entity_type_alter(array &$entity_types) {
+  /** @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+  $entity_types['group']->setAccessClass(LivingSpacesSubgroupAccessControlHandler::class);
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function living_spaces_subgroup_entity_base_field_info(EntityTypeInterface $entity_type) {
+  if ($entity_type->id() === 'group') {
+    $fields['parent'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Parent'))
+      ->setSetting('target_type', 'group')
+      ->setTranslatable(FALSE)
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'weight' => -1,
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => '60',
+          'placeholder' => '',
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setConstraints(['LivingSpacesSubgroupParentConstraint' => []]);
+
+    return $fields;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_subgroup_form_group_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\group\Entity\GroupInterface $group */
+  $group = $form_state->getFormObject()->getEntity();
+  $create = \Drupal::currentUser()->hasPermission('create living space subgroup')
+    && $group->isNew();
+  $update = \Drupal::currentUser()->hasPermission('update living space subgroup parent')
+    && !$group->isNew();
+
+  $form['parent']['#access'] = $create || $update;
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function living_spaces_subgroup_form_group_confirm_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $object = $form_state->getFormObject();
+  /** @var \Drupal\group\Entity\GroupInterface $group */
+  $group = $object->getEntity();
+
+  if ($children = \Drupal::service('living_spaces_subgroup.manager')->getGroupsChildren($group, 0, TRUE)) {
+    $options = [];
+    foreach ($children as $child) {
+      $options[$child->id()] = $child->label();
+    }
+
+    $form['subgroups'] = [
+      '#type' => 'checkboxes',
+      '#title' => t('Subgroups'),
+      '#default_value' => [],
+      '#options' => $options,
+    ];
+
+    array_unshift($form['actions']['submit']['#submit'], 'living_spaces_subgroup_group_confirm_form_submit');
+  }
+}
+
+/**
+ * Provides submit handler for 'group_confirm' form.
+ */
+function living_spaces_subgroup_group_confirm_form_submit($form, FormStateInterface $form_state) {
+  $values = $form_state->getValues();
+  $object = $form_state->getFormObject();
+
+  /** @var \Drupal\group\Entity\GroupInterface $group */
+  $group = $object->getEntity();
+
+  $items = [];
+  foreach ($values['subgroups'] as $subgroup_id => $subgroup) {
+    $child = \Drupal::entityTypeManager()->getStorage('group')->load($subgroup_id);
+    if ($subgroup) {
+      foreach ($child->getContent() as $group_content) {
+        $items['group_content'][] = $group_content->id();
+      }
+
+      $items['group'][] = $subgroup_id;
+      \Drupal::moduleHandler()->alter('living_spaces_group_remove_group_content', $child, $items);
+    }
+    else {
+      $child->set('parent', NULL);
+      $child->save();
+    }
+  }
+
+  if ($items) {
+    \Drupal::service('tempstore.shared')->get('living_spaces_subgroup_delete_group')->set($group->id(), $items);
+  }
+}
+
+/**
+ * Implements hook_living_spaces_group_remove_group_content_alter().
+ */
+function living_spaces_subgroup_living_spaces_group_remove_group_content_alter(GroupInterface $space, array &$items) {
+  if ($data = \Drupal::service('tempstore.shared')->get('living_spaces_subgroup_delete_group')->get($space->id())) {
+    $items = array_merge_recursive($items, $data);
+  }
+}
+
+/**
+ * Implements hook_system_breadcrumb_alter().
+ */
+function living_spaces_subgroup_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
+  if ($route_match->getRouteName() === 'entity.group.canonical') {
+    // Make sure we have breadcrumbs cached per group.
+    $breadcrumb->addCacheableDependency($route_match);
+
+    /** @var \Drupal\living_spaces_subgroup\LivingSpacesSubgroupManagerInterface $manager */
+    $manager = \Drupal::service('living_spaces_subgroup.manager');
+    $group = $route_match->getParameter('group');
+    if ($parents = $manager->getGroupsParents($group)) {
+      foreach ($parents as $parent) {
+        $breadcrumb->addLink($parent->toLink());
+        $breadcrumb->addCacheableDependency($parent);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function living_spaces_subgroup_theme($existing, $type, $theme, $path) {
+  return [
+    'subgroups_list' => [
+      'variables' => [
+        'type' => 'ul',
+        'link' => '',
+        'group' => NULL,
+        'items' => [],
+        'include_self' => TRUE,
+        'attributes' => ['class' => ['sub-groups-list']],
+        'item_attributes' => ['class' => ['sub-groups-item']],
+        'link_attributes' => ['class' => ['sub-groups-link']],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_subgroups_list().
+ */
+function template_preprocess_subgroups_list(&$variables) {
+  $group = $variables['group'];
+
+  if ($group instanceof GroupInterface) {
+    $cache = new CacheableMetadata();
+    $cache->addCacheableDependency($group);
+    $variables['link'] = $group->toLink(NULL, 'canonical', ['attributes' => $variables['link_attributes']]);
+    $variables['attributes'] = new Attribute($variables['attributes']);
+    $variables['item_attributes'] = new Attribute($variables['item_attributes']);
+
+    /** @var \Drupal\living_spaces_subgroup\LivingSpacesSubgroupManagerInterface $manager */
+    $manager = \Drupal::service('living_spaces_subgroup.manager');
+    foreach ($manager->getGroupsChildren($group, 1, TRUE) as $child) {
+      $cache->addCacheableDependency($child);
+      $variables['items'][] = [
+        '#theme' => 'subgroups_list',
+        '#group' => $child,
+        '#attributes' => [],
+      ];
+    }
+
+    $cache->applyTo($variables);
+  }
+}
+
+/**
+ * Implements hook_living_spaces_subgroup_child_actions_info().
+ */
+function living_spaces_subgroup_living_spaces_subgroup_child_actions_info(GroupInterface $child) {
+  $links = [];
+
+  if (\Drupal::currentUser()->hasPermission('update living space subgroup parent')) {
+    $links['remove_child'] = [
+      '#type' => 'link',
+      '#title' => t('Remove child'),
+      '#url' => Url::fromRoute('living_spaces_subgroup.remove_child', [
+        'child' => $child->id(),
+      ]),
+    ];
+  }
+
+  return $links;
+}

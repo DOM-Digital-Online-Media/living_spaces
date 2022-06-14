@@ -1,0 +1,25 @@
+name: 'Space Group'
+type: module
+description: 'Provides group type for living spaces and functionality related to it'
+core_version_requirement: ^9.0
+package: 'Living Spaces'
+interface translation project: living_spaces_group
+interface translation server pattern: profiles/custom/living_spaces/modules/living_spaces_group/translations/%language.po
+dependencies:
+  - autocomplete_deluxe
+  - group
+  - living_spaces_default_configs
+  - living_spaces_entity_extra
+  - living_spaces_group_privacy
+  - living_spaces_menus
+  - living_spaces_subgroup
+  - living_spaces_users
+  - page_manager
+  - user_permission_condition
+  - views_data_export
+  - views_field_view
+
+
+default_content:
+  menu_link_content:
+    - 21f299cd-b60c-4983-b863-879297d3bcd3

@@ -1,0 +1,219 @@
+<?php
+
+/**
+ * @file
+ * Contains living_spaces_protected_area.module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\living_spaces_protected_area\Entity\LivingSpacesProtectedAreaAccessGrantInterface;
+use Drupal\living_spaces_protected_area\Entity\LivingSpacesProtectedAreaAccessAreaInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\field\Entity\FieldStorageConfig;
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function living_spaces_protected_area_living_spaces_access_grant_presave(LivingSpacesProtectedAreaAccessGrantInterface $entity) {
+  $label = '';
+  if (!$entity->get('access_area')->isEmpty()) {
+    $label .= $entity->get('access_area')->entity->label();
+  }
+  if (!$entity->get('uid')->isEmpty()) {
+    $label .= ':' . $entity->getOwner()->getDisplayName();
+  }
+  $entity->set('label', $label);
+
+  \Drupal::service('router.builder')->setRebuildNeeded();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function living_spaces_protected_area_living_spaces_access_area_presave(LivingSpacesProtectedAreaAccessAreaInterface $entity) {
+  switch ($entity->bundle()) {
+    case 'page':
+      $label = $entity->get('field_path_pattern')->getString();
+      $entity->set('label', $label);
+
+      \Drupal::cache()->invalidate('living_spaces_protected_area');
+      break;
+
+    case 'entity':
+      $label = $entity->get('field_entity_type')->getString() . ':' . $entity->get('field_entity_bundle')->getString();
+      $entity->set('label', $label);
+      break;
+
+  }
+
+  \Drupal::service('router.builder')->setRebuildNeeded();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function living_spaces_protected_area_living_spaces_access_grant_delete(LivingSpacesProtectedAreaAccessGrantInterface $entity) {
+  $tempstore = \Drupal::service('tempstore.shared');
+  $data = $tempstore->get('living_spaces_protected_area_clear_cache')->get($entity->id());
+
+  // No need to clear the cache on removing the access area entity.
+  if (!isset($data['execute']) || $data['execute']) {
+    \Drupal::service('router.builder')->setRebuildNeeded();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function living_spaces_protected_area_living_spaces_access_area_delete(LivingSpacesProtectedAreaAccessAreaInterface $entity) {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $tempstore = \Drupal::service('tempstore.shared');
+
+  foreach ($entity_type_manager->getStorage('living_spaces_access_grant')->loadByProperties(['access_area' => $entity->id()]) as $grant) {
+    $tempstore->get('living_spaces_protected_area_clear_cache')->set($grant->id(), ['execute' => FALSE]);
+    $grant->delete();
+  }
+
+  if ('page' == $entity->bundle()) {
+    \Drupal::cache()->invalidate('living_spaces_protected_area');
+  }
+
+  \Drupal::service('router.builder')->setRebuildNeeded();
+}
+
+/**
+ * Provides option callback for 'field_entity_type' field.
+ */
+function living_spaces_protected_area_field_entity_type(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+  $options = [];
+
+  $configs = \Drupal::configFactory()->getEditable('living_spaces_protected_area.protected_area_settings');
+  if (!empty($configs->getRawData())) {
+    foreach ($configs->get('types') as $type) {
+      if ($type && $entity_type = \Drupal::entityTypeManager()->getDefinition($type)) {
+        $options[$type] = $entity_type->getLabel();
+      }
+    }
+  }
+
+  return $options;
+}
+
+/**
+ * Provides option callback for 'field_entity_bundle' field.
+ */
+function living_spaces_protected_area_field_entity_bundle(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+  $options = [];
+
+  foreach (\Drupal::service('entity_type.bundle.info')->getAllBundleInfo() as $bundles) {
+    foreach ($bundles as $name => $bundle) {
+      $options[$name] = $bundle['label'];
+    }
+  }
+
+  return $options;
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function living_spaces_protected_area_form_living_spaces_access_area_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  switch ($form_id) {
+    case 'living_spaces_access_area_entity_add_form':
+    case 'living_spaces_access_area_entity_edit_form':
+      $form['field_entity_type']['widget']['#ajax'] = [
+        'callback' => 'living_spaces_protected_area_entity_type_ajax_callback',
+      ];
+
+      $form['field_entity_bundle']['widget']['#states'] = [
+        'disabled' => [
+          ":input[name='field_entity_type']" => ['value' => '_none'],
+        ],
+      ];
+
+      $form['field_entity_bundle']['#prefix'] = '<div id="field-entity-bundle-wrapper">';
+      $form['field_entity_bundle']['#suffix'] = '</div>';
+
+      if (!empty($form['field_entity_type']['widget']['#default_value'][0])) {
+        $type = $form['field_entity_type']['widget']['#default_value'][0];
+        $form['field_entity_bundle']['widget']['#options'] = living_spaces_protected_area_get_entity_bundles($type);
+      }
+
+      $form['#validate'][] = 'living_spaces_protected_area_entity_access_area_validate';
+      break;
+
+    case 'living_spaces_access_area_page_add_form':
+    case 'living_spaces_access_area_page_edit_form':
+      $form['#validate'][] = 'living_spaces_protected_area_page_access_area_validate';
+      break;
+
+  }
+}
+
+/**
+ * Provides ajax callback for 'field_entity_type' field.
+ */
+function living_spaces_protected_area_entity_type_ajax_callback(&$form, FormStateInterface $form_state) {
+  $form_state->setRebuild();
+  $type = $form_state->getValue('field_entity_type');
+  $type = !empty($type[0]['value']) ? $type[0]['value'] : '';
+  $form['field_entity_bundle']['widget']['#options'] = living_spaces_protected_area_get_entity_bundles($type);
+
+  $response = new AjaxResponse();
+  $response->addCommand(new ReplaceCommand('#field-entity-bundle-wrapper', $form['field_entity_bundle']));
+
+  return $response;
+}
+
+/**
+ * Provides validate callback for entity access area form.
+ */
+function living_spaces_protected_area_entity_access_area_validate(&$form, FormStateInterface $form_state) {
+  $type = $form_state->getValue('field_entity_type');
+
+  if (!empty($type[0]['value']) && $form_state->getErrors()) {
+    $form['field_entity_bundle']['widget']['#options'] = living_spaces_protected_area_get_entity_bundles($type[0]['value']);
+  }
+}
+
+/**
+ * Provides validate callback for page access area form.
+ */
+function living_spaces_protected_area_page_access_area_validate(&$form, FormStateInterface $form_state) {
+  $path = $form_state->getValue('field_path_pattern');
+
+  if (!empty($path[0]['value']) && $path[0]['value'][0] !== '/') {
+    $form_state->setErrorByName('field_path_pattern', t('The path has to start with a slash.'));
+  }
+}
+
+/**
+ * Gets available entity bundles for provided entity type.
+ *
+ * @param string $type
+ *   The entity type machine name.
+ *
+ * @return array
+ *   An array of options.
+ */
+function living_spaces_protected_area_get_entity_bundles($type) {
+  $options = ['_none' => t('- Select a value -')];
+
+  $configs = \Drupal::configFactory()->getEditable('living_spaces_protected_area.protected_area_settings');
+  $bundles = \Drupal::service('entity_type.bundle.info')->getBundleInfo($type);
+
+  $items = [];
+  if (!empty($configs->getRawData())) {
+    $items = $configs->get("{$type}_bundles");
+  }
+
+  foreach ($bundles as $bundle => $info) {
+    if (isset($items[$bundle]) && $items[$bundle]) {
+      $options[$bundle] = $info['label'];
+    }
+  }
+
+  return $options;
+}

@@ -1,0 +1,5 @@
+living_spaces_group.update_memberships:
+  title: 'Update space memberships'
+  description: 'Launches batch process to re-save all space memberships with latest dynamic values.'
+  route_name: living_spaces_group.update_memberships
+  parent: system.admin_config_development

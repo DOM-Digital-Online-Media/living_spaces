@@ -1,0 +1,38 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.project_space
+id: project_space-admin
+label: 'Space Administrator'
+weight: 100
+internal: false
+audience: member
+group_type: project_space
+permissions_ui: true
+permissions:
+  - 'access content overview'
+  - 'access group_node overview'
+  - 'access living spaces sections settings'
+  - 'administer group'
+  - 'administer members'
+  - 'create page entities'
+  - 'delete group'
+  - 'delete group revisions'
+  - 'edit group'
+  - 'join private group'
+  - 'join public group'
+  - 'leave group'
+  - 'manage living space member account'
+  - 'manage space members'
+  - 'revert group revisions'
+  - 'update own group_membership content'
+  - 'view any unpublished group'
+  - 'view discussions section of a living space'
+  - 'view group'
+  - 'view group revisions'
+  - 'view group_membership content'
+  - 'view latest group version'
+  - 'view own unpublished group'
+  - 'view published pages'
+is_space_admin: true

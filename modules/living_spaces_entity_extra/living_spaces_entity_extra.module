@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Contains functions and hooks for living_spaces_entity_extra.module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\EntityForm;
+
+/**
+ * Implements hook_form_alter().
+ */
+function living_spaces_entity_extra_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $parameters = \Drupal::request()->query->all();
+  $object = $form_state->getFormObject();
+
+  if ($parameters && $object instanceof EntityForm) {
+    foreach ($parameters as $name => $parameter) {
+      // Check if form element exists and a user has an access to the element.
+      if (isset($form[$name]) && $form[$name]['#access']) {
+        foreach ($form[$name]['widget'] as $key => &$data) {
+          if (isset($parameter[$key])) {
+            // Check for multiple values.
+            if (is_array($parameter[$key])) {
+              $property = key($parameter[$key]);
+              if (isset($data[$property])) {
+                // Set entity object as a default value for an entity reference field.
+                if ('target_id' == $property) {
+                  $target_type = $object->getEntity()->getFieldDefinition($name)->getSetting('target_type');
+                  if ($target_type && $entity = \Drupal::entityTypeManager()->getStorage($target_type)->load($parameter[$key][$property])) {
+                    $data[$property]['#default_value'] = $entity;
+                  }
+                }
+                else {
+                  $data[$property]['#default_value'] = $parameter[$key][$property];
+                }
+              }
+            }
+            elseif (is_string($parameter[$key]) && $key == key($parameter)) {
+              $data['#default_value'] = $parameter[$key];
+            }
+          }
+        }
+      }
+    }
+  }
+}

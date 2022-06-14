@@ -1,0 +1,15 @@
+_meta:
+  version: '1.0'
+  entity_type: living_spaces_section
+  uuid: 1b83cb06-bddb-429a-8c0f-5de96ab0baae
+  bundle: events
+default:
+  tab:
+    -
+      value: Events
+  path:
+    -
+      value: events
+  created:
+    -
+      value: 1640872011

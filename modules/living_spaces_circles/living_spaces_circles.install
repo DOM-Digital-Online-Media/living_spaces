@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Install/update/uninstall hooks for circle module.
+ */
+
+use Drupal\Core\Field\BaseFieldDefinition;
+
+/**
+ * Implements hook_install().
+ */
+function living_spaces_circles_install() {
+  $circle = BaseFieldDefinition::create('entity_reference')
+    ->setLabel(t('Circles'))
+    ->setSetting('target_type', 'group')
+    ->setSetting('handler_settings', ['target_bundles' => ['circle' => 'circle']])
+    ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
+    ->setTranslatable(FALSE);
+
+  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('circles', 'group', 'living_spaces_circles', $circle);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function living_spaces_circles_uninstall($is_syncing) {
+  // Delete preinstalled content.
+  $link_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+  $link = $link_storage
+    ->loadByProperties(['uuid' => 'd3c379dc-e4c8-47d0-a59f-0f3bc51ef623']);
+  if (!empty($link)) {
+    $link_storage->delete($link);
+  }
+}

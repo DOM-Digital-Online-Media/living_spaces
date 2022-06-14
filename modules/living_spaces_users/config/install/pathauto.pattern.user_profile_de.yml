@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_users
+  module:
+    - language
+    - user
+id: user_profile_de
+label: 'User profile DE'
+type: 'canonical_entities:user'
+pattern: 'user/[user:uid]/profil'
+selection_criteria:
+  57e1e487-0d2b-4765-8c93-dbdda7ef7c5d:
+    id: language
+    langcodes:
+      de: de
+    negate: false
+    context_mapping:
+      language: 'user:langcode:language'
+    uuid: 57e1e487-0d2b-4765-8c93-dbdda7ef7c5d
+selection_logic: and
+weight: -5
+relationships:
+  'user:langcode:language':
+    label: Language

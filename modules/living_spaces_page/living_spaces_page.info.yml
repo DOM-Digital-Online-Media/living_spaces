@@ -1,0 +1,13 @@
+name: 'Space Page'
+type: module
+description: 'Provides page content type for Living Spaces profile'
+core_version_requirement: ^9.0
+package: 'Living Spaces'
+interface translation project: living_spaces_page
+interface translation server pattern: profiles/custom/living_spaces/modules/living_spaces_page/translations/%language.po
+dependencies:
+  - config_rewrite
+  - living_spaces_activity
+  - living_spaces_group
+  - living_spaces_sections
+  - message

@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.circle
+id: group.circle.default
+targetEntityType: group
+bundle: circle
+mode: default
+content:
+  label:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  living_space_privacy:
+    type: options_buttons
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  content_sections: true
+  is_default: true
+  langcode: true
+  parent: true
+  path: true
+  status: true
+  uid: true

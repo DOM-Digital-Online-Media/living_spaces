@@ -1,0 +1,5 @@
+living_spaces_sections.sections_form:
+  title: 'Section settings'
+  base_route: entity.group.canonical
+  route_name: living_spaces_sections.sections_form
+  weight: 5

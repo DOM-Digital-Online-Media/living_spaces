@@ -1,0 +1,25 @@
+langcode: en
+status: false
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.agenda.field_agendatopics
+    - field.field.node.agenda.field_tags
+    - node.type.agenda
+  module:
+    - user
+id: node.agenda.teaser
+targetEntityType: node
+bundle: agenda
+mode: teaser
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_agendatopics: true
+  field_tags: true
+  langcode: true
+  search_api_excerpt: true

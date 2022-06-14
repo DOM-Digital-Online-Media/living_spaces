@@ -1,0 +1,6 @@
+access employees overview:
+  title: 'Access employees overview'
+  description: 'Allow access to employees overview page'
+manage employee profiles:
+  title: 'Access living spaces employee profiles'
+  description: 'Allow access to manage employee profiles'

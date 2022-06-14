@@ -1,0 +1,5 @@
+entity.living_spaces_section_type.add_form:
+  route_name: entity.living_spaces_section_type.add_form
+  title: 'Add living space section type'
+  appears_on:
+    - entity.living_spaces_section_type.collection

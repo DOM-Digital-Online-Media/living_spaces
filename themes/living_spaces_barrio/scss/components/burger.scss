@@ -1,0 +1,14 @@
+#hamburger {
+  width: 48px;
+  height: 48px;
+  display: block;
+  position: relative;
+  cursor: pointer;
+}
+#hamburger span.strike {
+  display: block;
+
+  height: 2px;
+  width: 100%;
+  background: white;
+}

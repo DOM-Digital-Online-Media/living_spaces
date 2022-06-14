@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_discussions
+id: discussion_post
+label: 'Discussion post'
+target_entity_type_id: node
+description: ''

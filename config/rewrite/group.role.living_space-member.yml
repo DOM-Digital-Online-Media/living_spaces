@@ -1,0 +1,9 @@
+permissions:
+  - 'delete own group_node:agenda entity'
+  - 'update own group_node:agenda entity'
+  - 'view calendar section of a living space'
+  - 'view documents section of a living space'
+  - 'view group_node:agenda entity'
+  - 'view private group'
+  - 'view public group'
+  - 'view published pages'

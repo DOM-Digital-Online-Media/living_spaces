@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.message.field_group_content
+    - group.content_type.group_content_type_82eaeaf036e74
+    - message.template.group_content_created
+id: message.group_content_created.field_group_content
+field_name: field_group_content
+entity_type: message
+bundle: group_content_created
+label: 'Group content'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:group_content'
+  handler_settings:
+    target_bundles:
+      group_content_type_82eaeaf036e74: group_content_type_82eaeaf036e74
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

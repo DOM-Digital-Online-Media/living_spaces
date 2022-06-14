@@ -1,0 +1,26 @@
+{#
+/**
+ * Default theme implementation for Views to output a 'Notifications'.
+ *
+ * Available variables:
+ * - options: array of wrapper attributes;
+ * - id: aria-labelledby value;
+ * - links: array of notification items.
+ *
+ * @see template_preprocess_views_view_living_spaces_activity_notification()
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+  'dropdown-menu',
+  options.class
+]
+%}
+
+<ul {{ attributes.addClass(classes) }} aria-labelledby="{{ id }}">
+  {% for link in links %}
+    <li>{{ link }}</li>
+  {% endfor %}
+</ul>

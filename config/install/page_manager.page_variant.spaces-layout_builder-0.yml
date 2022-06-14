@@ -1,0 +1,50 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - page_manager.page.spaces
+id: spaces-layout_builder-0
+label: Spaces
+variant: layout_builder
+variant_settings:
+  id: layout_builder
+  uuid: 28a6e073-e4f0-40c1-bd04-1c0272a4237b
+  label: null
+  weight: 0
+  sections:
+    -
+      layout_id: barrio_col2-equal
+      layout_settings:
+        label: ''
+        context_mapping: {  }
+      components:
+        fe5715f5-1345-44f3-ae9a-bd5702270d8f:
+          uuid: fe5715f5-1345-44f3-ae9a-bd5702270d8f
+          region: top
+          configuration:
+            id: living_spaces_default_create_space
+            label: 'Add space'
+            provider: living_spaces_default
+            label_display: visible
+            context_mapping: {  }
+          additional: {  }
+          weight: 0
+        66b9d980-47b0-4a19-a452-e0756711d5b4:
+          uuid: 66b9d980-47b0-4a19-a452-e0756711d5b4
+          region: top
+          configuration:
+            id: 'views_block:groups-groups'
+            label: ''
+            provider: views
+            label_display: '0'
+            views_label: ''
+            items_per_page: none
+            context_mapping: {  }
+          additional: {  }
+          weight: 1
+      third_party_settings: {  }
+page: spaces
+weight: 0
+selection_criteria: {  }
+selection_logic: and
+static_context: {  }

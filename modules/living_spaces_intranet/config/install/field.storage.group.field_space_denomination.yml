@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_intranet
+  module:
+    - group
+    - options
+id: group.field_space_denomination
+field_name: field_space_denomination
+entity_type: group
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: c
+      label: Catholic
+    -
+      value: p
+      label: Protestant
+    -
+      value: e
+      label: Ecumenical
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

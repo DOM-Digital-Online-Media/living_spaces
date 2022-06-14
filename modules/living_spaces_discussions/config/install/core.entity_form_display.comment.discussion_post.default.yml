@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - comment.type.discussion_post
+    - field.field.comment.discussion_post.comment_body
+  module:
+    - text
+id: comment.discussion_post.default
+targetEntityType: comment
+bundle: discussion_post
+mode: default
+content:
+  comment_body:
+    type: text_textarea
+    weight: 0
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    region: content
+hidden:
+  author: true
+  langcode: true
+  subject: true

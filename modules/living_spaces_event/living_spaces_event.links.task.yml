@@ -1,0 +1,4 @@
+entity.living_spaces_event.canonical_tab:
+  title: 'Space events'
+  route_name: entity.living_spaces_event.collection
+  base_route: system.admin_content

@@ -1,0 +1,10 @@
+services:
+  living_spaces_default.access_checker:
+    class: Drupal\living_spaces_default\Access\LivingSpacesDefaultAccessCheck
+    arguments: ['@current_route_match', '@current_user']
+    tags:
+      - { name: access_check, applies_to: _living_spaces_default_access_check }
+  living_spaces_default.route_subscriber:
+    class: Drupal\living_spaces_default\Routing\LivingSpacesDefaultRouteSubscriber
+    tags:
+      - { name: event_subscriber, priority: 1000 }

@@ -1,0 +1,99 @@
+<?php
+
+/**
+ * @file
+ * Contains living_spaces_users.module.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
+use Drupal\profile\Entity\ProfileInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function living_spaces_users_profile_access(ProfileInterface $entity, $operation, AccountInterface $account) {
+  if ('employee_data' == $entity->bundle()) {
+    $permission = 'manage employee profiles';
+    return $account->hasPermission($permission)
+      ? AccessResult::allowed()
+      : AccessResult::forbidden();
+  }
+
+  if (\Drupal::moduleHandler()->moduleExists('living_spaces_group')
+&& ('view' == $operation) && ($entity->getOwnerId() !== $account->id())) {
+    $user = \Drupal::entityTypeManager()->getStorage('user')->load($account->id());
+    if ($user_spaces = $user->get('joined_spaces')->getValue()) {
+      $user_space_ids = array_column($user_spaces, 'target_id');
+
+      if ($owner_spaces = $entity->getOwner()->get('joined_spaces')->getValue()) {
+        $owner_space_ids = array_column($owner_spaces, 'target_id');
+
+        if (array_intersect($user_space_ids, $owner_space_ids)) {
+          return AccessResult::allowed();
+        }
+      }
+    }
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_users_profile_insert(ProfileInterface $entity) {
+  search_api_entity_update($entity->getOwner());
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function living_spaces_users_profile_update(ProfileInterface $entity) {
+  search_api_entity_update($entity->getOwner());
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_users_profile_delete(ProfileInterface $entity) {
+  search_api_entity_update($entity->getOwner());
+}
+
+/**
+ * Implements hook_user_cancel().
+ */
+function living_spaces_users_user_cancel($edit, $account, $method) {
+  if ('user_cancel_block' == $method) {
+    $account->setUsername(t('Deleted employee') . " {$account->id()}");
+  }
+}
+
+/**
+ * Implements hook_living_spaces_group_exports_info().
+ */
+function living_spaces_users_living_spaces_group_exports_info($names_only = TRUE, \Drupal\group\Entity\GroupInterface $space = NULL) {
+  $full_export_label = t('Members list (Full data)');
+  if ($names_only) {
+    return [
+      'export_full' => $full_export_label,
+    ];
+  }
+
+  $results = [];
+  $user = \Drupal::currentUser()->getAccount();
+  if ($user->hasPermission('manage living spaces') && $space->id()) {
+    $results['export_full'] = [
+      '#type' => 'link',
+      '#title' => $full_export_label,
+      '#url' => Url::fromRoute('view.members_export.data_export_full', ['group' => $space->id()]),
+      '#attributes' => ['class' => ['btn', 'btn-default']],
+    ];
+    $cache = CacheableMetadata::createFromObject($user);
+    $cache->applyTo($results['export_full']);
+  }
+
+  return $results;
+}

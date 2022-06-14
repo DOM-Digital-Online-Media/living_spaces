@@ -1,0 +1,14 @@
+access protected area manage pages:
+  title: 'Administer access area entities'
+  description: 'Gain full control over all access area configuration.'
+  restrict access: TRUE
+access protected area:
+  title: 'Access protected content'
+  description: 'Gain access control to all protected content.'
+access protected area settings:
+  title: 'Access protected content settings'
+  description: 'Gain access control to all protected content settings.'
+
+permission_callbacks:
+  - '\Drupal\living_spaces_protected_area\Access\LivingSpacesProtectedAreaAccessAreaPermissions::accessAreaPermissions'
+  - '\Drupal\living_spaces_protected_area\Access\LivingSpacesProtectedAreaAccessGrantPermissions::accessGrantPermissions'

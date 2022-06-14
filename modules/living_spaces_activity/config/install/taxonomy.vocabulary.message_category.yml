@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_activity
+name: 'Message category'
+vid: message_category
+description: ''
+weight: 0

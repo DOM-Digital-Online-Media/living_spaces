@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Contains functions and hooks for living_spaces_discussions.module.
+ */
+
+use Drupal\group\Entity\GroupContentInterface;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function living_spaces_discussions_entity_bundle_info_alter(&$bundles) {
+  $bundles['living_spaces_section']['discussions']['class'] = 'Drupal\living_spaces_discussions\Entity\LivingSpacesDiscussions';
+}
+
+/**
+ * Implements hook_living_spaces_sections_content_alter().
+ */
+function living_spaces_discussions_living_spaces_sections_content_alter(GroupContentInterface $content, &$section) {
+  if ($content->getEntity() instanceof NodeInterface &&
+    'discussion_post' == $content->getEntity()->bundle() &&
+    $data = \Drupal::service('living_spaces_sections.manager')->getSectionFromGroupByType($content->getGroup(), 'discussions')
+  ) {
+    $section = $data;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_discussions_form_node_discussion_post_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['actions']['submit']['#submit'][] = 'living_spaces_discussions_discussion_post_form_submit';
+}
+
+/**
+ * Provides submit callback for discussion post form.
+ */
+function living_spaces_discussions_discussion_post_form_submit(&$form, FormStateInterface $form_state) {
+  /** @var \Drupal\group\Entity\GroupInterface $group */
+  $group = $form_state->get('group');
+
+  /** @var \Drupal\living_spaces_sections\Entity\LivingSpacesSectionInterface $section */
+  if ($group && $section = \Drupal::service('living_spaces_sections.manager')->getSectionFromGroupByType($group, 'discussions')) {
+    if ($section->access('view')) {
+      $form_state->setRedirectUrl($section->toUrl());
+    }
+  }
+}

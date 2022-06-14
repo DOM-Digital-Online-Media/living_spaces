@@ -1,0 +1,7 @@
+living_spaces_changelog.add_changelog:
+  title: 'Add changelog'
+  route_name: 'node.add'
+  route_parameters:
+    node_type: 'changelog'
+  appears_on:
+    - 'view.content.admin_changelog'

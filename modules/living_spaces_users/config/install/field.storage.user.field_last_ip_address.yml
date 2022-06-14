@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_users
+  module:
+    - field_ipaddress
+    - user
+id: user.field_last_ip_address
+field_name: field_last_ip_address
+entity_type: user
+type: ipaddress
+settings: {  }
+module: field_ipaddress
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

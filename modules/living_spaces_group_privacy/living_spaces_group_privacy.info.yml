@@ -1,0 +1,7 @@
+name: 'Space Privacy'
+type: module
+description: 'Provides privacy functionality for living spaces'
+core_version_requirement: ^9.0
+package: 'Living Spaces'
+dependencies:
+  - config_rewrite

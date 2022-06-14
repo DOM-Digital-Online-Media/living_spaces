@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_group
+  module:
+    - user_permission_condition
+id: members_roles
+label: 'Members & Roles'
+description: ''
+use_admin_theme: true
+path: '/group/{group}/living-spaces-admin/people'
+access_logic: and
+access_conditions:
+  -
+    id: living_spaces_group_is_living_group
+    negate: false
+    context_mapping:
+      group: group
+  -
+    id: user_permission
+    permission: 'manage living spaces'
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+parameters:
+  group:
+    machine_name: group
+    type: 'entity:group'
+    label: Group

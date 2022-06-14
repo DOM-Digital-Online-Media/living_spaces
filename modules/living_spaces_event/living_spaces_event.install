@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Install/update/uninstall hooks for event module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function living_spaces_event_uninstall($is_syncing) {
+  // Delete preinstalled content.
+  $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $term = $taxonomy_storage
+    ->loadByProperties(['uuid' => [
+      '3ae0c24b-826e-418b-8d40-40f65ad843de',
+      '4c8fdc19-dd01-4104-b540-005a4062a65a',
+      '4ff35c2a-1d0a-401a-80f3-929e07931ea1',
+      '6ac8691c-87d5-49f6-882e-46398be6d119',
+      '70ed9d67-f5df-428a-8ebb-2b0276e826fd',
+      '73f46fe8-82f5-40a3-82a3-ddde450a285b',
+      'c9e45cef-15e9-4d9e-92c9-cd67dbf1fcae',
+    ]]);
+  if (!empty($term)) {
+    $taxonomy_storage->delete($term);
+  }
+}

@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Install/update/uninstall hooks for protected area module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function living_spaces_protected_area_uninstall() {
+  // Delete preinstalled content.
+  $link_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+  $link = $link_storage
+    ->loadByProperties(['uuid' => '2c42848f-18be-47e8-8359-5bd86457ad34']);
+  if (!empty($link)) {
+    $link_storage->delete($link);
+  }
+}

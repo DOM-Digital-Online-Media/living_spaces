@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the living_spaces install profile.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function living_spaces_install() {
+  // First, do everything in standard profile.
+  include_once DRUPAL_ROOT . '/core/profiles/standard/standard.install';
+  standard_install();
+
+  // Can add code in here to make nodes, terms, etc.
+}

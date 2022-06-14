@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.message.field_group_label
+    - message.template.group_member_added
+id: message.group_member_added.field_group_label
+field_name: field_group_label
+entity_type: message
+bundle: group_member_added
+label: 'Group label'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

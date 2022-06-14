@@ -1,0 +1,37 @@
+dependencies:
+  config:
+    - group.content_type.department-group_node-agenda
+    - group.content_type.department-group_node-protocol
+    - group.content_type.group_content_type_1266597b53320
+    - group.content_type.group_content_type_4f2b1972921d2
+    - group.content_type.group_content_type_64993866055f1
+    - group.content_type.group_content_type_676c0d734d54d
+    - group.content_type.group_content_type_6a198e9cd74d8
+    - group.content_type.group_content_type_6a5bcaa0e2cc2
+    - group.content_type.group_content_type_8a25fe7cb5d03
+    - group.content_type.group_content_type_94ac5cb87e1b3
+    - group.content_type.group_content_type_a3f3193191964
+    - group.content_type.group_content_type_a64dad17707cd
+    - group.content_type.group_content_type_bc0e733967be8
+    - group.content_type.group_content_type_c5c74debf685e
+    - group.content_type.group_content_type_f2e6bbaad05b4
+    - group.content_type.project_space-group_node-agenda
+settings:
+  handler_settings:
+    target_bundles:
+      department-group_node-agenda: department-group_node-agenda
+      group_content_type_64993866055f1: group_content_type_64993866055f1
+      department-group_node-protocol: department-group_node-protocol
+      group_content_type_f2e6bbaad05b4: group_content_type_f2e6bbaad05b4
+      group_content_type_a3f3193191964: group_content_type_a3f3193191964
+      group_content_type_1266597b53320: group_content_type_1266597b53320
+      group_content_type_bc0e733967be8: group_content_type_bc0e733967be8
+      group_content_type_6a5bcaa0e2cc2: group_content_type_6a5bcaa0e2cc2
+      project_space-group_node-agenda: project_space-group_node-agenda
+      group_content_type_a64dad17707cd: group_content_type_a64dad17707cd
+      group_content_type_4f2b1972921d2: group_content_type_4f2b1972921d2
+      group_content_type_c5c74debf685e: group_content_type_c5c74debf685e
+      group_content_type_94ac5cb87e1b3: group_content_type_94ac5cb87e1b3
+      group_content_type_8a25fe7cb5d03: group_content_type_8a25fe7cb5d03
+      group_content_type_6a198e9cd74d8: group_content_type_6a198e9cd74d8
+      group_content_type_676c0d734d54d: group_content_type_676c0d734d54d

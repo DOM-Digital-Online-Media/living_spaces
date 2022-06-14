@@ -1,0 +1,130 @@
+<?php
+
+/**
+ * @file
+ * Contains functions and hooks for living_spaces_simple_permissions.module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_load().
+ */
+function living_spaces_simple_permissions_user_role_load(&$entities) {
+  $count_query = \Drupal::entityTypeManager()->getStorage('user_role')->getQuery();
+  $count_query->count();
+  $count = $count_query->execute();
+
+  $query = \Drupal::request()->query->all();
+  $configs = \Drupal::configFactory()->getEditable('living_spaces_simple_permissions.role_filter');
+
+  if ($count == count($entities) && isset($query['filter_roles']) && $query['filter_roles'] && !empty($configs->getRawData())) {
+    foreach ($entities as $name => $entity) {
+      if (!in_array($name, $configs->get('roles'))) {
+        unset($entities[$name]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function living_spaces_simple_permissions_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (\Drupal::currentUser()->hasPermission('access advanced permissions')) {
+    return;
+  }
+
+  $config = NULL;
+
+  switch ($form_id) {
+    case 'user_admin_permissions':
+      $config = [
+        'config' => 'living_spaces_simple_permissions.global',
+        'role' => 'user_role',
+        'permission' => 'user.permissions',
+      ];
+      break;
+
+    case 'group_admin_permissions':
+      $config = [
+        'config' => 'living_spaces_simple_permissions.group',
+        'role' => 'group_role',
+        'permission' => 'group.permissions',
+      ];
+      break;
+
+  }
+
+  if ($config) {
+    $configs = \Drupal::configFactory()->getEditable($config['config']);
+    if (empty($configs->getRawData())) {
+      return;
+    }
+
+    $modules = $configs->get('modules');
+    $permissions = $configs->get('permissions');
+
+    $roles = [];
+    foreach (\Drupal::entityTypeManager()->getStorage($config['role'])->loadMultiple() as $role) {
+      $roles[] = $role->id();
+    }
+
+    $names = [];
+    foreach ($configs->get('names') as $name) {
+      $names[$name['old']] = [
+        'title' => $name['new'],
+        'description' => $name['desc'],
+      ];
+    }
+
+    $mode = system_admin_compact_mode();
+    $module_handler = \Drupal::moduleHandler();
+
+    foreach ($form['permissions'] as $name => &$data) {
+      // Check the module.
+      if ($module_handler->moduleExists($name) && !in_array($name, $modules)) {
+        unset($form['permissions'][$name]);
+
+        $items = living_spaces_simple_permissions_get_permissions_by_module($config['permission'], $name);
+        $permissions = array_merge($items, $permissions);
+      }
+
+      // Hide permission.
+      if (in_array($name, $permissions)) {
+        unset($form['permissions'][$name]);
+      }
+
+      // Change permission name.
+      if (isset($names[$name])) {
+        $title = $data['description']['#context']['title'];
+        $data['description']['#context']['title'] = t($names[$name]['title']);
+
+        if (!$mode) {
+          $data['description']['#context']['description'] = t($names[$name]['description']);
+        }
+
+        foreach ($roles as $role) {
+          if (isset($data[$role])) {
+            $data[$role]['#title'] = str_replace($title->render(), t($names[$name]['title'])->render(), $data[$role]['#title']);
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Helper to get all permissions provided by the module.
+ */
+function living_spaces_simple_permissions_get_permissions_by_module($type, $module) {
+  $permissions = [];
+
+  foreach (\Drupal::service($type)->getPermissions() as $name => $info) {
+    if ($module == $info['provider']) {
+      $permissions[] = $name;
+    }
+  }
+
+  return $permissions;
+}

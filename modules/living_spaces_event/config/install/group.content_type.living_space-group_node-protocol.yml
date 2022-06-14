@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.living_space
+    - node.type.protocol
+  module:
+    - gnode
+    - node
+id: living_space-group_node-protocol
+label: 'Standard: Group node (Protocol)'
+description: 'Adds <em class="placeholder">Protocol</em> content to groups both publicly and privately.'
+group_type: living_space
+content_plugin: 'group_node:protocol'
+plugin_config:
+  group_cardinality: 0
+  entity_cardinality: 1
+  use_creation_wizard: false

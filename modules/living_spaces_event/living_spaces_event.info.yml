@@ -1,0 +1,30 @@
+name: 'Space Event'
+type: module
+description: 'Provides event functionality for living spaces.'
+core_version_requirement: ^9.0
+package: 'Living Spaces'
+dependencies:
+  - default_content
+  - fullcalendar_view
+  - inline_entity_form
+  - living_spaces_activity
+  - living_spaces_default_configs
+  - living_spaces_group
+  - living_spaces_sections
+  - paragraphs
+  - search_api_date_popup
+  - search_api_solr
+  - time_field
+  - user_permission_condition
+default_content:
+  taxonomy_term:
+    - 6ac8691c-87d5-49f6-882e-46398be6d119
+    - 4c8fdc19-dd01-4104-b540-005a4062a65a
+    - 70ed9d67-f5df-428a-8ebb-2b0276e826fd
+    - 73f46fe8-82f5-40a3-82a3-ddde450a285b
+    - c9e45cef-15e9-4d9e-92c9-cd67dbf1fcae
+    - 4ff35c2a-1d0a-401a-80f3-929e07931ea1
+    - 3ae0c24b-826e-418b-8d40-40f65ad843de
+
+'interface translation project': living_spaces_event
+'interface translation server pattern': profiles/custom/living_spaces/modules/living_spaces_event/translations/living_spaces_event-%language.po

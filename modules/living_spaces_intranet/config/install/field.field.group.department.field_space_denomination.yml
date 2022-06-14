@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.group.field_space_denomination
+    - group.type.department
+  module:
+    - options
+id: group.department.field_space_denomination
+field_name: field_space_denomination
+entity_type: group
+bundle: department
+label: Denomination
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

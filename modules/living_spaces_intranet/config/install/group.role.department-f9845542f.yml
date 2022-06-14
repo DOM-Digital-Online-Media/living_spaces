@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department
+  enforced:
+    config:
+      - user.role.client_admin
+id: department-f9845542f
+label: Administrator
+weight: 3
+internal: true
+audience: outsider
+group_type: department
+permissions_ui: false
+permissions:
+  - 'access living spaces sections settings'
+  - 'edit group'
+  - 'update private group'
+  - 'update public group'
+  - 'view any unpublished group'
+  - 'view discussions section of a living space'
+  - 'view events section of a living space'
+  - 'view group'
+  - 'view own unpublished group'
+  - 'view private group'
+  - 'view public group'
+is_space_admin: false

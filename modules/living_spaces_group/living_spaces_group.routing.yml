@@ -1,0 +1,52 @@
+living_spaces_group.multiple_change_role_confirm:
+  path: '/user/change-role'
+  defaults:
+    _form: '\Drupal\living_spaces_group\Form\LivingSpacesGroupChangeRoleForm'
+    _title: 'Change user role'
+  requirements:
+    _permission: 'manage living spaces'
+  options:
+    _admin_route: TRUE
+living_spaces_group.remove_member:
+  path: '/group/{group}/living-spaces-admin/remove-member/{user}'
+  defaults:
+    _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupController::removeMember'
+  requirements:
+    _group_permission: 'manage living spaces'
+living_spaces_group.assign_admin:
+  path: '/group/{group}/living-spaces-admin/assign-admin/{user}'
+  defaults:
+    _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupController::assignAdmin'
+  requirements:
+    _group_permission: 'manage living spaces'
+living_spaces_group.remove_admin:
+  path: '/group/{group}/living-spaces-admin/remove-admin/{user}'
+  defaults:
+    _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupController::removeAdmin'
+  requirements:
+    _group_permission: 'manage living spaces'
+living_spaces_group.update_memberships:
+  path: '/admin/config/development/update-memberships'
+  defaults:
+    _title: 'Update space memberships'
+    _form: 'Drupal\living_spaces_group\Form\LivingSpacesGroupUpdateMembershipsForm'
+  requirements:
+    _permission: 'manage living spaces'
+living_spaces_group.create_content:
+  path: '/group/{group}/content/create-list/{plugin}'
+  defaults:
+    _title: 'Create content'
+    _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupCreateContentController::createContent'
+  requirements:
+    _permission: 'manage living spaces'
+  options:
+    parameters:
+      group:
+        type: entity:group
+living_spaces_group.preferred_spaces:
+  path: '/user/preferred/{type}'
+  defaults:
+    _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupController::spaceRedirect'
+    _title: 'Preferred spaces'
+  requirements:
+    _user_is_logged_in: 'TRUE'

@@ -1,0 +1,7 @@
+living_spaces_sections.settings:
+  type: config_object
+  label: 'Living space section type config'
+  mapping:
+    group_types:
+      type: sequence
+      label: 'Enabled group types'

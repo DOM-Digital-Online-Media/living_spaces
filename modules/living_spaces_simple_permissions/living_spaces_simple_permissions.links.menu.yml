@@ -1,0 +1,4 @@
+living_spaces_simple_permissions.simple_global_permissions:
+  title: 'Simple Permission settings'
+  route_name: living_spaces_simple_permissions.simple_global_permissions
+  parent: living_spaces.settings_overview

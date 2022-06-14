@@ -1,0 +1,102 @@
+.form-check.radio {
+  box-sizing: border-box;
+  color: $primary;
+  display: block;
+  font-size: 15px;
+  font-weight: 400;
+  height: 34px;
+  line-height: 34px;
+  margin: 0;
+  padding-left: 0;
+  position: relative;
+  .form-check-input {
+    background-color: $white;
+    background-size: auto;
+    border: none;
+    box-shadow: none;
+    box-sizing: border-box;
+    color: $primary;
+    cursor: pointer;
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    height: 34px;
+    left: 0;
+    line-height: 34px;
+    margin: 0;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    z-index: $input-index;
+    &:checked + label i:before {
+      background-color: $primary;
+      border-color: $primary;
+    }
+    &:checked + label i:after {
+      background-color: initial;
+      border-color: $primary;
+    }
+    &:focus + label {
+      outline: 1px dashed $primary;
+      padding: 5px;
+    }
+  }
+  label {
+    box-sizing: content-box;
+    color: $primary;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 400;
+    height: 14px;
+    line-height: 14px;
+    margin-right: 10px;
+    min-width: 14px;
+    padding: 2px;
+    position: relative;
+    i {
+      box-sizing: content-box;
+      color: $primary;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: 400;
+      height: 14px;
+      line-height: 14px;
+      margin-right: 10px;
+      min-width: 14px;
+      padding: 2px;
+      position: relative;
+      &:before {
+        background-color: $white;
+        border-radius: 100px;
+        box-sizing: border-box;
+        color: transparent;
+        content: '\0000';
+        display: inline-block;
+        height: 14px;
+        left: 0;
+        min-width: 14px;
+        position: relative;
+        transform: matrix(0.8, 0, 0, 0.8, 0, 0);
+        z-index: $input-before-index;
+      }
+      &:after {
+        border: 1px solid $gray-400;
+        border-radius: 100px;
+        box-sizing: border-box;
+        color: transparent;
+        content: '\0000';
+        display: block;
+        height: 18px;
+        width: 18px;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    }
+  }
+}

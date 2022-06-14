@@ -1,0 +1,445 @@
+<?php
+
+/**
+ * @file
+ * Hooks and various functions for living spaces group bundle.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
+use Drupal\group\Entity\GroupInterface;
+use Drupal\group\Entity\GroupRoleInterface;
+use Drupal\group\Entity\GroupContentInterface;
+use Drupal\profile\Entity\ProfileInterface;
+use Drupal\user\UserInterface;
+use Drupal\user\Entity\Role;
+use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function living_spaces_group_entity_type_alter(&$entity_types) {
+  $export = [
+    'group_type' => ['is_living_space'],
+    'group_role' => ['is_space_admin'],
+  ];
+
+  foreach ($export as $entity_type => $new_configs) {
+    if (isset($entity_types[$entity_type])) {
+      $configs = $entity_types[$entity_type]->get('config_export');
+      foreach ($new_configs as $config) {
+        $configs[] = $config;
+      }
+      $entity_types[$entity_type]->set('config_export', $configs);
+    }
+  }
+
+  $handlers = $entity_types['group']->getHandlerClasses();
+  $handlers['form']['delete'] = 'Drupal\living_spaces_group\LivingSpacesGroupDeleteForm';
+  $entity_types['group']->setHandlerClass('form', $handlers['form']);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function living_spaces_group_group_content_delete(GroupContentInterface $content) {
+  if ('group_membership' != $content->getContentPlugin()->getPluginId()
+&& $entity = $content->getEntity()) {
+    $entity->delete();
+  }
+  if ($content->getEntity() instanceof UserInterface) {
+    living_spaces_group_update_joined_spaces($content->getEntity());
+  }
+}
+
+/**
+ * Process a batch of removing entity.
+ */
+function living_spaces_group_remove_referenced_entity($type, $id) {
+  if ($entity = \Drupal::entityTypeManager()->getStorage($type)->load($id)) {
+    $entity->delete();
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_group_form_group_type_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\group\Entity\GroupTypeInterface $type */
+  $type = $form_state->getFormObject()->getEntity();
+
+  $form['is_living_space'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Living space'),
+    '#default_value' => $type->get('is_living_space'),
+    '#access' => \Drupal::currentUser()->hasPermission('manage living spaces'),
+  ];
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function living_spaces_group_group_role_presave(GroupRoleInterface $entity) {
+  $parts = explode('-', $entity->id());
+  $entity->set('is_space_admin', FALSE);
+  if (isset($parts[1]) && 'admin' == $parts[1]) {
+    $entity->set('is_space_admin', TRUE);
+
+    if ($entity->isNew() && \Drupal::service('living_spaces_group.manager')->isLivingSpace($parts[0])) {
+      $entity->set('label', 'Space Administrator');
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function living_spaces_group_group_content_presave(EntityInterface $entity) {
+  /** @var \Drupal\group\Entity\GroupContentInterface $entity */
+  $entity->set('is_space_admin', FALSE);
+  if ($entity->getContentPlugin()->getBaseId() === 'group_membership') {
+    $roles = $entity->get('group_roles')->referencedEntities();
+    /** @var \Drupal\group\Entity\GroupRoleInterface $role */
+    foreach ($roles as $role) {
+      if ($role->get('is_space_admin')) {
+        $entity->set('is_space_admin', TRUE);
+        break;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function living_spaces_group_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
+
+  if (in_array($entity_type->id(), ['group_role', 'group_content'])) {
+    $description = $entity_type->id() === 'group_role'
+      ? t('Mark group role as admin role for space type.')
+      : t('Mark group membership content as admin.');
+    $fields['is_space_admin'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Is space admin'))
+      ->setDescription($description)
+      ->setDefaultValue(FALSE);
+  }
+
+  if ('group' == $entity_type->id()) {
+    $fields['protected'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Protected'))
+      ->setRevisionable(TRUE)
+      ->setTranslatable(FALSE)
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'settings' => [
+          'display_label' => TRUE,
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+  }
+
+  if ('user' == $entity_type->id()) {
+    $fields['preferred_spaces'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Preferred spaces'))
+      ->setSetting('target_type', 'group')
+      ->setSetting('handler', 'views')
+      ->setSetting('handler_settings', [
+        'view' => [
+          'view_name' => 'groups',
+          'display_name' => 'preferred_spaces',
+        ],
+      ])
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
+      ->addConstraint('LivingSpacesGroupPreferredSpaces')
+      ->setTranslatable(FALSE)
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'weight' => 0,
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => '60',
+          'placeholder' => '',
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['joined_spaces'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Spaces'))
+      ->setSetting('target_type', 'group')
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
+      ->setTranslatable(FALSE);
+  }
+
+  return $fields;
+}
+
+/**
+ * Implements hook_entity_base_field_info_alter().
+ */
+function living_spaces_group_entity_base_field_info_alter(&$fields, EntityTypeInterface $entity_type) {
+  if ('group' == $entity_type->id()) {
+    if (!empty($fields['uid'])) {
+      $fields['uid']->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'weight' => -1,
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'match_limit' => 10,
+          'size' => '60',
+          'placeholder' => '',
+        ],
+      ]);
+      $fields['uid']->setDisplayConfigurable('form', TRUE);
+    }
+    if (!empty($fields['parent'])) {
+      $fields['parent']->addConstraint('LivingSpacesGroupParentConstraint');
+    }
+  }
+
+  if ('user' == $entity_type->id() && !empty($fields['roles'])) {
+    $roles = [];
+    foreach (Role::loadMultiple() as $role) {
+      $roles[$role->id()] = $role->label();
+    }
+    $fields['roles']->setSetting('allowed_values', $roles);
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function living_spaces_group_form_group_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\group\Entity\GroupTypeInterface $group */
+  $group = $form_state->getFormObject()->getEntity();
+  $living = \Drupal::service('living_spaces_group.manager')->isLivingSpace($group->bundle());
+
+  if (isset($form['uid']) && $living) {
+    $form['uid']['widget'][0]['target_id']['#title'] = t('Manager');
+    $form['uid']['#access'] = \Drupal::currentUser()->hasPermission('manage living spaces');
+  }
+
+  if (isset($form['revision_information'])) {
+    $form['revision_information']['#access'] = FALSE;
+  }
+
+  if (isset($form['protected'])) {
+    $form['protected']['#access'] = \Drupal::currentUser()->hasPermission('manage protected spaces');
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function living_spaces_group_group_access(GroupInterface $group, $operation, AccountInterface $account) {
+  if ('delete' == $operation && $group->get('protected')->getString() && !$account->hasPermission('manage protected spaces')) {
+    return AccessResult::forbidden();
+  }
+
+  return AccessResult::allowed();
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function living_spaces_group_menu_local_tasks_alter(&$data, $route_name, RefinableCacheableDependencyInterface &$cacheability) {
+  // Since we add tab to other variant, tabs won't appear for this one.
+  if ($route_name === 'page_manager.page_view_living_space_members_living_space_members-layout_builder-1') {
+    /** @var \Drupal\Core\Menu\LocalTaskManagerInterface $manager */
+    $manager = \Drupal::service('plugin.manager.menu.local_task');
+    $group_data = $manager->getLocalTasks('entity.group.canonical');
+    $data['tabs'][0] = $group_data['tabs'];
+    $cacheability->addCacheableDependency($group_data['cacheability']);
+
+    // Adjust active tab from group view.
+    $data['tabs'][0]['group.view']['#active'] = FALSE;
+    $data['tabs'][0]['living_spaces_group.members']['#active'] = TRUE;
+  }
+
+  if (!empty($data['tabs'][0]['group.edit_form'])) {
+    unset($data['tabs'][0]['group.edit_form']);
+  }
+}
+
+/**
+ * Implements hook_living_spaces_group_actions_info().
+ */
+function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE, GroupInterface $space = NULL, UserInterface $user = NULL) {
+  if ($names_only || !$space->id()) {
+    return [
+      'view_profile' => t('Show profile'),
+      'remove_from_space' => t('Remove from Space'),
+      'add_remove_admin' => t('Add/Remove as Admin'),
+
+    ];
+  }
+  $current_user = \Drupal::currentUser()->getAccount();
+
+  /** @var \Drupal\group\Entity\Storage\GroupRoleStorageInterface $role_storage */
+  $role_storage = \Drupal::entityTypeManager()->getStorage('group_role');
+  $roles = $role_storage->loadByUserAndGroup($user, $space);
+  $is_admin = FALSE;
+  foreach ($roles as $role) {
+    $is_admin = $role->get('is_space_admin') ? TRUE : $is_admin;
+  }
+  $route = $is_admin
+    ? 'living_spaces_group.remove_admin'
+    : 'living_spaces_group.assign_admin';
+
+  $links = [
+    'view_profile' => [
+      '#type' => 'link',
+      '#title' => t('Show profile'),
+      '#url' => Url::fromRoute('entity.user.canonical', [
+        'user' => $user->id(),
+      ]),
+    ],
+  ];
+
+  $cache = CacheableMetadata::createFromObject($current_user);
+  $cache->applyTo($links['view_profile']);
+  if ($space->getOwnerId() !== $user->id() &&
+    $space->hasPermission('manage space members', $current_user)
+  ) {
+    $links['remove_from_space'] = [
+      '#type' => 'link',
+      '#title' => t('Remove from Space'),
+      '#url' => Url::fromRoute('living_spaces_group.remove_member', [
+        'group' => $space->id(),
+        'user' => $user->id(),
+      ]),
+    ];
+    $links['add_remove_admin'] = [
+      '#type' => 'link',
+      '#title' => $is_admin ? t('Remove as Admin') : t('Add as Admin'),
+      '#url' => Url::fromRoute($route, [
+        'group' => $space->id(),
+        'user' => $user->id(),
+      ]),
+    ];
+  }
+  return $links;
+}
+
+/**
+ * Implements hook_living_spaces_group_exports_info().
+ */
+function living_spaces_group_living_spaces_group_exports_info($names_only = TRUE, GroupInterface $space = NULL) {
+  $names_export_label = t('Members list (Names & E-mail)');
+  if ($names_only) {
+    return [
+      'export_names' => $names_export_label,
+    ];
+  }
+
+  $results = [];
+  $user = \Drupal::currentUser()->getAccount();
+  if ($space->hasPermission('view group_membership content', $user) && $space->id()) {
+    $results['export_names'] = [
+      '#type' => 'link',
+      '#title' => $names_export_label,
+      '#url' => Url::fromRoute('view.members_export.data_export_names', ['group' => $space->id()]),
+      '#attributes' => ['class' => ['btn', 'btn-default']],
+    ];
+
+    $cache = CacheableMetadata::createFromObject($user);
+    $cache->applyTo($results['export_names']);
+  }
+
+  return $results;
+}
+
+/**
+ * Implements hook_living_spaces_group_action_info().
+ */
+function living_spaces_group_living_spaces_group_action_info(GroupInterface $space) {
+  $items = [];
+
+  if ($space->hasPermission('edit group', \Drupal::currentUser())) {
+    $items['edit'] = [
+      '#type' => 'link',
+      '#title' => t('Edit space'),
+      '#options' => [],
+      '#url' => Url::fromRoute('entity.group.edit_form', [
+        'group' => $space->id(),
+      ]),
+    ];
+  }
+
+  if (\Drupal::currentUser()->hasPermission('manage living spaces')) {
+    $items['members'] = [
+      '#type' => 'link',
+      '#title' => t('Manage members'),
+      '#options' => [],
+      '#url' => Url::fromRoute('page_manager.page_view_members_roles_members_roles-block_display-0', [
+        'group' => $space->id(),
+      ]),
+    ];
+  }
+
+  return $items;
+}
+
+/**
+ * Implements hook_group_operations_alter().
+ */
+function living_spaces_group_group_operations_alter(array &$operations, GroupInterface $group) {
+  $allowed = ['group-join', 'group-leave'];
+
+  if ('page_manager.page_view_living_space_members_living_space_members-layout_builder-0' == \Drupal::routeMatch()->getRouteName()) {
+    foreach ($operations as $name => $operation) {
+      if (!in_array($name, $allowed)) {
+        unset($operations[$name]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function living_spaces_group_entity_operation_alter(array &$operations, EntityInterface $entity) {
+  if ('group' == $entity->getEntityTypeId()) {
+    $remove = ['revisions', 'devel', 'nodes'];
+
+    foreach ($operations as $name => $operation) {
+      if (in_array($name, $remove)) {
+        unset($operations[$name]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_group_group_content_insert(GroupContentInterface $entity) {
+  if ($entity->getEntity() instanceof UserInterface) {
+    living_spaces_group_update_joined_spaces($entity->getEntity());
+  }
+}
+
+/**
+ * Helper to update 'joined_spaces' field value.
+ */
+function living_spaces_group_update_joined_spaces(UserInterface $user) {
+  $memberships = \Drupal::service('group.membership_loader')->loadByUser($user);
+  $space_manager = \Drupal::service('living_spaces_group.manager');
+
+  $gids = [];
+  foreach ($memberships as $membership) {
+    $group = $membership->getGroup();
+    if ($group && $space_manager->isLivingSpace($group->bundle())) {
+      $gids[]['target_id'] = $group->id();
+    }
+  }
+
+  $user->set('joined_spaces', $gids);
+  $user->save();
+}

@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.protocol.field_agendatopics
+    - field.field.node.protocol.field_attendees
+    - field.field.node.protocol.field_location
+    - field.field.node.protocol.field_tags
+    - node.type.protocol
+  module:
+    - user
+id: node.protocol.teaser
+targetEntityType: node
+bundle: protocol
+mode: teaser
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_agendatopics: true
+  field_attendees: true
+  field_location: true
+  field_tags: true
+  langcode: true
+  search_api_excerpt: true

@@ -1,0 +1,14 @@
+name: 'Space Protected Area'
+type: module
+description: 'Provides protected area functionality for living spaces.'
+core_version_requirement: ^9.0
+package: 'Living Spaces'
+dependencies:
+  - living_spaces_menus
+  - options
+  - universal_device_detection
+  - views
+
+default_content:
+  menu_link_content:
+    - 2c42848f-18be-47e8-8359-5bd86457ad34

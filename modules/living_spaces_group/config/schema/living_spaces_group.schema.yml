@@ -1,0 +1,27 @@
+condition.plugin.living_spaces_group_permission:
+  type: condition.plugin
+  label: 'LivingSpacesGroupPermission condition'
+  mapping:
+    permission:
+      type: string
+      label: Permission
+
+block.settings.living_spaces_group_members:
+  type: block_settings
+  label: 'Space members block'
+  mapping:
+    enabled:
+      type: sequence
+      label: 'Enabled tabs'
+      sequence:
+        type: string
+    enabled_contacts:
+      type: sequence
+      label: 'Enabled contacts'
+      sequence:
+        type: string
+    enabled_exports:
+      type: sequence
+      label: 'Enabled exports'
+      sequence:
+        type: string

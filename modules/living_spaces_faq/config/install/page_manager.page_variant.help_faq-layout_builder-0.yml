@@ -1,0 +1,53 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - page_manager.page.help_faq
+id: help_faq-layout_builder-0
+label: Page
+variant: layout_builder
+variant_settings:
+  id: layout_builder
+  uuid: 4b4f80dd-d584-487e-ae3d-ab6466733930
+  label: null
+  weight: 0
+  sections:
+    -
+      layout_id: layout_twocol_section
+      layout_settings:
+        label: ''
+        column_widths: 75-25
+        context_mapping: {  }
+      components:
+        fd746188-3a0e-488b-b701-61f6b1e697c7:
+          uuid: fd746188-3a0e-488b-b701-61f6b1e697c7
+          region: second
+          configuration:
+            id: 'views_block:intranet_faq-index'
+            label: ''
+            provider: views
+            label_display: visible
+            views_label: ''
+            items_per_page: none
+            context_mapping: {  }
+          additional: {  }
+          weight: 0
+        8fdbdead-0fc3-4a47-a944-d9cb3697bba4:
+          uuid: 8fdbdead-0fc3-4a47-a944-d9cb3697bba4
+          region: first
+          configuration:
+            id: 'views_block:intranet_faq-categories'
+            label: ''
+            provider: views
+            label_display: visible
+            views_label: ''
+            items_per_page: none
+            context_mapping: {  }
+          additional: {  }
+          weight: 0
+      third_party_settings: {  }
+page: help_faq
+weight: 0
+selection_criteria: {  }
+selection_logic: and
+static_context: {  }

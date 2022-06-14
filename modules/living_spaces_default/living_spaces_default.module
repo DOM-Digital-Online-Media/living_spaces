@@ -1,0 +1,153 @@
+<?php
+
+/**
+ * @file
+ * Contains functions and hooks for living_spaces_default.module.
+ */
+
+use Drupal\Core\Database\Query\SelectInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\group\Entity\Group;
+use Drupal\group\Entity\GroupInterface;
+use Drupal\group\QueryAccess\EntityQueryAlter;
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function living_spaces_default_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
+
+  if ('group' == $entity_type->id()) {
+    $fields['is_default'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Default'))
+      ->setRevisionable(TRUE)
+      ->setTranslatable(FALSE)
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'settings' => [
+          'display_label' => TRUE,
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['template'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Template'))
+      ->setSetting('target_type', 'group')
+      ->setTranslatable(FALSE);
+  }
+
+  return $fields;
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function living_spaces_default_form_group_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  $form['is_default']['#access'] = \Drupal::currentUser()->hasPermission('manage living spaces default content');
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function living_spaces_default_query_entity_query_alter(SelectInterface $query) {
+  $tag = $query->hasTag('skip_default_check');
+  if (!$tag && 'group' == $query->getMetaData('entity_type')) {
+    foreach ($query->getTables() as $table => $info) {
+      if (is_array($info) && 'groups' == $info['table']) {
+        $query->join('groups_field_data', 'groups_field_data', "groups_field_data.id = {$table}.id");
+
+        $group = $query->orConditionGroup();
+        $group->isNull('groups_field_data.is_default');
+        $group->condition('groups_field_data.is_default', 0);
+        $query->condition($group);
+        break;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function living_spaces_default_query_views_entity_query_alter(SelectInterface $query) {
+  $tag = $query->hasTag('skip_default_check');
+  if (!$tag && 'group' == $query->getMetaData('entity_type')) {
+    $group = $query->orConditionGroup();
+    $group->isNull('groups_field_data.is_default');
+    $group->condition('groups_field_data.is_default', 0);
+    $query->condition($group);
+  }
+}
+
+/**
+ * Implements hook_group_operations_alter().
+ */
+function living_spaces_default_group_operations_alter(array &$operations, GroupInterface $group) {
+  if (array_key_exists('group-join', $operations) &&
+    $group->get('is_default')->getString() &&
+    !\Drupal::currentUser()->hasPermission('manage living spaces default content')
+  ) {
+    unset($operations['group-join']);
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_default_form_entity_clone_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  $entity = $form_state->getFormObject()->getEntity();
+  if ($entity instanceof Group && \Drupal::currentUser()->hasPermission('manage living spaces default content')) {
+    $form['is_default'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Default'),
+      '#default_value' => $entity->get('is_default')->getString(),
+    ];
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_prepare_form().
+ */
+function living_spaces_default_group_prepare_form(GroupInterface $group, $operation, FormStateInterface $form_state) {
+  $uuid = \Drupal::request()->query->get('space');
+  if ('add' == $operation && !empty($uuid)) {
+    $group_manager = \Drupal::entityTypeManager()->getStorage('group');
+    $query = $group_manager->getQuery();
+    $query->condition('uuid', $uuid);
+    $query->addTag('skip_default_check');
+
+    if ($gids = $query->execute()) {
+      $gid = reset($gids);
+      $template = $group_manager->load($gid);
+
+      $group = $template->createDuplicate();
+      \Drupal::moduleHandler()->invokeAll('living_spaces_default_create', [$group, $template]);
+
+      $object = $form_state->getFormObject();
+      $object->setEntity($group);
+    }
+  }
+}
+
+/**
+ * Implements hook_living_spaces_default_create().
+ */
+function living_spaces_default_living_spaces_default_create(GroupInterface $space, GroupInterface $template) {
+  $space->set(LIVING_SPACES_SECTIONS_FIELD, NULL);
+  $space->set('is_default', NULL);
+  $space->set('template', $template->id());
+  $space->set('protected', FALSE);
+
+  if ($parent = \Drupal::request()->get('parent')) {
+    $space->set('parent', reset($parent));
+  }
+
+  $info = \Drupal::moduleHandler()->invokeAll('living_spaces_group_type_info');
+  if (!empty($info[$space->getGroupType()->id()]['title_callback'])) {
+    $label = $info[$space->getGroupType()->id()]['title_callback']($space);
+    $space->set('label', $label);
+  }
+}

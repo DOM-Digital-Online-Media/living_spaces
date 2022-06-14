@@ -1,0 +1,45 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.living_spaces_event.supervision.field_end_date
+    - field.field.living_spaces_event.supervision.field_start_date
+    - living_spaces_event.living_spaces_event_type.supervision
+  module:
+    - datetime
+id: living_spaces_event.supervision.default
+targetEntityType: living_spaces_event
+bundle: supervision
+mode: default
+content:
+  field_end_date:
+    weight: 2
+    label: above
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_start_date:
+    weight: 1
+    label: above
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  label:
+    label: hidden
+    type: string
+    weight: 0
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+hidden:
+  langcode: true
+  location: true
+  search_api_excerpt: true
+  uid: true

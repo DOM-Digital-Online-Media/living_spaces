@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_group
+id: assistant_to_the_office_manager
+label: 'Assistant to the Office Manager'
+weight: 11
+is_admin: false
+permissions: {  }

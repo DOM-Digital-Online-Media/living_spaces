@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - living_spaces_users
+  theme:
+    - living_spaces_barrio
+id: living_spaces_barrio_user_notifications
+theme: living_spaces_barrio
+region: secondary_menu
+weight: -4
+provider: null
+plugin: living_spaces_users_notifications
+settings:
+  id: living_spaces_users_notifications
+  label: 'User notifications'
+  label_display: '0'
+  provider: living_spaces_users
+visibility: {  }

@@ -1,0 +1,10 @@
+name: 'Space FAQ'
+type: module
+description: 'Provides FAQ functionality for living spaces.'
+core_version_requirement: ^9.0
+package: 'Living Spaces'
+dependencies:
+  - dom_faq
+  - views_accordion
+  - views_field_view
+  - page_manager

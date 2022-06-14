@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_event
+  module:
+    - paragraphs
+id: paragraph.agenda
+label: Agenda
+targetEntityType: paragraph
+cache: true

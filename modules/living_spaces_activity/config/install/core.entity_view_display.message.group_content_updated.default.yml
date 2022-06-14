@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.message.group_content_updated.field_group_content
+    - message.template.group_content_updated
+  module:
+    - user
+id: message.group_content_updated.default
+targetEntityType: message
+bundle: group_content_updated
+mode: default
+content:
+  field_group_content:
+    weight: 1
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  partial_0:
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  search_api_excerpt: true

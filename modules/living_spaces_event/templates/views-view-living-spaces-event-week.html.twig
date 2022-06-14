@@ -1,0 +1,33 @@
+{#
+/**
+ * Default theme implementation for Views to output a 'Week style'.
+ *
+ * @see template_preprocess_views_view_living_spaces_event_week()
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    'views-view-living-spaces-event-week',
+    options.class
+  ]
+%}
+
+<div{{ attributes.addClass(classes) }}>
+  {% for row in rows %}
+    <div class="row {{ row.class }}">
+      <div class="event-week-day">
+        <span class="week-name">{{ row.day }}</span>
+        <span class="week-day">{{ row.date }}</span>
+      </div>
+      <div class="event-week-items">
+        {% for item in row.items %}
+          <div class="item">
+            {{ item.content }}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</div>

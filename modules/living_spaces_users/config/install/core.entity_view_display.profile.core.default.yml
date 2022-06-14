@@ -1,0 +1,68 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.profile.core.field_birthday
+    - field.field.profile.core.field_denomination
+    - field.field.profile.core.field_first_name
+    - field.field.profile.core.field_gender
+    - field.field.profile.core.field_last_name
+    - field.field.profile.core.field_occupation
+    - profile.type.core
+  module:
+    - datetime
+    - options
+id: profile.core.default
+targetEntityType: profile
+bundle: core
+mode: default
+content:
+  field_birthday:
+    weight: 3
+    label: inline
+    settings:
+      timezone_override: ''
+      format_type: html_date
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_denomination:
+    weight: 4
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+  field_first_name:
+    weight: 1
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_gender:
+    weight: 0
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+  field_last_name:
+    weight: 2
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_occupation:
+    weight: 5
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+hidden:
+  search_api_excerpt: true

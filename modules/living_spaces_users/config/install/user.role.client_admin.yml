@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_users
+id: client_admin
+label: Administrator
+weight: 3
+is_admin: false
+permissions: {  }

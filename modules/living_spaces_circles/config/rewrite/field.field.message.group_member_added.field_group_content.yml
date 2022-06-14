@@ -1,0 +1,7 @@
+dependencies:
+  config:
+    - group.content_type.circle-group_membership
+settings:
+  handler_settings:
+    target_bundles:
+      circle-group_membership: circle-group_membership

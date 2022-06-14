@@ -1,0 +1,11 @@
+living_spaces_protected_area.add_living_spaces_access_area:
+  route_name: 'entity.living_spaces_access_area.add_page'
+  title: 'Add access area'
+  appears_on:
+    - 'view.access_area.access_area'
+
+living_spaces_protected_area.add_living_spaces_access_area_type:
+  route_name: 'entity.living_spaces_access_area_type.add_form'
+  title: 'Add access area type'
+  appears_on:
+    - 'entity.living_spaces_access_area_type.collection'

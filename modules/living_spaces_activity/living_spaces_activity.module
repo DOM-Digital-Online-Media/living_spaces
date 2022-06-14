@@ -1,0 +1,279 @@
+<?php
+
+/**
+ * @file
+ * Contains functions and hooks for living_spaces_activity.module.
+ */
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\group\Entity\GroupContentInterface;
+use Drupal\group\Entity\GroupInterface;
+use Drupal\message\Entity\Message;
+use Drupal\user\UserInterface;
+
+const LIVING_SPACES_ACTIVITY_PERSONAL = '5538078f-4a95-4e4c-9924-85d05b924894';
+const LIVING_SPACES_ACTIVITY_GENERAL = 'd42f2dc9-7d97-44c4-90a0-f93abf903ae0';
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function living_spaces_activity_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
+
+  if ('message' == $entity_type->id()) {
+    $fields['is_read'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Is read'))
+      ->setReadOnly(TRUE)
+      ->setRevisionable(TRUE)
+      ->setTranslatable(FALSE)
+      ->setDefaultValue(FALSE);
+  }
+
+  return $fields;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function living_spaces_activity_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['views_view_living_spaces_activity_notification'] = [
+    'file' => 'living_spaces_activity.theme.inc',
+  ];
+
+  $items['views_view__message__user_notifications'] = [
+    'original hook' => 'views_view',
+    'path' => \Drupal::service('extension.list.module')->getPath('living_spaces_activity') . '/templates',
+    'variables' => [
+      'view_array' => [],
+      'view' => NULL,
+      'rows' => [],
+      'header' => [],
+      'footer' => [],
+      'empty' => [],
+      'exposed' => [],
+      'more' => [],
+      'feed_icons' => [],
+      'pager' => [],
+      'title' => '',
+      'attachments_before' => [],
+      'attachments_after' => [],
+    ],
+  ];
+
+  return $items;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_alter().
+ */
+function living_spaces_activity_entity_type_alter(&$entity_types) {
+  $configs = $entity_types['message_template']->get('config_export');
+  $configs[] = 'category';
+  $entity_types['message_template']->set('config_export', $configs);
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function living_spaces_activity_form_message_template_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\message\Entity\MessageTemplate $template */
+  $template = $form_state->getFormObject()->getEntity();
+
+  $options = [];
+  foreach (\Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties(['vid' => 'message_category']) as $term) {
+    $options[$term->uuid()] = $term->label();
+  }
+
+  $form['category'] = [
+    '#title' => t('Category'),
+    '#type' => 'select',
+    '#options' => $options,
+    '#empty_option' => t(' - Select a value - '),
+    '#empty_value' => 0,
+    '#default_value' => $template->get('category'),
+  ];
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_activity_group_content_insert(GroupContentInterface $content) {
+  // @todo add check is content type is among field target bundles.
+  if ('group_membership' == $content->getContentPlugin()->getBaseId()) {
+    /** @var \Drupal\message\Entity\Message $message */
+    $message = \Drupal::entityTypeManager()->getStorage('message')->create([
+      'template' => 'group_member_added',
+      'uid' => $content->getEntity()->id(),
+      'field_group_content' => $content->id(),
+      'field_group_label' => $content->getGroup()->label(),
+    ]);
+    $message->save();
+  }
+  else {
+    /** @var \Drupal\message\Entity\Message $message */
+    $message = \Drupal::entityTypeManager()->getStorage('message')->create([
+      'template' => 'group_content_created',
+      'field_group_content' => $content->id(),
+    ]);
+    $message->save();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function living_spaces_activity_group_content_update(GroupContentInterface $content) {
+  // @todo add check is content type is among field target bundles.
+  if ('group_membership' != $content->getContentPlugin()->getBaseId()) {
+    /** @var \Drupal\message\Entity\Message $message */
+    $message = \Drupal::entityTypeManager()->getStorage('message')->create([
+      'template' => 'group_content_updated',
+      'field_group_content' => $content->id(),
+    ]);
+    $message->save();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function living_spaces_activity_group_content_delete(GroupContentInterface $content) {
+  // @todo add check is content type is among field target bundles.
+  if ('group_membership' == $content->getContentPlugin()->getBaseId()) {
+    /** @var \Drupal\message\Entity\Message $message */
+    $message = \Drupal::entityTypeManager()->getStorage('message')->create([
+      'template' => 'group_member_removed',
+      'uid' => $content->getEntity()->id(),
+      'field_group_label' => $content->getGroup()->label(),
+    ]);
+    $message->save();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_activity_message_insert(Message $message) {
+  if (LIVING_SPACES_ACTIVITY_PERSONAL == $message->getTemplate()->get('category')) {
+    living_spaces_activity_update_counter($message->getOwner());
+  }
+}
+
+/**
+ * Helper to update un-read counter for the user.
+ */
+function living_spaces_activity_update_counter(UserInterface $user) {
+  if ($count = living_spaces_activity_get_message_counter($user->id())) {
+    $nodejs_message = (object) [
+      'channel' => "living_spaces_activity:{$user->id()}",
+      'uid' => $user->id(),
+      'count' => $count,
+      'callback' => 'livingSpacesActivity',
+    ];
+    nodejs_send_content_channel_message($nodejs_message);
+  }
+}
+
+/**
+ * Helper to get count of un-read messages.
+ */
+function living_spaces_activity_get_message_counter($uid) {
+  $query = \Drupal::entityTypeManager()->getStorage('message_template')->getQuery();
+  $query->condition('category', LIVING_SPACES_ACTIVITY_PERSONAL);
+
+  if ($templates = $query->execute()) {
+    $query = \Drupal::entityTypeManager()->getStorage('message')->getQuery();
+    $query->condition('template', $templates, 'IN');
+    $query->condition('uid', $uid);
+    $query->condition('is_read', FALSE);
+
+    if ($messages = $query->execute()) {
+      return count($messages);
+    }
+  }
+
+  return 0;
+}
+
+/**
+ * Implements hook_living_spaces_group_remove_group_content_alter().
+ */
+function living_spaces_activity_living_spaces_group_remove_group_content_alter(GroupInterface $space, array &$items) {
+  $ids = [];
+  foreach ($space->getContent() as $content) {
+    $ids[] = $content->id();
+  }
+
+  if ($ids) {
+    $query = \Drupal::entityTypeManager()->getStorage('message')->getQuery();
+    $query->condition('field_group_content', $ids, 'IN');
+
+    if ($mids = $query->execute()) {
+      foreach ($mids as $mid) {
+        $items['message'][] = $mid;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_living_spaces_users_notification_menu_item_info().
+ */
+function living_spaces_activity_living_spaces_users_notification_menu_item_info() {
+  if (\Drupal::currentUser()->isAnonymous()) {
+    return [];
+  }
+
+  $uid = \Drupal::currentUser()->id();
+  nodejs_send_content_channel_token("living_spaces_activity:{$uid}");
+
+  $counter = [
+    '#type' => 'html_tag',
+    '#tag' => 'span',
+    '#value' => living_spaces_activity_get_message_counter($uid),
+    '#attributes' => ['class' => ['notification-counter']],
+    '#attached' => ['library' => ['living_spaces_activity/activity']],
+  ];
+
+  $icon = [
+    '#theme' => 'bootstrap_icon',
+    '#icon' => 'bell',
+    '#content' => \Drupal::service('renderer')->render($counter),
+    '#attributes' => [
+      'class' => ['bi', 'h4', 'me-4'],
+    ],
+  ];
+
+  $content = [
+    '#type' => 'html_tag',
+    '#tag' => 'a',
+    '#value' => \Drupal::service('renderer')->render($icon),
+    '#attributes' => [
+      'id' => 'js-view-dom-id-message-user_notifications',
+      'role' => 'button',
+      'href' => '#',
+      'data-bs-toggle' => 'dropdown',
+      'aria-expanded' => 'false',
+      'class' => ['nav-link', 'dropdown-toggle'],
+    ],
+    '#cache' => ['max-age' => 0],
+    '#suffix' => '<ul class="dropdown-menu"></ul>',
+  ];
+
+  return [
+    'notifications' => [
+      'content' => $content,
+      '#attributes' => [
+        'id' => 'space-activity-notifications',
+        'data-view-name' => 'message',
+        'data-view-display' => 'user_notifications',
+        'class' => ['nav-item', 'dropdown'],
+      ],
+      'weight' => 0,
+    ],
+  ];
+}

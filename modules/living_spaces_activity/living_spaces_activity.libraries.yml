@@ -1,0 +1,8 @@
+activity:
+  css:
+    theme:
+      css/living_spaces_activity.css: {}
+  js:
+    js/living_spaces_activity.js: {}
+  dependencies:
+    - nodejs/init

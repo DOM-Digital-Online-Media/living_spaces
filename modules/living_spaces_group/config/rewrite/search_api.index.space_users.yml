@@ -1,0 +1,38 @@
+dependencies:
+  module:
+    - group
+field_settings:
+  joined_spaces:
+    label: Spaces
+    datasource_id: 'entity:user'
+    property_path: joined_spaces
+    type: solr_text_unstemmed
+    dependencies:
+      module:
+        - living_spaces_group
+  joined_spaces_ids:
+    label: Spaces
+    datasource_id: 'entity:user'
+    property_path: joined_spaces
+    type: integer
+    dependencies:
+      module:
+        - living_spaces_group
+  label:
+    label: 'Spaces » Group » Title'
+    datasource_id: 'entity:user'
+    property_path: 'joined_spaces:entity:label'
+    type: solr_text_unstemmed
+    dependencies:
+      module:
+        - group
+        - living_spaces_group
+  ngram_label:
+    label: 'Spaces » Group » Title'
+    datasource_id: 'entity:user'
+    property_path: 'joined_spaces:entity:label'
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      module:
+        - group
+        - living_spaces_group

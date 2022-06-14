@@ -1,0 +1,25 @@
+/*:root {
+  --bs-font-sans-serif: 'Roboto', sans-serif;
+
+  // Typography variables.
+  --bs-body-font-size: 14px;
+  --bs-body-line-height: 1.42857;
+}
+
+
+
+// Color variables.
+$input-border-color: #00386e;
+*/
+$input-index: 1;
+$input-before-index: 2;
+// Primary colors shades.
+$primary-100: tint-color($primary, 80%);
+$primary-200: tint-color($primary, 60%);
+$primary-300: tint-color($primary, 40%);
+$primary-400: tint-color($primary, 20%);
+$primary-500: $primary;
+$primary-600: shade-color($primary, 20%);
+$primary-700: shade-color($primary, 40%);
+$primary-800: shade-color($primary, 60%);
+$primary-900: shade-color($primary, 80%);

@@ -1,0 +1,27 @@
+living_spaces_simple_permissions.simple_global_permissions:
+  path: '/admin/config/living-spaces/simple-permission-settings'
+  defaults:
+    _form: '\Drupal\living_spaces_simple_permissions\Form\LivingSpaceSimplePermissionGlobalSettingsForm'
+    _title: 'Global Permissions'
+  requirements:
+    _permission: 'manage simple permission settings'
+  options:
+    _admin_route: TRUE
+living_spaces_simple_permissions.simple_group_permissions:
+  path: '/admin/config/living-spaces/simple-permission-settings/group'
+  defaults:
+    _form: '\Drupal\living_spaces_simple_permissions\Form\LivingSpaceSimplePermissionGroupSettingsForm'
+    _title: 'Group Permissions'
+  requirements:
+    _permission: 'manage simple permission settings'
+  options:
+    _admin_route: TRUE
+living_spaces_simple_permissions.role_filter:
+  path: '/admin/config/living-spaces/simple-permission-settings/role-filter'
+  defaults:
+    _form: '\Drupal\living_spaces_simple_permissions\Form\LivingSpaceSimplePermissionRoleFilterSettingsForm'
+    _title: 'Role filter'
+  requirements:
+    _permission: 'manage simple permission settings'
+  options:
+    _admin_route: TRUE

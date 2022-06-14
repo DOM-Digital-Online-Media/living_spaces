@@ -1,0 +1,11 @@
+administer living spaces event:
+  title: 'Administer space events'
+  description: 'Gain full control over all space event configuration.'
+  restrict access: TRUE
+administer living spaces event invite:
+  title: 'Administer spaces event invite entities'
+  description: 'Gain full control over all spaces event invite configuration.'
+  restrict access: TRUE
+
+permission_callbacks:
+  - '\Drupal\living_spaces_event\Access\LivingSpacesEventPermissions::eventPermissions'

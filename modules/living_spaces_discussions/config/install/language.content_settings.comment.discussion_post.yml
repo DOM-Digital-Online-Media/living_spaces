@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - comment.type.discussion_post
+id: comment.discussion_post
+target_entity_type_id: comment
+target_bundle: discussion_post
+default_langcode: site_default
+language_alterable: false

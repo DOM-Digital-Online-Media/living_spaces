@@ -1,0 +1,7 @@
+living_spaces_circles.add_circle:
+  title: 'Add circle'
+  route_name: 'entity.group.add_form'
+  route_parameters:
+    group_type: 'circle'
+  appears_on:
+    - 'view.groups.circles'

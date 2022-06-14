@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_time
+    - paragraphs.paragraphs_type.agenda_item
+  module:
+    - time_field
+id: paragraph.agenda_item.field_time
+field_name: field_time
+entity_type: paragraph
+bundle: agenda_item
+label: Time
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: time_range

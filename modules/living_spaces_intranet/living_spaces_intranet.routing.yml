@@ -1,0 +1,7 @@
+living_spaces_intranet.create_employees:
+  path: '/employees-create'
+  defaults:
+    _entity_form: 'user.employee'
+    _title: 'Create employees'
+  requirements:
+    _permission: 'living space create employees'

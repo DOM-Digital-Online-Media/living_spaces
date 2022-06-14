@@ -1,0 +1,15 @@
+living_spaces_simple_permissions.simple_global_permissions:
+  title: 'Global Permissions'
+  base_route: 'living_spaces_simple_permissions.simple_global_permissions'
+  route_name: 'living_spaces_simple_permissions.simple_global_permissions'
+  weight: 0
+living_spaces_simple_permissions.simple_group_permissions:
+  title: 'Group Permissions'
+  base_route: 'living_spaces_simple_permissions.simple_global_permissions'
+  route_name: 'living_spaces_simple_permissions.simple_group_permissions'
+  weight: 1
+living_spaces_simple_permissions.role_filter:
+  title: 'Role Filter'
+  base_route: 'living_spaces_simple_permissions.simple_global_permissions'
+  route_name: 'living_spaces_simple_permissions.role_filter'
+  weight: 2

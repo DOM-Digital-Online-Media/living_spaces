@@ -1,0 +1,85 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - page_manager.page.living_space_members
+  module:
+    - living_spaces_group
+    - living_spaces_group_privacy
+id: living_space_members-layout_builder-1
+label: 'Group Members'
+weight: 0
+variant: layout_builder
+variant_settings:
+  id: layout_builder
+  label: null
+  weight: 0
+  uuid: dc7fa37c-1793-4a06-916b-e01c1b81fbde
+  sections:
+    -
+      layout_id: layout_twocol_section
+      layout_settings:
+        label: ''
+        context_mapping: {  }
+        column_widths: 75-25
+      components:
+        c350340f-88eb-40ee-871a-7dd29e19ada9:
+          uuid: c350340f-88eb-40ee-871a-7dd29e19ada9
+          region: first
+          configuration:
+            id: living_spaces_group_members
+            label: 'Space members'
+            label_display: '0'
+            provider: living_spaces_group
+            context_mapping:
+              group: group
+            enabled:
+              members: members
+              admins: admins
+              inherit: '0'
+            enabled_contacts: {  }
+            enabled_exports:
+              export_names: export_names
+              export_full: export_full
+            members_label: Members
+            admins_label: Administrators
+            members_view_label: 'Members in this circle of people'
+            admins_view_label: 'Administrators in this circle of people'
+          weight: 0
+          additional: {  }
+        36559719-fe0e-4305-a04f-cf3ed4e9493b:
+          uuid: 36559719-fe0e-4305-a04f-cf3ed4e9493b
+          region: second
+          configuration:
+            id: group_operations
+            label: 'Group operations'
+            label_display: '0'
+            provider: group
+            context_mapping:
+              group: group
+          weight: 0
+          additional: {  }
+        574891bc-2197-46ef-9261-334c4e4cfba0:
+          uuid: 574891bc-2197-46ef-9261-334c4e4cfba0
+          region: second
+          configuration:
+            id: living_spaces_group_membership_block
+            label: 'Add Existing User'
+            label_display: visible
+            provider: living_spaces_group
+            context_mapping:
+              group: group
+          weight: 1
+          additional: {  }
+      third_party_settings: {  }
+page: living_space_members
+selection_criteria:
+  -
+    id: living_spaces_group_privacy_access
+    negate: false
+    context_mapping:
+      group: group
+      user: '@user.current_user_context:current_user'
+    operation: view
+selection_logic: and
+static_context: {  }

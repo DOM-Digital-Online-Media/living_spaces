@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_circles
+id: circle
+label: Circle
+description: ''
+new_revision: false
+creator_membership: true
+creator_wizard: false
+creator_roles:
+  - circle-admin
+is_living_space: 0

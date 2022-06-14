@@ -1,0 +1,14 @@
+services:
+  plugin.manager.living_spaces_group_privacy:
+    class: Drupal\living_spaces_group_privacy\Plugin\LivingSpacesGroupPrivacyManager
+    parent: default_plugin_manager
+    arguments: ['@logger.channel.default', '@entity_type.manager']
+  living_spaces_group_privacy.access_checker:
+    class: Drupal\living_spaces_group_privacy\Access\LivingSpacesGroupPrivacyAccessCheck
+    arguments: ['@plugin.manager.living_spaces_group_privacy']
+    tags:
+      - { name: access_check, applies_to: _living_spaces_group_privacy_access_check }
+  living_spaces_group_privacy.route_subscriber:
+    class: Drupal\living_spaces_group_privacy\Routing\LivingSpacesGroupPrivacyRouteSubscriber
+    tags:
+      - { name: event_subscriber, priority: 100 }

@@ -1,0 +1,6 @@
+access circles overview:
+  title: 'Access Circles Overview'
+  description: 'Allow access to page that lists all Circles'
+manage circle spaces:
+  title: 'Manage circle spaces'
+  description: 'Allow access to manage all Circles'

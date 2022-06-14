@@ -1,0 +1,6 @@
+create living space subgroup:
+  title: 'Create sub-groups'
+  description: 'Allow access to create new sub-groups to other groups'
+update living space subgroup parent:
+  title: "Update sub-group's parent"
+  description: 'Allow access to edit existing sub-group parent field'

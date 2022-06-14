@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Contains functions and hooks for living_spaces_changelog.install.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function living_spaces_changelog_uninstall($is_syncing) {
+  // Delete preinstalled content.
+  $link_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+  $link = $link_storage
+    ->loadByProperties(['uuid' => '69e5de5f-5b46-495c-8cfc-6c8888fd1b66']);
+  if (!empty($link)) {
+    $link_storage->delete($link);
+  }
+}

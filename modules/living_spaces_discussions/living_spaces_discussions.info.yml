@@ -1,0 +1,11 @@
+name: 'Space Discussions'
+type: module
+description: 'Provides discussions functionality for living spaces.'
+core_version_requirement: ^9.0
+package: 'Living Spaces'
+dependencies:
+  - gnode
+  - living_spaces_default_configs
+  - living_spaces_group
+  - living_spaces_sections
+  - views_block_area

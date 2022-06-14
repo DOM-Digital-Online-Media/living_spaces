@@ -1,0 +1,14 @@
+entity.living_spaces_access_area.canonical_tab:
+  title: 'Manage Areas'
+  route_name: view.access_area.access_area
+  base_route: view.access_area.access_area
+
+entity.living_spaces_access_grant.canonical_tab:
+  title: 'Manage Access'
+  route_name: view.access_grant.access_grant
+  base_route: view.access_area.access_area
+
+living_spaces_protected_area.protected_area_settings:
+  title: 'Settings'
+  route_name: living_spaces_protected_area.protected_area_settings
+  base_route: view.access_area.access_area

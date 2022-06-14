@@ -1,0 +1,15 @@
+label:
+  listYear: listYear
+  dayGridMonth: 0
+  timeGridWeek: 0
+  timeGridDay: 0
+date:
+  listYear: listYear
+  dayGridMonth: 0
+  timeGridWeek: 0
+  timeGridDay: 0
+type:
+  dayGridMonth: dayGridMonth
+  timeGridWeek: timeGridWeek
+  timeGridDay: timeGridDay
+  listYear: listYear

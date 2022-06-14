@@ -1,0 +1,43 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.full
+    - field.field.node.agenda.field_agendatopics
+    - field.field.node.agenda.field_tags
+    - node.type.agenda
+  module:
+    - empty_fields
+    - layout_builder
+    - paragraphs
+    - user
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: false
+id: node.agenda.full
+targetEntityType: node
+bundle: agenda
+mode: full
+content:
+  field_agendatopics:
+    type: paragraph_summary
+    weight: 0
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_tags:
+    weight: 1
+    label: above
+    settings:
+      link: false
+    third_party_settings:
+      empty_fields:
+        handler: ''
+    type: entity_reference_label
+    region: content
+hidden:
+  langcode: true
+  links: true
+  search_api_excerpt: true

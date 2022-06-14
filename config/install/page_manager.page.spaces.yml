@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - user_permission_condition
+id: spaces
+label: Spaces
+description: ''
+use_admin_theme: false
+path: /admin/group/spaces
+access_logic: and
+access_conditions:
+  -
+    id: user_permission
+    permission: 'access living spaces overview'
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+parameters: {  }

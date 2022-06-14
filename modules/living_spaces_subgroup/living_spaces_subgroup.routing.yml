@@ -1,0 +1,11 @@
+living_spaces_subgroup.remove_child:
+  path: '/remove-child/{child}'
+  defaults:
+    _form: '\Drupal\living_spaces_subgroup\Form\LivingSpacesSubgroupRemoveChildForm'
+    _title: 'Remove child'
+  requirements:
+    _permission: 'update living space subgroup parent'
+  options:
+    parameters:
+      child:
+        type: entity:group

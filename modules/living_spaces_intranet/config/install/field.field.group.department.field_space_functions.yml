@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.group.field_space_functions
+    - group.type.department
+    - taxonomy.vocabulary.space_functions
+id: group.department.field_space_functions
+field_name: field_space_functions
+entity_type: group
+bundle: department
+label: Capacity
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      space_functions: space_functions
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

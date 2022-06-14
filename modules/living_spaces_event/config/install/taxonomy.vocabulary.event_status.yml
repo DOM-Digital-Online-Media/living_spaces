@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_event
+name: 'Event invite status'
+vid: event_status
+description: ''
+weight: 0

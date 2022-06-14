@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - dom_bootstrap
+  theme:
+    - living_spaces_barrio
+id: living_spaces_barrio_bootstrap_collapse_tabs
+theme: living_spaces_barrio
+region: sidebar_first
+weight: 0
+provider: null
+plugin: dom_bootstrap_tabs
+settings:
+  id: dom_bootstrap_tabs
+  label: 'Bootstrap collapse tabs'
+  label_display: '0'
+  primary: 1
+  provider: dom_bootstrap
+  secondary: 1
+visibility: {  }

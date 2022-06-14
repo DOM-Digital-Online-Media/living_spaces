@@ -1,0 +1,11 @@
+services:
+  access_check.protected_area:
+    class: Drupal\living_spaces_protected_area\Access\LivingSpacesProtectedAreaAccessCheck
+    arguments: ['@request_stack']
+    tags:
+      - { name: access_check, applies_to: _access_protected_area }
+  living_spaces_protected_area.event_subscriber:
+    class: Drupal\living_spaces_protected_area\EventSubscriber\LivingSpacesProtectedAreaSubscriber
+    arguments: ['@current_user']
+    tags:
+      - {name: event_subscriber}

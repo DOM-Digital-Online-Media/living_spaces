@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.circle
+id: circle-member
+label: Member
+weight: -100
+internal: true
+audience: member
+group_type: circle
+permissions_ui: true
+permissions:
+  - 'view group'
+  - 'view group_membership content'
+  - 'view private group'
+  - 'view public group'

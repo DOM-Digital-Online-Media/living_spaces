@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_event
+id: agenda_item
+label: 'Agenda item'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

@@ -1,0 +1,9 @@
+manage simple permission settings:
+  title: 'Manage simple permission settings'
+  description: 'Allow access to simple permission settings'
+access simple permissions:
+  title: 'Access simple permissions'
+  description: 'Allow access to simple permissions'
+access advanced permissions:
+  title: 'Access advanced permissions'
+  description: 'Allow access to advanced permissions'

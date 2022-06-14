@@ -1,0 +1,82 @@
+display:
+  circles_of_user:
+    display_plugin: living_spaces_group_display
+    id: circles_of_user
+    display_title: 'Circles of user'
+    position: 2
+    display_options:
+      display_extenders: { }
+      display_description: ''
+      title: 'Circles of user'
+      defaults:
+        title: false
+        filters: false
+        filter_groups: false
+        header: false
+      filters:
+        type:
+          id: type
+          table: groups_field_data
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: in
+          value:
+            circle: circle
+          group: 1
+          exposed: false
+          expose:
+            operator_id: type_op
+            label: 'Group type'
+            description: ''
+            use_operator: false
+            operator: type_op
+            operator_limit_selection: false
+            operator_list: { }
+            identifier: user_group_types
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: { }
+            group_items: { }
+          entity_type: group
+          entity_field: type
+          plugin_id: bundle
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      block_category: 'Living Spaces'
+      allow:
+        items_per_page: items_per_page
+        exposed_type_filter: 0
+      header:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          plugin_id: text_custom
+      block_hide_empty: 1
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+      tags: { }

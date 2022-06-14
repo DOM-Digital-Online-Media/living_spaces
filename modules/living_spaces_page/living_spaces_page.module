@@ -1,0 +1,280 @@
+<?php
+
+/**
+ * @file
+ * Contains functions and hooks for living_spaces_page.module.
+ */
+
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
+use Drupal\Core\Url;
+use Drupal\living_spaces_sections\LivingSpacesSectionsHtmlRouteProvider;
+use Drupal\group\Entity\GroupInterface;
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function living_spaces_page_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
+
+  if ('group' == $entity_type->id()) {
+    $fields['content_sections'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Pages'))
+      ->setSetting('target_type', 'node')
+      ->setSetting('handler_settings', ['target_bundles' => ['page' => 'page']])
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
+      ->setRevisionable(TRUE)
+      ->setTranslatable(FALSE)
+      ->setDisplayOptions('form', [
+        'type' => 'inline_entity_form_complex',
+        'settings' => [
+          'form_mode' => 'default',
+          'revision' => TRUE,
+          'collapsible' => TRUE,
+          'collapsed' => TRUE,
+          'override_labels' => FALSE,
+          'allow_new' => FALSE,
+          'allow_existing' => TRUE,
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+  }
+
+  return $fields;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function living_spaces_page_node_access(NodeInterface $entity, $operation, AccountInterface $account) {
+  if ('page' == $entity->bundle()) {
+    $entity_manager = \Drupal::entityTypeManager()->getStorage('group');
+    $query = $entity_manager->getQuery();
+    $query->condition('content_sections', $entity->id());
+    $query->accessCheck(FALSE);
+
+    if ($group_ids = $query->execute()) {
+      $group_id = reset($group_ids);
+
+      /** @var \Drupal\group\Entity\Group $group */
+      $group = $entity_manager->load($group_id);
+
+      if ($group->hasPermission('create page entities', $account)) {
+        return AccessResult::allowed();
+      }
+
+      if ($entity->isPublished() && 'view' == $operation) {
+        return $group->hasPermission('view published pages', $account) ? AccessResult::allowed() : AccessResult::forbidden();
+      }
+    }
+  }
+
+  return AccessResult::allowed();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_page_node_insert(NodeInterface $entity) {
+  if ('page' == $entity->bundle()) {
+    living_spaces_page_attach_page($entity);
+
+    $message = \Drupal::entityTypeManager()->getStorage('message')->create([
+      'template' => 'page_created',
+      'field_page' => $entity->id(),
+    ]);
+    $message->save();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function living_spaces_page_node_update(NodeInterface $entity) {
+  if ('page' == $entity->bundle()) {
+    living_spaces_page_attach_page($entity);
+
+    $message = \Drupal::entityTypeManager()->getStorage('message')->create([
+      'template' => 'page_updated',
+      'field_page' => $entity->id(),
+    ]);
+    $message->save();
+  }
+}
+
+/**
+ * Helper to attach page to the space.
+ *
+ * @param \Drupal\node\NodeInterface $entity
+ *   Page entity.
+ */
+function living_spaces_page_attach_page(NodeInterface $entity) {
+  if ($space = \Drupal::request()->query->get('space')) {
+    $entity_manager = \Drupal::entityTypeManager()->getStorage('group');
+
+    /** @var \Drupal\group\Entity\Group $group */
+    if ($group = $entity_manager->load($space)) {
+      if ($group->get('content_sections')->isEmpty() || !array_search($entity->id(), array_column($group->get('content_sections')->getValue(), 'target_id'))) {
+        $group->get('content_sections')->appendItem([
+          'target_id' => $entity->id(),
+        ]);
+        $group->save();
+
+        $query = $entity_manager->getQuery();
+        $query->condition('content_sections', $entity->id());
+        $query->condition('id', $group->id(), '<>');
+        $query->accessCheck(FALSE);
+
+        if ($groups = $query->execute()) {
+          foreach ($entity_manager->loadMultiple($groups) as $group) {
+            $pages = $group->get('content_sections')->getValue();
+            $key = array_search($entity->id(), array_column($pages, 'target_id'));
+            unset($pages[$key]);
+
+            $group->set('content_sections', $pages);
+            $group->save();
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_living_spaces_group_action_info().
+ */
+function living_spaces_page_living_spaces_group_action_info(GroupInterface $space) {
+  $items = [];
+
+  if (\Drupal::currentUser()->hasPermission('create page content')) {
+    $items['page'] = [
+      '#type' => 'link',
+      '#title' => t('Create Info page'),
+      '#options' => [],
+      '#url' => Url::fromRoute('node.add', [
+        'node_type' => 'page',
+      ], [
+        'query' => ['space' => $space->id()],
+      ]),
+    ];
+  }
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function living_spaces_page_menu_local_tasks_alter(&$data, $route_name, RefinableCacheableDependencyInterface &$cacheability) {
+  $route_match = \Drupal::routeMatch();
+
+  if ('entity.node.canonical' == $route_name) {
+    /** @var \Drupal\node\Entity\Node $node */
+    $node = $route_match->getParameter('node');
+    if ('page' == $node->bundle()) {
+      $entity_manager = \Drupal::entityTypeManager();
+      $query = $entity_manager->getStorage('group')->getQuery();
+      $query->condition('content_sections', $node->id());
+      $query->accessCheck(FALSE);
+
+      if ($query->execute()) {
+        /** @var \Drupal\Core\Menu\LocalTaskManagerInterface $manager */
+        $manager = \Drupal::service('plugin.manager.menu.local_task');
+        if ($group_data = $manager->getLocalTasks('entity.group.canonical')) {
+          foreach ($group_data['tabs'] as &$tab) {
+            if ($tab['#link']['url'] instanceof Url) {
+              $parameters = $tab['#link']['url']->getRouteParameters();
+              if (isset($parameters['node']) && $parameters['node'] == $node->id()) {
+                $tab['#active'] = TRUE;
+              }
+            }
+          }
+
+          $data['tabs'][1] = $data['tabs'][0];
+          $data['tabs'][0] = $group_data['tabs'];
+        }
+      }
+    }
+  }
+
+  $routes = [
+    LivingSpacesSectionsHtmlRouteProvider::SECTION_ROUTE,
+    LivingSpacesSectionsHtmlRouteProvider::SUB_SECTION_ROUTE,
+    'entity.group.canonical',
+    'entity.group.edit_form',
+    'living_spaces_sections.sections_form',
+    'living_spaces_sections.sub_sections_form',
+    'entity.group.delete_form',
+    'entity.group_content.collection',
+    'view.group_members.page_1',
+    'entity.group.devel_load',
+    'entity.group.clone_form',
+  ];
+
+  if (in_array($route_name, $routes)) {
+    // Fetch living space group from route.
+    $group = $route_match->getParameter('group');
+    if (!$group instanceof GroupInterface) {
+      $group = \Drupal::entityTypeManager()->getStorage('group')->load($group);
+    }
+
+    if (!$group->get('content_sections')->isEmpty()) {
+      $entity_manager = \Drupal::entityTypeManager()->getStorage('node');
+      $weight = 0;
+
+      foreach ($group->get('content_sections')->getValue() as $value) {
+        if (isset($value['target_id']) && $node = $entity_manager->load($value['target_id'])) {
+          $data['tabs'][0]['living_spaces_pages.' . $node->bundle() . $node->id()] = [
+            '#theme' => 'menu_local_task',
+            '#weight' => $weight,
+            '#access' => $node->access('view'),
+            '#active' => FALSE,
+            '#link' => [
+              'title' => $node->label(),
+              'url' => Url::fromRoute('entity.node.canonical', [
+                'node' => $node->id(),
+              ]),
+              'localized_options' => [],
+            ],
+          ];
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_operation().
+ */
+function living_spaces_page_entity_operation(EntityInterface $entity) {
+  $operations = [];
+
+  if ('group' == $entity->getEntityTypeId() && $entity->hasPermission('create page entities', \Drupal::currentUser())) {
+    $living = \Drupal::service('living_spaces_group.manager')->isLivingSpace($entity->bundle());
+    if ($living) {
+      $operations['add_page'] = [
+        'title' => t('Create Info page'),
+        'url' => Url::fromRoute('node.add', ['node_type' => 'page'], ['query' => ['space' => $entity->id()]]),
+        'weight' => 100,
+      ];
+    }
+  }
+
+  return $operations;
+}
+
+/**
+ * Implements hook_living_spaces_group_remove_group_content_alter().
+ */
+function living_spaces_page_living_spaces_group_remove_group_content_alter(GroupInterface $space, array &$items) {
+  if (!$space->get('content_sections')->isEmpty()) {
+    foreach ($space->get('content_sections')->getValue() as $value) {
+      $items['node'][] = $value['target_id'];
+    }
+  }
+}

@@ -1,0 +1,5 @@
+services:
+  living_spaces_users.route_subscriber:
+    class: Drupal\living_spaces_users\EventSubscriber\LivingSpacesUsersRouteSubscriber
+    tags:
+      - { name: event_subscriber }

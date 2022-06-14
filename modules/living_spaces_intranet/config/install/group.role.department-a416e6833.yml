@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department
+  enforced:
+    config:
+      - user.role.administrator
+id: department-a416e6833
+label: 'Technical Administrator'
+weight: 2
+internal: true
+audience: outsider
+group_type: department
+permissions_ui: false
+permissions:
+  - 'delete group'
+  - 'edit group'
+  - 'view any unpublished group'
+  - 'view group'
+is_space_admin: false

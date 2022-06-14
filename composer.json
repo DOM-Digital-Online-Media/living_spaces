@@ -1,0 +1,102 @@
+{
+    "name": "drupal/living_spaces",
+    "description": "Distribution for user spaces (groups) that designed for extranet/intranet workflow.",
+    "type": "drupal-custom-profile",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "authors": [
+        {
+            "name": "Markus Schulte",
+            "email": "ms@dom.de"
+        },
+        {
+            "name": "Marc Eschrich",
+            "email": "marc@dom.de"
+        },
+        {
+            "name": "Andrew Sereda",
+            "email": "a.sereda@dev-branch.com"
+        },
+        {
+            "name": "Victor Golovachek",
+            "email": "v.golovachek@dev-branch.com"
+        }
+    ],
+    "require": {
+        "cweagans/composer-patches": "^1.6.5",
+        "dom-digital-online-media/dom_bootstrap": "^1.1",
+        "dom-digital-online-media/dom_faq": "^1.4",
+        "dom-digital-online-media/dom_field_extra": "^1.0",
+        "dom-digital-online-media/dom_paragraphs_extra": "^1.1",
+        "drupal/admin_toolbar": "^2.2",
+        "drupal/address": "^1.9",
+        "drupal/autocomplete_deluxe": "^2.0.0",
+        "drupal/bootstrap_barrio": "^5.5@beta",
+        "drupal/config_rewrite": "^1.4",
+        "drupal/default_content": "^2.0",
+        "drupal/devel": "^4.0",
+        "drupal/empty_fields": "^1.0@beta",
+        "drupal/entity_clone": "^1.0@beta",
+        "drupal/field_ipaddress": "^2.0",
+        "drupal/flood_control": "^2.2.2",
+        "drupal/fullcalendar_view": "^5.1.2",
+        "drupal/group": "^1.3",
+        "drupal/inline_entity_form": "^1.0@RC",
+        "drupal/languagefield": "^1.6",
+        "drupal/menu_item_role_access": "^2.0",
+        "drupal/masquerade": "2.x-dev",
+        "drupal/message": "^1.2",
+        "drupal/message_ui": "^1.0",
+        "drupal/migrate_plus": "^5.1",
+        "drupal/migrate_tools": "^5.0",
+        "drupal/nodejs": "dev-1.x",
+        "drupal/page_manager": "^4.0@beta",
+        "drupal/paragraphs": "^1.12",
+        "drupal/pathauto": "^1.8",
+        "drupal/profile": "^1.3",
+        "drupal/redirect": "^1.6",
+        "drupal/simple_oauth": "^5.0",
+        "drupal/search_api": "^1.21",
+        "drupal/search_api_autocomplete": "^1.5",
+        "drupal/search_api_date_popup": "^1.1",
+        "drupal/search_api_solr": "^4.2.3",
+        "drupal/site_settings": "^1.19",
+        "drupal/subpathauto": "^1.2",
+        "drupal/time_field": "^2.0",
+        "drupal/token": "^1.9",
+        "drupal/universal_device_detection": "^1.0",
+        "drupal/user_permission_condition": "^1.1",
+        "drupal/views_accordion": "^2.0",
+        "drupal/views_block_area": "^1.0",
+        "drupal/views_contextual_filters_or": "^1.3",
+        "drupal/views_data_export": "^1.0",
+        "drupal/views_field_view": "^1.0",
+        "fullcalendar/fullcalendar": "4.4.0",
+        "valve/fingerprintjs2": "2.1.0"
+    },
+    "extra": {
+        "patches": {
+            "drupal/core": {
+                "Invalid config structures can result in exceptions when saving a config entity": "https://www.drupal.org/files/issues/2021-11-29/2925890-29.patch"
+            },
+            "drupal/message_ui": {
+                "Deleted and replaced configuration entity error": "https://www.drupal.org/files/issues/2018-12-21/issue-3021923-deleted-replaced-config-error-1.patch"
+            },
+            "drupal/empty_fields": {
+                "Empty field for Drupal core Layout builder": "https://www.drupal.org/files/issues/2020-09-15/3055574-empty_fields_layout_builder-with-weights-19.patch"
+            },
+            "drupal/default_content": {
+                "Do not reimport existing entities": "https://www.drupal.org/files/issues/2021-01-20/default_content-integrity_constrait_violation-3162987-137-2.0.x.patch",
+                "Don't add translation, if exist": "https://www.drupal.org/files/issues/2020-10-14/default_content-3176839-2.patch"
+            },
+            "drupal/fullcalendar_view": {
+                "Integration with Search API": "https://www.drupal.org/files/issues/2021-06-22/fullcalendar_view-3089238-18.patch"
+            },
+            "drupal/nodejs": {
+                "Drupal 9 compatibility": "https://www.drupal.org/files/issues/2021-07-12/drupal-9-update-3166681-7.patch"
+            }
+        },
+         "enable-patching": true
+    }
+}

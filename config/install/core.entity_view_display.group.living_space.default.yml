@@ -1,0 +1,82 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.living_space
+    - views.view.group_content
+    - views.view.message
+    - views.view.recent_discussions
+  module:
+    - layout_builder
+    - views
+  theme:
+    - bootstrap_barrio
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: true
+    sections:
+      -
+        layout_id: barrio_col2-equal
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+        components:
+          65b6031f-058b-4d99-8f07-a632e4298e50:
+            uuid: 65b6031f-058b-4d99-8f07-a632e4298e50
+            region: first
+            configuration:
+              id: 'views_block:recent_discussions-posts'
+              label: ''
+              provider: views
+              label_display: visible
+              views_label: ''
+              items_per_page: none
+              context_mapping: {  }
+            additional: {  }
+            weight: 0
+          fc6ccff8-f488-40e5-9510-b9603256df59:
+            uuid: fc6ccff8-f488-40e5-9510-b9603256df59
+            region: second
+            configuration:
+              id: 'views_block:group_content-events'
+              label: ''
+              provider: views
+              label_display: visible
+              views_label: ''
+              items_per_page: none
+              context_mapping: {  }
+            additional: {  }
+            weight: 0
+          5bf57016-faa4-4f7b-959b-ce90522c9387:
+            uuid: 5bf57016-faa4-4f7b-959b-ce90522c9387
+            region: first
+            configuration:
+              id: 'views_block:message-space_activity'
+              label: ''
+              provider: views
+              label_display: visible
+              views_label: ''
+              items_per_page: none
+              context_mapping: {  }
+            additional: {  }
+            weight: 1
+        third_party_settings: {  }
+id: group.living_space.default
+targetEntityType: group
+bundle: living_space
+mode: default
+content:
+  label:
+    label: hidden
+    type: string
+    weight: -5
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+hidden:
+  changed: true
+  created: true
+  langcode: true
+  uid: true

@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - comment.type.discussion_post
+    - field.storage.comment.comment_body
+  module:
+    - text
+id: comment.discussion_post.comment_body
+field_name: comment_body
+entity_type: comment
+bundle: discussion_post
+label: Comment
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

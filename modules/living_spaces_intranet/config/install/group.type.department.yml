@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - living_spaces_intranet
+id: department
+label: Department
+description: 'Group type that has all features of Standard type and provides more intranet features and user management.'
+new_revision: false
+creator_membership: true
+creator_wizard: false
+creator_roles:
+  - department-admin
+is_living_space: 1

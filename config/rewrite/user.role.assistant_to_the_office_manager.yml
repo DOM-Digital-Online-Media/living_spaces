@@ -1,0 +1,6 @@
+permissions:
+  - 'access circles overview'
+  - 'access employees overview'
+  - 'access living spaces overview'
+  - 'living space create employees'
+  - 'view own profile'

@@ -1,0 +1,10 @@
+views.field.living_spaces_group_space_member_actions:
+  type: views.field.field
+  label: 'Space member actions'
+  mapping:
+    group_field:
+      type: string
+      label: 'Group field'
+    enabled_links:
+      type: sequence
+      label: 'Enabled actions'

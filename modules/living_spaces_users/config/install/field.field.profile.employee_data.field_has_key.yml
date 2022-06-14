@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_has_key
+    - profile.type.employee_data
+id: profile.employee_data.field_has_key
+field_name: field_has_key
+entity_type: profile
+bundle: employee_data
+label: 'Has a key'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

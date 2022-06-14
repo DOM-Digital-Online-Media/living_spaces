@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.living_spaces_access_area.page.field_path_pattern
+    - living_spaces_protected_area.living_spaces_access_area_type.page
+id: living_spaces_access_area.page.default
+targetEntityType: living_spaces_access_area
+bundle: page
+mode: default
+content:
+  field_path_pattern:
+    weight: 0
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+hidden:
+  label: true

@@ -1,0 +1,20 @@
+global-styling:
+  version: 1.0.3
+  js:
+    js/bootstrap.min.js: { preprocess: false, minified: true }
+  css:
+    base:
+      css/styles.min.css: { preprocess: false, minified: true }
+      css/materialdesignicons.min.css: { preprocess: false, minified: true }
+
+inner_view:
+  version: 1.0.2
+  js:
+    js/living_spaces_barrio_inner_view.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+    - core/drupal.ajax
+    - core/views.ajax
+    - living_spaces_barrio/global-styling
