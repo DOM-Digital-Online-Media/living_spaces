@@ -24,7 +24,6 @@ function living_spaces_default_uninstall($is_syncing) {
   $space = $group_storage
     ->getQuery()
     ->accessCheck(FALSE)
-    ->addTag('skip_default_check')
     ->condition('uuid', 'c84c2661-b8e4-4759-a479-4b8c91a25dd8')
     ->execute();
   if (!empty($space)) {

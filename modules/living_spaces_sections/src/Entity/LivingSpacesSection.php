@@ -141,7 +141,7 @@ class LivingSpacesSection extends ContentEntityBase implements LivingSpacesSecti
     $group_manager = \Drupal::entityTypeManager()->getStorage('group');
     $query = $group_manager->getQuery();
     $query->condition(LIVING_SPACES_SECTIONS_FIELD, $id);
-    $query->addTag('skip_default_check');
+    $query->accessCheck(FALSE);
     $gids = $query->execute();
 
     return !empty($gids) ? $group_manager->load(reset($gids)) : NULL;

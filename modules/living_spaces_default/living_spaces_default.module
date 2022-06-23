@@ -53,8 +53,8 @@ function living_spaces_default_form_group_form_alter(array &$form, FormStateInte
  * Implements hook_query_TAG_alter().
  */
 function living_spaces_default_query_entity_query_alter(SelectInterface $query) {
-  $tag = $query->hasTag('skip_default_check');
-  if (!$tag && 'group' == $query->getMetaData('entity_type')) {
+  $access_check = $query->hasTag('group_access');
+  if (($query->getMetaData('entity_type') === 'group') && $access_check) {
     foreach ($query->getTables() as $table => $info) {
       if (is_array($info) && 'groups' == $info['table']) {
         $query->join('groups_field_data', 'groups_field_data', "groups_field_data.id = {$table}.id");
@@ -73,8 +73,8 @@ function living_spaces_default_query_entity_query_alter(SelectInterface $query) 
  * Implements hook_query_TAG_alter().
  */
 function living_spaces_default_query_views_entity_query_alter(SelectInterface $query) {
-  $tag = $query->hasTag('skip_default_check');
-  if (!$tag && 'group' == $query->getMetaData('entity_type')) {
+  $access_check = $query->hasTag('group_access');
+  if (($query->getMetaData('entity_type') === 'group') && $access_check) {
     $group = $query->orConditionGroup();
     $group->isNull('groups_field_data.is_default');
     $group->condition('groups_field_data.is_default', 0);
@@ -117,7 +117,7 @@ function living_spaces_default_group_prepare_form(GroupInterface $group, $operat
     $group_manager = \Drupal::entityTypeManager()->getStorage('group');
     $query = $group_manager->getQuery();
     $query->condition('uuid', $uuid);
-    $query->addTag('skip_default_check');
+    $query->accessCheck(FALSE);
 
     if ($gids = $query->execute()) {
       $gid = reset($gids);
