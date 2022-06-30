@@ -35,7 +35,7 @@ use Drupal\group\Entity\GroupInterface;
  *   },
  *   base_table = "living_spaces_section",
  *   translatable = FALSE,
- *   admin_permission = "access living spaces sections settings",
+ *   admin_permission = "administer living spaces sections settings",
  *   entity_keys = {
  *     "id" = "id",
  *     "bundle" = "type",

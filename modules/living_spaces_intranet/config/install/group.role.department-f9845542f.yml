@@ -14,7 +14,7 @@ audience: outsider
 group_type: department
 permissions_ui: false
 permissions:
-  - 'access living spaces sections settings'
+  - 'administer living spaces sections settings'
   - 'edit group'
   - 'update private group'
   - 'update public group'

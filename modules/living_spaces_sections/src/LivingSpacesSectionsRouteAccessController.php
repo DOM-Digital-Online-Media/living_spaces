@@ -71,8 +71,10 @@ class LivingSpacesSectionsRouteAccessController {
     }
 
     // Check if user has global access or certain group access.
-    if ($user->hasPermission('access living spaces sections settings') ||
-      $group->hasPermission('access living spaces sections settings', $user)
+    if ($user->hasPermission('administer living spaces sections settings') ||
+      $user->hasPermission('manage living spaces sections settings') ||
+      $group->hasPermission('administer living spaces sections settings', $user) ||
+      $group->hasPermission('manage living spaces sections settings', $user)
     ) {
       return AccessResult::allowed();
     }

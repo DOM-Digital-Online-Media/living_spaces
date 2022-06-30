@@ -37,7 +37,7 @@ class LivingSpacesSectionsAccessControlHandler extends EntityAccessControlHandle
    * {@inheritdoc}
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
-    return AccessResult::allowedIfHasPermission($account, 'access living spaces sections settings');
+    return AccessResult::allowedIfHasPermission($account, 'administer living spaces sections settings');
   }
 
 }

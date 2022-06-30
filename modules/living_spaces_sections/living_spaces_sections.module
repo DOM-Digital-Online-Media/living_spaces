@@ -301,10 +301,10 @@ function living_spaces_sections_menu_local_tasks_alter(&$data, $route_name, Refi
 
     // Check for global permission, if given then we won't check the group one.
     $manage_access = \Drupal::currentUser()
-      ->hasPermission('access living spaces sections settings');
+      ->hasPermission('administer living spaces sections settings');
     $manage_access = $manage_access
       ? $manage_access
-      : $group->hasPermission('access living spaces sections settings', \Drupal::currentUser());
+      : $group->hasPermission('administer living spaces sections settings', \Drupal::currentUser());
     $data['tabs'][1]['living_spaces_sections.subsection.settings'] = [
       '#theme' => 'menu_local_task',
       '#weight' => 1000,
