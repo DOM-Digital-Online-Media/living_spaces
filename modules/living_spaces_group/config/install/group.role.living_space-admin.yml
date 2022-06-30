@@ -17,6 +17,7 @@ permissions:
   - 'delete group'
   - 'edit group'
   - 'leave group'
+  - 'manage living spaces sections settings'
   - 'manage space members'
   - 'update own group_membership content'
   - 'view group'

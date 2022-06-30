@@ -13,7 +13,6 @@ permissions_ui: true
 permissions:
   - 'access content overview'
   - 'access group_node overview'
-  - 'administer living spaces sections settings'
   - 'administer group'
   - 'administer members'
   - 'create page entities'
@@ -24,6 +23,7 @@ permissions:
   - 'join public group'
   - 'leave group'
   - 'manage living space member account'
+  - 'manage living spaces sections settings'
   - 'manage space members'
   - 'revert group revisions'
   - 'update own group_membership content'
