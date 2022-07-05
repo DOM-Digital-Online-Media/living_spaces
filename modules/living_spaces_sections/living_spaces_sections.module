@@ -311,8 +311,8 @@ function living_spaces_sections_menu_local_tasks_alter(&$data, $route_name, Refi
 
     if (!$manage_access &&
       ($group->hasPermission('administer living spaces sections settings', $account) ||
-        $group->hasPermission('manage living spaces sections settings', $account)
-      )) {
+      $group->hasPermission('manage living spaces sections settings', $account))
+    ) {
       $manage_access = TRUE;
     }
 
