@@ -14,6 +14,7 @@ permissions:
   - 'access content overview'
   - 'access group_node overview'
   - 'administer group'
+  - 'administer living spaces sections settings'
   - 'administer members'
   - 'create page entities'
   - 'delete group'

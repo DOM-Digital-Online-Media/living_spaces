@@ -13,6 +13,7 @@ permissions_ui: true
 permissions:
   - 'access content overview'
   - 'administer group'
+  - 'administer living spaces sections settings'
   - 'administer members'
   - 'delete group'
   - 'edit group'
