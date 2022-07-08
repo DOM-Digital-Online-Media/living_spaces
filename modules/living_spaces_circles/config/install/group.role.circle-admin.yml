@@ -13,7 +13,6 @@ permissions_ui: true
 permissions:
   - 'access content overview'
   - 'access group_node overview'
-  - 'access living spaces sections settings'
   - 'administer group'
   - 'administer members'
   - 'create page entities'

@@ -1,2 +1,3 @@
 permissions:
-  - 'access living spaces sections settings'
+  - 'administer living spaces sections settings'
+  - 'manage living spaces sections settings'

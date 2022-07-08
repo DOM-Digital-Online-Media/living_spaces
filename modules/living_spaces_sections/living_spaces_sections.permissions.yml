@@ -1,3 +1,7 @@
-access living spaces sections settings:
-  title: 'Access living spaces sections settings'
-  description: 'Allow access to manage sections and their settings on any living space'
+administer living spaces sections settings:
+  title: 'Administer living spaces sections settings'
+  description: 'Allow access to manage sections to enable/disable them and manage settings'
+
+manage living spaces sections settings:
+  title: 'Manage living spaces sections settings'
+  description: 'Allow access to manage sections pages to only manage their settings'

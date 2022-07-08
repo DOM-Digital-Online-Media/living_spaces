@@ -141,6 +141,7 @@ class LivingSpacesSectionsSettingsForm extends FormBase {
         '#title' => $this->t('Enable Sections'),
         '#options' => [],
         '#default_value' => [],
+        '#disabled' => !$this->currentUser()->hasPermission('administer living spaces sections settings'),
       ];
       $options = &$form['sections']['#options'];
       $form_storage['group_sections'] = [];
