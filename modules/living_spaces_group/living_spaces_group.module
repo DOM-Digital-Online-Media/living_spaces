@@ -5,6 +5,8 @@
  * Hooks and various functions for living spaces group bundle.
  */
 
+use Drupal\views\ViewExecutable;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityInterface;
@@ -16,10 +18,23 @@ use Drupal\Core\Url;
 use Drupal\group\Entity\GroupInterface;
 use Drupal\group\Entity\GroupRoleInterface;
 use Drupal\group\Entity\GroupContentInterface;
-use Drupal\profile\Entity\ProfileInterface;
 use Drupal\user\UserInterface;
 use Drupal\user\Entity\Role;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function living_spaces_group_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+  if ('users' == $view->id() &&
+    'employee' == $view->current_display &&
+    \Drupal::currentUser()->hasPermission('administer users')
+  ) {
+    // Skip contextual filter by space ids for admins.
+    $where = &$query->getWhere();
+    $where[0]['conditions'] = [];
+  }
+}
 
 /**
  * Implements hook_entity_type_alter().
