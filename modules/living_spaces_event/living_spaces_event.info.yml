@@ -27,4 +27,4 @@ default_content:
     - 3ae0c24b-826e-418b-8d40-40f65ad843de
 
 'interface translation project': living_spaces_event
-'interface translation server pattern': profiles/custom/living_spaces/modules/living_spaces_event/translations/living_spaces_event-%language.po
+'interface translation server pattern': profiles/contrib/living_spaces/modules/living_spaces_event/translations/living_spaces_event-%language.po
