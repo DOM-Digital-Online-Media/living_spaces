@@ -16,7 +16,6 @@ use Drupal\Core\Url;
 use Drupal\group\Entity\GroupInterface;
 use Drupal\group\Entity\GroupRoleInterface;
 use Drupal\group\Entity\GroupContentInterface;
-use Drupal\profile\Entity\ProfileInterface;
 use Drupal\user\UserInterface;
 use Drupal\user\Entity\Role;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;

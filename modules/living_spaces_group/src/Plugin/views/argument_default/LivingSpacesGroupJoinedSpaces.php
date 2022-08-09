@@ -72,6 +72,10 @@ class LivingSpacesGroupJoinedSpaces extends ArgumentDefaultPluginBase implements
    * {@inheritdoc}
    */
   public function getArgument() {
+    if ($this->currentUser->hasPermission('administer users')) {
+      return 'all';
+    }
+
     $user = $this->entityTypeManager->getStorage('user')
       ->load($this->currentUser->id());
     $spaces = array_column($user->get('joined_spaces')->getValue(), 'target_id');
