@@ -4,7 +4,7 @@ description: 'Provides group type for living spaces and functionality related to
 core_version_requirement: ^9.0
 package: 'Living Spaces'
 interface translation project: living_spaces_group
-interface translation server pattern: profiles/custom/living_spaces/modules/living_spaces_group/translations/%language.po
+interface translation server pattern: profiles/contrib/living_spaces/modules/living_spaces_group/translations/%language.po
 dependencies:
   - autocomplete_deluxe
   - group

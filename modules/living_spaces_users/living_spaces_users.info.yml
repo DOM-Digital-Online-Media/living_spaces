@@ -24,4 +24,4 @@ default_content:
     - c7a95681-2e4c-437b-bec2-ea861497b913
 
 'interface translation project': living_spaces_users
-'interface translation server pattern': profiles/custom/living_spaces/modules/living_spaces_users/translations/living_spaces_users-%language.po
+'interface translation server pattern': profiles/contrib/living_spaces/modules/living_spaces_users/translations/living_spaces_users-%language.po

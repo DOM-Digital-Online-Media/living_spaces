@@ -4,7 +4,7 @@ description: 'Provides page content type for Living Spaces profile'
 core_version_requirement: ^9.0
 package: 'Living Spaces'
 interface translation project: living_spaces_page
-interface translation server pattern: profiles/custom/living_spaces/modules/living_spaces_page/translations/%language.po
+interface translation server pattern: profiles/contrib/living_spaces/modules/living_spaces_page/translations/%language.po
 dependencies:
   - config_rewrite
   - living_spaces_activity
