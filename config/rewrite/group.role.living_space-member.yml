@@ -7,3 +7,5 @@ permissions:
   - 'view private group'
   - 'view public group'
   - 'view published pages'
+  - 'view discussions section of a living space'
+  - 'view events section of a living space'
