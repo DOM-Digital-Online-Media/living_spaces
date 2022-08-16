@@ -136,12 +136,15 @@ class LivingSpacesSectionsSettingsForm extends FormBase {
     $entity_view_storage = $this->entityTypeManager->getStorage('entity_view_display');
 
     if (!empty($section_types)) {
+      $class = !$this->currentUser()->hasPermission('administer living spaces sections settings') ? 'visually-hidden' : '';
       $form['sections'] = [
         '#type' => 'checkboxes',
         '#title' => $this->t('Enable Sections'),
         '#options' => [],
         '#default_value' => [],
-        '#access' => $this->currentUser()->hasPermission('administer living spaces sections settings'),
+        '#attributes' => [
+          'class' => [$class],
+        ],
       ];
       $options = &$form['sections']['#options'];
       $form_storage['group_sections'] = [];
