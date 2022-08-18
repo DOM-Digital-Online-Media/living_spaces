@@ -142,6 +142,7 @@ class LivingSpacesSectionsSettingsForm extends FormBase {
         '#title' => $this->t('Enable Sections'),
         '#options' => [],
         '#default_value' => [],
+        '#disabled' => !empty($class),
         '#attributes' => [
           'class' => [$class],
         ],
