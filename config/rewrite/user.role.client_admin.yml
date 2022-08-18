@@ -4,7 +4,6 @@ permissions:
   - 'access flood unblock'
   - 'access living spaces overview'
   - 'access simple permissions'
-  - 'administer living spaces sections settings'
   - 'administer permissions'
   - 'create agenda content'
   - 'create department group'
