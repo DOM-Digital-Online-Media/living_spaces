@@ -4,6 +4,7 @@ permissions:
   - 'access intranet dashboard'
   - 'access shortcuts'
   - 'access site-wide contact form'
+  - 'change own username'
   - 'post comments'
   - 'search content'
   - 'skip comment approval'

@@ -15,3 +15,10 @@ function living_spaces_install() {
 
   // Can add code in here to make nodes, terms, etc.
 }
+
+/**
+ * Grant 'change own username' permission.
+ */
+function living_spaces_update_9001() {
+  user_role_grant_permissions('authenticated', ['change own username']);
+}
