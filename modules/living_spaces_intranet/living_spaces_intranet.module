@@ -156,6 +156,22 @@ function living_spaces_intranet_user_settings_form_submit($form, FormStateInterf
 }
 
 /**
+ * Implements hook_form_alter().
+ */
+function living_spaces_intranet_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  switch ($form_id) {
+    case 'user_register_form':
+    case 'user_employee_form':
+    case 'user_form':
+      if (isset($form['account']['roles'])) {
+        $form['account']['roles']['#required'] = TRUE;
+      }
+      break;
+
+  }
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function living_spaces_intranet_form_user_employee_form_alter(&$form, FormStateInterface $form_state, $form_id) {
