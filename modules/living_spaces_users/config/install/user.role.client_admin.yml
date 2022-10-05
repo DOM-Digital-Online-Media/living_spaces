@@ -9,4 +9,5 @@ label: Administrator
 weight: 3
 is_admin: false
 permissions:
+  - 'administer users'
   - 'manage living spaces sections settings'
