@@ -1,0 +1,6 @@
+permissions:
+  - 'create changelog content'
+  - 'delete any changelog content'
+  - 'delete own changelog content'
+  - 'edit any changelog content'
+  - 'edit own changelog content'
