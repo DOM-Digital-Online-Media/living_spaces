@@ -15,6 +15,33 @@ use Drupal\profile\Entity\ProfileInterface;
  * Implements hook_ENTITY_TYPE_access().
  */
 function living_spaces_users_profile_access(ProfileInterface $entity, $operation, AccountInterface $account) {
+  if (\Drupal::moduleHandler()->moduleExists('living_spaces_intranet')) {
+    /** @var \Drupal\user\UserInterface $entity */
+    $current = \Drupal::entityTypeManager()->getStorage('user')->load($account->id());
+    $own_spaces = $current->get('joined_spaces')->getValue();
+    $own_spaces = array_column($own_spaces, 'target_id');
+
+    if ($own_spaces && $entity->getOwnerId() !== $account->id()) {
+      $user_spaces = $entity->getOwner()->get('joined_spaces')->getValue();
+      $user_spaces = array_column($user_spaces, 'target_id');
+
+      $same = array_intersect($own_spaces, $user_spaces);
+      if ($operation === 'view' && !empty($same)) {
+        return AccessResult::allowed();
+      }
+
+      if ($operation === 'update') {
+        foreach ($same as $group_id) {
+          /** @var \Drupal\group\Entity\GroupInterface $group */
+          $group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id);
+          if ($group->hasPermission('manage living space member account', $current)) {
+            return AccessResult::allowed();
+          }
+        }
+      }
+    }
+  }
+
   if ('employee_data' == $entity->bundle()) {
     $permission = 'manage employee profiles';
     return $account->hasPermission($permission)
@@ -22,8 +49,10 @@ function living_spaces_users_profile_access(ProfileInterface $entity, $operation
       : AccessResult::forbidden();
   }
 
-  if (\Drupal::moduleHandler()->moduleExists('living_spaces_group')
-&& ('view' == $operation) && ($entity->getOwnerId() !== $account->id())) {
+  if (\Drupal::moduleHandler()->moduleExists('living_spaces_group') &&
+    'view' == $operation &&
+    $entity->getOwnerId() !== $account->id()
+  ) {
     $user = \Drupal::entityTypeManager()->getStorage('user')->load($account->id());
     if ($user_spaces = $user->get('joined_spaces')->getValue()) {
       $user_space_ids = array_column($user_spaces, 'target_id');
