@@ -34,7 +34,7 @@ display:
         type: none
         options: {  }
       cache:
-        type: tag
+        type: none
         options: {  }
       query:
         type: views_query
@@ -205,7 +205,6 @@ display:
         filters: false
         filter_groups: false
         relationships: false
-        cache: false
       style:
         type: table
         options:
