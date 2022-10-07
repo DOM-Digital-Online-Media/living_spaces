@@ -3,6 +3,7 @@
 namespace Drupal\living_spaces\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -82,10 +83,49 @@ class LivingSpacesPageTitleBlock extends BlockBase implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
+  public function defaultConfiguration() {
+    return [
+      'lead' => '',
+      'include_hr' => '',
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockForm($form, FormStateInterface $form_state) {
+    $form['lead'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Lead'),
+      '#default_value' => $this->configuration['lead'],
+    ];
+
+    $form['include_hr'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Include hr'),
+      '#default_value' => $this->configuration['include_hr'],
+    ];
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockSubmit($form, FormStateInterface $form_state) {
+    $this->configuration['lead'] = $form_state->getValue('lead');
+    $this->configuration['include_hr'] = $form_state->getValue('include_hr');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function build() {
     return [
       '#type' => 'page_title',
       '#title' => $this->titleResolver->getTitle($this->request->getCurrentRequest(), $this->route->getRouteObject()),
+      '#lead' => $this->configuration['lead'],
+      '#include_hr' => $this->configuration['include_hr'],
     ];
   }
 
