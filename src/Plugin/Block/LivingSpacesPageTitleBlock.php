@@ -86,7 +86,7 @@ class LivingSpacesPageTitleBlock extends BlockBase implements ContainerFactoryPl
   public function defaultConfiguration() {
     return [
       'lead' => '',
-      'include_hr' => '',
+      'include_hr' => 1,
     ];
   }
 
