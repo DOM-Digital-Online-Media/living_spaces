@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * Theme override for page titles.
+ *
+ * @see template_preprocess_page_title()
+ */
+#}
+{{ title_prefix }}
+{% if title %}
+  <h1{{ title_attributes.addClass('title') }}>{{ title }}</h1>
+  {% if lead %}
+    <p class="lead">{{ lead }}</p>
+  {% endif %}
+  {% if include_hr %}
+    <hr />
+  {% endif %}
+{% endif %}
+{{ title_suffix }}
