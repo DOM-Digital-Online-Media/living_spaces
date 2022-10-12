@@ -31,7 +31,7 @@ display:
         type: none
         options: {  }
       cache:
-        type: tag
+        type: none
         options: {  }
       query:
         type: views_query
@@ -43,7 +43,7 @@ display:
         type: basic
         options:
           submit_button: Apply
-          reset_button: false
+          reset_button: true
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
           expose_sort_order: true
@@ -203,7 +203,6 @@ display:
         filters: false
         filter_groups: false
         relationships: false
-        cache: false
       style:
         type: table
         options:
@@ -406,8 +405,13 @@ display:
           empty_zero: false
           hide_alter_empty: true
           action_title: Action
-          include_exclude: exclude
-          selected_actions: { }
+          include_exclude: include
+          selected_actions:
+            - living_spaces_group_remove_user_action
+            - living_spaces_users_employee_export_action
+            - user_block_user_action
+            - user_cancel_user_action
+            - user_unblock_user_action
           link_to_item: 0
           use_highlighting: 0
           plugin_id: search_api_bulk_form
