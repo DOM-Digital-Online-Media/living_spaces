@@ -126,6 +126,7 @@ class LivingSpacesPageTitleBlock extends BlockBase implements ContainerFactoryPl
       '#title' => $this->titleResolver->getTitle($this->request->getCurrentRequest(), $this->route->getRouteObject()),
       '#lead' => $this->configuration['lead'],
       '#include_hr' => $this->configuration['include_hr'],
+      '#cache' => ['contexts' => ['url']],
     ];
   }
 
