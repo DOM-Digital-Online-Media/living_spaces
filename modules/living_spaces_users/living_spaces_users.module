@@ -88,7 +88,9 @@ function living_spaces_users_profile_update(ProfileInterface $entity) {
  * Implements hook_ENTITY_TYPE_insert().
  */
 function living_spaces_users_profile_delete(ProfileInterface $entity) {
-  search_api_entity_update($entity->getOwner());
+  if ($entity->getOwner()) {
+    search_api_entity_update($entity->getOwner());
+  }
 }
 
 /**

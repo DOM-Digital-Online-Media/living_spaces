@@ -143,7 +143,7 @@ function living_spaces_activity_group_content_update(GroupContentInterface $cont
  */
 function living_spaces_activity_group_content_delete(GroupContentInterface $content) {
   // @todo add check is content type is among field target bundles.
-  if ('group_membership' == $content->getContentPlugin()->getBaseId()) {
+  if ('group_membership' == $content->getContentPlugin()->getBaseId() && $content->getEntity()) {
     /** @var \Drupal\message\Entity\Message $message */
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'group_member_removed',
