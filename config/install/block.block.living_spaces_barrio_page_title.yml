@@ -8,10 +8,12 @@ theme: living_spaces_barrio
 region: content
 weight: -4
 provider: null
-plugin: page_title_block
+plugin: living_spaces_page_title_block
 settings:
-  id: page_title_block
+  id: living_spaces_page_title_block
   label: 'Page title'
   label_display: '0'
-  provider: core
+  provider: living_spaces
+  lead: ''
+  include_hr: 1
 visibility: {  }
