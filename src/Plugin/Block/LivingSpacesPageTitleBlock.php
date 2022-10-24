@@ -146,6 +146,7 @@ class LivingSpacesPageTitleBlock extends BlockBase implements ContainerFactoryPl
         '#type' => 'textfield',
         '#title' => $this->t('Lead path'),
         '#default_value' => isset($config['lead'][$i]['lead_path']) ? $config['lead'][$i]['lead_path'] : '',
+        '#suffix' => '<br />',
       ];
     }
 
