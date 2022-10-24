@@ -84,8 +84,8 @@ class LivingSpacesPageTitleBlock extends BlockBase implements ContainerFactoryPl
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return [
-      'lead' => '',
+    return parent::defaultConfiguration() + [
+      'lead' => [],
       'include_hr' => 1,
     ];
   }
@@ -94,10 +94,48 @@ class LivingSpacesPageTitleBlock extends BlockBase implements ContainerFactoryPl
    * {@inheritdoc}
    */
   public function blockForm($form, FormStateInterface $form_state) {
-    $form['lead'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Lead'),
-      '#default_value' => $this->configuration['lead'],
+    $form = parent::blockForm($form, $form_state);
+    $config = $this->getConfiguration();
+
+    $form['#tree'] = TRUE;
+    $form['lead_fieldset'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Lead items'),
+      '#prefix' => '<div id="lead-fieldset-wrapper">',
+      '#suffix' => '</div>',
+    ];
+
+    if (!$form_state->has('lead_count')) {
+      $count = !empty($config['lead']) && is_array($config['lead']) ? count($config['lead']) : 1;
+      $form_state->set('lead_count', $count);
+    }
+    $name_field = $form_state->get('lead_count');
+
+    for ($i = 0; $i < $name_field; $i++) {
+      $form['lead_fieldset']['lead_items'][$i]['lead_text'] = [
+        '#type' => 'textfield',
+        '#title' => $this->t('Lead text'),
+        '#default_value' => isset($config['lead'][$i]['lead_text']) ? $config['lead'][$i]['lead_text'] : '',
+      ];
+      $form['lead_fieldset']['lead_items'][$i]['lead_path'] = [
+        '#type' => 'textfield',
+        '#title' => $this->t('Lead path'),
+        '#default_value' => isset($config['lead'][$i]['lead_path']) ? $config['lead'][$i]['lead_path'] : '',
+      ];
+    }
+
+    $form['lead_fieldset']['actions'] = [
+      '#type' => 'actions',
+    ];
+
+    $form['lead_fieldset']['actions']['add_item'] = [
+      '#type' => 'submit',
+      '#value' => t('Add more'),
+      '#submit' => [[$this, 'addOne']],
+      '#ajax' => [
+        'callback' => [$this, 'addmoreCallback'],
+        'wrapper' => 'lead-fieldset-wrapper',
+      ],
     ];
 
     $form['include_hr'] = [
@@ -110,10 +148,29 @@ class LivingSpacesPageTitleBlock extends BlockBase implements ContainerFactoryPl
   }
 
   /**
+   * Submit handler for the 'Add more' button.
+   */
+  public function addOne(array &$form, FormStateInterface $form_state) {
+    $name_field = $form_state->get('lead_count');
+    $form_state->set('lead_count', $name_field + 1);
+    $form_state->setRebuild();
+  }
+
+  /**
+   * Ajax handler for the 'Add more' button.
+   */
+  public function addmoreCallback(array &$form, FormStateInterface $form_state) {
+    return $form['settings']['lead_fieldset'];
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
-    $this->configuration['lead'] = $form_state->getValue('lead');
+    $lead_fieldset = $form_state->getValue('lead_fieldset');
+    $items = isset($lead_fieldset['lead_items']) ? $lead_fieldset['lead_items'] : [];
+
+    $this->configuration['lead'] = $items;
     $this->configuration['include_hr'] = $form_state->getValue('include_hr');
   }
 
