@@ -4,3 +4,49 @@
  * @file
  * Contains functions and hooks for living_spaces_changelog.module.
  */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function living_spaces_changelog_node_access(NodeInterface $entity, $operation, AccountInterface $account) {
+  $access = AccessResult::neutral();
+
+  $type = $entity->bundle();
+  if ('changelog' == $type) {
+    if ($account->hasPermission('bypass node access')) {
+      return AccessResult::allowed();
+    }
+
+    switch ($operation) {
+      case 'view':
+        if ($entity->isPublished()) {
+          $access = AccessResult::allowedIfHasPermission($account, 'access content');
+        }
+        if (!$access->isAllowed() && !$entity->isPublished() && $account->id() == $entity->getOwnerId()) {
+          $access = AccessResult::allowedIfHasPermission($account, 'view own unpublished content');
+        }
+        break;
+
+      case 'update':
+        $access = AccessResult::allowedIfHasPermission($account, 'edit any ' . $type . ' content');
+        if (!$access->isAllowed() && $account->hasPermission('edit own ' . $type . ' content')) {
+          $access = $access->orIf(AccessResult::allowedIf($account->id() == $entity->getOwnerId())->cachePerUser()->addCacheableDependency($entity));
+        }
+        break;
+
+      case 'delete':
+        $access = AccessResult::allowedIfHasPermission($account, 'delete any ' . $type . ' content');
+        if (!$access->isAllowed() && $account->hasPermission('delete own ' . $type . ' content')) {
+          $access = $access->orIf(AccessResult::allowedIf($account->id() == $entity->getOwnerId()))->cachePerUser()->addCacheableDependency($entity);
+        }
+        break;
+
+    }
+  }
+
+  return $access;
+}
