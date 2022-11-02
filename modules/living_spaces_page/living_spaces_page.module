@@ -74,7 +74,7 @@ function living_spaces_page_node_access(NodeInterface $entity, $operation, Accou
     }
   }
 
-  return AccessResult::neutral();
+  return AccessResult::allowed();
 }
 
 /**
