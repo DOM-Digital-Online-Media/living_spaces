@@ -52,29 +52,64 @@ function living_spaces_page_entity_base_field_info(EntityTypeInterface $entity_t
  * Implements hook_ENTITY_TYPE_access().
  */
 function living_spaces_page_node_access(NodeInterface $entity, $operation, AccountInterface $account) {
-  if ('page' == $entity->bundle()) {
-    $entity_manager = \Drupal::entityTypeManager()->getStorage('group');
-    $query = $entity_manager->getQuery();
-    $query->condition('content_sections', $entity->id());
-    $query->accessCheck(FALSE);
+  $access = AccessResult::neutral();
 
-    if ($group_ids = $query->execute()) {
-      $group_id = reset($group_ids);
+  $type = $entity->bundle();
+  if ('page' == $type) {
+    if ($account->hasPermission('bypass node access')) {
+      return AccessResult::allowed();
+    }
 
-      /** @var \Drupal\group\Entity\Group $group */
-      $group = $entity_manager->load($group_id);
+    switch ($operation) {
+      case 'view':
+        if ($entity->isPublished()) {
+          $access = AccessResult::allowedIfHasPermission($account, 'access content');
+        }
+        if (!$access->isAllowed() && !$entity->isPublished() && $account->id() == $entity->getOwnerId()) {
+          $access = AccessResult::allowedIfHasPermission($account, 'view own unpublished content');
+        }
+        break;
 
-      if ($group->hasPermission('create page entities', $account)) {
-        return AccessResult::allowed();
-      }
+      case 'update':
+        $access = AccessResult::allowedIfHasPermission($account, 'edit any ' . $type . ' content');
+        if (!$access->isAllowed() && $account->hasPermission('edit own ' . $type . ' content')) {
+          $access = $access->orIf(AccessResult::allowedIf($account->id() == $entity->getOwnerId())->cachePerUser()->addCacheableDependency($entity));
+        }
+        break;
 
-      if ($entity->isPublished() && 'view' == $operation) {
-        return $group->hasPermission('view published pages', $account) ? AccessResult::allowed() : AccessResult::forbidden();
+      case 'delete':
+        $access = AccessResult::allowedIfHasPermission($account, 'delete any ' . $type . ' content');
+        if (!$access->isAllowed() && $account->hasPermission('delete own ' . $type . ' content')) {
+          $access = $access->orIf(AccessResult::allowedIf($account->id() == $entity->getOwnerId()))->cachePerUser()->addCacheableDependency($entity);
+        }
+        break;
+
+    }
+
+    if (!$access->isAllowed()) {
+      $entity_manager = \Drupal::entityTypeManager()->getStorage('group');
+      $query = $entity_manager->getQuery();
+      $query->condition('content_sections', $entity->id());
+      $query->accessCheck(FALSE);
+
+      if ($group_ids = $query->execute()) {
+        $group_id = reset($group_ids);
+
+        /** @var \Drupal\group\Entity\Group $group */
+        $group = $entity_manager->load($group_id);
+
+        if ($group->hasPermission('create page entities', $account)) {
+          $access = AccessResult::allowed();
+        }
+
+        if (!$access->isAllowed() && $entity->isPublished() && 'view' == $operation) {
+          $access = $group->hasPermission('view published pages', $account) ? AccessResult::allowed() : AccessResult::forbidden();
+        }
       }
     }
   }
 
-  return AccessResult::allowed();
+  return $access;
 }
 
 /**

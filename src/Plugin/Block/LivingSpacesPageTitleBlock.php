@@ -205,7 +205,7 @@ class LivingSpacesPageTitleBlock extends BlockBase implements ContainerFactoryPl
    */
   public function build() {
     $lead = '';
-    if (isset($this->configuration['lead'])) {
+    if (!empty($this->configuration['lead'])) {
       $url = Url::fromRoute('<current>')->toString();
       $path = $this->aliasManager->getAliasByPath($url);
 
