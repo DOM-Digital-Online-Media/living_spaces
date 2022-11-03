@@ -14,6 +14,10 @@ dependencies:
   - nodejs
   - token
   - views_contextual_filters_or
+  - taxonomy
+  - message
+  - field
+  - language
 default_content:
   taxonomy_term:
     - 5538078f-4a95-4e4c-9924-85d05b924894

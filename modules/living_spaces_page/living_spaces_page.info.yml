@@ -11,3 +11,6 @@ dependencies:
   - living_spaces_group
   - living_spaces_sections
   - message
+  - field
+  - node
+  - message

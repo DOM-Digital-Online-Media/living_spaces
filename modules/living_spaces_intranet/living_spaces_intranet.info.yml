@@ -13,6 +13,10 @@ dependencies:
   - living_spaces_group
   - living_spaces_menus
   - living_spaces_users
+  - group
+  - field
+  - taxonomy
+  - language
 
 default_content:
   living_spaces_section:

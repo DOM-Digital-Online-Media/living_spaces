@@ -8,6 +8,8 @@ dependencies:
   - options
   - universal_device_detection
   - views
+  - system
+  - field
 
 default_content:
   menu_link_content:

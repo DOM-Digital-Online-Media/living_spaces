@@ -17,6 +17,12 @@ dependencies:
   - profile
   - search_api_autocomplete
   - views_data_export
+  - field
+  - user
+  - system
+  - views
+  - search_api_solr
+  - pathauto
 
 default_content:
   menu_link_content:

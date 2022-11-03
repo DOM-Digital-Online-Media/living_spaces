@@ -9,3 +9,9 @@ dependencies:
   - living_spaces_group
   - living_spaces_sections
   - views_block_area
+  - comment
+  - field
+  - group
+  - language
+  - node
+  - views
