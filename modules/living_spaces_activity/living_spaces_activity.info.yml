@@ -18,6 +18,7 @@ dependencies:
   - message
   - field
   - language
+  - views
 default_content:
   taxonomy_term:
     - 5538078f-4a95-4e4c-9924-85d05b924894

@@ -11,6 +11,7 @@ dependencies:
   - living_spaces_menus
   - living_spaces_users
   - views_field_view
+  - views
 
 default_content:
   menu_link_content:

@@ -22,6 +22,7 @@ dependencies:
   - user
   - system
   - image
+  - search_api
 
 default_content:
   menu_link_content:

@@ -10,6 +10,8 @@ dependencies:
   - node
   - language
   - field
+  - views
+  - user
 
 default_content:
   menu_link_content:
