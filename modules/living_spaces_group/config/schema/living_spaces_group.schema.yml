@@ -2,7 +2,7 @@ condition.plugin.living_spaces_group_permission:
   type: condition.plugin
   label: 'LivingSpacesGroupPermission condition'
   mapping:
-    permission:
+    group_permission:
       type: string
       label: Permission
 

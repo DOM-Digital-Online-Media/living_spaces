@@ -10,6 +10,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\group\Access\GroupPermissionCheckerInterface;
 use Drupal\group\Access\GroupPermissionHandlerInterface;
+use Drupal\group\Entity\GroupInterface;
+use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -91,7 +93,9 @@ class LivingSpacesGroupPermission extends ConditionPluginBase implements Contain
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return ['permission' => NULL] + parent::defaultConfiguration();
+    return [
+      'group_permission' => ''
+      ] + parent::defaultConfiguration();
   }
 
   /**
@@ -104,11 +108,12 @@ class LivingSpacesGroupPermission extends ConditionPluginBase implements Contain
       $permissions[$display_name . ' : ' . $permission['section']][$permission_name] = strip_tags($permission['title']);
     }
 
-    $form['permission'] = [
+    $form['group_permission'] = [
       '#title' => $this->t('Group permission'),
+      '#empty_value' => '',
       '#type' => 'select',
       '#options' => $permissions,
-      '#default_value' => $this->configuration['permission'],
+      '#default_value' => $this->configuration['group_permission'],
     ];
 
     return parent::buildConfigurationForm($form, $form_state);
@@ -118,7 +123,7 @@ class LivingSpacesGroupPermission extends ConditionPluginBase implements Contain
    * {@inheritdoc}
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
-    $this->configuration['permission'] = $form_state->getValue('permission');
+    $this->configuration['group_permission'] = $form_state->getValue('group_permission');
     parent::submitConfigurationForm($form, $form_state);
   }
 
@@ -126,7 +131,7 @@ class LivingSpacesGroupPermission extends ConditionPluginBase implements Contain
    * {@inheritdoc}
    */
   public function summary() {
-    $args = ['%permission' => $this->configuration['permission']];
+    $args = ['%permission' => $this->configuration['group_permission']];
     return $this->isNegated()
       ? $this->t('Does not have %permission group permission.', $args)
       : $this->t('Have %permission group permission.', $args);
@@ -136,10 +141,15 @@ class LivingSpacesGroupPermission extends ConditionPluginBase implements Contain
    * {@inheritdoc}
    */
   public function evaluate() {
+    $access = TRUE;
+
     $group = $this->getContextValue('group');
     $user = $this->getContextValue('user');
-    $access = $this->permissionChecker
-      ->hasPermissionInGroup($this->configuration['permission'], $user, $group);
+    if (!empty($this->configuration['group_permission'])
+  && $group instanceof GroupInterface && $user instanceof UserInterface) {
+      $access = $this->permissionChecker
+        ->hasPermissionInGroup($this->configuration['group_permission'], $user, $group);
+    }
 
     return $this->isNegated() ? !$access : $access;
   }
