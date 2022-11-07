@@ -128,3 +128,20 @@ function living_spaces_users_living_spaces_group_exports_info($names_only = TRUE
 
   return $results;
 }
+
+/**
+ * Implements hook_views_data().
+ */
+function living_spaces_users_views_data() {
+  $data = [];
+
+  $data['views']['current_user_is_counselor_or_moderator'] = [
+    'title' => t('Current User is counselor or moderator'),
+    'filter' => [
+      'title' => t('Current User is counselor or moderator'),
+      'id' => 'current_user_is_counselor_or_moderator',
+    ],
+  ];
+
+  return $data;
+}
