@@ -8,3 +8,6 @@ dependencies:
   - language
   - search_api_solr
   - taxonomy
+  - user
+  - filter
+  - rdf

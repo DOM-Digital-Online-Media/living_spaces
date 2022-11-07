@@ -18,7 +18,11 @@ dependencies:
   - user_permission_condition
   - views_data_export
   - views_field_view
-
+  - views
+  - user
+  - system
+  - image
+  - search_api
 
 default_content:
   menu_link_content:

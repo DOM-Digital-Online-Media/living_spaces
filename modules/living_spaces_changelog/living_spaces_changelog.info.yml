@@ -8,6 +8,10 @@ dependencies:
   - living_spaces_default_configs
   - living_spaces_menus
   - node
+  - language
+  - field
+  - views
+  - user
 
 default_content:
   menu_link_content:

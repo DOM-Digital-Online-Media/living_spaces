@@ -16,6 +16,13 @@ dependencies:
   - search_api_solr
   - time_field
   - user_permission_condition
+  - field
+  - group
+  - language
+  - node
+  - views
+  - taxonomy
+  - paragraphs
 default_content:
   taxonomy_term:
     - 6ac8691c-87d5-49f6-882e-46398be6d119
