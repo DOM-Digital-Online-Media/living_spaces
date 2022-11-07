@@ -5,9 +5,12 @@
  * Contains functions and hooks for living_spaces_discussions.module.
  */
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\group\Entity\GroupContentInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Form\FormStateInterface;
+use \Drupal\comment\CommentInterface;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -48,4 +51,22 @@ function living_spaces_discussions_discussion_post_form_submit(&$form, FormState
       $form_state->setRedirectUrl($section->toUrl());
     }
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function living_spaces_discussions_comment_access(CommentInterface $comment, $operation, AccountInterface $account) {
+  $result = AccessResult::neutral();
+
+  $entity = $comment->getCommentedEntity();
+  if ('node' == $entity->getEntityTypeId() &&
+    'discussion_post' == $entity->bundle() &&
+    in_array($operation, ['update', 'delete']) &&
+    $comment->getOwnerId() == $account->id()
+  ) {
+    $result = AccessResult::allowed();
+  }
+
+  return $result;
 }
