@@ -6,6 +6,7 @@
  */
 
 use Drupal\Component\Utility\Html;
+use Drupal\dip_chat_counseling\Entity\DipChatAppointmentInterface;
 use Drupal\living_spaces_event\Entity\LivingSpaceEventInviteInterface;
 
 /**
@@ -47,17 +48,30 @@ function template_preprocess_views_view_living_spaces_event_week(&$variables) {
     /** @var \Drupal\group\Entity\GroupContentInterface $content */
     $content = $row['#row']->_entity;
 
+    $day = $i;
     if ($content instanceof LivingSpaceEventInviteInterface) {
       /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInterface $event */
       $event = $content->get('event')->entity;
+      $start = strtotime($event->get('field_start_date')->getValue()[0]['value']);
+      $day = $date_formatter->format($start, 'custom', 'N') - 1;
+    }
+    elseif ($content instanceof DipChatAppointmentInterface) {
+      $start = strtotime($content->get('field_appointmentdate')->getValue()[0]['value']);
+      $day = $date_formatter->format($start, 'custom', 'N') - 1;
     }
     else {
-      /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInterface $event */
-      $event = $content->getEntity();
+      try {
+        /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInterface $event */
+        if ($event = $content->getEntity()) {
+          $start = strtotime($event->get('field_start_date')->getValue()[0]['value']);
+          $day = $date_formatter->format($start, 'custom', 'N') - 1;
+        }
+      }
+      catch (Exception $ex) {
+      }
     }
 
-    $start = strtotime($event->get('field_start_date')->getValue()[0]['value']);
-    $items[$date_formatter->format($start, 'custom', 'N') - 1]['items'][] = [
+    $items[$day]['items'][] = [
       'content' => $row,
     ];
   }
