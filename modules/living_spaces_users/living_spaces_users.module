@@ -135,11 +135,11 @@ function living_spaces_users_living_spaces_group_exports_info($names_only = TRUE
 function living_spaces_users_views_data() {
   $data = [];
 
-  $data['views']['current_user_is_counselor_or_moderator'] = [
-    'title' => t('Current User is counselor or moderator'),
+  $data['views']['living_spaces_is_current_user_in_field'] = [
+    'title' => t('Current User is present in the field'),
     'filter' => [
-      'title' => t('Current User is counselor or moderator'),
-      'id' => 'current_user_is_counselor_or_moderator',
+      'title' => t('Current User is present in the field'),
+      'id' => 'living_spaces_is_current_user_in_field',
     ],
   ];
 
