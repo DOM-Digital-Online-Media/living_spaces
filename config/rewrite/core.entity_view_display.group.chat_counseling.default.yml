@@ -1,0 +1,70 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.chat_counseling
+    - views.view.chat_appointment_week
+  module:
+    - layout_builder
+    - living_spaces_group
+    - views
+  theme:
+    - bootstrap_barrio
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: barrio_col2-equal
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+        components:
+          5c548459-2ccf-41f0-a2a7-e9b4cbbd2993:
+            uuid: 5c548459-2ccf-41f0-a2a7-e9b4cbbd2993
+            region: first
+            configuration:
+              id: living_spaces_group_actions_block
+              label: 'Space actions'
+              label_display: '0'
+              provider: living_spaces_group
+              context_mapping:
+                group: layout_builder.entity
+            weight: 0
+            additional: {  }
+          94341222-078d-4f07-8aa4-86876b394d32:
+            uuid: 94341222-078d-4f07-8aa4-86876b394d32
+            region: first
+            configuration:
+              id: 'views_block:chat_appointment_week-chat_appointment_week_block'
+              label: ''
+              label_display: visible
+              provider: views
+              context_mapping: {  }
+              views_label: ''
+              items_per_page: none
+            weight: 2
+            additional: {  }
+        third_party_settings: {  }
+_core:
+  default_config_hash: RPXGoiNPayIjs2LrLMn0kNzwEHRml9FGA03X3BYXZ-w
+id: group.chat_counseling.default
+targetEntityType: group
+bundle: chat_counseling
+mode: default
+content:
+  label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -5
+    region: content
+hidden:
+  changed: true
+  created: true
+  langcode: true
+  search_api_excerpt: true
+  uid: true
