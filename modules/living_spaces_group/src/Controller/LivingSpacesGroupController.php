@@ -37,6 +37,50 @@ class LivingSpacesGroupController extends ControllerBase {
   }
 
   /**
+   * Block user and redirects to space members page.
+   *
+   * @param \Drupal\group\Entity\GroupInterface $group
+   *   Space group entity.
+   * @param \Drupal\user\UserInterface $user
+   *   User for which action was triggered.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   Redirect to space members page.
+   */
+  public function blockUser(GroupInterface $group, UserInterface $user) {
+    $user->block();
+    $user->save();
+
+    return new RedirectResponse(
+      Url::fromRoute('page_manager.page_view_living_space_members_living_space_members-layout_builder-0', [
+        'group' => $group->id()
+      ])->setAbsolute()->toString()
+    );
+  }
+
+  /**
+   * Unblock user and redirects to space members page.
+   *
+   * @param \Drupal\group\Entity\GroupInterface $group
+   *   Space group entity.
+   * @param \Drupal\user\UserInterface $user
+   *   User for which action was triggered.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   Redirect to space members page.
+   */
+  public function unblockUser(GroupInterface $group, UserInterface $user) {
+    $user->activate();
+    $user->save();
+
+    return new RedirectResponse(
+      Url::fromRoute('page_manager.page_view_living_space_members_living_space_members-layout_builder-0', [
+        'group' => $group->id()
+      ])->setAbsolute()->toString()
+    );
+  }
+
+  /**
    * Assigns space admin role to the user.
    *
    * @param \Drupal\group\Entity\GroupInterface $group
