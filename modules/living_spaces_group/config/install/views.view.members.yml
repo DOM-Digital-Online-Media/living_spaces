@@ -678,6 +678,8 @@ display:
             view_profile: view_profile
             remove_from_space: remove_from_space
             add_remove_admin: add_remove_admin
+            block_user: block_user
+            unblock_user: unblock_user
           entity_type: user
           plugin_id: living_spaces_group_space_member_actions
       defaults:

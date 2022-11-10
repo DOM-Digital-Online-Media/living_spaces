@@ -275,7 +275,8 @@ function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE
       'view_profile' => t('Show profile'),
       'remove_from_space' => t('Remove from Space'),
       'add_remove_admin' => t('Add/Remove as Admin'),
-
+      'block_user' => t('Block user'),
+      'unblock_user' => t('Unblock user'),
     ];
   }
   $current_user = \Drupal::currentUser()->getAccount();
@@ -322,7 +323,30 @@ function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE
         'user' => $user->id(),
       ]),
     ];
+
+    if ($user->isActive() && $current_user->id() != $user->id()) {
+      $links['block_user'] = [
+        '#type' => 'link',
+        '#title' => t('Block user'),
+        '#url' => Url::fromRoute('living_spaces_group.block_user', [
+          'group' => $space->id(),
+          'user' => $user->id(),
+        ]),
+      ];
+    }
+
+    if ($user->isBlocked() && $current_user->id() != $user->id()) {
+      $links['unblock_user'] = [
+        '#type' => 'link',
+        '#title' => t('Unblock user'),
+        '#url' => Url::fromRoute('living_spaces_group.unblock_user', [
+          'group' => $space->id(),
+          'user' => $user->id(),
+        ]),
+      ];
+    }
   }
+
   return $links;
 }
 
