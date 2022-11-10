@@ -186,7 +186,9 @@ function living_spaces_page_attach_page(NodeInterface $entity) {
 function living_spaces_page_living_spaces_group_action_info(GroupInterface $space) {
   $items = [];
 
-  if (\Drupal::currentUser()->hasPermission('create page content')) {
+  if (\Drupal::currentUser()->hasPermission('create page content') ||
+    $space->hasPermission('create page entities', \Drupal::currentUser())
+  ) {
     $items['page'] = [
       '#type' => 'link',
       '#title' => t('Create Info page'),
