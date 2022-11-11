@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - living_spaces
+  theme:
+    - living_spaces_barrio
+id: footerlogo
+theme: living_spaces_barrio
+region: footer_right
+weight: 0
+provider: null
+plugin: living_spaces_footer_logo_block
+settings:
+  id: living_spaces_footer_logo_block
+  label: 'Footer Logo'
+  label_display: '0'
+  provider: living_spaces
+  image:
+    - '4'
+visibility: {  }
