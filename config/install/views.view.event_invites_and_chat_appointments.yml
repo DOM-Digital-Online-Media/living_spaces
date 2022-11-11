@@ -324,7 +324,7 @@ display:
           entity_type: dip_chat_appointment
           plugin_id: search_api_field
           label: ''
-          exclude: false
+          exclude: true
           alter:
             alter_text: false
             text: ''
@@ -367,7 +367,7 @@ display:
           click_sort_column: value
           type: string
           settings:
-            link_to_entity: true
+            link_to_entity: false
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -398,7 +398,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: '{{ ''Chat Counseling''|t }}'
+            text: '<a href=''/dip-chat-appointment/{{ id__value }}''> {{ label_1 }} {{ ''Chat Counseling''|t }}</a>'
             make_link: false
             path: ''
             absolute: false
@@ -787,9 +787,11 @@ display:
           query_tags: {  }
           contextual_filters_or: false
       relationships: {  }
-      use_more: false
+      use_more: true
       use_more_always: true
       use_more_text: 'All events'
+      link_display: custom_url
+      link_url: /my-events
       header: {  }
       footer: {  }
       display_extenders: {  }

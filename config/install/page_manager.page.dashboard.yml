@@ -3,6 +3,8 @@ status: true
 dependencies:
   module:
     - user_permission_condition
+_core:
+  default_config_hash: Ygo_4jH1noJXaXJoaG1sCz7ZdmaiOUJkysimGPX9DmQ
 id: dashboard
 label: Dashboard
 description: ''
@@ -12,8 +14,8 @@ access_logic: and
 access_conditions:
   -
     id: user_permission
-    permission: 'access intranet dashboard'
     negate: false
     context_mapping:
       user: '@user.current_user_context:current_user'
+    permission: 'access intranet dashboard'
 parameters: {  }
