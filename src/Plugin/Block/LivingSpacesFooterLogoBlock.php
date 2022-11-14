@@ -58,6 +58,15 @@ class LivingSpacesFooterLogoBlock extends BlockBase implements ContainerFactoryP
   /**
    * {@inheritdoc}
    */
+  public function defaultConfiguration() {
+    return [
+      'image' => '',
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function blockForm($form, FormStateInterface $form_state) {
     $form['image'] = [
       '#type' => 'managed_file',
