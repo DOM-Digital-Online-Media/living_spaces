@@ -138,7 +138,7 @@ class LivingSpacesPageTitleBlock extends BlockBase implements ContainerFactoryPl
 
     for ($i = 0; $i < $lead_count; $i++) {
       $form['lead_fieldset']['lead_items'][$i]['lead_text'] = [
-        '#type' => 'textfield',
+        '#type' => 'textarea',
         '#title' => $this->t('Lead text'),
         '#default_value' => isset($config['lead'][$i]['lead_text']) ? $config['lead'][$i]['lead_text'] : '',
       ];
@@ -211,7 +211,7 @@ class LivingSpacesPageTitleBlock extends BlockBase implements ContainerFactoryPl
 
       foreach ($this->configuration['lead'] as $item) {
         if ($this->pathMatcher->matchPath($path, $item['lead_path'])) {
-          $lead = $item['lead_text'];
+          $lead = $this->t($item['lead_text']);
         }
       }
     }
