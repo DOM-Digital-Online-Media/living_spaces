@@ -4,3 +4,19 @@
  * @file
  * Contains functions and hooks for living_spaces_menus.module.
  */
+
+/**
+ * Delete menu link content and update it from yml.
+ */
+function living_spaces_menus_update_9001() {
+  if (function_exists('living_spaces_menus_uninstall')) {
+    // Delete preinstalled content.
+    living_spaces_menus_uninstall();
+  }
+
+  try {
+    \Drupal::service('default_content.importer')
+      ->importContent('living_spaces_menus');
+  } catch (Exception $e) {
+  }
+}
