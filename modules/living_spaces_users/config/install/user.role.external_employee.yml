@@ -8,4 +8,5 @@ id: external_employee
 label: 'External employee'
 weight: 6
 is_admin: false
-permissions: {  }
+permissions:
+  - 'access living spaces overview'
