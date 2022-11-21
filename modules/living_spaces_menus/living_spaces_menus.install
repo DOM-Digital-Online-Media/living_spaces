@@ -21,3 +21,21 @@ function living_spaces_menus_uninstall() {
     $link_storage->delete($link);
   }
 }
+
+/**
+ * Add new roles to menu item.
+ */
+function living_spaces_menus_update_9001(&$sandbox) {
+  $storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+  if ($items = $storage->loadByProperties(['uuid' => '4d89df5f-b766-4abc-a882-feeb218d61e2'])) {
+    $item = reset($items);
+
+    if ($roles = $item->get('menu_item_roles')->getValue()) {
+      $roles[] = ['target_id' => 'external_employee'];
+      $roles[] = ['target_id' => 'former_employee'];
+      $roles[] = ['target_id' => 'full_time_employee'];
+      $item->set('menu_item_roles', $roles);
+      $item->save();
+    }
+  }
+}
