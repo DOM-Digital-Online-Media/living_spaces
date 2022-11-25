@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - living_spaces
+  theme:
+    - living_spaces_barrio
+id: sitecopyright
+theme: living_spaces_barrio
+region: footer_left
+weight: 0
+provider: null
+plugin: living_spaces_site_copyright_block
+settings:
+  id: living_spaces_site_copyright_block
+  label: 'Site Copyright'
+  label_display: '0'
+  provider: living_spaces
+  sitename: ankerplatz
+visibility: {  }
