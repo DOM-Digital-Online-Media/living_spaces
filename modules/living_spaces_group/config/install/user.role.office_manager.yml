@@ -8,4 +8,5 @@ id: office_manager
 label: 'Office Manager'
 weight: 10
 is_admin: false
-permissions: {  }
+permissions:
+  - 'create living_space group'
