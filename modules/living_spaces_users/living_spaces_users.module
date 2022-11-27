@@ -8,8 +8,42 @@
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\profile\Entity\ProfileInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function living_spaces_users_user_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  if ($operation === 'delete') {
+    if (\Drupal::moduleHandler()->moduleExists('living_spaces_intranet')) {
+      /** @var \Drupal\user\UserInterface $current */
+      if (
+        ($current = \Drupal::entityTypeManager()->getStorage('user')->load($account->id())) &&
+        in_array('office_manager', $current->getRoles())
+      ) {
+        $own_spaces = $current->get('joined_spaces')->getValue();
+        $own_spaces = array_column($own_spaces, 'target_id');
+
+        if ($own_spaces && $entity->id() !== $account->id()) {
+          $user_spaces = $entity->get('joined_spaces')->getValue();
+          $user_spaces = array_column($user_spaces, 'target_id');
+
+          $same = array_intersect($own_spaces, $user_spaces);
+          foreach ($same as $group_id) {
+            /** @var \Drupal\group\Entity\GroupInterface $group */
+            $group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id);
+            if ($group->hasPermission('manage living space member account', $current)) {
+              return AccessResult::allowed();
+            }
+          }
+        }
+      }
+    }
+  }
+  return AccessResult::neutral();
+}
 
 /**
  * Implements hook_ENTITY_TYPE_access().
