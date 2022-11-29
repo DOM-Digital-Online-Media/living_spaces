@@ -42,6 +42,12 @@ default:
     -
       target_id: client_admin
     -
+      target_id: external_employee
+    -
+      target_id: former_employee
+    -
+      target_id: full_time_employee
+    -
       target_id: office_manager
   menu_item_override_children:
     -

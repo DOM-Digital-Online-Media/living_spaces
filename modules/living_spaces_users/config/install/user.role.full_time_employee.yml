@@ -8,4 +8,5 @@ id: full_time_employee
 label: 'Full-time employee'
 weight: 4
 is_admin: false
-permissions: {  }
+permissions:
+  - 'access living spaces overview'

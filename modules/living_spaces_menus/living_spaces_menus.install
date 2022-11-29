@@ -23,7 +23,6 @@ function living_spaces_menus_uninstall() {
   }
 }
 
-
 /**
  * Delete menu link content and update it from yml.
  */
@@ -36,5 +35,23 @@ function living_spaces_menus_update_9001() {
     \Drupal::service('default_content.importer')
       ->importContent('living_spaces_menus');
   } catch (Exception $e) {
+  }
+}
+
+/**
+ * Add new roles to menu item.
+ */
+function living_spaces_menus_update_9002(&$sandbox) {
+  $storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+  if ($items = $storage->loadByProperties(['uuid' => '4d89df5f-b766-4abc-a882-feeb218d61e2'])) {
+    $item = reset($items);
+
+    if ($roles = $item->get('menu_item_roles')->getValue()) {
+      $roles[] = ['target_id' => 'external_employee'];
+      $roles[] = ['target_id' => 'former_employee'];
+      $roles[] = ['target_id' => 'full_time_employee'];
+      $item->set('menu_item_roles', $roles);
+      $item->save();
+    }
   }
 }
