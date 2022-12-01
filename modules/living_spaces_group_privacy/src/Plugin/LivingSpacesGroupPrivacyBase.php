@@ -101,7 +101,23 @@ class LivingSpacesGroupPrivacyBase extends PluginBase implements LivingSpacesGro
    * {@inheritdoc}
    */
   public function groupAccess(GroupInterface $group, $operation, AccountInterface $account) {
-    $access = $group->hasPermission("{$operation} {$this->getPluginId()} group", $account);
+    $access = $account->hasPermission('bypass group access');
+
+    if (!$access) {
+      $access = $group->hasPermission('administer group', $account);
+    }
+    if (!$access) {
+      if ('update' == $operation) {
+        $access = $group->hasPermission('edit group', $account);
+      }
+      else {
+        $access = $group->hasPermission("{$operation} group", $account);
+      }
+    }
+    if (!$access) {
+      $access = $group->hasPermission("{$operation} {$this->getPluginId()} group", $account);
+    }
+
     return $access ? AccessResult::allowed() : AccessResult::forbidden();
   }
 
