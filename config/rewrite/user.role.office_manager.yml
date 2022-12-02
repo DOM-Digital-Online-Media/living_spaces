@@ -18,3 +18,4 @@ permissions:
   - 'view paragraph content agenda_item'
   - 'view paragraph content faq'
   - 'view user email addresses'
+  - 'delete shared offices space members'

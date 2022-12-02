@@ -16,14 +16,35 @@ use Drupal\user\Entity\User;
 /**
  * Implements hook_ENTITY_TYPE_access().
  */
+function living_spaces_users_user_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
 function living_spaces_intranet_user_access(EntityInterface $entity, $operation, AccountInterface $account) {
-  /** @var \Drupal\user\UserInterface $entity */
+  /** @var \Drupal\user\UserInterface $current */
   $current = User::load($account->id());
   $own_spaces = $current->get('joined_spaces')->getValue();
   $own_spaces = array_column($own_spaces, 'target_id');
   if ($own_spaces && ($entity->id() !== $account->id())) {
     $user_spaces = $entity->get('joined_spaces')->getValue();
     $user_spaces = array_column($user_spaces, 'target_id');
+
+    if (
+      ($operation === 'delete') &&
+      $current->hasPermission('delete shared offices space members')
+    ) {
+      $same = array_intersect($own_spaces, $user_spaces);
+      foreach ($same as $group_id) {
+        /** @var \Drupal\group\Entity\GroupInterface $group */
+        $group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id);
+        if ($group->hasPermission('manage living space member account', $current)) {
+          return AccessResult::allowed();
+        }
+      }
+    }
 
     $same = array_intersect($own_spaces, $user_spaces);
     if ($operation === 'view' && !empty($same)) {
