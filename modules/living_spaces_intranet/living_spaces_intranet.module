@@ -49,7 +49,11 @@ function living_spaces_intranet_user_access(EntityInterface $entity, $operation,
  */
 function living_spaces_intranet_query_entity_reference_alter(AlterableInterface $query) {
   $account = \Drupal::currentUser();
-  if ($account->hasPermission('manage living spaces')) {
+  if (
+    $account->hasPermission('manage living spaces') ||
+    $account->hasPermission('add members to any space') ||
+    $account->hasPermission('add members to administered space')
+  ) {
     return;
   }
 
