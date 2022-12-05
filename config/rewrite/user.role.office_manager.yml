@@ -3,6 +3,7 @@ permissions:
   - 'access content'
   - 'access employees overview'
   - 'access living spaces overview'
+  - 'add members to administered space'
   - 'create agenda content'
   - 'create paragraph content agenda_item'
   - 'delete own agenda content'
