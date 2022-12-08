@@ -49,6 +49,13 @@ function living_spaces_page_entity_base_field_info(EntityTypeInterface $entity_t
 }
 
 /**
+ * Implements hook_living_spaces_group_exclude_permissions().
+ */
+function living_spaces_page_living_spaces_group_exclude_permissions() {
+  return ['create page entities'];
+}
+
+/**
  * Implements hook_ENTITY_TYPE_access().
  */
 function living_spaces_page_node_access(NodeInterface $entity, $operation, AccountInterface $account) {
