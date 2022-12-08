@@ -284,13 +284,19 @@ function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE
   /** @var \Drupal\group\Entity\Storage\GroupRoleStorageInterface $role_storage */
   $role_storage = \Drupal::entityTypeManager()->getStorage('group_role');
   $roles = $role_storage->loadByUserAndGroup($user, $space);
-  $is_admin = FALSE;
+  $user_is_admin = FALSE;
   foreach ($roles as $role) {
-    $is_admin = $role->get('is_space_admin') ? TRUE : $is_admin;
+    $user_is_admin = $role->get('is_space_admin') ? TRUE : $user_is_admin;
   }
-  $route = $is_admin
+  $route = $user_is_admin
     ? 'living_spaces_group.remove_admin'
     : 'living_spaces_group.assign_admin';
+
+  $roles = $role_storage->loadByUserAndGroup($current_user, $space);
+  $current_is_admin = FALSE;
+  foreach ($roles as $role) {
+    $current_is_admin = $role->get('is_space_admin') ? TRUE : $current_is_admin;
+  }
 
   $links = [
     'view_profile' => [
@@ -305,7 +311,7 @@ function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE
   $cache = CacheableMetadata::createFromObject($current_user);
   $cache->applyTo($links['view_profile']);
   if ($space->getOwnerId() !== $user->id() &&
-    $space->hasPermission('manage space members', $current_user)
+    ($current_is_admin || $space->hasPermission('manage space members', $current_user))
   ) {
     $links['remove_from_space'] = [
       '#type' => 'link',
@@ -317,7 +323,7 @@ function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE
     ];
     $links['add_remove_admin'] = [
       '#type' => 'link',
-      '#title' => $is_admin ? t('Remove as Admin') : t('Add as Admin'),
+      '#title' => $user_is_admin ? t('Remove as Admin') : t('Add as Admin'),
       '#url' => Url::fromRoute($route, [
         'group' => $space->id(),
         'user' => $user->id(),
