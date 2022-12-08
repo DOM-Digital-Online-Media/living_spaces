@@ -1,3 +1,9 @@
 manage protected spaces:
   title: 'Manage protected spaces'
   description: 'Allow access to manage protected spaces'
+add members to any space:
+  title: 'Add members to any space'
+  description: 'Allow access to add members to any space'
+add members to administered space:
+  title: 'Add members to administered space'
+  description: 'Allow access to add members to administered space'
