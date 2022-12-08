@@ -9,6 +9,7 @@ permissions:
   - 'create paragraph content agenda_item'
   - 'delete own agenda content'
   - 'delete paragraph content agenda_item'
+  - 'delete shared offices space members'
   - 'edit own agenda content'
   - 'living space create employees'
   - 'select account cancellation method'
