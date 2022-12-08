@@ -43,7 +43,6 @@ class LivingSpacesGroupPermissionChecker implements GroupPermissionCheckerInterf
         $exclude = ['manage circle spaces', 'create page entities'];
         if (in_array('office_manager', $account->getRoles()) && !in_array($permission, $exclude)) {
           return TRUE;
-
         }
 
     return $this->originalService->hasPermissionInGroup($permission, $account, $group);
