@@ -5,6 +5,6 @@ services:
   living_spaces_group.checker_decorator:
     decorates: group_permission.checker
     class: Drupal\living_spaces_group\Access\LivingSpacesGroupPermissionChecker
-    arguments: ['@living_spaces_group.checker_decorator.inner', '@living_spaces_group.manager']
+    arguments: ['@living_spaces_group.checker_decorator.inner', '@living_spaces_group.manager', '@module_handler']
     public: false
     decoration_priority: 9

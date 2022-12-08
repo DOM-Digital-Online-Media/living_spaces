@@ -31,6 +31,13 @@ function living_spaces_circles_entity_base_field_info(EntityTypeInterface $entit
 }
 
 /**
+ * Implements hook_living_spaces_group_exclude_permissions().
+ */
+function living_spaces_circles_living_spaces_group_exclude_permissions() {
+  return ['manage circle spaces'];
+}
+
+/**
  * Implements hook_living_spaces_circles_actions_info().
  */
 function living_spaces_circles_living_spaces_circles_actions_info(GroupInterface $group, GroupInterface $circle) {
