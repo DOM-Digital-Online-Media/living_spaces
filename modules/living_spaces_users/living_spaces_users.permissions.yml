@@ -4,9 +4,3 @@ access employees overview:
 manage employee profiles:
   title: 'Access living spaces employee profiles'
   description: 'Allow access to manage employee profiles'
-add members to any space:
-  title: 'Add members to any space'
-  description: 'Allow access to add members to any space'
-add members to administered space:
-  title: 'Add members to administered space'
-  description: 'Allow access to add members to administered space'
