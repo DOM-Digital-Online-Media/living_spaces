@@ -250,7 +250,11 @@ class LivingSpacesGroupMembersBlock extends BlockBase implements ContainerFactor
         }
 
         if ($this->moduleHandler->moduleExists('living_spaces_circles') &&
-          ($current_is_admin || $this->currentUser->hasPermission('manage circle spaces'))
+          (
+            $current_is_admin ||
+            $this->currentUser->hasPermission('manage circle spaces') ||
+            $group->hasPermission('manage circle spaces', $this->currentUser)
+          )
         ) {
           $build['circle'] = $this->getCircleFormRender($group);
 

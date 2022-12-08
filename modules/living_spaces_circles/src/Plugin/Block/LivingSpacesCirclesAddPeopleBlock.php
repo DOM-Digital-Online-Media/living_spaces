@@ -73,6 +73,10 @@ class LivingSpacesCirclesAddPeopleBlock extends BlockBase implements ContainerFa
   public function blockAccess(AccountInterface $account) {
     $access = $account->hasPermission('manage circle spaces');
 
+    if (!$access && $group = $this->getContextValue('group')) {
+      $access = $group->hasPermission('manage circle spaces', $account);
+    }
+
     return $access ? AccessResult::allowed() : AccessResult::forbidden();
   }
 

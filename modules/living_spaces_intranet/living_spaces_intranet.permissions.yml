@@ -4,3 +4,6 @@ living space create employees:
 access intranet dashboard:
   title: 'Access intranet dashboard'
   description: 'Allow access intranet dashboard'
+delete shared offices space members:
+  title: 'Delete shared office space members'
+  description: 'Delete account of a shared office space'
