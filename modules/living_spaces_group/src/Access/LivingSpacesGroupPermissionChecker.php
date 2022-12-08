@@ -39,7 +39,7 @@ class LivingSpacesGroupPermissionChecker implements GroupPermissionCheckerInterf
    */
   public function hasPermissionInGroup($permission, AccountInterface $account, GroupInterface $group) {
     if ($this->livingSpacesMananger->isLivingSpace($group->bundle())) {
-      if (in_array('office_manager', $account->getRoles())) {
+      if (in_array('office_manager', $account->getRoles()) && 'manage circle spaces' != $permission) {
         return TRUE;
       }
     }
