@@ -50,7 +50,7 @@ living_spaces_group.create_content:
     _title: 'Create content'
     _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupCreateContentController::createContent'
   requirements:
-    _permission: 'manage living spaces'
+    _custom_access: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupCreateContentController::access'
   options:
     parameters:
       group:
