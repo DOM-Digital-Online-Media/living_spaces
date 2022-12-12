@@ -9,6 +9,7 @@ use Drupal\group\Plugin\GroupContentEnablerManagerInterface;
 use Drupal\group\Entity\GroupInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * LivingSpacesGroupCreateContentController class.
@@ -93,6 +94,19 @@ class LivingSpacesGroupCreateContentController extends ControllerBase {
     $build['#cache']['tags'] = $bundle_entity_type->getListCacheTags();
 
     return $build;
+  }
+
+  /**
+   * Access callback for 'plugin content links' route.
+   */
+  public function access(GroupInterface $group, $plugin) {
+    $access = $this->currentUser()->hasPermission('manage living spaces');
+
+    if (!$access) {
+      $access = $group->hasPermission('manage living spaces', $this->currentUser());
+    }
+
+    return $access ? AccessResult::allowed() : AccessResult::forbidden();
   }
 
 }

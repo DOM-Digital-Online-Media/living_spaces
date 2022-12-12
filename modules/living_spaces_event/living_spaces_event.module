@@ -78,6 +78,32 @@ function living_spaces_event_entity_base_field_info(EntityTypeInterface $entity_
 }
 
 /**
+ * Implements hook_living_spaces_group_exclude_permissions().
+ */
+function living_spaces_event_living_spaces_group_exclude_permissions() {
+  $result = [];
+
+  $permissions = [
+    'create living_spaces_event:@bundle entity',
+    'delete any living_spaces_event:@bundle entity',
+    'delete own living_spaces_event:@bundle entity',
+    'update any living_spaces_event:@bundle entity',
+    'update own living_spaces_event:@bundle entity',
+    'view living_spaces_event:@bundle entity',
+    'view unpublished living_spaces_event:@bundle entity',
+  ];
+
+  $event_types = \Drupal::entityTypeManager()->getStorage('living_spaces_event_type')->loadMultiple();
+  foreach ($event_types as $bundle => $event_type) {
+    foreach ($permissions as $permission) {
+      $result[] = str_replace('@bundle', $bundle, $permission);
+    }
+  }
+
+  return $result;
+}
+
+/**
  * Implements hook_ENTITY_TYPE_insert().
  */
 function living_spaces_event_group_content_insert(GroupContentInterface $entity) {
