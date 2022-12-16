@@ -472,3 +472,12 @@ function living_spaces_group_update_joined_spaces(UserInterface $user) {
   $user->set('joined_spaces', $gids);
   $user->save();
 }
+
+/**
+ * Implements hook_living_spaces_group_exclude_permissions().
+ */
+function living_spaces_group_living_spaces_group_exclude_permissions() {
+  $permissions = ['administer members', 'manage space members'];
+
+  return $permissions;
+}
