@@ -123,8 +123,10 @@ function living_spaces_default_group_prepare_form(GroupInterface $group, $operat
       $gid = reset($gids);
       $template = $group_manager->load($gid);
 
+      /** @var \Drupal\group\Entity\GroupInterface $group */
       $group = $template->createDuplicate();
       \Drupal::moduleHandler()->invokeAll('living_spaces_default_create', [$group, $template]);
+      $group->setOwnerId(\Drupal::currentUser()->id());
 
       $object = $form_state->getFormObject();
       $object->setEntity($group);

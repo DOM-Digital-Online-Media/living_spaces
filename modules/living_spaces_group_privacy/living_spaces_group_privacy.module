@@ -84,7 +84,30 @@ function living_spaces_group_privacy_entity_base_field_info_alter(&$fields, Enti
  * Implements hook_form_FORM_ID_alter().
  */
 function living_spaces_group_privacy_form_group_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $form['living_space_privacy']['#access'] = \Drupal::currentUser()->hasPermission('access living spaces privacy');
+  $user = \Drupal::currentUser();
+  $access = $user->hasPermission('access living spaces privacy');
+
+  $uuid = \Drupal::request()->query->get('space');
+  if (!$access && !empty($uuid)) {
+    $group_manager = \Drupal::entityTypeManager()->getStorage('group');
+    $query = $group_manager->getQuery();
+    $query->condition('uuid', $uuid);
+    $query->accessCheck(FALSE);
+
+    if ($gids = $query->execute()) {
+      $gid = reset($gids);
+      /** @var \Drupal\group\Entity\GroupInterface $group */
+      $group = $group_manager->load($gid);
+
+      $access = $group->hasPermission('access living spaces privacy', $user);
+    }
+  }
+
+  if (!$access && $group = $form_state->getFormObject()->getEntity()) {
+    $access = $group->hasPermission('access living spaces privacy', $user);
+  }
+
+  $form['living_space_privacy']['#access'] = $access;
 }
 
 /**
