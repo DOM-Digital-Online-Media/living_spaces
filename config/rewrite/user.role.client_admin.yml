@@ -16,6 +16,7 @@ permissions:
   - 'delete any discussion_post content'
   - 'delete own discussion_post content'
   - 'delete paragraph content agenda_item'
+  - 'delete shared offices space members'
   - 'edit any agenda content'
   - 'edit any discussion_post content'
   - 'edit own agenda content'

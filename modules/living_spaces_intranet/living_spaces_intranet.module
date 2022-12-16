@@ -16,13 +16,6 @@ use Drupal\user\Entity\User;
 /**
  * Implements hook_ENTITY_TYPE_access().
  */
-function living_spaces_users_user_access(EntityInterface $entity, $operation, AccountInterface $account) {
-  return AccessResult::neutral();
-}
-
-/**
- * Implements hook_ENTITY_TYPE_access().
- */
 function living_spaces_intranet_user_access(EntityInterface $entity, $operation, AccountInterface $account) {
   /** @var \Drupal\user\UserInterface $current */
   $current = User::load($account->id());
