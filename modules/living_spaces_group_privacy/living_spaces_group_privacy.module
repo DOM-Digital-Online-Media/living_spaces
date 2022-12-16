@@ -103,6 +103,10 @@ function living_spaces_group_privacy_form_group_form_alter(&$form, FormStateInte
     }
   }
 
+  if (!$access && $group = $form_state->getFormObject()->getEntity()) {
+    $access = $group->hasPermission('access living spaces privacy', $user);
+  }
+
   $form['living_space_privacy']['#access'] = $access;
 }
 
