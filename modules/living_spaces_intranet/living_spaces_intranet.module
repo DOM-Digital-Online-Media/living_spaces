@@ -190,6 +190,21 @@ function living_spaces_intranet_form_alter(&$form, FormStateInterface $form_stat
 }
 
 /**
+ * Implements hook_entity_field_access_alter().
+ */
+function living_spaces_intranet_entity_field_access_alter(array &$grants, array $context) {
+  /** @var \Drupal\Core\Field\FieldDefinitionInterface $field_definition */
+  $field_definition = $context['field_definition'];
+
+  if ('user' == $field_definition->getTargetEntityTypeId() &&
+    'status' == $field_definition->getName() &&
+    \Drupal::currentUser()->hasPermission('administer permissions')
+  ) {
+    $grants['living_spaces_intranet'] = AccessResult::allowed();
+  }
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function living_spaces_intranet_form_user_employee_form_alter(&$form, FormStateInterface $form_state, $form_id) {
