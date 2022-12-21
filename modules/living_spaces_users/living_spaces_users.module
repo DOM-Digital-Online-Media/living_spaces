@@ -7,10 +7,70 @@
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\profile\Entity\ProfileInterface;
 
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function living_spaces_users_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $current_user = \Drupal::currentUser();
+
+  if (isset($form['account']['roles']) && $current_user->hasPermission('administer permissions')) {
+    $weights = living_spaces_users_get_role_weights();
+    $current_user_level = living_spaces_users_get_user_level($current_user, $weights);
+
+    /** @var \Drupal\user\UserInterface $user */
+    $user = $form_state->getFormObject()->getEntity();
+    $user_level = living_spaces_users_get_user_level($user, $weights);
+
+    $access = $current_user_level < $user_level;
+    $form['account']['roles']['#access'] = $access;
+  }
+}
+
+/**
+ * Helper to get user role weights.
+ */
+function living_spaces_users_get_role_weights() {
+  $weights = [];
+  $storage = \Drupal::entityTypeManager()->getStorage('user_role');
+
+  /** @var \Drupal\user\RoleInterface $name */
+  foreach ($storage->loadMultiple() as $name => $role) {
+    $weights[$name] = $role->getWeight();
+  }
+
+  return $weights;
+}
+
+/**
+ * Helper to get user level.
+ */
+function living_spaces_users_get_user_level(AccountInterface $account, $weights = []) {
+  $level = 100;
+
+  if (empty($weights)) {
+    $storage = \Drupal::entityTypeManager()->getStorage('user_role');
+
+    /** @var \Drupal\user\RoleInterface $name */
+    foreach ($storage->loadMultiple() as $name => $role) {
+      $weights[$name] = $role->getWeight();
+    }
+  }
+
+  if ($account) {
+    foreach ($account->getRoles() as $role) {
+      if (isset($weights[$role]) && $weights[$role] < $level) {
+        $level = $weights[$role];
+      }
+    }
+  }
+
+  return $level;
+}
 
 /**
  * Implements hook_ENTITY_TYPE_access().
