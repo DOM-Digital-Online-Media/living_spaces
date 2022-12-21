@@ -51,21 +51,11 @@ function living_spaces_users_get_role_weights() {
  */
 function living_spaces_users_get_user_level(AccountInterface $account, $weights = []) {
   $level = 100;
+  $weights = empty($weights) ? living_spaces_users_get_role_weights() : $weights;
 
-  if (empty($weights)) {
-    $storage = \Drupal::entityTypeManager()->getStorage('user_role');
-
-    /** @var \Drupal\user\RoleInterface $name */
-    foreach ($storage->loadMultiple() as $name => $role) {
-      $weights[$name] = $role->getWeight();
-    }
-  }
-
-  if ($account) {
-    foreach ($account->getRoles() as $role) {
-      if (isset($weights[$role]) && $weights[$role] < $level) {
-        $level = $weights[$role];
-      }
+  foreach ($account->getRoles() as $role) {
+    if (isset($weights[$role]) && $weights[$role] < $level) {
+      $level = $weights[$role];
     }
   }
 
