@@ -4,3 +4,9 @@ access employees overview:
 manage employee profiles:
   title: 'Access living spaces employee profiles'
   description: 'Allow access to manage employee profiles'
+change any passwords:
+  title: 'Access to change any passwords'
+  description: 'Allow access to change any passwords'
+change member passwords:
+  title: 'Access to change member passwords'
+  description: 'Allow access to change member passwords'

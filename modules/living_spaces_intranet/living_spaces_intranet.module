@@ -19,6 +19,18 @@ use Drupal\user\Entity\User;
 function living_spaces_intranet_user_access(EntityInterface $entity, $operation, AccountInterface $account) {
   /** @var \Drupal\user\UserInterface $current */
   $current = User::load($account->id());
+
+  /** @var \Drupal\user\UserInterface $entity */
+  if ($operation === 'delete' && in_array('client_admin', $current->getRoles())) {
+    $weights = living_spaces_users_get_role_weights();
+    $current_user_level = living_spaces_users_get_user_level($current, $weights);
+    $user_level = living_spaces_users_get_user_level($entity, $weights);
+    // Disable access to delete if user has higher weight than current user.
+    if ($current_user_level < $user_level) {
+      return AccessResult::forbidden();
+    }
+  }
+
   $own_spaces = $current->get('joined_spaces')->getValue();
   $own_spaces = array_column($own_spaces, 'target_id');
   if ($own_spaces && ($entity->id() !== $account->id())) {
