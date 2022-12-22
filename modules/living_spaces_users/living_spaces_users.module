@@ -36,8 +36,25 @@ function living_spaces_users_form_user_form_alter(&$form, FormStateInterface $fo
     if ($current_user->hasPermission('change any passwords')) {
       $access = TRUE;
     }
+
     if (!$access && $current_user->id() == $user->id()) {
       $access = TRUE;
+    }
+
+    if (!$access && $current_user->hasPermission('change member passwords')) {
+      $current = \Drupal::entityTypeManager()->getStorage('user')->load($current_user->id());
+      $own_spaces = $current->get('joined_spaces')->getValue();
+      $own_spaces = array_column($own_spaces, 'target_id');
+
+      if ($own_spaces) {
+        $user_spaces = $user->get('joined_spaces')->getValue();
+        $user_spaces = array_column($user_spaces, 'target_id');
+
+        $exist = array_intersect($own_spaces, $user_spaces);
+        if (!empty($exist)) {
+          $access = TRUE;
+        }
+      }
     }
 
     $form['account']['pass']['#access'] = $access;
