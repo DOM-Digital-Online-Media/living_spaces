@@ -13,6 +13,17 @@ use Drupal\Core\Url;
 use Drupal\profile\Entity\ProfileInterface;
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function living_spaces_users_module_implements_alter(&$implementations, $hook) {
+  if ('form_alter' == $hook && isset($implementations['living_spaces_users'])) {
+    $group = $implementations['living_spaces_users'];
+    unset($implementations['living_spaces_users']);
+    $implementations['living_spaces_users'] = $group;
+  }
+}
+
+/**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function living_spaces_users_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
