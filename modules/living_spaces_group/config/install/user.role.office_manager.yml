@@ -10,5 +10,6 @@ weight: 10
 is_admin: false
 permissions:
   - 'access living spaces overview'
+  - 'change member passwords'
   - 'create living_space group'
   - 'administer permissions'

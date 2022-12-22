@@ -10,4 +10,5 @@ weight: 3
 is_admin: false
 permissions:
   - 'administer users'
+  - 'change any passwords'
   - 'manage living spaces sections settings'
