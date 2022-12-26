@@ -51,10 +51,14 @@ class LivingSpacesBansManager implements LivingSpacesBansManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function getUserBans(AccountInterface $user): array {
+  public function getUserBans(AccountInterface $user, array $types = []): array {
     $storage = $this->entityTypeManager->getStorage('living_spaces_ban');
     $query = $storage->getQuery();
     $query->condition('target_user', $user->id());
+
+    if ($types) {
+      $query->condition('type', $types, 'IN');
+    }
 
     if ($results = $query->execute()) {
       return $storage->loadMultiple($results);
