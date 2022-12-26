@@ -4,7 +4,6 @@ namespace Drupal\living_spaces_intranet;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Component\Datetime\TimeInterface;
 
 /**
  * Manager for ban related methods.
@@ -26,26 +25,16 @@ class LivingSpacesBansManager implements LivingSpacesBansManagerInterface {
   protected $currentUser;
 
   /**
-   * Returns the time service.
-   *
-   * @var \Drupal\Component\Datetime\TimeInterface
-   */
-  protected $time;
-
-  /**
    * LivingSpacesBansManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Provides an interface for entity type managers.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   Defines an account interface which represents the current user.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   Defines an interface for obtaining system time.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, TimeInterface $time) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user) {
     $this->entityTypeManager = $entity_type_manager;
     $this->currentUser = $current_user;
-    $this->time = $time;
   }
 
   /**
@@ -55,6 +44,7 @@ class LivingSpacesBansManager implements LivingSpacesBansManagerInterface {
     $storage = $this->entityTypeManager->getStorage('living_spaces_ban');
     $query = $storage->getQuery();
     $query->condition('target_user', $user->id());
+    $query->condition('expire', $this->time->getRequestTime(), '>');
 
     if ($types) {
       $query->condition('type', $types, 'IN');
@@ -74,7 +64,7 @@ class LivingSpacesBansManager implements LivingSpacesBansManagerInterface {
     $bundle = !empty($data['bundle']) ? $data['bundle'] : 'global';
 
     if ($this->currentUser->hasPermission('administer ban') ||
-      $this->currentUser->hasPermission('create ' . $bundle . ' ban')
+      $this->currentUser->hasPermission("create {$bundle} ban")
     ) {
       $storage = $this->entityTypeManager->getStorage('living_spaces_ban');
 
@@ -82,7 +72,7 @@ class LivingSpacesBansManager implements LivingSpacesBansManagerInterface {
         'type' => $bundle,
         'target_user' => $user->id(),
         'title' => !empty($data['reason']) ? $data['reason'] : "Ban {$user->id()}",
-        'expire' => !empty($data['expire']) ? $data['expire'] : $this->time->getRequestTime(),
+        'expire' => !empty($data['expire']) ? $data['expire'] : strtotime('+2 days'),
       ]);
       $ban->save();
     }
