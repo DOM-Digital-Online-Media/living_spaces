@@ -1,3 +1,7 @@
+aadminister ban:
+  title: 'Administer bans'
+  description: 'Gain full control over all ban configuration.'
+  restrict access: TRUE
 living space create employees:
   title: 'Access create employees form'
   description: 'Allow access to create employees form'
