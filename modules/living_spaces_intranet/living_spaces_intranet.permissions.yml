@@ -11,3 +11,6 @@ access intranet dashboard:
 delete shared offices space members:
   title: 'Delete shared office space members'
   description: 'Delete account of a shared office space'
+
+permission_callbacks:
+  - '\Drupal\living_spaces_intranet\Access\LivingSpacesBanPermissions::banPermissions'
