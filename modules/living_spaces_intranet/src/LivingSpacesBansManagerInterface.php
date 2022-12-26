@@ -32,4 +32,14 @@ interface LivingSpacesBansManagerInterface {
    */
   public function setUserBan(AccountInterface $user, array $data);
 
+  /**
+   * Removes user bans.
+   *
+   * @param AccountInterface $user
+   *   User entity.
+   * @param array $types
+   *   An array of ban bundles.
+   */
+  public function deleteUserBans(AccountInterface $user, array $types = []);
+
 }

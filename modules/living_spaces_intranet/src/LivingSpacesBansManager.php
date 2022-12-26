@@ -71,10 +71,20 @@ class LivingSpacesBansManager implements LivingSpacesBansManagerInterface {
       $ban = $storage->create([
         'type' => $bundle,
         'target_user' => $user->id(),
-        'title' => !empty($data['reason']) ? $data['reason'] : "Ban {$user->id()}",
+        'title' => !empty($data['reason']) ? $data['reason'] : "{$bundle} ban {$user->getDisplayName()}",
         'expire' => !empty($data['expire']) ? $data['expire'] : strtotime('+2 days'),
       ]);
       $ban->save();
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function deleteUserBans(AccountInterface $user, array $types = []) {
+    if ($bans = $this->getUserBans($user, $types)) {
+      $storage = $this->entityTypeManager->getStorage('living_spaces_ban');
+      $storage->delete($bans);
     }
   }
 
