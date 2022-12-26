@@ -24,7 +24,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *     },
  *   },
  *   config_prefix = "living_spaces_ban_type",
- *   admin_permission = "aadminister ban",
+ *   admin_permission = "administer ban",
  *   bundle_of = "living_spaces_ban",
  *   entity_keys = {
  *     "id" = "id",
