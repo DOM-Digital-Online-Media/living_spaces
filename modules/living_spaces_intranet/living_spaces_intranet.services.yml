@@ -1,4 +1,4 @@
 services:
   living_spaces_bans.manager:
     class: Drupal\living_spaces_intranet\LivingSpacesBansManager
-    arguments: ['@entity_type.manager', '@current_user']
+    arguments: ['@entity_type.manager', '@current_user', '@datetime.time']

@@ -4,6 +4,7 @@ namespace Drupal\living_spaces_intranet;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Component\Datetime\TimeInterface;
 
 /**
  * Manager for ban related methods.
@@ -25,16 +26,26 @@ class LivingSpacesBansManager implements LivingSpacesBansManagerInterface {
   protected $currentUser;
 
   /**
+   * Returns the time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $time;
+
+  /**
    * LivingSpacesBansManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Provides an interface for entity type managers.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   Defines an account interface which represents the current user.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   Defines an interface for obtaining system time.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, TimeInterface $time) {
     $this->entityTypeManager = $entity_type_manager;
     $this->currentUser = $current_user;
+    $this->time = $time;
   }
 
   /**
