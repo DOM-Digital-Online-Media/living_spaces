@@ -14,6 +14,23 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\user\Entity\User;
 
 /**
+ * Implements hook_cron().
+ */
+function living_spaces_intranet_cron() {
+  $storage = \Drupal::entityTypeManager()->getStorage('living_spaces_ban');
+
+  $query = $storage->getQuery();
+  $query->condition('expire', \Drupal::time()->getRequestTime(), '<');
+  $query->accessCheck(FALSE);
+  $query->range(0, 40);
+
+  if ($ids = $query->execute()) {
+    $bans = $storage->loadMultiple($ids);
+    $storage->delete($bans);
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_access().
  */
 function living_spaces_intranet_user_access(EntityInterface $entity, $operation, AccountInterface $account) {

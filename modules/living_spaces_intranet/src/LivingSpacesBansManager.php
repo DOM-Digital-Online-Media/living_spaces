@@ -56,6 +56,7 @@ class LivingSpacesBansManager implements LivingSpacesBansManagerInterface {
     $query = $storage->getQuery();
     $query->condition('target_user', $user->id());
     $query->condition('expire', $this->time->getRequestTime(), '>');
+    $query->accessCheck(FALSE);
 
     if ($types) {
       $query->condition('type', $types, 'IN');
