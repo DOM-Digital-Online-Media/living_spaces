@@ -5,3 +5,14 @@ living_spaces_intranet.create_employees:
     _title: 'Create employees'
   requirements:
     _permission: 'living space create employees'
+living_spaces_intranet.ban:
+  path: '/user-ban/{user}/{type}/{length}'
+  defaults:
+    _controller: '\Drupal\living_spaces_intranet\Controller\LivingSpacesBan::ban'
+    _title: 'Close chat appointment'
+  requirements:
+    _permission: 'administer ban'
+  options:
+    parameters:
+      user:
+        type: entity:user
