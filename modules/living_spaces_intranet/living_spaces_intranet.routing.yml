@@ -9,7 +9,7 @@ living_spaces_intranet.ban:
   path: '/user-ban/{user}/{type}/{length}'
   defaults:
     _controller: '\Drupal\living_spaces_intranet\Controller\LivingSpacesBan::ban'
-    _title: 'Close chat appointment'
+    _title: 'Ban user'
   requirements:
     _permission: 'administer ban'
   options:
