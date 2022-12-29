@@ -29,10 +29,8 @@ interface LivingSpacesBansManagerInterface {
    *   User entity.
    * @param array $data
    *   Array of values.
-   * @param bool $recreate
-   *   Indicate to remove of existing bans.
    */
-  public function setUserBan(AccountInterface $user, array $data, $recreate = FALSE);
+  public function setUserBan(AccountInterface $user, array $data);
 
   /**
    * Removes user bans.

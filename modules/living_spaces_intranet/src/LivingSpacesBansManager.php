@@ -72,17 +72,15 @@ class LivingSpacesBansManager implements LivingSpacesBansManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function setUserBan(AccountInterface $user, array $data, $recreate = FALSE) {
+  public function setUserBan(AccountInterface $user, array $data) {
     $bundle = !empty($data['bundle']) ? $data['bundle'] : 'global';
 
     if ($this->currentUser->hasPermission('administer ban') ||
       $this->currentUser->hasPermission("create {$bundle} ban")
     ) {
+      // Delete old bans for the same type.
+      $this->deleteUserBans($user, [$bundle]);
       $storage = $this->entityTypeManager->getStorage('living_spaces_ban');
-
-      if ($recreate) {
-        $this->deleteUserBans($user, [$bundle]);
-      }
 
       $ban = $storage->create([
         'type' => $bundle,

@@ -56,28 +56,28 @@ class LivingSpacesBan extends ControllerBase {
    * Callback for 'ban user' route.
    */
   public function ban(AccountInterface $user, $type, $length) {
-    switch ($type) {
-      case 'ban':
-        $data = [
-          'bundle' => $type,
-          'expire' => $length,
-        ];
-        $this->banManager->setUserBan($user, $data);
-        break;
+    $data = [
+      'bundle' => $type,
+      'expire' => $length,
+    ];
+    $this->banManager->setUserBan($user, $data);
 
-      case 'unban':
-        $this->banManager->deleteUserBans($user, [$type]);
-        break;
+    $query = $this->requestStack->getCurrentRequest()->query;
 
-      case 'extend':
-        $data = [
-          'bundle' => $type,
-          'expire' => $length,
-        ];
-        $this->banManager->setUserBan($user, $data, TRUE);
-        break;
-
+    if ($query->has('destination')) {
+      $query->get('destination');
+      return new RedirectResponse($query->get('destination'));
     }
+
+    $url = Url::fromRoute('<front>');
+    return new RedirectResponse($url->toString());
+  }
+
+  /**
+   * Callback for 'unban user' route.
+   */
+  public function unban(AccountInterface $user, $type) {
+    $this->banManager->deleteUserBans($user, [$type]);
 
     $query = $this->requestStack->getCurrentRequest()->query;
 

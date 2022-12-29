@@ -16,3 +16,14 @@ living_spaces_intranet.ban:
     parameters:
       user:
         type: entity:user
+living_spaces_intranet.unban:
+  path: '/user-unban/{user}/{type}'
+  defaults:
+    _controller: '\Drupal\living_spaces_intranet\Controller\LivingSpacesBan::unban'
+    _title: 'Unban user'
+  requirements:
+    _permission: 'administer ban'
+  options:
+    parameters:
+      user:
+        type: entity:user
