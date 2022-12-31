@@ -1,0 +1,42 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.message.field_related_space
+    - group.type.chat_counseling
+    - group.type.circle
+    - group.type.department
+    - group.type.living_space
+    - group.type.mail_counseling
+    - group.type.on_site_counseling
+    - group.type.project_space
+    - group.type.telephone_counseling
+    - message.template.group_member_added
+id: message.group_member_added.field_related_space
+field_name: field_related_space
+entity_type: message
+bundle: group_member_added
+label: 'Related Space'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:group'
+  handler_settings:
+    target_bundles:
+      chat_counseling: chat_counseling
+      circle: circle
+      department: department
+      mail_counseling: mail_counseling
+      on_site_counseling: on_site_counseling
+      project_space: project_space
+      living_space: living_space
+      telephone_counseling: telephone_counseling
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: chat_counseling
+field_type: entity_reference

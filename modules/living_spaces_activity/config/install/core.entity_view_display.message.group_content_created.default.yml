@@ -3,26 +3,37 @@ status: true
 dependencies:
   config:
     - field.field.message.group_content_created.field_group_content
+    - field.field.message.group_content_created.field_related_space
     - message.template.group_content_created
   module:
     - user
+_core:
+  default_config_hash: n210nev18vUeyrECR2Rqxr7Gqkw-AyFgkB6wtp9ku30
 id: message.group_content_created.default
 targetEntityType: message
 bundle: group_content_created
 mode: default
 content:
   field_group_content:
-    weight: 1
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
+    weight: 1
+    region: content
+  field_related_space:
     type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
     region: content
   partial_0:
-    weight: 0
     settings: {  }
     third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   search_api_excerpt: true

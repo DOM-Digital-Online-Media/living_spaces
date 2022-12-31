@@ -103,6 +103,7 @@ function living_spaces_activity_form_message_template_form_alter(&$form, FormSta
  */
 function living_spaces_activity_group_content_insert(GroupContentInterface $content) {
   // @todo add check is content type is among field target bundles.
+  $space = \Drupal::request()->query->get('space');
   if ('group_membership' == $content->getContentPlugin()->getBaseId()) {
     /** @var \Drupal\message\Entity\Message $message */
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
@@ -110,6 +111,7 @@ function living_spaces_activity_group_content_insert(GroupContentInterface $cont
       'uid' => $content->getEntity()->id(),
       'field_group_content' => $content->id(),
       'field_group_label' => $content->getGroup()->label(),
+      'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
   }
@@ -118,6 +120,7 @@ function living_spaces_activity_group_content_insert(GroupContentInterface $cont
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'group_content_created',
       'field_group_content' => $content->id(),
+      'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
   }
@@ -128,11 +131,13 @@ function living_spaces_activity_group_content_insert(GroupContentInterface $cont
  */
 function living_spaces_activity_group_content_update(GroupContentInterface $content) {
   // @todo add check is content type is among field target bundles.
+  $space = \Drupal::request()->query->get('space');
   if ('group_membership' != $content->getContentPlugin()->getBaseId()) {
     /** @var \Drupal\message\Entity\Message $message */
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'group_content_updated',
       'field_group_content' => $content->id(),
+      'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
   }
@@ -143,12 +148,14 @@ function living_spaces_activity_group_content_update(GroupContentInterface $cont
  */
 function living_spaces_activity_group_content_delete(GroupContentInterface $content) {
   // @todo add check is content type is among field target bundles.
+  $space = \Drupal::request()->query->get('space');
   if ('group_membership' == $content->getContentPlugin()->getBaseId() && $content->getEntity()) {
     /** @var \Drupal\message\Entity\Message $message */
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'group_member_removed',
       'uid' => $content->getEntity()->id(),
       'field_group_label' => $content->getGroup()->label(),
+      'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
   }
