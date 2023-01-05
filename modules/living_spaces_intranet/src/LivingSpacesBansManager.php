@@ -26,7 +26,7 @@ class LivingSpacesBansManager implements LivingSpacesBansManagerInterface {
   protected $currentUser;
 
   /**
-   * Returns the time service.
+   * Returns the datetime.time service.
    *
    * @var \Drupal\Component\Datetime\TimeInterface
    */
