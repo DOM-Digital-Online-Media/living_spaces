@@ -125,10 +125,11 @@ function living_spaces_page_node_access(NodeInterface $entity, $operation, Accou
 function living_spaces_page_node_insert(NodeInterface $entity) {
   if ('page' == $entity->bundle()) {
     living_spaces_page_attach_page($entity);
-
+    $space = \Drupal::request()->query->get('space');
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'page_created',
       'field_page' => $entity->id(),
+      'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
   }
@@ -140,10 +141,11 @@ function living_spaces_page_node_insert(NodeInterface $entity) {
 function living_spaces_page_node_update(NodeInterface $entity) {
   if ('page' == $entity->bundle()) {
     living_spaces_page_attach_page($entity);
-
+    $space = \Drupal::request()->query->get('space');
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'page_updated',
       'field_page' => $entity->id(),
+      'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
   }

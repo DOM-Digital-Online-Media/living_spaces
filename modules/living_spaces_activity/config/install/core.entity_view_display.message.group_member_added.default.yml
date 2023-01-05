@@ -4,34 +4,45 @@ dependencies:
   config:
     - field.field.message.group_member_added.field_group_content
     - field.field.message.group_member_added.field_group_label
+    - field.field.message.group_member_added.field_related_space
     - message.template.group_member_added
   module:
     - user
+_core:
+  default_config_hash: MlUA4dalTUfmcq0Wybo6hrQgKbQSjYYeqtWrVG94IP8
 id: message.group_member_added.default
 targetEntityType: message
 bundle: group_member_added
 mode: default
 content:
   field_group_content:
-    weight: 1
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 1
     region: content
   field_group_label:
-    weight: 2
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 2
+    region: content
+  field_related_space:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
     region: content
   partial_0:
-    weight: 0
     settings: {  }
     third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   search_api_excerpt: true

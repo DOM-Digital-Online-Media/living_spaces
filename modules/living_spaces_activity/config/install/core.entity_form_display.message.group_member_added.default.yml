@@ -4,7 +4,10 @@ dependencies:
   config:
     - field.field.message.group_member_added.field_group_content
     - field.field.message.group_member_added.field_group_label
+    - field.field.message.group_member_added.field_related_space
     - message.template.group_member_added
+_core:
+  default_config_hash: Nms9yoCCdIi8GmePlchxii7oWT7kABc13UF4G6I3W8c
 id: message.group_member_added.default
 targetEntityType: message
 bundle: group_member_added
@@ -17,32 +20,42 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_group_content:
+    type: entity_reference_autocomplete
     weight: 12
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   field_group_label:
+    type: string_textfield
     weight: 13
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
+  field_related_space:
+    type: entity_reference_autocomplete
+    weight: 14
     region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
     weight: 5
-    '#group': advanced
+    region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
-      match_limit: 10
-    region: content
     third_party_settings: {  }
+    '#group': advanced
 hidden: {  }
