@@ -261,11 +261,6 @@ function living_spaces_intranet_employee_form_submit($form, FormStateInterface $
  */
 function living_spaces_intranet_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 
-  if ($form_id === 'user_employee_form' && isset($form['preferred_spaces'])) {
-    // Hide 'preferred_spaces' field on create form.
-    $form['preferred_spaces']['#access'] = FALSE;
-  }
-
   if (isset($form['account']['roles']['#options']) && \Drupal::hasService('delegatable_roles')) {
     // Set options of available roles for current user.
     $current_user = \Drupal::currentUser();
