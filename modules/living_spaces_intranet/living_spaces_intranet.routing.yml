@@ -11,7 +11,7 @@ living_spaces_intranet.ban:
     _controller: '\Drupal\living_spaces_intranet\Controller\LivingSpacesBan::ban'
     _title: 'Ban user'
   requirements:
-    _permission: 'administer ban'
+    _custom_access: '\Drupal\living_spaces_intranet\Controller\LivingSpacesBan::banAccess'
   options:
     parameters:
       user:
@@ -22,7 +22,7 @@ living_spaces_intranet.unban:
     _controller: '\Drupal\living_spaces_intranet\Controller\LivingSpacesBan::unban'
     _title: 'Unban user'
   requirements:
-    _permission: 'administer ban'
+    _custom_access: '\Drupal\living_spaces_intranet\Controller\LivingSpacesBan::unbanAccess'
   options:
     parameters:
       user:

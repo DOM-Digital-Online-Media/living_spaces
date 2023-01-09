@@ -2,6 +2,7 @@
 
 namespace Drupal\living_spaces_intranet\Controller;
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -74,6 +75,16 @@ class LivingSpacesBan extends ControllerBase {
   }
 
   /**
+   * Access callback for 'ban user' route.
+   */
+  public function banAccess(AccountInterface $user, $type, $length) {
+    $access = $this->currentUser()->hasPermission('administer ban') ||
+      $this->currentUser()->hasPermission("create {$type} ban");
+
+    return $access ? AccessResult::allowed() : AccessResult::forbidden();
+  }
+
+  /**
    * Callback for 'unban user' route.
    */
   public function unban(AccountInterface $user, $type) {
@@ -88,6 +99,16 @@ class LivingSpacesBan extends ControllerBase {
 
     $url = Url::fromRoute('<front>');
     return new RedirectResponse($url->toString());
+  }
+
+  /**
+   * Access callback for 'unban user' route.
+   */
+  public function unbanAccess(AccountInterface $user, $type, $length) {
+    $access = $this->currentUser()->hasPermission('administer ban') ||
+      $this->currentUser()->hasPermission("delete {$type} ban");
+
+    return $access ? AccessResult::allowed() : AccessResult::forbidden();
   }
 
 }
