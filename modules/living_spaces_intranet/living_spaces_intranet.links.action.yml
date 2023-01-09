@@ -1,0 +1,11 @@
+living_spaces_intranet.add_ban:
+  route_name: 'entity.living_spaces_ban.add_page'
+  title: 'Add ban'
+  appears_on:
+    - 'entity.living_spaces_ban.collection'
+
+living_spaces_intranet.add_ban_type:
+  route_name: 'entity.living_spaces_ban_type.add_form'
+  title: 'Add ban type'
+  appears_on:
+    - 'entity.living_spaces_ban_type.collection'
