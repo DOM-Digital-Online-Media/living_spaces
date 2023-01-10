@@ -843,6 +843,11 @@ display:
         title: false
         use_ajax: false
         pager: false
+        use_more: false
+        use_more_always: false
+        use_more_text: false
+        link_display: false
+        link_url: false
         style: false
         row: false
         relationships: false
@@ -855,7 +860,25 @@ display:
       relationships: {  }
       use_ajax: true
       display_description: ''
-      footer: {  }
+      use_more: false
+      use_more_always: false
+      use_more_text: Close
+      link_display: '0'
+      link_url: ''
+      footer:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: false
+          content:
+            value: '<a class="use-ajax" href="/living-spaces-activity/mark-persistent-messages/{{ raw_arguments.uid }}">Close</a>'
+            format: full_html
+          tokenize: true
       display_extenders: {  }
     cache_metadata:
       max-age: -1
