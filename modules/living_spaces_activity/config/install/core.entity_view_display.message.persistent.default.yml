@@ -3,7 +3,6 @@ status: true
 dependencies:
   config:
     - field.field.message.persistent.field_content
-    - field.field.message.persistent.field_read
     - field.field.message.persistent.field_target_user
     - message.template.persistent
   module:
@@ -20,16 +19,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 3
-    region: content
-  field_read:
-    type: boolean
-    label: above
-    settings:
-      format: default
-      format_custom_false: ''
-      format_custom_true: ''
-    third_party_settings: {  }
-    weight: 2
     region: content
   field_target_user:
     type: entity_reference_label
