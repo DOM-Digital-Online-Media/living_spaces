@@ -623,7 +623,7 @@ display:
     display_plugin: block
     position: 4
     display_options:
-      title: 'Persistent messages'
+      title: ''
       fields:
         get_text:
           id: get_text
