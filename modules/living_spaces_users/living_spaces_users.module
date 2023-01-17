@@ -190,7 +190,8 @@ function living_spaces_users_profile_delete(ProfileInterface $entity) {
  */
 function living_spaces_users_user_cancel($edit, $account, $method) {
   if ('user_cancel_block' == $method) {
-    $account->setUsername(t('Deleted employee') . " {$account->id()}");
+    $account->setUsername(t('Deleted employee',[], ['langcode' => $account->getPreferredLangcode()]) . " {$account->id()}");
+    $account->setEmail(t('former-employee-', [], ['langcode' => $account->getPreferredLangcode()]) . "{$account->id()}@d.d.dom.de");
   }
 }
 

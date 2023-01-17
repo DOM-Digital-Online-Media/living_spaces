@@ -20,3 +20,6 @@ msgstr "Hier ist @user mitglied"
 
 msgid "Deleted employee"
 msgstr "Gelöschter mitarbeiter"
+
+msgid "former-employee-"
+msgstr "ehemaliger-mitarbeiter-"
