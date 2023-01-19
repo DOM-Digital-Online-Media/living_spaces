@@ -12,6 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\Entity\User;
+use Drupal\living_spaces_intranet\Entity\LivingSpacesBanInterface;
 
 /**
  * Implements hook_cron().
@@ -48,6 +49,30 @@ function living_spaces_intranet_user_login_validate(&$form, FormStateInterface $
     if ($ban_manager->getUserBans($account, ['global'])) {
       $form_state->setErrorByName('name', t('This account has been temporarily suspended.'));
     }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_intranet_living_spaces_ban_insert(LivingSpacesBanInterface $entity) {
+  if ('global' == $entity->bundle() && !$entity->get('target_user')->isEmpty()) {
+    /** @var \Drupal\user\UserInterface $target */
+    $target = $entity->get('target_user')->entity;
+    $target->block();
+    $target->save();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function living_spaces_intranet_living_spaces_ban_delete(LivingSpacesBanInterface $entity) {
+  if ('global' == $entity->bundle() && !$entity->get('target_user')->isEmpty()) {
+    /** @var \Drupal\user\UserInterface $target */
+    $target = $entity->get('target_user')->entity;
+    $target->activate();
+    $target->save();
   }
 }
 
