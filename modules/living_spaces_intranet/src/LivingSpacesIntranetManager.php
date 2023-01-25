@@ -22,7 +22,7 @@ class LivingSpacesIntranetManager implements LivingSpacesIntranetManagerInterfac
    * LivingSpacesIntranetManager constructor.
    *
    * @param \GuzzleHttp\Client $http_client
-   *   Provides a http client service..
+   *   Provides a http client service.
    */
   public function __construct(Client $http_client) {
     $this->httpClient = $http_client;
