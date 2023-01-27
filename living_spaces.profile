@@ -10,7 +10,7 @@
  */
 function living_spaces_theme_registry_alter(&$theme_registry) {
   if (!empty($theme_registry['page_title'])) {
-    $theme_registry['page_title']['variables']['lead'] = '';
-    $theme_registry['page_title']['variables']['include_hr'] = '';
+    $theme_registry['page_title']['variables']['lead'] = [];
+    $theme_registry['page_title']['variables']['include_hr'] = 0;
   }
 }
