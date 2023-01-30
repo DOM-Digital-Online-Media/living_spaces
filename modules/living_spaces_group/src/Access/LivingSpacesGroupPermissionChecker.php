@@ -48,11 +48,16 @@ class LivingSpacesGroupPermissionChecker implements GroupPermissionCheckerInterf
    */
   public function hasPermissionInGroup($permission, AccountInterface $account, GroupInterface $group) {
     if ($this->livingSpacesMananger->isLivingSpace($group->bundle())) {
-      $permissions = $this->moduleHandler->invokeAll('living_spaces_group_exclude_permissions');
-      $exclude = empty($permissions) || !in_array($permission, $permissions);
-
-      if (in_array('office_manager', $account->getRoles()) && $exclude) {
-        return TRUE;
+      $exclude_permissions = $this->moduleHandler->invokeAll('living_spaces_group_exclude_permissions');
+      $account_roles = $account->getRoles();
+      foreach ($exclude_permissions as $exclude_permission => $roles) {
+        if ($permission === $exclude_permission) {
+          foreach ($roles as $role => $access) {
+            if (in_array($role, $account_roles)) {
+              return $access;
+            }
+          }
+        }
       }
     }
 
