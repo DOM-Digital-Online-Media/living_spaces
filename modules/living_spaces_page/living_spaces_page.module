@@ -52,11 +52,7 @@ function living_spaces_page_entity_base_field_info(EntityTypeInterface $entity_t
  * Implements hook_living_spaces_group_exclude_permissions().
  */
 function living_spaces_page_living_spaces_group_exclude_permissions() {
-  $permissions['create page entities'] = [
-    'office_manager' => TRUE,
-  ];
-
-  return $permissions;
+  return ['create page entities'];
 }
 
 /**

@@ -34,10 +34,7 @@ function living_spaces_circles_entity_base_field_info(EntityTypeInterface $entit
  * Implements hook_living_spaces_group_exclude_permissions().
  */
 function living_spaces_circles_living_spaces_group_exclude_permissions() {
-  $permissions['manage circle spaces'] = [
-    'office_manager' => TRUE,
-  ];
-  return $permissions;
+  return ['manage circle spaces'];
 }
 
 /**

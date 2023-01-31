@@ -104,9 +104,9 @@ function living_spaces_users_get_user_level(AccountInterface $account, $weights 
 }
 
 /**
- * Implements hook_living_spaces_group_exclude_permissions().
+ * Implements hook_living_spaces_group_custom_permissions_by_roles().
  */
-function living_spaces_users_living_spaces_group_exclude_permissions() {
+function living_spaces_users_living_spaces_group_custom_permissions_by_roles() {
   $permissions = [];
   // Remove permissions from role 'full_time_employee' and all roles lower it.
   $role_weights = living_spaces_users_get_role_weights();

@@ -477,12 +477,7 @@ function living_spaces_group_update_joined_spaces(UserInterface $user) {
  * Implements hook_living_spaces_group_exclude_permissions().
  */
 function living_spaces_group_living_spaces_group_exclude_permissions() {
-  $permissions['administer members'] = [
-    'office_manager' => TRUE,
-  ];
-  $permissions['manage space members'] = [
-    'office_manager' => TRUE,
-  ];
+  $permissions = ['administer members', 'manage space members'];
 
   return $permissions;
 }

@@ -148,7 +148,7 @@ function hook_living_spaces_group_action_info(\Drupal\group\Entity\GroupInterfac
 }
 
 /**
- * Provide a list of permissions to exclude for user roles.
+ * Provide a list of permissions to customize for user roles.
  *
  * @return array
  *   An array of permissions.
@@ -158,7 +158,7 @@ function hook_living_spaces_group_action_info(\Drupal\group\Entity\GroupInterfac
  *       ]
  *   ]
  */
-function hook_living_spaces_group_exclude_permissions() {
+function hook_living_spaces_group_custom_permissions_by_roles() {
   $permissions = [];
 
   $permissions['manage space members'] = [
@@ -168,6 +168,21 @@ function hook_living_spaces_group_exclude_permissions() {
   $permissions['manage living space member account'] = [
     'office_manager' => FALSE,
   ];
+
+  return $permissions;
+}
+
+
+/**
+ * Provide a list of permissions to exclude for office managers.
+ *
+ * @return array
+ *   An array of permissions.
+ */
+function hook_living_spaces_group_exclude_permissions() {
+  $permissions = [];
+
+  $permissions[] = 'manage space members';
 
   return $permissions;
 }

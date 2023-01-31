@@ -96,10 +96,7 @@ function living_spaces_event_living_spaces_group_exclude_permissions() {
   $event_types = \Drupal::entityTypeManager()->getStorage('living_spaces_event_type')->loadMultiple();
   foreach ($event_types as $bundle => $event_type) {
     foreach ($permissions as $permission) {
-      $permission = str_replace('@bundle', $bundle, $permission);
-      $result[$permission] = [
-        'office_manager' => TRUE,
-      ];
+      $result[] = str_replace('@bundle', $bundle, $permission);
     }
   }
 
