@@ -120,6 +120,14 @@ function living_spaces_group_group_content_presave(EntityInterface $entity) {
 function living_spaces_group_entity_base_field_info(EntityTypeInterface $entity_type) {
   $fields = [];
 
+  $entity_types = Drupal::service('living_spaces_group.manager')->getEntityTypesOfLivingSpaceGroupTypes();
+  if (in_array($entity_type->id(), $entity_types)) {
+    $fields['space'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Space'))
+      ->setSetting('target_type', 'group')
+      ->setTranslatable(FALSE);
+  }
+
   if (in_array($entity_type->id(), ['group_role', 'group_content'])) {
     $description = $entity_type->id() === 'group_role'
       ? t('Mark group role as admin role for space type.')
