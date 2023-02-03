@@ -33,35 +33,35 @@ function living_spaces_event_uninstall($is_syncing) {
  */
 function living_spaces_event_update_9001() {
   $definition_update_manager = \Drupal::entityDefinitionUpdateManager();
-  $definition = BaseFieldDefinition::create('entity_reference')
-    ->setLabel(t('invited spaces'))
-    ->setSetting('target_type', 'group')
-    ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
-    ->setDisplayOptions('form', [
-      'type' => 'entity_reference_autocomplete',
-      'settings' => [
-        'match_operator' => 'CONTAINS',
-        'size' => 60,
-        'placeholder' => '',
-      ],
-    ])
-    ->setDisplayConfigurable('form', TRUE);
 
-  $definition_update_manager->installFieldStorageDefinition('invited_spaces', 'living_spaces_event', 'living_spaces_event', $definition);
+  $fields = [
+    [
+      'name' => t('invited spaces'),
+      'machine_name' => 'invited_spaces',
+      'target' => 'group',
+    ],
+    [
+      'name' => t('invited users'),
+      'machine_name' => 'invited_users',
+      'target' => 'user',
+    ],
+  ];
 
-  $definition = BaseFieldDefinition::create('entity_reference')
-    ->setLabel(t('Invited users'))
-    ->setSetting('target_type', 'user')
-    ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
-    ->setDisplayOptions('form', [
-      'type' => 'entity_reference_autocomplete',
-      'settings' => [
-        'match_operator' => 'CONTAINS',
-        'size' => 60,
-        'placeholder' => '',
-      ],
-    ])
-    ->setDisplayConfigurable('form', TRUE);
+  foreach ($fields as $field) {
+    $definition = BaseFieldDefinition::create('entity_reference')
+      ->setLabel($field['name'])
+      ->setSetting('target_type', $field['name'])
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => 60,
+          'placeholder' => '',
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE);
 
-  $definition_update_manager->installFieldStorageDefinition('invited_users', 'living_spaces_event', 'living_spaces_event', $definition);
+    $definition_update_manager->installFieldStorageDefinition($field['machine_name'], 'living_spaces_event', 'living_spaces_event', $definition);
+  }
 }

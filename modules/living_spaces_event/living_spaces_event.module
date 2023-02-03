@@ -192,18 +192,19 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
     }
   }
 
-  if (!$event->get('invited_users')->isEmpty()) {
+  if (!$event->isNew() && !$event->get('invited_users')->isEmpty()) {
+    $terms = $entity_manager->getStorage('taxonomy_term')->loadByProperties([
+      'uuid' => LIVING_SPACES_EVENT_INVITED_STATUS,
+    ]);
+
     foreach ($event->get('invited_users')->getValue() as $user) {
       if (!living_spaces_event_check_user_status($event->id(), $user['target_id'])) {
-        $terms = $entity_manager->getStorage('taxonomy_term')->loadByProperties([
-          'uuid' => LIVING_SPACES_EVENT_INVITED_STATUS,
-        ]);
-
         $invite = $entity_manager->getStorage('living_spaces_event_invite')->create([
           'event' => $event->id(),
           'uid' => $user['target_id'],
           'status' => $terms ? reset($terms)->id() : '',
         ]);
+
         $invite->save();
       }
     }
@@ -211,6 +212,37 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
     $event->set('invited_users', NULL);
   }
 
+  if (!$event->isNew() && !$event->get('invited_spaces')->isEmpty()) {
+    $terms = $entity_manager->getStorage('taxonomy_term')->loadByProperties([
+      'uuid' => LIVING_SPACES_EVENT_INVITED_STATUS,
+    ]);
+
+    /** @var \Drupal\group\GroupMembershipLoaderInterface $membership_loader */
+    $membership_loader = \Drupal::service('group.membership_loader');
+
+    foreach ($event->get('invited_spaces')->getValue() as $space) {
+      if ($group = $entity_manager->getStorage('group')->load($space['target_id'])) {
+        $memberships = $membership_loader->loadByGroup($group);
+
+        /** @var \Drupal\group\GroupMembership $membership */
+        foreach ($memberships as $membership) {
+          if ($uid = $membership->getUser()->id()) {
+            if (!living_spaces_event_check_user_status($event->id(), $uid)) {
+              $invite = $entity_manager->getStorage('living_spaces_event_invite')->create([
+                'event' => $event->id(),
+                'uid' => $uid,
+                'status' => $terms ? reset($terms)->id() : '',
+              ]);
+
+              $invite->save();
+            }
+          }
+        }
+      }
+    }
+
+    $event->set('invited_spaces', NULL);
+  }
 }
 
 /**
@@ -328,6 +360,19 @@ function living_spaces_event_inline_entity_form_reference_form_submit($reference
     NestedArray::setValue($values, $reference_form['#parents'], ['entity_id' => $match]);
     $form_state->setValues($values);
 
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_event_form_living_spaces_event_event_add_form_alter(array &$form, FormStateInterface $form_state) {
+  $fields = ['invited_spaces', 'invited_users'];
+
+  foreach ($fields as $field) {
+    if (!empty($form[$field])) {
+      $form[$field]['#access'] = FALSE;
+    }
   }
 }
 
