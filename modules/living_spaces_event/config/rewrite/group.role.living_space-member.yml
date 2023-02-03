@@ -1,19 +1,5 @@
-langcode: en
-status: true
-dependencies:
-  config:
-    - group.type.project_space
-id: project_space-member
-label: Member
-weight: -100
-internal: true
-audience: member
-group_type: project_space
-permissions_ui: true
 permissions:
   - 'overview living space events'
-  - 'view group'
-  - 'view group_membership content'
   - 'view living_spaces_event:event content'
   - 'view living_spaces_event:event entity'
   - 'view living_spaces_event:general content'
@@ -24,4 +10,3 @@ permissions:
   - 'view living_spaces_event:supervision entity'
   - 'view living_spaces_event:training content'
   - 'view living_spaces_event:training entity'
-is_space_admin: false
