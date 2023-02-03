@@ -1,5 +1,4 @@
 permissions:
-  - 'overview living space events'
   - 'view living_spaces_event:event content'
   - 'view living_spaces_event:event entity'
   - 'view living_spaces_event:general content'

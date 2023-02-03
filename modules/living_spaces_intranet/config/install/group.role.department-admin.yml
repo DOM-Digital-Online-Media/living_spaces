@@ -26,7 +26,6 @@ permissions:
   - 'manage living space member account'
   - 'manage living spaces sections settings'
   - 'manage space members'
-  - 'overview living space events'
   - 'revert group revisions'
   - 'update own group_membership content'
   - 'view any unpublished group'

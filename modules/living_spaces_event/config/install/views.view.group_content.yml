@@ -233,7 +233,7 @@ display:
       access:
         type: group_permission
         options:
-          group_permission: 'overview living space events'
+          group_permission: 'view events section of a living space'
       cache:
         type: tag
         options: {  }
