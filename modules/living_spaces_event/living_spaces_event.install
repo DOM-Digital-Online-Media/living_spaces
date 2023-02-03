@@ -36,12 +36,12 @@ function living_spaces_event_update_9001() {
 
   $fields = [
     [
-      'name' => t('invited spaces'),
+      'name' => t('Invited spaces'),
       'machine_name' => 'invited_spaces',
       'target' => 'group',
     ],
     [
-      'name' => t('invited users'),
+      'name' => t('Invited users'),
       'machine_name' => 'invited_users',
       'target' => 'user',
     ],
@@ -50,7 +50,7 @@ function living_spaces_event_update_9001() {
   foreach ($fields as $field) {
     $definition = BaseFieldDefinition::create('entity_reference')
       ->setLabel($field['name'])
-      ->setSetting('target_type', $field['name'])
+      ->setSetting('target_type', $field['target'])
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
       ->setDisplayOptions('form', [
         'type' => 'entity_reference_autocomplete',

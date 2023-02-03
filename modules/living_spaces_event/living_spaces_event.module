@@ -192,26 +192,6 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
     }
   }
 
-  if (!$event->isNew() && !$event->get('invited_users')->isEmpty()) {
-    $terms = $entity_manager->getStorage('taxonomy_term')->loadByProperties([
-      'uuid' => LIVING_SPACES_EVENT_INVITED_STATUS,
-    ]);
-
-    foreach ($event->get('invited_users')->getValue() as $user) {
-      if (!living_spaces_event_check_user_status($event->id(), $user['target_id'])) {
-        $invite = $entity_manager->getStorage('living_spaces_event_invite')->create([
-          'event' => $event->id(),
-          'uid' => $user['target_id'],
-          'status' => $terms ? reset($terms)->id() : '',
-        ]);
-
-        $invite->save();
-      }
-    }
-
-    $event->set('invited_users', NULL);
-  }
-
   if (!$event->isNew() && !$event->get('invited_spaces')->isEmpty()) {
     $terms = $entity_manager->getStorage('taxonomy_term')->loadByProperties([
       'uuid' => LIVING_SPACES_EVENT_INVITED_STATUS,
@@ -222,6 +202,7 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
 
     foreach ($event->get('invited_spaces')->getValue() as $space) {
       if ($group = $entity_manager->getStorage('group')->load($space['target_id'])) {
+        /** @var \Drupal\group\Entity\GroupInterface $membership */
         $memberships = $membership_loader->loadByGroup($group);
 
         /** @var \Drupal\group\GroupMembership $membership */
@@ -242,6 +223,26 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
     }
 
     $event->set('invited_spaces', NULL);
+  }
+
+  if (!$event->isNew() && !$event->get('invited_users')->isEmpty()) {
+    $terms = $entity_manager->getStorage('taxonomy_term')->loadByProperties([
+      'uuid' => LIVING_SPACES_EVENT_INVITED_STATUS,
+    ]);
+
+    foreach ($event->get('invited_users')->getValue() as $user) {
+      if (!living_spaces_event_check_user_status($event->id(), $user['target_id'])) {
+        $invite = $entity_manager->getStorage('living_spaces_event_invite')->create([
+          'event' => $event->id(),
+          'uid' => $user['target_id'],
+          'status' => $terms ? reset($terms)->id() : '',
+        ]);
+
+        $invite->save();
+      }
+    }
+
+    $event->set('invited_users', NULL);
   }
 }
 
