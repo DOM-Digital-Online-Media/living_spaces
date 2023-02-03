@@ -68,7 +68,7 @@ function living_spaces_event_entity_base_field_info(EntityTypeInterface $entity_
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['invited_spaces'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('invited spaces'))
+      ->setLabel(t('Invited spaces'))
       ->setSetting('target_type', 'group')
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
       ->setDisplayOptions('form', [
