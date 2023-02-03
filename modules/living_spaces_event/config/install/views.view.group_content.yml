@@ -153,12 +153,12 @@ display:
           field_api_classes: false
         label:
           id: label
-          table: group_content_field_data
+          table: living_spaces_event_field_data
           field: label
-          relationship: none
+          relationship: gc__living_spaces_event
           group_type: group
           admin_label: ''
-          entity_type: null
+          entity_type: living_spaces_event
           entity_field: label
           plugin_id: field
           label: ''
