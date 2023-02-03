@@ -365,9 +365,9 @@ function living_spaces_event_inline_entity_form_reference_form_submit($reference
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_BASE_FORM_ID_alter().
  */
-function living_spaces_event_form_living_spaces_event_event_add_form_alter(array &$form, FormStateInterface $form_state) {
+function living_spaces_event_form_living_spaces_event_form_alter(array &$form, FormStateInterface $form_state) {
   $fields = ['invited_spaces', 'invited_users'];
 
   foreach ($fields as $field) {
