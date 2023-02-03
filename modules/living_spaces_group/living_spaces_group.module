@@ -456,16 +456,16 @@ function living_spaces_group_entity_operation_alter(array &$operations, EntityIn
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function living_spaces_group_group_content_insert(GroupContentInterface $groupContentEntity) {
-  $entity = $groupContentEntity->getEntity();
+function living_spaces_group_group_content_insert(GroupContentInterface $group_content_entity) {
+  $entity = $group_content_entity->getEntity();
 
   if ($entity && $entity->hasField('space') && $entity->get('space')->isEmpty()) {
-    $entity->set('space', $groupContentEntity->getGroup()->id());
+    $entity->set('space', $group_content_entity->getGroup()->id());
     $entity->save();
   }
 
-  if ($groupContentEntity->getEntity() instanceof UserInterface) {
-    living_spaces_group_update_joined_spaces($groupContentEntity->getEntity());
+  if ($group_content_entity->getEntity() instanceof UserInterface) {
+    living_spaces_group_update_joined_spaces($group_content_entity->getEntity());
   }
 }
 
