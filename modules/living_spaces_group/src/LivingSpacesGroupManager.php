@@ -52,7 +52,7 @@ class LivingSpacesGroupManager implements LivingSpacesGroupManagerInterface {
     $entity_types = [];
     foreach ($types as $type) {
       /** @var \Drupal\group\Entity\GroupContentType[] $group_content_types */
-      $group_content_types = \Drupal::entityTypeManager()
+      $group_content_types = $this->entityTypeManager
         ->getStorage('group_content_type')
         ->loadByProperties(['group_type' => $type]);
       foreach ($group_content_types as $group_content_type) {
