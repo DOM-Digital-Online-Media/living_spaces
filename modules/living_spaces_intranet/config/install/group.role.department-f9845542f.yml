@@ -14,6 +14,7 @@ audience: outsider
 group_type: department
 permissions_ui: false
 permissions:
+  - 'administer members'
   - 'create group_node:discussion_post entity'
   - 'edit group'
   - 'delete any group_node:discussion_post entity'
