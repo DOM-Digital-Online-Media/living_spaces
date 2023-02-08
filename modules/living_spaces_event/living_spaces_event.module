@@ -31,11 +31,6 @@ function living_spaces_event_entity_base_field_info(EntityTypeInterface $entity_
   $fields = [];
 
   if ('living_spaces_event' == $entity_type->id()) {
-    $fields['space'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Space'))
-      ->setSetting('target_type', 'group')
-      ->setTranslatable(FALSE);
-
     $fields['agenda'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Agenda'))
       ->setSetting('target_type', 'node')
@@ -101,17 +96,6 @@ function living_spaces_event_living_spaces_group_exclude_permissions() {
   }
 
   return $result;
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function living_spaces_event_group_content_insert(GroupContentInterface $entity) {
-  if ($entity->getEntity() instanceof LivingSpaceEventInterface) {
-    $event = $entity->getEntity();
-    $event->set('space', $entity->getGroup()->id());
-    $event->save();
-  }
 }
 
 /**
