@@ -4,7 +4,8 @@
  */
 
 // Jquery wrapper for drupal to avoid conflicts between libraries.
-(function ($) {
+(function ($, Drupal, drupalSettings) {
+
   var initialLocaleCode = 'en';
   // Dialog index.
   var dialogIndex = 0;
@@ -298,8 +299,12 @@
 
   // Event mouse leave call back function.
   function eventMouseLeave(info) {
-    if (dialogs[dialogIndex] !== undefined) {
-      // @todo: close all windows.
+    let el = dialogs[dialogIndex];
+
+    if (el !== undefined) {
+      $(el.htmlElement).mouseleave(function () {
+        el.hide();
+      });
     }
   }
 
@@ -427,4 +432,4 @@
     }
   });
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, drupalSettings);
