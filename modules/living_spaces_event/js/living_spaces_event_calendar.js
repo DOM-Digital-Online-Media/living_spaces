@@ -300,12 +300,17 @@
 
   // Event mouse leave call back function.
   function eventMouseLeave(info) {
-    let el = dialogs[dialogIndex];
+    let viewIndex = parseInt(this.el.getAttribute("calendar-view-index"));
+    let viewSettings = drupalSettings.fullCalendarView[viewIndex];
 
-    if (el !== undefined) {
-      $(el.htmlElement).mouseleave(function () {
-        el.hide();
-      });
+    if (viewSettings.dialogWindow) {
+      let el = dialogs[dialogIndex];
+
+      if (el !== undefined) {
+        $(el.htmlElement).mouseleave(function () {
+          el.hide();
+        });
+      }
     }
   }
 
