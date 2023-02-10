@@ -264,24 +264,28 @@
     // Show the event detail in a pop up dialog.
     if (viewSettings.dialogWindow) {
       let dataDialogOptionsDetails = {};
-      if ( des == '') {
+      if (des == '') {
         return false;
       }
 
+      let el = info.el;
       const jsFrame = new JSFrame({
-        parentElement:info.el,//Set the parent element to which the jsFrame is attached here
+        parentElement: el,
       });
 
       // Dialog options.
       let dialogOptions = JSON.parse(viewSettings.dialog_options);
-      dialogOptions.left += info.jsEvent.pageX;
-      dialogOptions.top += info.jsEvent.pageY;
-      dialogOptions.title = dialogOptions.title ? dialogOptions.title : thisEvent.title.replace(/(<([^>]+)>)/ig,"");
+      dialogOptions.left = el.getBoundingClientRect().left;
+      dialogOptions.top = info.jsEvent.pageY;
+      dialogOptions.movable = false;
+      dialogOptions.width = el.clientWidth;
+      dialogOptions.height = 100;
+      dialogOptions.title = dialogOptions.title ? dialogOptions.title : thisEvent.title.replace(/(<([^>]+)>)/ig, "");
       dialogOptions.html = des;
 
       // Close old wondow.
       if (dialogs[dialogIndex] !== undefined) {
-        dialogs[dialogIndex].closeFrame();
+        dialogs[dialogIndex].hide();
       }
 
       // Create window.
@@ -294,7 +298,9 @@
 
   // Event mouse leave call back function.
   function eventMouseLeave(info) {
-    // @todo: close all windows.
+    if (dialogs[dialogIndex] !== undefined) {
+      // @todo: close all windows.
+    }
   }
 
   // Build the calendar objects.
