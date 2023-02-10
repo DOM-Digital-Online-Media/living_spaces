@@ -123,33 +123,7 @@
     let thisEvent = info.event;
     let viewIndex = parseInt(this.el.getAttribute("calendar-view-index"));
     let viewSettings = drupalSettings.fullCalendarView[viewIndex];
-    let des = thisEvent.extendedProps.des;
-    // Show the event detail in a pop up dialog.
-    if (viewSettings.dialogWindow) {
-      let dataDialogOptionsDetails = {};
-      if ( des == '') {
-        return false;
-      }
 
-      const jsFrame = new JSFrame({
-        parentElement:info.el,//Set the parent element to which the jsFrame is attached here
-      });
-      // Position offset.
-      let posOffset = dialogIndex * 20;
-      // Dialog options.
-      let dialogOptions = JSON.parse(viewSettings.dialog_options);
-      dialogOptions.left += posOffset + info.jsEvent.pageX;
-      dialogOptions.top += posOffset + info.jsEvent.pageY;
-      dialogOptions.title = dialogOptions.title ? dialogOptions.title : thisEvent.title.replace(/(<([^>]+)>)/ig,"");
-      dialogOptions.html = des;
-      //Create window
-      dialogs[dialogIndex] = jsFrame.create(dialogOptions);
-
-      dialogs[dialogIndex].show();
-      dialogIndex++;
-
-      return false;
-    }
     // Open a new window to show the details of the event.
     if (thisEvent.url) {
       if (viewSettings.openEntityInNewTab) {
@@ -279,6 +253,50 @@
     }
   }
 
+  // Event mouse enter call back function.
+  function eventMouseEnter(info) {
+    slotDate = null;
+    info.jsEvent.preventDefault();
+    let thisEvent = info.event;
+    let viewIndex = parseInt(this.el.getAttribute("calendar-view-index"));
+    let viewSettings = drupalSettings.fullCalendarView[viewIndex];
+    let des = thisEvent.extendedProps.des;
+    // Show the event detail in a pop up dialog.
+    if (viewSettings.dialogWindow) {
+      let dataDialogOptionsDetails = {};
+      if ( des == '') {
+        return false;
+      }
+
+      const jsFrame = new JSFrame({
+        parentElement:info.el,//Set the parent element to which the jsFrame is attached here
+      });
+
+      // Dialog options.
+      let dialogOptions = JSON.parse(viewSettings.dialog_options);
+      dialogOptions.left += info.jsEvent.pageX;
+      dialogOptions.top += info.jsEvent.pageY;
+      dialogOptions.title = dialogOptions.title ? dialogOptions.title : thisEvent.title.replace(/(<([^>]+)>)/ig,"");
+      dialogOptions.html = des;
+
+      // Close old wondow.
+      if (dialogs[dialogIndex] !== undefined) {
+        dialogs[dialogIndex].closeFrame();
+      }
+
+      // Create window.
+      dialogs[dialogIndex] = jsFrame.create(dialogOptions);
+      dialogs[dialogIndex].show();
+
+      return false;
+    }
+  }
+
+  // Event mouse leave call back function.
+  function eventMouseLeave(info) {
+    // @todo: close all windows.
+  }
+
   // Build the calendar objects.
   function buildCalendars() {
     $('.js-drupal-fullcalendar')
@@ -299,6 +317,10 @@
         calendarOptions.eventDrop = eventDrop;
         // Bind the view skeleton render handler.
         calendarOptions.viewSkeletonRender = viewSkeletonRender;
+        // Bind the event mouse enter handler.
+        calendarOptions.eventMouseEnter = eventMouseEnter;
+        // Bind the event mouse leave handler.
+        calendarOptions.eventMouseLeave = eventMouseLeave;
         // Language select element.
         var localeSelectorEl = document.getElementById('locale-selector-' + viewIndex);
         // Initial the calendar.
