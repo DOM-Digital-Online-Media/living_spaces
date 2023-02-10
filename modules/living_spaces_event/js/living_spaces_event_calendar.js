@@ -279,6 +279,7 @@
       dialogOptions.left = el.getBoundingClientRect().left;
       dialogOptions.top = info.jsEvent.pageY;
       dialogOptions.movable = false;
+      dialogOptions.resizable = false;
       dialogOptions.width = el.clientWidth;
       dialogOptions.height = 100;
       dialogOptions.title = dialogOptions.title ? dialogOptions.title : thisEvent.title.replace(/(<([^>]+)>)/ig, "");
