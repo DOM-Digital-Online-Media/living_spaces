@@ -44,4 +44,24 @@ class LivingSpacesGroupManager implements LivingSpacesGroupManagerInterface {
     return is_array($types) ? $types : [];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getEntityTypesOfLivingSpaceGroupTypes() {
+    $types = $this->getLivingSpaceGroupTypes();
+    $entity_types = [];
+    foreach ($types as $type) {
+      /** @var \Drupal\group\Entity\GroupContentType[] $group_content_types */
+      $group_content_types = $this->entityTypeManager
+        ->getStorage('group_content_type')
+        ->loadByProperties(['group_type' => $type]);
+      foreach ($group_content_types as $group_content_type) {
+        $plugin = $group_content_type->getContentPlugin();
+        $entity_type = $plugin->getEntityTypeId();
+        $entity_types[$entity_type] = $entity_type;
+      }
+    }
+    return $entity_types;
+  }
+
 }

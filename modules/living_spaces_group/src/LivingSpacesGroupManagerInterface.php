@@ -26,4 +26,12 @@ interface LivingSpacesGroupManagerInterface {
    */
   public function getLivingSpaceGroupTypes();
 
+  /**
+   * Returns entity types from group types with living space functionality.
+   *
+   * @return array
+   *   An array of entity types.
+   */
+  public function getEntityTypesOfLivingSpaceGroupTypes();
+
 }

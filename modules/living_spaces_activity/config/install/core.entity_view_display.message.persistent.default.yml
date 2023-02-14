@@ -2,30 +2,27 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.page.body
-    - field.field.node.page.field_exposed_to_frontend
-    - node.type.page
+    - field.field.message.persistent.field_content
+    - message.template.persistent
   module:
     - text
     - user
-id: node.page.default
-targetEntityType: node
-bundle: page
+id: message.persistent.default
+targetEntityType: message
+bundle: persistent
 mode: default
 content:
-  body:
+  field_content:
     type: text_default
-    label: hidden
+    label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 3
     region: content
-  links:
+  partial_0:
     settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content
 hidden:
-  field_exposed_to_frontend: true
-  langcode: true
   search_api_excerpt: true

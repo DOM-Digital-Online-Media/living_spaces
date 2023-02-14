@@ -36,4 +36,14 @@ function living_spaces_faq_uninstall() {
   foreach ($aliases as $alias) {
     $alias->delete();
   }
+
+  // Delete preinstalled content.
+  $link_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+  $link = $link_storage
+    ->loadByProperties(['uuid' => [
+      '67dd9262-c52f-4abd-a278-93c788e2dd55',
+    ]]);
+  if (!empty($link)) {
+    $link_storage->delete($link);
+  }
 }

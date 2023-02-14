@@ -12,6 +12,7 @@ use Drupal\group\Entity\GroupContentInterface;
 use Drupal\group\Entity\GroupInterface;
 use Drupal\message\Entity\Message;
 use Drupal\user\UserInterface;
+use Drupal\views\ViewExecutable;
 
 const LIVING_SPACES_ACTIVITY_PERSONAL = '5538078f-4a95-4e4c-9924-85d05b924894';
 const LIVING_SPACES_ACTIVITY_GENERAL = 'd42f2dc9-7d97-44c4-90a0-f93abf903ae0';
@@ -65,6 +66,15 @@ function living_spaces_activity_theme($existing, $type, $theme, $path) {
   ];
 
   return $items;
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function living_spaces_activity_views_pre_render(ViewExecutable $view) {
+  if ('message' == $view->id() && 'persistent' == $view->current_display) {
+    $view->element['#attached']['library'][] = 'bootstrap_barrio/alerts';
+  }
 }
 
 /**
