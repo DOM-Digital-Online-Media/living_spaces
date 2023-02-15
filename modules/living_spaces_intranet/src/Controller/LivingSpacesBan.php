@@ -104,7 +104,7 @@ class LivingSpacesBan extends ControllerBase {
   /**
    * Access callback for 'unban user' route.
    */
-  public function unbanAccess(AccountInterface $user, $type, $length) {
+  public function unbanAccess(AccountInterface $user, $type) {
     $access = $this->currentUser()->hasPermission('administer ban') ||
       $this->currentUser()->hasPermission("delete {$type} ban");
 

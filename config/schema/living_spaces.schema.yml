@@ -1,0 +1,21 @@
+block.settings.living_spaces_page_title_block:
+  type: block_settings
+  label: 'Page title block'
+  mapping:
+    lead:
+      type: sequence
+      label: 'Lead items'
+      sequence:
+        type: mapping
+        label: 'Lead item'
+        mapping:
+          lead_text:
+            type: label
+            label: 'Lead text'
+            translatable: true
+          lead_path:
+            type: string
+            label: 'Lead path'
+    include_hr:
+      type: integer
+      label: 'Show hr tag'
