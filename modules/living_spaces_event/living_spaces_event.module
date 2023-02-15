@@ -62,6 +62,36 @@ function living_spaces_event_entity_base_field_info(EntityTypeInterface $entity_
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
+    $fields['invited_spaces'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Invited spaces'))
+      ->setSetting('target_type', 'group')
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => 60,
+          'placeholder' => '',
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setTranslatable(FALSE);
+
+    $fields['invited_users'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Invited users'))
+      ->setSetting('target_type', 'user')
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => 60,
+          'placeholder' => '',
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setTranslatable(FALSE);
+
     $fields['protocol'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Protocol'))
       ->setSetting('target_type', 'node')
@@ -120,8 +150,9 @@ function living_spaces_event_living_spaces_event_insert(LivingSpaceEventInterfac
  * Implements hook_ENTITY_TYPE_presave().
  */
 function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterface $event) {
+  $entity_manager = \Drupal::entityTypeManager();
+
   if (!$event->get('agenda')->isEmpty() && !$event->get('space')->isEmpty()) {
-    $entity_manager = \Drupal::entityTypeManager();
     $properties = [
       'group_type' => $event->get('space')->entity->bundle(),
       'content_plugin' => 'group_node:agenda',
@@ -143,7 +174,59 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
         }
       }
     }
+  }
 
+  if (!$event->isNew() && !$event->get('invited_spaces')->isEmpty()) {
+    $terms = $entity_manager->getStorage('taxonomy_term')->loadByProperties([
+      'uuid' => LIVING_SPACES_EVENT_INVITED_STATUS,
+    ]);
+
+    /** @var \Drupal\group\GroupMembershipLoaderInterface $membership_loader */
+    $membership_loader = \Drupal::service('group.membership_loader');
+
+    foreach ($event->get('invited_spaces')->getValue() as $space) {
+      if ($group = $entity_manager->getStorage('group')->load($space['target_id'])) {
+        /** @var \Drupal\group\Entity\GroupInterface $membership */
+        $memberships = $membership_loader->loadByGroup($group);
+
+        /** @var \Drupal\group\GroupMembership $membership */
+        foreach ($memberships as $membership) {
+          if ($uid = $membership->getUser()->id()) {
+            if (!living_spaces_event_check_user_status($event->id(), $uid)) {
+              $invite = $entity_manager->getStorage('living_spaces_event_invite')->create([
+                'event' => $event->id(),
+                'uid' => $uid,
+                'status' => $terms ? reset($terms)->id() : '',
+              ]);
+
+              $invite->save();
+            }
+          }
+        }
+      }
+    }
+
+    $event->set('invited_spaces', NULL);
+  }
+
+  if (!$event->isNew() && !$event->get('invited_users')->isEmpty()) {
+    $terms = $entity_manager->getStorage('taxonomy_term')->loadByProperties([
+      'uuid' => LIVING_SPACES_EVENT_INVITED_STATUS,
+    ]);
+
+    foreach ($event->get('invited_users')->getValue() as $user) {
+      if (!living_spaces_event_check_user_status($event->id(), $user['target_id'])) {
+        $invite = $entity_manager->getStorage('living_spaces_event_invite')->create([
+          'event' => $event->id(),
+          'uid' => $user['target_id'],
+          'status' => $terms ? reset($terms)->id() : '',
+        ]);
+
+        $invite->save();
+      }
+    }
+
+    $event->set('invited_users', NULL);
   }
 }
 
@@ -161,6 +244,17 @@ function living_spaces_event_living_spaces_event_delete(LivingSpaceEventInterfac
       $invite->delete();
     }
   }
+}
+
+/**
+ * Helper to check if the user was invited to the event.
+ */
+function living_spaces_event_check_user_status($eid, $uid) {
+  $query = \Drupal::entityTypeManager()->getStorage('living_spaces_event_invite')->getQuery();
+  $query->condition('event', $eid);
+  $query->condition('uid', $uid);
+
+  return (bool) $query->execute();
 }
 
 /**
@@ -251,6 +345,19 @@ function living_spaces_event_inline_entity_form_reference_form_submit($reference
     NestedArray::setValue($values, $reference_form['#parents'], ['entity_id' => $match]);
     $form_state->setValues($values);
 
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function living_spaces_event_form_living_spaces_event_form_alter(array &$form, FormStateInterface $form_state) {
+  $fields = ['invited_spaces', 'invited_users'];
+
+  foreach ($fields as $field) {
+    if (!empty($form[$field])) {
+      $form[$field]['#access'] = FALSE;
+    }
   }
 }
 
