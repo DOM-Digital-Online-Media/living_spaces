@@ -13,11 +13,21 @@ class LivingSpacesIntranetManager implements LivingSpacesIntranetManagerInterfac
    * {@inheritdoc}
    */
   public function sendMessage($message) {
-    $server = new Server();
-    $server->accept();
+    $options = [
+      'return_obj' => TRUE,
+      'timeout' => 30,
+    ];
 
-    $server->text($message);
-    $server->close();
+    try {
+      $server = new Server($options);
+      $server->accept();
+
+      $server->text($message);
+      $server->close();
+    }
+    catch (\Exception $e) {
+      watchdog_exception('living_spaces_intranet', $e);
+    }
   }
 
 }

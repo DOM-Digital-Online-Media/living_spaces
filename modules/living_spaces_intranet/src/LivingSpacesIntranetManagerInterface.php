@@ -11,7 +11,7 @@ interface LivingSpacesIntranetManagerInterface {
    * Send message to websocket.
    *
    * @param string $message
-   *   message to send.
+   *   Message to send.
    */
   public function sendMessage($message);
 
