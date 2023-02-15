@@ -3,6 +3,8 @@
 namespace Drupal\living_spaces_group;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\group\Entity\GroupInterface;
 
 /**
  * Manager for group related methods.
@@ -42,6 +44,21 @@ class LivingSpacesGroupManager implements LivingSpacesGroupManagerInterface {
     $query->condition('is_living_space', TRUE);
     $types = $query->execute();
     return is_array($types) ? $types : [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isUserSpaceAdmin(AccountInterface $account, GroupInterface $group) {
+    /** @var \Drupal\group\Entity\Storage\GroupRoleStorageInterface $role_storage */
+    $role_storage = \Drupal::entityTypeManager()->getStorage('group_role');
+    $roles = $role_storage->loadByUserAndGroup($account, $group);
+    foreach ($roles as $role) {
+      if ($role->get('is_space_admin')) {
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
 
 }

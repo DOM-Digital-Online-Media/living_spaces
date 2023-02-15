@@ -2,6 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.group.project_space.field_allow_admin_to_edit_member
     - group.type.project_space
     - views.view.group_content
     - views.view.message
@@ -15,8 +16,8 @@ dependencies:
     - bootstrap_barrio
 third_party_settings:
   layout_builder:
-    allow_custom: false
     enabled: true
+    allow_custom: false
     sections:
       -
         layout_id: barrio_col2-equal
@@ -30,77 +31,105 @@ third_party_settings:
             configuration:
               id: 'views_block:recent_discussions-posts'
               label: ''
-              provider: views
               label_display: visible
+              provider: views
+              context_mapping: {  }
               views_label: ''
               items_per_page: '4'
-              context_mapping: {  }
-            additional: {  }
             weight: 2
+            additional: {  }
           07bef0d2-5409-4666-8937-8cdbcb85e1ea:
             uuid: 07bef0d2-5409-4666-8937-8cdbcb85e1ea
             region: second
             configuration:
               id: 'views_block:group_content-events'
               label: ''
-              provider: views
               label_display: visible
+              provider: views
+              context_mapping: {  }
               views_label: ''
               items_per_page: none
-              context_mapping: {  }
-            additional: {  }
             weight: 0
+            additional: {  }
           8e26638b-4765-4eb4-b72a-13cc7662d30a:
             uuid: 8e26638b-4765-4eb4-b72a-13cc7662d30a
             region: second
             configuration:
               id: 'views_block:message-space_activity'
               label: ''
-              provider: views
               label_display: visible
+              provider: views
+              context_mapping: {  }
               views_label: ''
               items_per_page: none
-              context_mapping: {  }
-            additional: {  }
             weight: 1
+            additional: {  }
           01eacab7-e912-4dd8-a0c0-201d10151fe6:
             uuid: 01eacab7-e912-4dd8-a0c0-201d10151fe6
             region: first
             configuration:
               id: living_spaces_group_tree_block
               label: 'Group Tree'
-              provider: living_spaces_subgroup
               label_display: '0'
+              provider: living_spaces_subgroup
               context_mapping:
                 group: layout_builder.entity
-            additional: {  }
             weight: 1
+            additional: {  }
           558da384-afd7-40fe-b8d8-eecbcf738025:
             uuid: 558da384-afd7-40fe-b8d8-eecbcf738025
             region: first
             configuration:
               id: living_spaces_group_actions_block
               label: 'Space actions'
-              provider: living_spaces_group
               label_display: '0'
+              provider: living_spaces_group
               context_mapping:
                 group: layout_builder.entity
-            additional: {  }
             weight: 0
+            additional: {  }
+          80c80156-127c-49d0-8a3d-2f21b737d39f:
+            uuid: 80c80156-127c-49d0-8a3d-2f21b737d39f
+            region: first
+            configuration:
+              id: 'field_block:group:project_space:field_allow_admin_to_edit_member'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: boolean
+                label: above
+                settings:
+                  format: default
+                  format_custom_false: ''
+                  format_custom_true: ''
+                third_party_settings: {  }
+            weight: 3
+            additional: {  }
         third_party_settings: {  }
 id: group.project_space.default
 targetEntityType: group
 bundle: project_space
 mode: default
 content:
+  field_allow_admin_to_edit_member:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: -4
+    region: first
   label:
-    label: hidden
     type: string
-    weight: -5
-    region: content
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: -5
+    region: content
 hidden:
   changed: true
   created: true

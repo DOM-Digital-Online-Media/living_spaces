@@ -100,21 +100,27 @@ function living_spaces_intranet_user_access(EntityInterface $entity, $operation,
     $user_spaces = $entity->get('joined_spaces')->getValue();
     $user_spaces = array_column($user_spaces, 'target_id');
 
+    $same = array_intersect($own_spaces, $user_spaces);
     if (
       ($operation === 'delete') &&
       $current->hasPermission('delete shared offices space members')
     ) {
-      $same = array_intersect($own_spaces, $user_spaces);
       foreach ($same as $group_id) {
         /** @var \Drupal\group\Entity\GroupInterface $group */
-        $group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id);
-        if ($group->hasPermission('manage living space member account', $current)) {
+        if (
+          ($group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id))
+          && in_array(
+            $group->getGroupType()->id(),
+            ['project_space', 'department']
+          )
+          && $group->field_allow_admin_to_edit_member->value
+          && \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($account, $group)
+        ) {
           return AccessResult::allowed();
         }
       }
     }
 
-    $same = array_intersect($own_spaces, $user_spaces);
     if ($operation === 'view' && !empty($same)) {
       return AccessResult::allowed();
     }
@@ -122,8 +128,15 @@ function living_spaces_intranet_user_access(EntityInterface $entity, $operation,
     if ($operation === 'update') {
       foreach ($same as $group_id) {
         /** @var \Drupal\group\Entity\GroupInterface $group */
-        $group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id);
-        if ($group->hasPermission('manage living space member account', $current)) {
+        if (
+          ($group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id))
+          && in_array(
+            $group->getGroupType()->id(),
+            ['project_space', 'department']
+          )
+          && $group->field_allow_admin_to_edit_member->value
+          && \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($account, $group)
+        ) {
           return AccessResult::allowed();
         }
       }

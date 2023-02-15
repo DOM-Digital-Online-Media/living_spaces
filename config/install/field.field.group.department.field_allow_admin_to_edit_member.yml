@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.group.field_allow_admin_to_edit_member
+    - group.type.department
+id: group.department.field_allow_admin_to_edit_member
+field_name: field_allow_admin_to_edit_member
+entity_type: group
+bundle: department
+label: 'Allow space admins to edit member accounts'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

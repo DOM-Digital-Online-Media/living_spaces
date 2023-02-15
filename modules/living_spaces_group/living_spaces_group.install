@@ -34,3 +34,28 @@ function living_spaces_group_update_9001(&$sandbox) {
   ]);
   $menu_link->save();
 }
+
+/**
+ * Set undefined field_allow_admin_to_edit_member to TRUE.
+ *
+ * Set field_allow_admin_to_edit_member to TRUE if it not set already
+ * for space types 'project_space' and 'department'
+ * to allow space admins to edit space members profile.
+ */
+function living_spaces_group_update_9101(&$sandbox) {
+  $entityStorage = \Drupal::entityTypeManager()->getStorage('group');
+  $query = $entityStorage->getQuery();
+  $query->accessCheck(FALSE);
+  $query->condition('type', ['project_space', 'department'], 'IN');
+  $query->notExists('field_allow_admin_to_edit_member');
+  $gids = $query->execute();
+  foreach ($entityStorage->loadMultiple($gids) as $group) {
+    if ($group->hasField('field_allow_admin_to_edit_member')) {
+      $group->set('field_allow_admin_to_edit_member', TRUE);
+      $group->save();
+    }
+    else {
+      throw new Exception("There is no field 'field_allow_admin_to_edit_member' in the group type '{$group->getGroupType()->id()}'.");
+    }
+  }
+}

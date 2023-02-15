@@ -231,6 +231,13 @@ function living_spaces_group_form_group_form_alter(&$form, FormStateInterface $f
   if (isset($form['protected'])) {
     $form['protected']['#access'] = \Drupal::currentUser()->hasPermission('manage protected spaces');
   }
+
+  if (
+    isset($form['field_allow_admin_to_edit_member'])
+    && empty(array_intersect(['administrator', 'client_admin'], \Drupal::currentUser()->getRoles()))
+  ) {
+    $form['field_allow_admin_to_edit_member']['#access'] = FALSE;
+  }
 }
 
 /**
