@@ -4,4 +4,3 @@ services:
     arguments: ['@entity_type.manager', '@current_user', '@datetime.time']
   living_spaces_intranet.manager:
     class: Drupal\living_spaces_intranet\LivingSpacesIntranetManager
-    arguments: ['@http_client']

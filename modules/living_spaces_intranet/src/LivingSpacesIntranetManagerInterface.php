@@ -8,18 +8,11 @@ namespace Drupal\living_spaces_intranet;
 interface LivingSpacesIntranetManagerInterface {
 
   /**
-   * Send request to provided URL.
+   * Send message to websocket.
    *
-   * @param string $path
-   *   URL to send request.
-   * @param array $data
-   *   An array of post data.
-   * @param array $headers
-   *   An array of headers.
-   *
-   * @return array
-   *   Response data array.
+   * @param string $message
+   *   message to send.
    */
-  public function sendMessage($path, $data = [], $headers = []);
+  public function sendMessage($message);
 
 }
