@@ -104,27 +104,6 @@ function living_spaces_users_get_user_level(AccountInterface $account, $weights 
 }
 
 /**
- * Implements hook_living_spaces_group_custom_permissions_by_roles().
- */
-function living_spaces_users_living_spaces_group_custom_permissions_by_roles() {
-  $permissions = [];
-  // Remove permissions from role 'full_time_employee' and all roles lower it.
-  $role_weights = living_spaces_users_get_role_weights();
-  unset($role_weights['authenticated']);
-  asort($role_weights);
-  $key = array_search('full_time_employee', array_keys($role_weights), TRUE);
-  if ($key !== FALSE) {
-    $sliced = array_slice($role_weights, $key, NULL, TRUE);
-    foreach ($sliced as &$slice) {
-      $slice = FALSE;
-    }
-    $permissions['manage living space member account'] = $sliced;
-  }
-
-  return $permissions;
-
-}
-/**
  * Implements hook_ENTITY_TYPE_access().
  */
 function living_spaces_users_profile_access(ProfileInterface $entity, $operation, AccountInterface $account) {
@@ -157,9 +136,6 @@ function living_spaces_users_profile_access(ProfileInterface $entity, $operation
           ) {
             return AccessResult::allowed();
           }
-//          if ($group->hasPermission('manage living space member account', $current)) {
-//            return AccessResult::allowed();
-//          }
         }
       }
     }
