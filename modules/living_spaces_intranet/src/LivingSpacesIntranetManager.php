@@ -16,7 +16,7 @@ class LivingSpacesIntranetManager implements LivingSpacesIntranetManagerInterfac
     $message = '';
 
     try {
-      $server = new Server();
+      $server = new Server(['timeout' => 10]);
       $server->accept();
 
       $message = $server->receive();
@@ -34,7 +34,7 @@ class LivingSpacesIntranetManager implements LivingSpacesIntranetManagerInterfac
    */
   public function sendMessage($message) {
     try {
-      $server = new Server();
+      $server = new Server(['timeout' => 10]);
       $server->accept();
 
       $server->text($message);

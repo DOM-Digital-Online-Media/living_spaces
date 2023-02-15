@@ -207,6 +207,7 @@ function living_spaces_activity_get_message_counter($uid) {
     $query->condition('template', $templates, 'IN');
     $query->condition('uid', $uid);
     $query->condition('is_read', FALSE);
+    $query->accessCheck();
 
     if ($messages = $query->execute()) {
       return count($messages);
