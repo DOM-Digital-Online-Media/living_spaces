@@ -288,22 +288,12 @@ function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE
   }
   $current_user = \Drupal::currentUser()->getAccount();
 
-  /** @var \Drupal\group\Entity\Storage\GroupRoleStorageInterface $role_storage */
-  $role_storage = \Drupal::entityTypeManager()->getStorage('group_role');
-  $roles = $role_storage->loadByUserAndGroup($user, $space);
-  $user_is_admin = FALSE;
-  foreach ($roles as $role) {
-    $user_is_admin = $role->get('is_space_admin') ? TRUE : $user_is_admin;
-  }
+  $user_is_admin = \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($user, $space);
   $route = $user_is_admin
     ? 'living_spaces_group.remove_admin'
     : 'living_spaces_group.assign_admin';
 
-  $roles = $role_storage->loadByUserAndGroup($current_user, $space);
-  $current_is_admin = FALSE;
-  foreach ($roles as $role) {
-    $current_is_admin = $role->get('is_space_admin') ? TRUE : $current_is_admin;
-  }
+  $current_is_admin = \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($current_user, $space);
 
   $links = [
     'view_profile' => [
