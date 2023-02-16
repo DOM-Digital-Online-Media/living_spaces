@@ -8,6 +8,7 @@ use Drupal\Core\Render\RendererInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Ajax\RemoveCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\views\Views;
 
@@ -63,7 +64,7 @@ class LivingSpacesActivityMarkMessagesController extends ControllerBase {
       $query->condition('is_read', FALSE);
 
       if ($messages = $query->execute()) {
-        /** @var \Drupal\message\Entity\Message $message */
+        /** @var \Drupal\message\MessageInterface $message */
         foreach ($entity_manager->getStorage('message')->loadMultiple($messages) as $message) {
           $message->set('is_read', TRUE);
           $message->save();
@@ -91,6 +92,35 @@ class LivingSpacesActivityMarkMessagesController extends ControllerBase {
 
     $response->addCommand(new InvokeCommand('#space-activity-notifications .dropdown-toggle', 'dropdown', ['dispose']));
     $response->addCommand(new InvokeCommand('#space-activity-notifications .dropdown-toggle', 'dropdown', ['update']));
+
+    return $response;
+  }
+
+  /**
+   * Mark all unread persistent messages as read.
+   */
+  public function markPersistent($user) {
+    if ($user != $this->currentUser()->id()) {
+      throw new AccessDeniedHttpException();
+    }
+
+    $response = new AjaxResponse();
+    $entity_manager = $this->entityTypeManager();
+
+    $query = $entity_manager->getStorage('message')->getQuery();
+    $query->condition('template', 'persistent');
+    $query->condition('uid', $user);
+    $query->condition('is_read', FALSE);
+
+    if ($messages = $query->execute()) {
+      /** @var \Drupal\message\MessageInterface $message */
+      foreach ($entity_manager->getStorage('message')->loadMultiple($messages) as $message) {
+        $message->set('is_read', TRUE);
+        $message->save();
+      }
+    }
+
+    $response->addCommand(new RemoveCommand('.view-id-message.view-display-id-persistent'));
 
     return $response;
   }
