@@ -307,8 +307,10 @@ function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE
 
   $cache = CacheableMetadata::createFromObject($current_user);
   $cache->applyTo($links['view_profile']);
-  if ($space->getOwnerId() !== $user->id() &&
-    ($current_is_admin || $space->hasPermission('manage space members', $current_user))
+  if (
+    $space->getOwnerId() !== $user->id()
+    && $current_user->id() != $user->id()
+    && ($current_is_admin || $space->hasPermission('manage space members', $current_user))
   ) {
     $links['remove_from_space'] = [
       '#type' => 'link',
