@@ -5,6 +5,8 @@
  * Install/update/uninstall hooks for group module.
  */
 
+use Drupal\Core\Field\BaseFieldDefinition;
+
 /**
  * Implements hook_uninstall().
  */
@@ -33,6 +35,22 @@ function living_spaces_group_update_9001(&$sandbox) {
     'menu_name' => 'main',
   ]);
   $menu_link->save();
+}
+
+/**
+ * Add a field 'space' to entity types with enabled living space functionality.
+ */
+function living_spaces_group_update_9009(&$sandbox) {
+  $entity_types = Drupal::service('living_spaces_group.manager')->getEntityTypesOfLivingSpaceGroupTypes();
+
+  foreach ($entity_types as $entity_type) {
+    $field_definition = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Space'))
+      ->setSetting('target_type', 'group')
+      ->setTranslatable(FALSE);
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition('space', $entity_type, 'living_spaces_group', $field_definition);
+  }
 }
 
 /**

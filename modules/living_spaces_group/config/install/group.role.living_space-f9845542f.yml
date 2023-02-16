@@ -13,5 +13,6 @@ internal: true
 audience: outsider
 group_type: living_space
 permissions_ui: false
-permissions: {  }
+permissions:
+  - 'administer members'
 is_space_admin: false
