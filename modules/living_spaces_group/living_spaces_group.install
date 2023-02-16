@@ -44,11 +44,25 @@ function living_spaces_group_update_9009(&$sandbox) {
   $entity_types = Drupal::service('living_spaces_group.manager')->getEntityTypesOfLivingSpaceGroupTypes();
 
   foreach ($entity_types as $entity_type) {
-    $field_definition = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Space'))
-      ->setSetting('target_type', 'group')
-      ->setTranslatable(FALSE);
-    \Drupal::entityDefinitionUpdateManager()
-      ->installFieldStorageDefinition('space', $entity_type, 'living_spaces_group', $field_definition);
+    if ($entity_type !== 'user') {
+      $field_definition = BaseFieldDefinition::create('entity_reference')
+        ->setLabel(t('Space'))
+        ->setSetting('target_type', 'group')
+        ->setTranslatable(FALSE);
+      \Drupal::entityDefinitionUpdateManager()
+        ->installFieldStorageDefinition('space', $entity_type, 'living_spaces_group', $field_definition);
+    }
+  }
+}
+
+/**
+ * Remove a field 'space' from entity type 'user'.
+ */
+function living_spaces_group_update_9102(&$sandbox) {
+  $entity_definition_update_manager = Drupal::entityDefinitionUpdateManager();
+  // Delete the storage definition if it was defined before.
+  $storage_definition = $entity_definition_update_manager->getFieldStorageDefinition('space', 'user');
+  if ($storage_definition) {
+    $entity_definition_update_manager->uninstallFieldStorageDefinition($storage_definition);
   }
 }
