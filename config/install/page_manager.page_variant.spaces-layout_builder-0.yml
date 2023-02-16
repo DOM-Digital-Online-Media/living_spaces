@@ -33,7 +33,7 @@ variant_settings:
           uuid: 66b9d980-47b0-4a19-a452-e0756711d5b4
           region: top
           configuration:
-            id: 'views_block:groups-groups'
+            id: 'views_block:spaces-groups'
             label: ''
             provider: views
             label_display: '0'
