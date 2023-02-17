@@ -73,7 +73,6 @@ function living_spaces_group_update_9101(&$sandbox) {
   \Drupal::entityDefinitionUpdateManager()
     ->installFieldStorageDefinition($field_name, 'group', 'living_spaces_group', $definition);
 
-
   $entityStorage = \Drupal::entityTypeManager()->getStorage('group');
   $query = $entityStorage->getQuery();
   $query->accessCheck(FALSE);
