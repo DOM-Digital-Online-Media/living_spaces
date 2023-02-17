@@ -128,6 +128,17 @@ function living_spaces_group_entity_base_field_info(EntityTypeInterface $entity_
       ->setTranslatable(FALSE);
   }
 
+  if ($entity_type->id() == 'group') {
+    $fields['allow_admins_to_edit_members'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Allow space admins to edit member accounts'))
+      ->setDefaultValue(FALSE)
+      ->setDisplayOptions('form', [
+        'settings' => ['display_label' => TRUE],
+        'weight' => 0,
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+  }
+
   if (in_array($entity_type->id(), ['group_role', 'group_content'])) {
     $description = $entity_type->id() === 'group_role'
       ? t('Mark group role as admin role for space type.')
@@ -240,11 +251,16 @@ function living_spaces_group_form_group_form_alter(&$form, FormStateInterface $f
     $form['protected']['#access'] = \Drupal::currentUser()->hasPermission('manage protected spaces');
   }
 
-  if (
-    isset($form['field_allow_admin_to_edit_member'])
-    && empty(array_intersect(['administrator', 'client_admin'], \Drupal::currentUser()->getRoles()))
-  ) {
-    $form['field_allow_admin_to_edit_member']['#access'] = FALSE;
+  if (isset($form['allow_admins_to_edit_members'])) {
+    if (
+      $group->isNew()
+      && in_array($group->bundle(), ['project_space', 'department'])
+    ) {
+      $form['allow_admins_to_edit_members']['widget']['value']['#default_value'] = TRUE;
+    }
+
+    $form['allow_admins_to_edit_members']['#access'] = \Drupal::currentUser()->hasPermission('manage access of admins to edit accounts in mutual space');
+
   }
 }
 

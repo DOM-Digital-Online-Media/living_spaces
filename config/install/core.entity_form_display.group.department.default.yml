@@ -2,7 +2,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.group.department.field_allow_admin_to_edit_member
     - field.field.group.department.field_space_denomination
     - field.field.group.department.field_space_functions
     - group.type.department
@@ -11,13 +10,6 @@ targetEntityType: group
 bundle: department
 mode: default
 content:
-  field_allow_admin_to_edit_member:
-    type: boolean_checkbox
-    weight: 28
-    region: content
-    settings:
-      display_label: true
-    third_party_settings: {  }
   field_space_denomination:
     weight: 3
     settings: {  }

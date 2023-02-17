@@ -1,0 +1,3 @@
+manage access of admins to edit accounts in mutual space:
+  title: 'Manage access of admins to edit accounts in mutual space'
+  description: 'Allow access to the checkbox "Allow space admins to edit member accounts" in the group setting.'

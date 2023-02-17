@@ -54,26 +54,35 @@ function living_spaces_group_update_9009(&$sandbox) {
 }
 
 /**
- * Set undefined field_allow_admin_to_edit_member to TRUE.
+ * Add a field 'allow_admins_to_edit_members' to entity type 'group'.
  *
- * Set field_allow_admin_to_edit_member to TRUE if it not set already
- * for space types 'project_space' and 'department'
- * to allow space admins to edit space members profile.
+ * Set undefined field to TRUE for space types 'project_space' and 'department'.
  */
 function living_spaces_group_update_9101(&$sandbox) {
+  $field_name = 'allow_admins_to_edit_members';
+
+  $definition = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Allow space admins to edit member accounts'))
+    ->setDefaultValue(FALSE)
+    ->setDisplayOptions('form', [
+      'settings' => ['display_label' => TRUE],
+      'weight' => 0,
+    ])
+    ->setDisplayConfigurable('form', TRUE);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition($field_name, 'group', 'living_spaces_group', $definition);
+
+
   $entityStorage = \Drupal::entityTypeManager()->getStorage('group');
   $query = $entityStorage->getQuery();
   $query->accessCheck(FALSE);
   $query->condition('type', ['project_space', 'department'], 'IN');
-  $query->notExists('field_allow_admin_to_edit_member');
+  $query->notExists($field_name);
   $gids = $query->execute();
   foreach ($entityStorage->loadMultiple($gids) as $group) {
-    if ($group->hasField('field_allow_admin_to_edit_member')) {
-      $group->set('field_allow_admin_to_edit_member', TRUE);
-      $group->save();
-    }
-    else {
-      throw new Exception("There is no field 'field_allow_admin_to_edit_member' in the group type '{$group->getGroupType()->id()}'.");
-    }
+    $group->set($field_name, TRUE);
+    $group->save();
   }
+  die();
 }

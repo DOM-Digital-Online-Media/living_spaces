@@ -2,20 +2,12 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.group.project_space.field_allow_admin_to_edit_member
     - group.type.project_space
 id: group.project_space.default
 targetEntityType: group
 bundle: project_space
 mode: default
 content:
-  field_allow_admin_to_edit_member:
-    type: boolean_checkbox
-    weight: 28
-    region: content
-    settings:
-      display_label: true
-    third_party_settings: {  }
   label:
     type: string_textfield
     weight: 0

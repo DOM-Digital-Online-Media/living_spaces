@@ -71,7 +71,7 @@ class LivingSpacesGroupManager implements LivingSpacesGroupManagerInterface {
    */
   public function isUserSpaceAdmin(AccountInterface $account, GroupInterface $group) {
     /** @var \Drupal\group\Entity\Storage\GroupRoleStorageInterface $role_storage */
-    $role_storage = \Drupal::entityTypeManager()->getStorage('group_role');
+    $role_storage = $this->entityTypeManager->getStorage('group_role');
     $roles = $role_storage->loadByUserAndGroup($account, $group);
     foreach ($roles as $role) {
       if ($role->get('is_space_admin')) {

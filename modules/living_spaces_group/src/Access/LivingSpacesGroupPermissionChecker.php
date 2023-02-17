@@ -56,17 +56,6 @@ class LivingSpacesGroupPermissionChecker implements GroupPermissionCheckerInterf
       if (in_array('office_manager', $account_roles) && $exclude) {
         return TRUE;
       }
-
-      $permissions = $this->moduleHandler->invokeAll('living_spaces_group_custom_permissions_by_roles');
-      foreach ($permissions as $custom_permission => $roles) {
-        if ($permission === $custom_permission) {
-          foreach ($roles as $role => $access) {
-            if (in_array($role, $account_roles)) {
-              return $access;
-            }
-          }
-        }
-      }
     }
 
     return $this->originalService->hasPermissionInGroup($permission, $account, $group);
