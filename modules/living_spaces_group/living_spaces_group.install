@@ -83,5 +83,4 @@ function living_spaces_group_update_9101(&$sandbox) {
     $group->set($field_name, TRUE);
     $group->save();
   }
-  die();
 }

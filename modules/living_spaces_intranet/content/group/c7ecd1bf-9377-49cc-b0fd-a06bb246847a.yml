@@ -42,3 +42,7 @@ default:
       entity: 7ec4e426-4ef5-4948-9817-8face23eaec0
     -
       entity: 1b83cb06-bddb-429a-8c0f-5de96ab0baae
+  allow_admins_to_edit_members:
+    -
+      value: true
+

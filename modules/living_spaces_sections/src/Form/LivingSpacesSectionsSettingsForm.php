@@ -200,12 +200,8 @@ class LivingSpacesSectionsSettingsForm extends FormBase {
       }
       $form_state->setStorage($form_storage);
 
-      if ($this->currentUser()->hasPermission('manage access of admins to edit accounts in mutual space')) {
-        $allow_admins_to_edit_members_value = FALSE;
-        $gid = $this->route->getRawParameter('group');
-        if ($gid && $group = $this->entityTypeManager->getStorage('group')->load($gid)) {
-          $allow_admins_to_edit_members_value = $group->allow_admins_to_edit_members->value;
-        }
+      if ($this->group && $this->currentUser()->hasPermission('manage access of admins to edit accounts in mutual space')) {
+        $allow_admins_to_edit_members_value = $this->group->allow_admins_to_edit_members->value ?? FALSE;
         $form['allow_admins_to_edit_members'] = [
           '#type' => 'checkbox',
           '#title' => $this->t('Allow space admins to edit member accounts'),
@@ -253,12 +249,11 @@ class LivingSpacesSectionsSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $gid = $this->route->getRawParameter('group');
-    if ($gid && $group = $this->entityTypeManager->getStorage('group')->load($gid)) {
+    if ($this->group) {
       $value = $form_state->getValue('allow_admins_to_edit_members');
       if (!is_null($value)) {
-        $group->set('allow_admins_to_edit_members', $value);
-        $group->save();
+        $this->group->set('allow_admins_to_edit_members', $value);
+        $this->group->save();
       }
     }
 
