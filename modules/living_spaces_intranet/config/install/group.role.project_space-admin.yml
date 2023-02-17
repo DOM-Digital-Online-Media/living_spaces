@@ -23,7 +23,6 @@ permissions:
   - 'join private group'
   - 'join public group'
   - 'leave group'
-  - 'manage access of admins to edit accounts in mutual space'
   - 'manage living spaces sections settings'
   - 'manage space members'
   - 'revert group revisions'
