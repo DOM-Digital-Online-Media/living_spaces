@@ -2,6 +2,9 @@
 
 namespace Drupal\living_spaces_group;
 
+use Drupal\Core\Session\AccountInterface;
+use Drupal\group\Entity\GroupInterface;
+
 /**
  * Interface for group manager service.
  */
@@ -33,5 +36,18 @@ interface LivingSpacesGroupManagerInterface {
    *   An array of entity types.
    */
   public function getEntityTypesOfLivingSpaceGroupTypes();
+
+  /**
+   * Returns whether user is group admin.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The account to load the group role entities for.
+   * @param \Drupal\group\Entity\GroupInterface $group
+   *   The group entity to find the user's role entities in.
+   *
+   * @return bool
+   *   True if living space enabled for the group bundle.
+   */
+  public function isUserSpaceAdmin(AccountInterface $account, GroupInterface $group);
 
 }

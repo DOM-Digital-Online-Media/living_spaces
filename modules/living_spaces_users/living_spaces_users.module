@@ -125,8 +125,11 @@ function living_spaces_users_profile_access(ProfileInterface $entity, $operation
       if ($operation === 'update') {
         foreach ($same as $group_id) {
           /** @var \Drupal\group\Entity\GroupInterface $group */
-          $group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id);
-          if ($group->hasPermission('manage living space member account', $current)) {
+          if (
+            ($group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id))
+            && $group->allow_admins_to_edit_members->value
+            && \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($account, $group)
+          ) {
             return AccessResult::allowed();
           }
         }

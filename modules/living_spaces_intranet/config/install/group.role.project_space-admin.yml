@@ -23,7 +23,6 @@ permissions:
   - 'join private group'
   - 'join public group'
   - 'leave group'
-  - 'manage living space member account'
   - 'manage living spaces sections settings'
   - 'manage space members'
   - 'revert group revisions'
