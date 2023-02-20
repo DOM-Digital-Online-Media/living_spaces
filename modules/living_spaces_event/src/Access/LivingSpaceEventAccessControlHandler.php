@@ -37,7 +37,30 @@ class LivingSpaceEventAccessControlHandler extends EntityAccessControlHandler {
         return $access_result->addCacheableDependency($entity);
 
       case 'update':
-        return AccessResult::allowedIfHasPermissions($account, ["edit {$entity->bundle()} space event"]);
+        $access = FALSE;
+
+        if ($account->id() === $entity->getOwnerId()) {
+          $access = TRUE;
+        }
+
+        if (!$access && $account->hasPermission("edit {$entity->bundle()} space event")) {
+          $access = TRUE;
+        }
+
+        if (!$access && !$entity->get('space')->isEmpty()) {
+          /** @var \Drupal\group\Entity\Group $group */
+          $group = $entity->get('space')->entity;
+
+          if ($entity->getOwnerId() === $account->id() && $group->hasPermission("update own living_spaces_event:{$entity->bundle()} entity", $account)) {
+            $access = TRUE;
+          }
+
+          if (!$access && $group->hasPermission("update any living_spaces_event:{$entity->bundle()} entity", $account)) {
+            $access = TRUE;
+          }
+        }
+
+        return AccessResult::allowedIf($access);
 
       case 'delete':
         return AccessResult::allowedIfHasPermissions($account, ["delete {$entity->bundle()} space event"]);
