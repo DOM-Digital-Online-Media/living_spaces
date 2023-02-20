@@ -13,7 +13,9 @@ define('LIVING_SPACES_EVENT_ACCEPTED_STATUS', 'c9e45cef-15e9-4d9e-92c9-cd67dbf1f
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Url;
 use Drupal\group\Entity\GroupContentInterface;
+use Drupal\group\Entity\GroupInterface;
 use Drupal\living_spaces_event\Entity\LivingSpaceEventTypeInterface;
 use Drupal\living_spaces_event\Entity\LivingSpaceEventInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -393,6 +395,29 @@ function living_spaces_event_event_form_submit($form, FormStateInterface $form_s
       $form_state->setRedirect('living_spaces_sections.section_view', ['group' => $group->id(), 'section' => $section->getPath()]);
     }
   }
+}
+
+/**
+ * Implements hook_living_spaces_group_action_info().
+ */
+function living_spaces_event_living_spaces_group_action_info(GroupInterface $space) {
+  $items = [];
+
+  if (\Drupal::currentUser()->hasPermission('manage living spaces') ||
+    $space->hasPermission('manage living spaces', \Drupal::currentUser())
+  ) {
+    $items['create_event'] = [
+      '#type' => 'link',
+      '#title' => t('Create Event'),
+      '#options' => [],
+      '#url' => \Drupal\Core\Url::fromRoute('living_spaces_group.create_content', [
+        'group' => $space->id(),
+        'plugin' => 'living_spaces_event',
+      ]),
+    ];
+  }
+
+  return $items;
 }
 
 /**
