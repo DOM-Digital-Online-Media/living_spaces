@@ -73,6 +73,7 @@
         "drupal/views_data_export": "^1.0",
         "drupal/views_field_view": "^1.0",
         "fullcalendar/fullcalendar": "4.4.0",
+        "drupal/role_delegation": "^1.2",
         "valve/fingerprintjs2": "2.1.0"
     },
     "extra": {
