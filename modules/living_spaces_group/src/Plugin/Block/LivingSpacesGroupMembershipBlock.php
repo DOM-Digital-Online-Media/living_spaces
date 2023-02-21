@@ -3,7 +3,10 @@
 namespace Drupal\living_spaces_group\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
+use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\group\Entity\GroupInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -31,6 +34,20 @@ class LivingSpacesGroupMembershipBlock extends BlockBase implements ContainerFac
   protected $formBuilder;
 
   /**
+   * The current route match service.
+   *
+   * @var \Drupal\Core\Routing\CurrentRouteMatch
+   */
+  protected $currentRouteMatch;
+
+  /**
+   * Returns the entity_type.manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Constructs a LivingSpacesGroupMembershipBlock block.
    *
    * @param array $configuration
@@ -41,10 +58,23 @@ class LivingSpacesGroupMembershipBlock extends BlockBase implements ContainerFac
    *   The plugin implementation definition.
    * @param \Drupal\Core\Form\FormBuilderInterface $formBuilder
    *   Provides an interface for form building and processing.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   * @param \Drupal\Core\Routing\CurrentRouteMatch $current_route_match
+   *   The current route match service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, FormBuilderInterface $formBuilder) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    FormBuilderInterface $formBuilder,
+    EntityTypeManagerInterface $entity_type_manager,
+    CurrentRouteMatch $current_route_match
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->formBuilder = $formBuilder;
+    $this->entityTypeManager = $entity_type_manager;
+    $this->currentRouteMatch = $current_route_match;
   }
 
   /**
@@ -55,7 +85,9 @@ class LivingSpacesGroupMembershipBlock extends BlockBase implements ContainerFac
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('form_builder')
+      $container->get('form_builder'),
+      $container->get('entity_type.manager'),
+      $container->get('current_route_match')
     );
   }
 
@@ -79,7 +111,23 @@ class LivingSpacesGroupMembershipBlock extends BlockBase implements ContainerFac
   public function blockAccess(AccountInterface $account) {
     /** @var \Drupal\group\Entity\GroupInterface $group */
     $group = $this->getContextValue('group');
-    $access = $account->hasPermission('administer members') || $group->hasPermission('administer members', $account);
+    $access = $group->hasPermission('administer members', $account);
+
+    if (!$access && $account->hasPermission('add members to administered space')) {
+      $gid = $this->currentRouteMatch->getRawParameter('group');
+
+      if ($gid && $group = $this->entityTypeManager->getStorage('group')->load($gid)) {
+        $role_storage = $this->entityTypeManager->getStorage('group_role');
+        $roles = $role_storage->loadByUserAndGroup($account, $group);
+
+        foreach ($roles as $role) {
+          if ($role->get('is_space_admin')) {
+            $access = TRUE;
+            break;
+          }
+        }
+      }
+    }
 
     return $access ? AccessResult::allowed() : AccessResult::forbidden();
   }

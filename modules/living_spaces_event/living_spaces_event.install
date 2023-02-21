@@ -5,6 +5,8 @@
  * Install/update/uninstall hooks for event module.
  */
 
+use Drupal\Core\Field\BaseFieldDefinition;
+
 /**
  * Implements hook_uninstall().
  */
@@ -23,5 +25,43 @@ function living_spaces_event_uninstall($is_syncing) {
     ]]);
   if (!empty($term)) {
     $taxonomy_storage->delete($term);
+  }
+}
+
+/**
+ * Add new field for invited spaces/users.
+ */
+function living_spaces_event_update_9001() {
+  $definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+
+  $fields = [
+    [
+      'name' => t('Invited spaces'),
+      'machine_name' => 'invited_spaces',
+      'target' => 'group',
+    ],
+    [
+      'name' => t('Invited users'),
+      'machine_name' => 'invited_users',
+      'target' => 'user',
+    ],
+  ];
+
+  foreach ($fields as $field) {
+    $definition = BaseFieldDefinition::create('entity_reference')
+      ->setLabel($field['name'])
+      ->setSetting('target_type', $field['target'])
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => 60,
+          'placeholder' => '',
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+
+    $definition_update_manager->installFieldStorageDefinition($field['machine_name'], 'living_spaces_event', 'living_spaces_event', $definition);
   }
 }

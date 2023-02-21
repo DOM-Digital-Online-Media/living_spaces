@@ -1,0 +1,55 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: c4ce400d-959a-4fab-b99a-64eacf67e723
+  bundle: menu_link_content
+  default_langcode: en
+default:
+  enabled:
+    -
+      value: true
+  title:
+    -
+      value: Guidance
+  menu_name:
+    -
+      value: footer-menu
+  link:
+    -
+      uri: 'internal:/'
+      title: ''
+      options:
+        attributes: {  }
+  external:
+    -
+      value: false
+  rediscover:
+    -
+      value: true
+  weight:
+    -
+      value: 0
+  expanded:
+    -
+      value: false
+  revision_translation_affected:
+    -
+      value: true
+  menu_item_override_children:
+    -
+      value: false
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 1
+  content_translation_status:
+    -
+      value: true
+  content_translation_created:
+    -
+      value: 1675424939

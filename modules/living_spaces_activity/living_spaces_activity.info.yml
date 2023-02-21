@@ -10,6 +10,7 @@ dependencies:
   - living_spaces_discussions
   - living_spaces_group
   - living_spaces_sections
+  - living_spaces_users
   - message_ui
   - nodejs
   - token

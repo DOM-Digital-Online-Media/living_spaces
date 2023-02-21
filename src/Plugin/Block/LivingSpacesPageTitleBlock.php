@@ -3,6 +3,7 @@
 namespace Drupal\living_spaces\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Path\PathMatcherInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -10,6 +11,7 @@ use Drupal\Core\Url;
 use Drupal\path_alias\AliasManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Controller\TitleResolverInterface;
 
@@ -138,7 +140,7 @@ class LivingSpacesPageTitleBlock extends BlockBase implements ContainerFactoryPl
 
     for ($i = 0; $i < $lead_count; $i++) {
       $form['lead_fieldset']['lead_items'][$i]['lead_text'] = [
-        '#type' => 'textfield',
+        '#type' => 'textarea',
         '#title' => $this->t('Lead text'),
         '#default_value' => isset($config['lead'][$i]['lead_text']) ? $config['lead'][$i]['lead_text'] : '',
       ];
@@ -211,8 +213,15 @@ class LivingSpacesPageTitleBlock extends BlockBase implements ContainerFactoryPl
 
       foreach ($this->configuration['lead'] as $item) {
         if ($this->pathMatcher->matchPath($path, $item['lead_path'])) {
-          $lead = $item['lead_text'];
+          $lead = $this->t($item['lead_text']);
         }
+      }
+    }
+
+    $tags = [];
+    foreach ($this->route->getParameters() as $entity) {
+      if ($entity instanceof EntityInterface) {
+        $tags = Cache::mergeTags($tags, $entity->getCacheTags());
       }
     }
 
@@ -221,7 +230,7 @@ class LivingSpacesPageTitleBlock extends BlockBase implements ContainerFactoryPl
       '#title' => $this->titleResolver->getTitle($this->request->getCurrentRequest(), $this->route->getRouteObject()),
       '#lead' => $lead,
       '#include_hr' => $this->configuration['include_hr'],
-      '#cache' => ['contexts' => ['url']],
+      '#cache' => ['contexts' => ['url'], 'tags' => $tags],
     ];
   }
 

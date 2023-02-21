@@ -8,4 +8,12 @@ id: volunteer
 label: Volunteer
 weight: 5
 is_admin: false
-permissions: {  }
+permissions:
+  - 'create contact_data profile'
+  - 'create core profile'
+  - 'delete own contact_data profile'
+  - 'delete own core profile'
+  - 'update own contact_data profile'
+  - 'update own core profile'
+  - 'view own contact_data profile'
+  - 'view own core profile'

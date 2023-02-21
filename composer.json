@@ -78,7 +78,8 @@
     "extra": {
         "patches": {
             "drupal/core": {
-                "Invalid config structures can result in exceptions when saving a config entity": "https://www.drupal.org/files/issues/2021-11-29/2925890-29.patch"
+                "Invalid config structures can result in exceptions when saving a config entity": "https://www.drupal.org/files/issues/2021-11-29/2925890-29.patch",
+                "Support removing nested elements in Twig 'without' filter": "https://www.drupal.org/files/issues/2020-08-18/3029189-14.patch"
             },
             "drupal/message_ui": {
                 "Deleted and replaced configuration entity error": "https://www.drupal.org/files/issues/2018-12-21/issue-3021923-deleted-replaced-config-error-1.patch"

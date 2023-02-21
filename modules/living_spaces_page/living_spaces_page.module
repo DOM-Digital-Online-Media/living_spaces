@@ -49,6 +49,13 @@ function living_spaces_page_entity_base_field_info(EntityTypeInterface $entity_t
 }
 
 /**
+ * Implements hook_living_spaces_group_exclude_permissions().
+ */
+function living_spaces_page_living_spaces_group_exclude_permissions() {
+  return ['create page entities'];
+}
+
+/**
  * Implements hook_ENTITY_TYPE_access().
  */
 function living_spaces_page_node_access(NodeInterface $entity, $operation, AccountInterface $account) {
@@ -118,10 +125,11 @@ function living_spaces_page_node_access(NodeInterface $entity, $operation, Accou
 function living_spaces_page_node_insert(NodeInterface $entity) {
   if ('page' == $entity->bundle()) {
     living_spaces_page_attach_page($entity);
-
+    $space = \Drupal::request()->query->get('space');
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'page_created',
       'field_page' => $entity->id(),
+      'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
   }
@@ -133,10 +141,11 @@ function living_spaces_page_node_insert(NodeInterface $entity) {
 function living_spaces_page_node_update(NodeInterface $entity) {
   if ('page' == $entity->bundle()) {
     living_spaces_page_attach_page($entity);
-
+    $space = \Drupal::request()->query->get('space');
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'page_updated',
       'field_page' => $entity->id(),
+      'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
   }
@@ -186,7 +195,9 @@ function living_spaces_page_attach_page(NodeInterface $entity) {
 function living_spaces_page_living_spaces_group_action_info(GroupInterface $space) {
   $items = [];
 
-  if (\Drupal::currentUser()->hasPermission('create page content')) {
+  if (\Drupal::currentUser()->hasPermission('create page content') ||
+    $space->hasPermission('create page entities', \Drupal::currentUser())
+  ) {
     $items['page'] = [
       '#type' => 'link',
       '#title' => t('Create Info page'),

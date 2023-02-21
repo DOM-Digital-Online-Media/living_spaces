@@ -1,0 +1,58 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: 67dd9262-c52f-4abd-a278-93c788e2dd55
+  bundle: menu_link_content
+  default_langcode: en
+default:
+  enabled:
+    -
+      value: true
+  title:
+    -
+      value: Help
+  menu_name:
+    -
+      value: footer-menu
+  link:
+    -
+      uri: 'internal:/help-faq'
+      title: ''
+      options:
+        attributes: {  }
+  external:
+    -
+      value: false
+  rediscover:
+    -
+      value: true
+  weight:
+    -
+      value: -20
+  expanded:
+    -
+      value: false
+  revision_translation_affected:
+    -
+      value: true
+  menu_item_roles:
+    -
+      target_id: authenticated
+  menu_item_override_children:
+    -
+      value: false
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 1
+  content_translation_status:
+    -
+      value: true
+  content_translation_created:
+    -
+      value: 1668169921

@@ -20,7 +20,8 @@ default:
     -
       uri: 'internal:/admin/group/spaces'
       title: ''
-      options: {  }
+      options:
+        attributes: {  }
   external:
     -
       value: false

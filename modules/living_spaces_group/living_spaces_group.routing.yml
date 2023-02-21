@@ -13,6 +13,18 @@ living_spaces_group.remove_member:
     _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupController::removeMember'
   requirements:
     _group_permission: 'manage living spaces'
+living_spaces_group.block_user:
+  path: '/group/{group}/living-spaces-admin/block-user/{user}'
+  defaults:
+    _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupController::blockUser'
+  requirements:
+    _group_permission: 'manage living spaces'
+living_spaces_group.unblock_user:
+  path: '/group/{group}/living-spaces-admin/unblock-user/{user}'
+  defaults:
+    _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupController::unblockUser'
+  requirements:
+    _group_permission: 'manage living spaces'
 living_spaces_group.assign_admin:
   path: '/group/{group}/living-spaces-admin/assign-admin/{user}'
   defaults:
@@ -38,7 +50,7 @@ living_spaces_group.create_content:
     _title: 'Create content'
     _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupCreateContentController::createContent'
   requirements:
-    _permission: 'manage living spaces'
+    _custom_access: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupCreateContentController::access'
   options:
     parameters:
       group:

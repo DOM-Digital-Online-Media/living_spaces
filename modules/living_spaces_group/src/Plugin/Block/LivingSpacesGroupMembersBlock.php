@@ -46,6 +46,13 @@ class LivingSpacesGroupMembersBlock extends BlockBase implements ContainerFactor
   protected $blockManager;
 
   /**
+   * Entity type manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
@@ -53,6 +60,7 @@ class LivingSpacesGroupMembersBlock extends BlockBase implements ContainerFactor
     $instance->currentUser = $container->get('current_user');
     $instance->moduleHandler = $container->get('module_handler');
     $instance->blockManager = $container->get('plugin.manager.block');
+    $instance->entityTypeManager = $container->get('entity_type.manager');
     return $instance;
   }
 
@@ -230,8 +238,23 @@ class LivingSpacesGroupMembersBlock extends BlockBase implements ContainerFactor
           $build['tree'] = $this->getGroupTreeRender($group);
         }
 
+        /** @var \Drupal\group\Entity\Storage\GroupRoleStorageInterface $role_storage */
+        $role_storage = $this->entityTypeManager->getStorage('group_role');
+        $roles = $role_storage->loadByUserAndGroup($this->currentUser, $group);
+        $current_is_admin = FALSE;
+        foreach ($roles as $role) {
+          if ($role->get('is_space_admin')) {
+            $current_is_admin = TRUE;
+            break;
+          }
+        }
+
         if ($this->moduleHandler->moduleExists('living_spaces_circles') &&
-          $this->currentUser->hasPermission('manage circle spaces')
+          (
+            $current_is_admin ||
+            $this->currentUser->hasPermission('manage circle spaces') ||
+            $group->hasPermission('manage circle spaces', $this->currentUser)
+          )
         ) {
           $build['circle'] = $this->getCircleFormRender($group);
 

@@ -3,26 +3,37 @@ status: true
 dependencies:
   config:
     - field.field.message.page_updated.field_page
+    - field.field.message.page_updated.field_related_space
     - message.template.page_updated
   module:
     - user
+_core:
+  default_config_hash: Btu_pFXb3g1LAWRj9UQU_JUcm5h62_8MLZvBOrp76IE
 id: message.page_updated.default
 targetEntityType: message
 bundle: page_updated
 mode: default
 content:
   field_page:
-    weight: 1
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
+    weight: 1
+    region: content
+  field_related_space:
     type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
     region: content
   partial_0:
-    weight: 0
     settings: {  }
     third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   search_api_excerpt: true

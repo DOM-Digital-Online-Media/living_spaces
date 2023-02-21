@@ -14,13 +14,18 @@ audience: outsider
 group_type: department
 permissions_ui: false
 permissions:
+  - 'administer members'
+  - 'create group_node:discussion_post entity'
   - 'edit group'
+  - 'delete any group_node:discussion_post entity'
   - 'update private group'
   - 'update public group'
+  - 'update any group_node:discussion_post entity'
   - 'view any unpublished group'
   - 'view discussions section of a living space'
   - 'view events section of a living space'
   - 'view group'
+  - 'view group_node:discussion_post entity'
   - 'view own unpublished group'
   - 'view private group'
   - 'view public group'

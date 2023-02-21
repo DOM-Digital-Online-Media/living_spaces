@@ -8,4 +8,17 @@ id: office_manager
 label: 'Office Manager'
 weight: 10
 is_admin: false
-permissions: {  }
+permissions:
+  - 'access living spaces overview'
+  - 'create living_space group'
+  - 'administer permissions'
+  - 'change member passwords'
+  - 'create contact_data profile'
+  - 'create core profile'
+  - 'create living_space group'
+  - 'delete own contact_data profile'
+  - 'delete own core profile'
+  - 'update own contact_data profile'
+  - 'update own core profile'
+  - 'view own contact_data profile'
+  - 'view own core profile'

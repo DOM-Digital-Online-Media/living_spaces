@@ -1,2 +1,3 @@
 permissions:
+  - 'access protected area manage pages'
   - 'access protected area settings'

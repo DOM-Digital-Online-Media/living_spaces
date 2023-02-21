@@ -12,13 +12,88 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\Entity\User;
+use Drupal\living_spaces_intranet\Entity\LivingSpacesBanInterface;
+
+/**
+ * Implements hook_cron().
+ */
+function living_spaces_intranet_cron() {
+  $storage = \Drupal::entityTypeManager()->getStorage('living_spaces_ban');
+
+  $query = $storage->getQuery();
+  $query->condition('expire', \Drupal::time()->getRequestTime(), '<');
+  $query->accessCheck(FALSE);
+  $query->range(0, 40);
+
+  if ($ids = $query->execute()) {
+    $bans = $storage->loadMultiple($ids);
+    $storage->delete($bans);
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_intranet_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['#validate'][] = 'living_spaces_intranet_user_login_validate';
+}
+
+/**
+ * Provides validate callback for user login form.
+ */
+function living_spaces_intranet_user_login_validate(&$form, FormStateInterface $form_state) {
+  if ($account = user_load_by_name($form_state->getValue('name'))) {
+    /** @var \Drupal\living_spaces_intranet\LivingSpacesBansManagerInterface $ban_manager */
+    $ban_manager = \Drupal::service('living_spaces_bans.manager');
+
+    if ($ban_manager->getUserBans($account, ['global'])) {
+      $form_state->setErrorByName('name', t('This account has been temporarily suspended.'));
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_intranet_living_spaces_ban_insert(LivingSpacesBanInterface $entity) {
+  if ('global' == $entity->bundle() && !$entity->get('target_user')->isEmpty()) {
+    /** @var \Drupal\user\UserInterface $target */
+    $target = $entity->get('target_user')->entity;
+    $target->block();
+    $target->save();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function living_spaces_intranet_living_spaces_ban_delete(LivingSpacesBanInterface $entity) {
+  if ('global' == $entity->bundle() && !$entity->get('target_user')->isEmpty()) {
+    /** @var \Drupal\user\UserInterface $target */
+    $target = $entity->get('target_user')->entity;
+    $target->activate();
+    $target->save();
+  }
+}
 
 /**
  * Implements hook_ENTITY_TYPE_access().
  */
 function living_spaces_intranet_user_access(EntityInterface $entity, $operation, AccountInterface $account) {
-  /** @var \Drupal\user\UserInterface $entity */
+  /** @var \Drupal\user\UserInterface $current */
   $current = User::load($account->id());
+
+  /** @var \Drupal\user\UserInterface $entity */
+  if ($operation === 'delete' && in_array('client_admin', $current->getRoles())) {
+    $weights = living_spaces_users_get_role_weights();
+    $current_user_level = living_spaces_users_get_user_level($current, $weights);
+    $user_level = living_spaces_users_get_user_level($entity, $weights);
+    // Disable access to delete if user has higher weight than current user.
+    if ($current_user_level < $user_level) {
+      return AccessResult::forbidden();
+    }
+  }
+
   $own_spaces = $current->get('joined_spaces')->getValue();
   $own_spaces = array_column($own_spaces, 'target_id');
   if ($own_spaces && ($entity->id() !== $account->id())) {
@@ -26,6 +101,22 @@ function living_spaces_intranet_user_access(EntityInterface $entity, $operation,
     $user_spaces = array_column($user_spaces, 'target_id');
 
     $same = array_intersect($own_spaces, $user_spaces);
+    if (
+      ($operation === 'delete') &&
+      $current->hasPermission('delete shared offices space members')
+    ) {
+      foreach ($same as $group_id) {
+        /** @var \Drupal\group\Entity\GroupInterface $group */
+        if (
+          ($group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id))
+          && $group->allow_admins_to_edit_members->value
+          && \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($account, $group)
+        ) {
+          return AccessResult::allowed();
+        }
+      }
+    }
+
     if ($operation === 'view' && !empty($same)) {
       return AccessResult::allowed();
     }
@@ -33,8 +124,11 @@ function living_spaces_intranet_user_access(EntityInterface $entity, $operation,
     if ($operation === 'update') {
       foreach ($same as $group_id) {
         /** @var \Drupal\group\Entity\GroupInterface $group */
-        $group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id);
-        if ($group->hasPermission('manage living space member account', $current)) {
+        if (
+          ($group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id))
+          && $group->allow_admins_to_edit_members->value
+          && \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($account, $group)
+        ) {
           return AccessResult::allowed();
         }
       }
@@ -49,7 +143,11 @@ function living_spaces_intranet_user_access(EntityInterface $entity, $operation,
  */
 function living_spaces_intranet_query_entity_reference_alter(AlterableInterface $query) {
   $account = \Drupal::currentUser();
-  if ($account->hasPermission('manage living spaces')) {
+  if (
+    $account->hasPermission('manage living spaces') ||
+    $account->hasPermission('add members to any space') ||
+    $account->hasPermission('add members to administered space')
+  ) {
     return;
   }
 
@@ -168,6 +266,21 @@ function living_spaces_intranet_form_alter(&$form, FormStateInterface $form_stat
       }
       break;
 
+  }
+}
+
+/**
+ * Implements hook_entity_field_access_alter().
+ */
+function living_spaces_intranet_entity_field_access_alter(array &$grants, array $context) {
+  /** @var \Drupal\Core\Field\FieldDefinitionInterface $field_definition */
+  $field_definition = $context['field_definition'];
+
+  if ('user' == $field_definition->getTargetEntityTypeId() &&
+    'status' == $field_definition->getName() &&
+    \Drupal::currentUser()->hasPermission('administer permissions')
+  ) {
+    $grants['living_spaces_intranet'] = AccessResult::allowed();
   }
 }
 
