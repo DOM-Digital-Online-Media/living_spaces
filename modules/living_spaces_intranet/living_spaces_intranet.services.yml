@@ -2,3 +2,6 @@ services:
   living_spaces_bans.manager:
     class: Drupal\living_spaces_intranet\LivingSpacesBansManager
     arguments: ['@entity_type.manager', '@current_user', '@datetime.time']
+  living_spaces_intranet.manager:
+    class: Drupal\living_spaces_intranet\LivingSpacesIntranetManager
+    arguments: ['@settings']
