@@ -100,11 +100,24 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
       /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInviteInterface $invite */
       $invite = $this->entityTypeManager->getStorage('living_spaces_event_invite')->load($invite_id);
 
-      $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
-        'uuid' => LIVING_SPACES_EVENT_ACCEPTED_STATUS,
-      ]);
+      $accept = FALSE;
+      /** @var \Drupal\taxonomy\TermInterface $status */
+      if ($status = $invite->get('status')->entity) {
 
-      if ($terms && $invite->get('status')->getString() != reset($terms)->id()) {
+        switch ($status->uuid()) {
+          case LIVING_SPACES_EVENT_INVITED_STATUS:
+          case LIVING_SPACES_EVENT_DECLINED_STATUS:
+            $accept = TRUE;
+            break;
+
+        }
+      }
+
+      if ($accept) {
+        $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
+          'uuid' => LIVING_SPACES_EVENT_ACCEPTED_STATUS,
+        ]);
+
         $build['accept'] = [
           '#type' => 'link',
           '#title' => $this->t('Accept'),
