@@ -280,7 +280,7 @@ function living_spaces_event_check_user_status($eid, $uid) {
   $query->condition('event', $eid);
   $query->condition('uid', $uid);
 
-  return (bool) $query->execute();
+  return $query->execute();
 }
 
 /**
