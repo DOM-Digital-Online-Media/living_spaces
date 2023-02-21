@@ -3,6 +3,7 @@
 namespace Drupal\living_spaces_event\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
@@ -121,13 +122,21 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
         $build['accept'] = [
           '#type' => 'link',
           '#title' => $this->t('Accept'),
-          '#attributes' => ['class' => ['btn', 'btn-primary']],
+          '#attributes' => ['class' => [
+            'btn',
+            'btn-primary',
+          ]],
           '#url' => Url::fromRoute('living_spaces_event.event_status', [
             'living_spaces_event_invite' => $invite->id(),
             'status' => $terms ? reset($terms)->id() : '',
           ], [
-            'query' => ['destination' => $this->redirect->get()],
+            'query' => [
+              'destination' => $this->redirect->get(),
+            ],
           ]),
+          '#cache' => [
+            'tags' => Cache::mergeTags($event->getCacheTags(), $invite->getCacheTags()),
+          ],
         ];
       }
     }
