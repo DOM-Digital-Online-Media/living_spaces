@@ -409,29 +409,6 @@ function living_spaces_event_event_form_submit($form, FormStateInterface $form_s
 }
 
 /**
- * Implements hook_living_spaces_group_action_info().
- */
-function living_spaces_event_living_spaces_group_action_info(GroupInterface $space) {
-  $items = [];
-
-  if (\Drupal::currentUser()->hasPermission('manage living spaces') ||
-    $space->hasPermission('manage living spaces', \Drupal::currentUser())
-  ) {
-    $items['create_event'] = [
-      '#type' => 'link',
-      '#title' => t('Create event'),
-      '#options' => [],
-      '#url' => Url::fromRoute('living_spaces_group.create_content', [
-        'group' => $space->id(),
-        'plugin' => 'living_spaces_event',
-      ]),
-    ];
-  }
-
-  return $items;
-}
-
-/**
  * Implements hook_living_spaces_event_action_info().
  */
 function living_spaces_event_living_spaces_event_action_info(LivingSpaceEventInterface $event) {
