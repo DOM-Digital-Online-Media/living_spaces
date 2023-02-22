@@ -15,7 +15,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
  *   admin_label = @Translation("Event actions"),
  *   category = @Translation("Living Spaces"),
  *   context_definitions = {
- *     "group" = @ContextDefinition("entity:group", required = TRUE, label = @Translation("Group"))
+ *     "living_spaces_event" = @ContextDefinition("entity:living_spaces_event", required = TRUE, label = @Translation("Event"))
  *   }
  * )
  */
@@ -61,15 +61,18 @@ class LivingSpacesEventActionsBlock extends BlockBase implements ContainerFactor
    * {@inheritdoc}
    */
   public function build() {
-    $space = $this->getContextValue('group');
+    $event = $this->getContextValue('living_spaces_event');
 
-    if (!empty($space->in_preview)) {
+    if (!empty($event->in_preview)) {
       return [];
     }
 
+    /** @var \Drupal\group\Entity\GroupInterface $space */
+    $space = $event->get('space')->entity;
+
     return [
       '#theme' => 'dropdown',
-      '#id' => "event-actions-{$space->id()}",
+      '#id' => "event-actions-{$event->id()}",
       '#button_class' => 'btn-primary',
       '#button' => $this->t('- Select action -'),
       '#links' => $this->moduleHandler->invokeAll('living_spaces_event_action_info', [$space]),

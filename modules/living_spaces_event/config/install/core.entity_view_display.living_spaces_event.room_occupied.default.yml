@@ -7,38 +7,135 @@ dependencies:
     - living_spaces_event.living_spaces_event_type.room_occupied
   module:
     - datetime
+    - layout_builder
+  theme:
+    - bootstrap_barrio
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: barrio_col2-9-3
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+        components:
+          9a8b5055-b0e5-466d-8474-6004428531bf:
+            uuid: 9a8b5055-b0e5-466d-8474-6004428531bf
+            region: top
+            configuration:
+              id: living_spaces_event_actions_block
+              label: 'Event actions'
+              label_display: '0'
+              provider: living_spaces_event
+              context_mapping:
+                living_spaces_event: layout_builder.entity
+            weight: 0
+            additional: {  }
+          197b4e43-13b2-4136-a2fb-e57527477d0f:
+            uuid: 197b4e43-13b2-4136-a2fb-e57527477d0f
+            region: first
+            configuration:
+              id: living_spaces_event_status_block
+              label: 'Change event status'
+              label_display: '0'
+              provider: living_spaces_event
+              context_mapping:
+                living_spaces_event: layout_builder.entity
+            weight: 0
+            additional: {  }
+          70b69436-b31c-4cc3-940b-57166d152884:
+            uuid: 70b69436-b31c-4cc3-940b-57166d152884
+            region: first
+            configuration:
+              id: living_spaces_page_title_block
+              label: 'Page Title'
+              label_display: '0'
+              provider: living_spaces
+              context_mapping: {  }
+              lead:
+                -
+                  lead_text: ''
+                  lead_path: ''
+              include_hr: 0
+            weight: 1
+            additional: {  }
+          1d7d125f-0d47-4061-8217-bf5c99aae597:
+            uuid: 1d7d125f-0d47-4061-8217-bf5c99aae597
+            region: first
+            configuration:
+              id: 'field_block:living_spaces_event:room_occupied:description'
+              label: Description
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings:
+                  empty_fields:
+                    handler: ''
+            weight: 2
+            additional: {  }
+          f00bb7e7-f65c-4669-8511-f30648e475d0:
+            uuid: f00bb7e7-f65c-4669-8511-f30648e475d0
+            region: first
+            configuration:
+              id: 'field_block:living_spaces_event:room_occupied:type'
+              label: 'Spaces event type'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: hidden
+                settings:
+                  link: false
+                third_party_settings:
+                  empty_fields:
+                    handler: ''
+            weight: 3
+            additional: {  }
+        third_party_settings: {  }
 id: living_spaces_event.room_occupied.default
 targetEntityType: living_spaces_event
 bundle: room_occupied
 mode: default
 content:
   field_end_date:
-    weight: 2
+    type: datetime_default
     label: above
     settings:
-      format_type: medium
       timezone_override: ''
+      format_type: medium
     third_party_settings: {  }
-    type: datetime_default
+    weight: 2
     region: content
   field_start_date:
-    weight: 1
+    type: datetime_default
     label: above
     settings:
-      format_type: medium
       timezone_override: ''
+      format_type: medium
     third_party_settings: {  }
-    type: datetime_default
+    weight: 1
     region: content
   label:
-    label: hidden
     type: string
-    weight: 0
-    region: content
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
+  description: true
   langcode: true
   location: true
   search_api_excerpt: true
