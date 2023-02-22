@@ -14,8 +14,10 @@ use Drupal\comment\CommentManagerInterface;
 use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
 use Drupal\comment\CommentInterface;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\group\Entity\GroupContentInterface;
 use Drupal\living_spaces_event\Entity\LivingSpaceEventTypeInterface;
@@ -150,6 +152,23 @@ function living_spaces_event_entity_base_field_info(EntityTypeInterface $entity_
   }
 
   return $fields;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function living_spaces_event_comment_access(CommentInterface $comment, $operation, AccountInterface $account) {
+  $result = AccessResult::neutral();
+
+  $entity = $comment->getCommentedEntity();
+  if ('living_spaces_event' == $entity->getEntityTypeId() &&
+    in_array($operation, ['update', 'delete']) &&
+    $comment->getOwnerId() == $account->id()
+  ) {
+    $result = AccessResult::allowed();
+  }
+
+  return $result;
 }
 
 /**
