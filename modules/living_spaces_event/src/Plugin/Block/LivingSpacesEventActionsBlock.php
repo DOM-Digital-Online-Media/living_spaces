@@ -61,6 +61,7 @@ class LivingSpacesEventActionsBlock extends BlockBase implements ContainerFactor
    * {@inheritdoc}
    */
   public function build() {
+    /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInterface $event */
     $event = $this->getContextValue('living_spaces_event');
 
     if (!empty($event->in_preview)) {

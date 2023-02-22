@@ -8,18 +8,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 
 /**
- * Block with 'LivingSpacesEventMetadataBlock' block.
+ * Block with 'LivingSpacesEventBaseInfoBlock' block.
  *
  * @Block(
- *   id = "living_spaces_event_metadata_block",
- *   admin_label = @Translation("Event metadata"),
+ *   id = "living_spaces_event_base_info_block",
+ *   admin_label = @Translation("Event base info"),
  *   category = @Translation("Living Spaces"),
  *   context_definitions = {
  *     "living_spaces_event" = @ContextDefinition("entity:living_spaces_event", required = TRUE, label = @Translation("Event"))
  *   }
  * )
  */
-class LivingSpacesEventMetadataBlock extends BlockBase implements ContainerFactoryPluginInterface {
+class LivingSpacesEventBaseInfoBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * Returns the date.formatter service.
@@ -29,7 +29,7 @@ class LivingSpacesEventMetadataBlock extends BlockBase implements ContainerFacto
   protected $dateFormat;
 
   /**
-   * Constructs a LivingSpacesEventMetadataBlock block.
+   * Constructs a LivingSpacesEventBaseInfoBlock block.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -71,18 +71,40 @@ class LivingSpacesEventMetadataBlock extends BlockBase implements ContainerFacto
       return $build;
     }
 
-    $build['metadata'] = [
-      '#type' => 'markup',
-      '#markup' => $this->t('Created by @author on @date.', [
-        '@author' => $event->getOwner()->toLink($event->getOwner()->getDisplayName())->toString(),
-        '@date' => $this->dateFormat->format($event->get('created')->getString(), 'custom', 'l, d F Y - H:i'),
-      ]),
-      '#prefix' => '<div class="metadata">',
-      '#suffix' => '</div>',
-      '#cache' => [
-        'tags' => $event->getCacheTags(),
-      ],
-    ];
+    $date = '';
+    if ($event->hasField('field_start_date') && !$event->get('field_start_date')->isEmpty()) {
+      $start = strtotime($event->get('field_start_date')->getValue()[0]['value']);
+      $date = $this->dateFormat->format($start, 'custom', 'D, d.m.Y - H:i');
+    }
+
+    if ($event->hasField('field_end_date') && !$event->get('field_end_date')->isEmpty()) {
+      $end = strtotime($event->get('field_end_date')->getValue()[0]['value']);
+      $date .= ' - ' . $this->dateFormat->format($end, 'custom', 'D, d.m.Y - H:i');
+    }
+
+    if ($date) {
+      $build['when'] = [
+        '#type' => 'markup',
+        '#markup' => '<b>' . $this->t('When') . '</b>: ' . $date,
+        '#prefix' => '<div class="when">',
+        '#suffix' => '</div>',
+        '#cache' => [
+          'tags' => $event->getCacheTags(),
+        ],
+      ];
+    }
+
+    if (!$event->get('location')->isEmpty()) {
+      $build['where'] = [
+        '#type' => 'markup',
+        '#markup' => '<b>' . $this->t('Where') . '</b>: ' . $event->get('location')->getValue()[0]['value'],
+        '#prefix' => '<div class="where">',
+        '#suffix' => '</div>',
+        '#cache' => [
+          'tags' => $event->getCacheTags(),
+        ],
+      ];
+    }
 
     return $build;
   }

@@ -80,7 +80,7 @@ third_party_settings:
                 third_party_settings:
                   empty_fields:
                     handler: ''
-            weight: 5
+            weight: 7
             additional: {  }
           c632ee46-b6de-4234-8535-269cab020cd1:
             uuid: c632ee46-b6de-4234-8535-269cab020cd1
@@ -93,6 +93,18 @@ third_party_settings:
               context_mapping:
                 living_spaces_event: layout_builder.entity
             weight: 3
+            additional: {  }
+          d8086954-e19e-463c-ba84-dda3d8166a72:
+            uuid: d8086954-e19e-463c-ba84-dda3d8166a72
+            region: first
+            configuration:
+              id: living_spaces_event_base_info_block
+              label: 'Event base info'
+              label_display: '0'
+              provider: living_spaces_event
+              context_mapping:
+                living_spaces_event: layout_builder.entity
+            weight: 5
             additional: {  }
           20e9bd56-5bdc-4ef9-ad7a-8795b4348721:
             uuid: 20e9bd56-5bdc-4ef9-ad7a-8795b4348721
@@ -112,7 +124,7 @@ third_party_settings:
                 third_party_settings:
                   empty_fields:
                     handler: ''
-            weight: 4
+            weight: 6
             additional: {  }
         third_party_settings: {  }
 id: living_spaces_event.training.default

@@ -89,6 +89,8 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
    */
   public function build() {
     $build = [];
+
+    /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInterface $event */
     $event = $this->getContextValue('living_spaces_event');
 
     if (!empty($event->in_preview)) {
