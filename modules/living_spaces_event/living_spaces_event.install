@@ -5,6 +5,9 @@
  * Install/update/uninstall hooks for event module.
  */
 
+use Drupal\comment\CommentInterface;
+use Drupal\comment\CommentManagerInterface;
+use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 
 /**
@@ -84,4 +87,33 @@ function living_spaces_event_update_9002() {
     ->setDisplayConfigurable('view', TRUE);
 
   \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('description', 'living_spaces_event', 'living_spaces_event', $definition);
+}
+
+/**
+ * Add comment field for event entity type.
+ */
+function living_spaces_event_update_9003() {
+  $definition = BaseFieldDefinition::create('comment')
+    ->setLabel(t('Comments'))
+    ->setSettings([
+      'comment_type' => 'event',
+      'locked' => FALSE,
+      'default_mode' => CommentManagerInterface::COMMENT_MODE_THREADED,
+      'per_page' => 50,
+      'form_location' => CommentItemInterface::FORM_BELOW,
+      'anonymous' => CommentInterface::ANONYMOUS_MAYNOT_CONTACT,
+      'preview' => DRUPAL_OPTIONAL,
+    ])
+    ->setDefaultValue([
+      'status' => CommentItemInterface::OPEN,
+      'cid' => 0,
+      'last_comment_timestamp' => 0,
+      'last_comment_name' => NULL,
+      'last_comment_uid' => 0,
+      'comment_count' => 0,
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('comment', 'living_spaces_event', 'living_spaces_event', $definition);
 }

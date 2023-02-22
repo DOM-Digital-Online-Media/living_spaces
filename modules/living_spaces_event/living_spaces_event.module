@@ -10,12 +10,14 @@ define('LIVING_SPACES_EVENT_INVITED_STATUS', '3ae0c24b-826e-418b-8d40-40f65ad843
 define('LIVING_SPACES_EVENT_DECLINED_STATUS', '4ff35c2a-1d0a-401a-80f3-929e07931ea1');
 define('LIVING_SPACES_EVENT_ACCEPTED_STATUS', 'c9e45cef-15e9-4d9e-92c9-cd67dbf1fcae');
 
+use Drupal\comment\CommentManagerInterface;
+use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
+use Drupal\comment\CommentInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Url;
 use Drupal\group\Entity\GroupContentInterface;
-use Drupal\group\Entity\GroupInterface;
 use Drupal\living_spaces_event\Entity\LivingSpaceEventTypeInterface;
 use Drupal\living_spaces_event\Entity\LivingSpaceEventInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -84,6 +86,28 @@ function living_spaces_event_entity_base_field_info(EntityTypeInterface $entity_
           'rows' => '5',
           'placeholder' => '',
         ],
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['comment'] = BaseFieldDefinition::create('comment')
+      ->setLabel(t('Comments'))
+      ->setSettings([
+          'comment_type' => 'event',
+          'locked' => FALSE,
+          'default_mode' => CommentManagerInterface::COMMENT_MODE_THREADED,
+          'per_page' => 50,
+          'form_location' => CommentItemInterface::FORM_BELOW,
+          'anonymous' => CommentInterface::ANONYMOUS_MAYNOT_CONTACT,
+          'preview' => DRUPAL_OPTIONAL,
+      ])
+      ->setDefaultValue([
+          'status' => CommentItemInterface::OPEN,
+          'cid' => 0,
+          'last_comment_timestamp' => 0,
+          'last_comment_name' => NULL,
+          'last_comment_uid' => 0,
+          'comment_count' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
