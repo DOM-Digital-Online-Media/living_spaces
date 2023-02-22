@@ -61,26 +61,6 @@ third_party_settings:
               include_hr: 0
             weight: 1
             additional: {  }
-          c36dda96-afa5-46d7-ac98-6d7eada24e6b:
-            uuid: c36dda96-afa5-46d7-ac98-6d7eada24e6b
-            region: first
-            configuration:
-              id: 'field_block:living_spaces_event:supervision:description'
-              label: Description
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: text_default
-                label: hidden
-                settings: {  }
-                third_party_settings:
-                  empty_fields:
-                    handler: ''
-            weight: 2
-            additional: {  }
           787aa8b2-a34b-4c5a-9289-6063d25115ad:
             uuid: 787aa8b2-a34b-4c5a-9289-6063d25115ad
             region: first
@@ -100,7 +80,39 @@ third_party_settings:
                 third_party_settings:
                   empty_fields:
                     handler: ''
+            weight: 5
+            additional: {  }
+          f7da9390-1bc5-4ce8-961d-ac84b70e3847:
+            uuid: f7da9390-1bc5-4ce8-961d-ac84b70e3847
+            region: first
+            configuration:
+              id: living_spaces_event_metadata_block
+              label: 'Event metadata'
+              label_display: '0'
+              provider: living_spaces_event
+              context_mapping:
+                living_spaces_event: layout_builder.entity
             weight: 3
+            additional: {  }
+          c36dda96-afa5-46d7-ac98-6d7eada24e6b:
+            uuid: c36dda96-afa5-46d7-ac98-6d7eada24e6b
+            region: first
+            configuration:
+              id: 'field_block:living_spaces_event:supervision:description'
+              label: Description
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings:
+                  empty_fields:
+                    handler: ''
+            weight: 4
             additional: {  }
         third_party_settings: {  }
 id: living_spaces_event.supervision.default

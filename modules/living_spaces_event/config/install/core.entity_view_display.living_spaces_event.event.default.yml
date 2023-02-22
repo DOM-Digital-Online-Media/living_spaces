@@ -61,26 +61,6 @@ third_party_settings:
               include_hr: 0
             weight: 1
             additional: {  }
-          3e0c81b6-884c-410a-b778-a059a5ee90b7:
-            uuid: 3e0c81b6-884c-410a-b778-a059a5ee90b7
-            region: first
-            configuration:
-              id: 'field_block:living_spaces_event:event:description'
-              label: Description
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: text_default
-                label: hidden
-                settings: {  }
-                third_party_settings:
-                  empty_fields:
-                    handler: ''
-            weight: 2
-            additional: {  }
           0beed056-0d24-4d4b-ad4c-0fa71e618030:
             uuid: 0beed056-0d24-4d4b-ad4c-0fa71e618030
             region: first
@@ -100,7 +80,39 @@ third_party_settings:
                 third_party_settings:
                   empty_fields:
                     handler: ''
-            weight: 3
+            weight: 6
+            additional: {  }
+          909dd2cb-960c-49e8-b5c1-3b28a8af4748:
+            uuid: 909dd2cb-960c-49e8-b5c1-3b28a8af4748
+            region: first
+            configuration:
+              id: living_spaces_event_metadata_block
+              label: 'Event metadata'
+              label_display: '0'
+              provider: living_spaces_event
+              context_mapping:
+                living_spaces_event: layout_builder.entity
+            weight: 4
+            additional: {  }
+          3e0c81b6-884c-410a-b778-a059a5ee90b7:
+            uuid: 3e0c81b6-884c-410a-b778-a059a5ee90b7
+            region: first
+            configuration:
+              id: 'field_block:living_spaces_event:event:description'
+              label: Description
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings:
+                  empty_fields:
+                    handler: ''
+            weight: 5
             additional: {  }
         third_party_settings: {  }
 id: living_spaces_event.event.default

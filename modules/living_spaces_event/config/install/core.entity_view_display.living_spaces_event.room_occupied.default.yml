@@ -61,26 +61,6 @@ third_party_settings:
               include_hr: 0
             weight: 1
             additional: {  }
-          1d7d125f-0d47-4061-8217-bf5c99aae597:
-            uuid: 1d7d125f-0d47-4061-8217-bf5c99aae597
-            region: first
-            configuration:
-              id: 'field_block:living_spaces_event:room_occupied:description'
-              label: Description
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: text_default
-                label: hidden
-                settings: {  }
-                third_party_settings:
-                  empty_fields:
-                    handler: ''
-            weight: 2
-            additional: {  }
           f00bb7e7-f65c-4669-8511-f30648e475d0:
             uuid: f00bb7e7-f65c-4669-8511-f30648e475d0
             region: first
@@ -100,7 +80,39 @@ third_party_settings:
                 third_party_settings:
                   empty_fields:
                     handler: ''
+            weight: 5
+            additional: {  }
+          e574f19e-4068-4cec-995e-54f3c7c9526d:
+            uuid: e574f19e-4068-4cec-995e-54f3c7c9526d
+            region: first
+            configuration:
+              id: living_spaces_event_metadata_block
+              label: 'Event metadata'
+              label_display: '0'
+              provider: living_spaces_event
+              context_mapping:
+                living_spaces_event: layout_builder.entity
             weight: 3
+            additional: {  }
+          1d7d125f-0d47-4061-8217-bf5c99aae597:
+            uuid: 1d7d125f-0d47-4061-8217-bf5c99aae597
+            region: first
+            configuration:
+              id: 'field_block:living_spaces_event:room_occupied:description'
+              label: Description
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings:
+                  empty_fields:
+                    handler: ''
+            weight: 4
             additional: {  }
         third_party_settings: {  }
 id: living_spaces_event.room_occupied.default
