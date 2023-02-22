@@ -126,6 +126,28 @@ third_party_settings:
                     handler: ''
             weight: 7
             additional: {  }
+          1dc64a48-ef76-4073-a046-4711416622c6:
+            uuid: 1dc64a48-ef76-4073-a046-4711416622c6
+            region: first
+            configuration:
+              id: 'field_block:living_spaces_event:event:comment'
+              label: Comments
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: comment_default
+                label: hidden
+                settings:
+                  view_mode: default
+                  pager_id: 0
+                third_party_settings:
+                  empty_fields:
+                    handler: ''
+            weight: 9
+            additional: {  }
         third_party_settings: {  }
 id: living_spaces_event.event.default
 targetEntityType: living_spaces_event
@@ -159,6 +181,7 @@ content:
     weight: 0
     region: content
 hidden:
+  comment: true
   description: true
   langcode: true
   location: true
