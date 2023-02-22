@@ -13,13 +13,13 @@
 /**
  * Provide a list of event actions for provided space.
  *
- * @param \Drupal\group\Entity\GroupInterface $space
- *   Related space entity.
+ * @param \Drupal\living_spaces_event\Entity\LivingSpaceEventInterface $event
+ *   Event entity.
  *
  * @return array
  *   An array of event actions.
  */
-function hook_living_spaces_event_action_info(\Drupal\group\Entity\GroupInterface $space) {
+function hook_living_spaces_event_action_info(\Drupal\living_spaces_event\Entity\LivingSpaceEventInterface $event) {
   $items = [];
 
   $items['create_event'] = [
@@ -27,7 +27,7 @@ function hook_living_spaces_event_action_info(\Drupal\group\Entity\GroupInterfac
     '#title' => t('Create Event'),
     '#options' => [],
     '#url' => \Drupal\Core\Url::fromRoute('living_spaces_group.create_content', [
-      'group' => $space->id(),
+      'group' => $event->get('space')->entity->id(),
       'plugin' => 'living_spaces_event',
     ]),
   ];

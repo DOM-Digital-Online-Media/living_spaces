@@ -419,7 +419,7 @@ function living_spaces_event_living_spaces_group_action_info(GroupInterface $spa
   ) {
     $items['create_event'] = [
       '#type' => 'link',
-      '#title' => t('Create Event'),
+      '#title' => t('Create event'),
       '#options' => [],
       '#url' => Url::fromRoute('living_spaces_group.create_content', [
         'group' => $space->id(),
@@ -434,19 +434,34 @@ function living_spaces_event_living_spaces_group_action_info(GroupInterface $spa
 /**
  * Implements hook_living_spaces_event_action_info().
  */
-function living_spaces_event_living_spaces_event_action_info(GroupInterface $space) {
+function living_spaces_event_living_spaces_event_action_info(LivingSpaceEventInterface $event) {
   $items = [];
 
-  if (\Drupal::currentUser()->hasPermission('manage living spaces') ||
-    $space->hasPermission('manage living spaces', \Drupal::currentUser())
+  /** @var \Drupal\group\Entity\GroupInterface $space */
+  $space = $event->get('space')->entity;
+
+  if ($space &&
+    (\Drupal::currentUser()->hasPermission('manage living spaces') ||
+    $space->hasPermission('manage living spaces', \Drupal::currentUser()))
   ) {
     $items['create_event'] = [
       '#type' => 'link',
-      '#title' => t('Create Event'),
+      '#title' => t('Create event'),
       '#options' => [],
       '#url' => Url::fromRoute('living_spaces_group.create_content', [
         'group' => $space->id(),
         'plugin' => 'living_spaces_event',
+      ]),
+    ];
+  }
+
+  if ($event->access('update')) {
+    $items['edit_event'] = [
+      '#type' => 'link',
+      '#title' => t('Edit event'),
+      '#options' => [],
+      '#url' => Url::fromRoute('entity.living_spaces_event.edit_form', [
+        'living_spaces_event' => $event->id(),
       ]),
     ];
   }

@@ -67,15 +67,12 @@ class LivingSpacesEventActionsBlock extends BlockBase implements ContainerFactor
       return [];
     }
 
-    /** @var \Drupal\group\Entity\GroupInterface $space */
-    $space = $event->get('space')->entity;
-
     return [
       '#theme' => 'dropdown',
       '#id' => "event-actions-{$event->id()}",
       '#button_class' => 'btn-primary',
       '#button' => $this->t('- Select action -'),
-      '#links' => $this->moduleHandler->invokeAll('living_spaces_event_action_info', [$space]),
+      '#links' => $this->moduleHandler->invokeAll('living_spaces_event_action_info', [$event]),
     ];
   }
 

@@ -74,8 +74,8 @@ class LivingSpacesEventMetadataBlock extends BlockBase implements ContainerFacto
     $build['metadata'] = [
       '#type' => 'markup',
       '#markup' => $this->t('Created by @author on @date.', [
-        '@author' => $event->getOwner()->getDisplayName(),
-        '@date' => $this->dateFormat->format($event->get('created')->getString(), 'custom', 'l d F Y - H:i'),
+        '@author' => $event->getOwner()->toLink($event->getOwner()->getDisplayName())->toString(),
+        '@date' => $this->dateFormat->format($event->get('created')->getString(), 'custom', 'l, d F Y - H:i'),
       ]),
       '#cache' => [
         'tags' => $event->getCacheTags(),
