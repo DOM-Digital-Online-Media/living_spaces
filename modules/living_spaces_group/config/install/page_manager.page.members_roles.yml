@@ -1,9 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  enforced:
-    module:
-      - living_spaces_group
   module:
     - user_permission_condition
 id: members_roles
@@ -20,12 +17,12 @@ access_conditions:
       group: group
   -
     id: user_permission
-    permission: 'manage living spaces'
     negate: false
     context_mapping:
       user: '@user.current_user_context:current_user'
+    permission: 'manage living spaces'
 parameters:
   group:
     machine_name: group
-    type: 'entity:group'
     label: Group
+    type: 'entity:group'
