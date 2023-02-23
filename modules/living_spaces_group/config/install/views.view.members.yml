@@ -763,23 +763,6 @@ display:
         - url
         - url.query_args
       tags: {  }
-  members_roles:
-    id: members_roles
-    display_title: 'Members & Roles'
-    display_plugin: block
-    position: 1
-    display_options:
-      display_description: ''
-      display_extenders: {  }
-    cache_metadata:
-      max-age: 0
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - url
-        - url.query_args
-      tags:
-        - 'config:field.storage.group_content.group_roles'
   people:
     id: people
     display_title: People
