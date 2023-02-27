@@ -17,6 +17,7 @@ dependencies:
   - field
   - taxonomy
   - language
+  - delegatable_roles
 
 default_content:
   living_spaces_section:
