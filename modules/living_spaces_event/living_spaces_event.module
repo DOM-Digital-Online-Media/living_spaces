@@ -371,6 +371,11 @@ function living_spaces_event_theme($existing, $type, $theme, $path) {
     'file' => 'living_spaces_event.theme.inc',
   ];
 
+  $items['living_spaces_event_invited_list'] = [
+    'variables' => ['rows' => []],
+    'file' => 'living_spaces_event.theme.inc',
+  ];
+
   return $items;
 }
 

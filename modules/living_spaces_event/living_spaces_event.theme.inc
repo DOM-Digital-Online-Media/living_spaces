@@ -89,3 +89,10 @@ function template_preprocess_living_spaces_event_fullcalendar_legend(&$variables
 
   $variables['element'] = $element;
 }
+
+/**
+ * Prepares variables for 'Invited users' templates.
+ */
+function template_preprocess_living_spaces_event_invited_list(&$variables) {
+
+}

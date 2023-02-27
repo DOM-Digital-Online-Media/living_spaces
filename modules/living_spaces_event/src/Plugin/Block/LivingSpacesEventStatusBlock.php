@@ -108,6 +108,7 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
       if ($status = $invite->get('status')->entity) {
 
         switch ($status->uuid()) {
+          case LIVING_SPACES_EVENT_OWN_STATUS:
           case LIVING_SPACES_EVENT_INVITED_STATUS:
             $accept = $decline = TRUE;
             break;

@@ -1,0 +1,14 @@
+<div class="event-invited-users">
+  {% for row in rows %}
+    <div class="type-{{ row.type }}">
+      {{ row.type }}
+      <div class="event-week-items">
+        {% for item in row.items %}
+          <div class="item">
+            {{ item }}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
