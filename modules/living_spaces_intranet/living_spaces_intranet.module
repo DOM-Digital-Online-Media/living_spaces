@@ -323,3 +323,21 @@ function living_spaces_intranet_employee_form_submit($form, FormStateInterface $
     ]));
   }
 }
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function living_spaces_intranet_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  if (isset($form['account']['roles']['#options'])) {
+    // Set options of available roles for current user.
+    $current_user = \Drupal::currentUser();
+    $assignable_roles = \Drupal::service('delegatable_roles')
+      ->getAssignableRoles($current_user);
+    if (isset($form['account']['roles']['#options']['authenticated'])) {
+      $assignable_roles['authenticated'] = $form['account']['roles']['#options']['authenticated'];
+    }
+    $form['account']['roles']['#options'] = array_intersect($form['account']['roles']['#options'], $assignable_roles);
+  }
+
+}
