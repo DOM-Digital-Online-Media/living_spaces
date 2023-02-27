@@ -148,6 +148,18 @@ third_party_settings:
                     handler: ''
             weight: 9
             additional: {  }
+          78b27e8a-c106-46d1-92ac-4de864508222:
+            uuid: 78b27e8a-c106-46d1-92ac-4de864508222
+            region: second
+            configuration:
+              id: living_spaces_event_invited_users_block
+              label: 'Invited users'
+              label_display: '0'
+              provider: living_spaces_event
+              context_mapping:
+                living_spaces_event: layout_builder.entity
+            weight: 0
+            additional: {  }
         third_party_settings: {  }
 id: living_spaces_event.event.default
 targetEntityType: living_spaces_event
