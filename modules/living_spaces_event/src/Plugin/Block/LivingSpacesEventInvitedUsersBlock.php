@@ -5,6 +5,8 @@ namespace Drupal\living_spaces_event\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Routing\RedirectDestinationInterface;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -38,6 +40,13 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
   protected $currentUser;
 
   /**
+   * Returns the redirect.destination service.
+   *
+   * @var \Drupal\Core\Routing\RedirectDestinationInterface
+   */
+  protected $redirect;
+
+  /**
    * Constructs a LivingSpacesEventInvitedUsersBlock block.
    *
    * @param array $configuration
@@ -50,12 +59,15 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
    *   Provides an interface for entity type managers.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   Defines an account interface which represents the current user.
+   * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect
+   *   Provides an interface for redirect destinations.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, RedirectDestinationInterface $redirect) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->entityTypeManager = $entity_type_manager;
     $this->currentUser = $current_user;
+    $this->redirect = $redirect;
   }
 
   /**
@@ -67,7 +79,8 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('redirect.destination')
     );
   }
 
@@ -84,6 +97,8 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
       return $build;
     }
 
+    $tags = $event->getCacheTags();
+
     $event_invite_manager = $this->entityTypeManager->getStorage('living_spaces_event_invite');
 
     $query = $event_invite_manager->getQuery();
@@ -93,12 +108,84 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
     if ($ids = $query->execute()) {
       /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInviteInterface $invite */
       foreach ($event_invite_manager->loadMultiple($ids) as $invite) {
+        $tags = Cache::mergeTags($tags, $invite->getCacheTags());
+
         if (!$invite->get('status')->isEmpty()) {
+          $accept = $decline = FALSE;
+
           /** @var \Drupal\taxonomy\TermInterface $status */
           $status = $invite->get('status')->entity;
 
-          $owner = $invite->getOwner();
-          $rows[$status->uuid()][] = $owner->getDisplayName();
+          switch ($status->uuid()) {
+            case LIVING_SPACES_EVENT_OWN_STATUS:
+            case LIVING_SPACES_EVENT_INVITED_STATUS:
+              $accept = $decline = TRUE;
+              break;
+
+            case LIVING_SPACES_EVENT_DECLINED_STATUS:
+              $accept = TRUE;
+              break;
+
+            case LIVING_SPACES_EVENT_ACCEPTED_STATUS:
+              $decline = TRUE;
+              break;
+
+          }
+
+          $suffix = '';
+          if ($accept) {
+            $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
+              'uuid' => LIVING_SPACES_EVENT_ACCEPTED_STATUS,
+            ]);
+
+            $options = [
+              'attributes' => [
+                'class' => [
+                  'btn',
+                  'btn-primary',
+                  'accept',
+                ],
+              ],
+              'query' => [
+                'destination' => $this->redirect->get(),
+              ],
+            ];
+
+            $suffix .= Link::createFromRoute($this->t('Accept'), 'living_spaces_event.event_status', [
+              'living_spaces_event_invite' => $invite->id(),
+              'status' => $terms ? reset($terms)->id() : '',
+            ], $options)->toString();
+          }
+
+          if ($decline) {
+            $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
+              'uuid' => LIVING_SPACES_EVENT_DECLINED_STATUS,
+            ]);
+
+            $options = [
+              'attributes' => [
+                'class' => [
+                  'btn',
+                  'btn-primary',
+                  'decline',
+                ],
+              ],
+              'query' => [
+                'destination' => $this->redirect->get(),
+              ],
+            ];
+
+            $suffix .= Link::createFromRoute($this->t('Decline'), 'living_spaces_event.event_status', [
+              'living_spaces_event_invite' => $invite->id(),
+              'status' => $terms ? reset($terms)->id() : '',
+            ], $options)->toString();
+          }
+
+          $rows[$status->uuid()][] = [
+            '#type' => 'markup',
+            '#markup' => $invite->getOwner()->getDisplayName(),
+            '#suffix' => $suffix,
+          ];
         }
       }
     }
@@ -107,7 +194,7 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
       '#theme' => 'living_spaces_event_invited_list',
       '#rows' => $rows,
       '#cache' => [
-        'tags' => Cache::mergeTags($event->getCacheTags(), []),
+        'tags' => $tags,
       ],
     ];
 
