@@ -99,6 +99,19 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
 
     $tags = $event->getCacheTags();
 
+    $taxonomy_manager = $this->entityTypeManager->getStorage('taxonomy_term');
+
+    $query = $taxonomy_manager->getQuery();
+    $query->condition('vid', 'event_status');
+
+    $statuses = [];
+    if ($tids = $query->execute()) {
+      /** @var \Drupal\taxonomy\TermInterface $term */
+      foreach ($taxonomy_manager->loadMultiple($tids) as $term) {
+        $statuses[$term->uuid()] = $term->id();
+      }
+    }
+
     $event_invite_manager = $this->entityTypeManager->getStorage('living_spaces_event_invite');
 
     $query = $event_invite_manager->getQuery();
@@ -134,10 +147,6 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
 
           $suffix = '';
           if ($accept) {
-            $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
-              'uuid' => LIVING_SPACES_EVENT_ACCEPTED_STATUS,
-            ]);
-
             $options = [
               'attributes' => [
                 'class' => [
@@ -153,15 +162,11 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
 
             $suffix .= Link::createFromRoute($this->t('Accept'), 'living_spaces_event.event_status', [
               'living_spaces_event_invite' => $invite->id(),
-              'status' => $terms ? reset($terms)->id() : '',
+              'status' => $statuses[LIVING_SPACES_EVENT_ACCEPTED_STATUS] ? $statuses[LIVING_SPACES_EVENT_ACCEPTED_STATUS] : '',
             ], $options)->toString();
           }
 
           if ($decline) {
-            $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
-              'uuid' => LIVING_SPACES_EVENT_DECLINED_STATUS,
-            ]);
-
             $options = [
               'attributes' => [
                 'class' => [
@@ -177,7 +182,7 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
 
             $suffix .= Link::createFromRoute($this->t('Decline'), 'living_spaces_event.event_status', [
               'living_spaces_event_invite' => $invite->id(),
-              'status' => $terms ? reset($terms)->id() : '',
+              'status' => $statuses[LIVING_SPACES_EVENT_DECLINED_STATUS] ? $statuses[LIVING_SPACES_EVENT_DECLINED_STATUS] : '',
             ], $options)->toString();
           }
 
