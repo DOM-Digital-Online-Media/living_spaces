@@ -59,9 +59,17 @@ class LivingSpacesSectionPathArea extends AreaPluginBase {
   public function render($empty = FALSE) {
     if (!$empty || !empty($this->options['empty'])) {
       if (!empty($this->options['bundle']) && !empty($this->options['title'])) {
-        $gid = $this->view->args;
+        $args = $this->view->args;
 
-        if (is_numeric($gid[0]) && $space = \Drupal::entityTypeManager()->getStorage('group')->load($gid[0])) {
+        $gid = '';
+        if ($parameter = \Drupal::service('current_route_match')->getRawParameter('group')) {
+          $gid = $parameter;
+        }
+        elseif (!empty($args[0])) {
+          $gid = $args[0];
+        }
+
+        if (is_numeric($gid) && $space = \Drupal::entityTypeManager()->getStorage('group')->load($gid)) {
           if ($section = \Drupal::service('living_spaces_sections.manager')->getSectionFromGroupByType($space, $this->options['bundle'])) {
             return $section->toLink($this->options['title'])->toRenderable();
           }
