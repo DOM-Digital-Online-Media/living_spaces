@@ -103,14 +103,21 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
       /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInviteInterface $invite */
       $invite = $this->entityTypeManager->getStorage('living_spaces_event_invite')->load($invite_id);
 
-      $accept = FALSE;
+      $accept = $decline = FALSE;
       /** @var \Drupal\taxonomy\TermInterface $status */
       if ($status = $invite->get('status')->entity) {
 
         switch ($status->uuid()) {
           case LIVING_SPACES_EVENT_INVITED_STATUS:
+            $accept = $decline = TRUE;
+            break;
+
           case LIVING_SPACES_EVENT_DECLINED_STATUS:
             $accept = TRUE;
+            break;
+
+          case LIVING_SPACES_EVENT_ACCEPTED_STATUS:
+            $decline = TRUE;
             break;
 
         }
@@ -127,6 +134,34 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
           '#attributes' => ['class' => [
             'btn',
             'btn-primary',
+            'accept',
+          ]],
+          '#url' => Url::fromRoute('living_spaces_event.event_status', [
+            'living_spaces_event_invite' => $invite->id(),
+            'status' => $terms ? reset($terms)->id() : '',
+          ], [
+            'query' => [
+              'destination' => $this->redirect->get(),
+            ],
+          ]),
+          '#cache' => [
+            'tags' => Cache::mergeTags($event->getCacheTags(), $invite->getCacheTags()),
+          ],
+        ];
+      }
+
+      if ($decline) {
+        $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
+          'uuid' => LIVING_SPACES_EVENT_DECLINED_STATUS,
+        ]);
+
+        $build['decline'] = [
+          '#type' => 'link',
+          '#title' => $this->t('Decline'),
+          '#attributes' => ['class' => [
+            'btn',
+            'btn-primary',
+            'decline',
           ]],
           '#url' => Url::fromRoute('living_spaces_event.event_status', [
             'living_spaces_event_invite' => $invite->id(),
