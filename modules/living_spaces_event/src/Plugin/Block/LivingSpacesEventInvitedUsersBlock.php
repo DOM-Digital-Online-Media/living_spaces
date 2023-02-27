@@ -124,71 +124,78 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
         $tags = Cache::mergeTags($tags, $invite->getCacheTags());
 
         if (!$invite->get('status')->isEmpty()) {
-          $accept = $decline = FALSE;
+          /** @var \Drupal\user\UserInterface $owner */
+          $owner = $invite->getOwner();
 
           /** @var \Drupal\taxonomy\TermInterface $status */
           $status = $invite->get('status')->entity;
 
-          switch ($status->uuid()) {
-            case LIVING_SPACES_EVENT_OWN_STATUS:
-            case LIVING_SPACES_EVENT_INVITED_STATUS:
-              $accept = $decline = TRUE;
-              break;
-
-            case LIVING_SPACES_EVENT_DECLINED_STATUS:
-              $accept = TRUE;
-              break;
-
-            case LIVING_SPACES_EVENT_ACCEPTED_STATUS:
-              $decline = TRUE;
-              break;
-
-          }
-
           $suffix = '';
-          if ($accept) {
-            $options = [
-              'attributes' => [
-                'class' => [
-                  'btn',
-                  'btn-primary',
-                  'accept',
+          if ($this->currentUser->hasPermission('administer living spaces event invite') ||
+            $this->currentUser->id() == $owner->id()
+          ) {
+            $accept = $decline = FALSE;
+
+            switch ($status->uuid()) {
+              case LIVING_SPACES_EVENT_OWN_STATUS:
+              case LIVING_SPACES_EVENT_INVITED_STATUS:
+                $accept = $decline = TRUE;
+                break;
+
+              case LIVING_SPACES_EVENT_DECLINED_STATUS:
+                $accept = TRUE;
+                break;
+
+              case LIVING_SPACES_EVENT_ACCEPTED_STATUS:
+                $decline = TRUE;
+                break;
+
+            }
+
+            if ($accept) {
+              $options = [
+                'attributes' => [
+                  'class' => [
+                    'btn',
+                    'btn-primary',
+                    'accept',
+                  ],
                 ],
-              ],
-              'query' => [
-                'destination' => $this->redirect->get(),
-              ],
-            ];
-
-            $suffix .= Link::createFromRoute($this->t('Accept'), 'living_spaces_event.event_status', [
-              'living_spaces_event_invite' => $invite->id(),
-              'status' => $statuses[LIVING_SPACES_EVENT_ACCEPTED_STATUS] ? $statuses[LIVING_SPACES_EVENT_ACCEPTED_STATUS] : '',
-            ], $options)->toString();
-          }
-
-          if ($decline) {
-            $options = [
-              'attributes' => [
-                'class' => [
-                  'btn',
-                  'btn-primary',
-                  'decline',
+                'query' => [
+                  'destination' => $this->redirect->get(),
                 ],
-              ],
-              'query' => [
-                'destination' => $this->redirect->get(),
-              ],
-            ];
+              ];
 
-            $suffix .= Link::createFromRoute($this->t('Decline'), 'living_spaces_event.event_status', [
-              'living_spaces_event_invite' => $invite->id(),
-              'status' => $statuses[LIVING_SPACES_EVENT_DECLINED_STATUS] ? $statuses[LIVING_SPACES_EVENT_DECLINED_STATUS] : '',
-            ], $options)->toString();
+              $suffix .= Link::createFromRoute($this->t('Accept'), 'living_spaces_event.event_status', [
+                'living_spaces_event_invite' => $invite->id(),
+                'status' => $statuses[LIVING_SPACES_EVENT_ACCEPTED_STATUS] ? $statuses[LIVING_SPACES_EVENT_ACCEPTED_STATUS] : '',
+              ], $options)->toString();
+            }
+
+            if ($decline) {
+              $options = [
+                'attributes' => [
+                  'class' => [
+                    'btn',
+                    'btn-primary',
+                    'decline',
+                  ],
+                ],
+                'query' => [
+                  'destination' => $this->redirect->get(),
+                ],
+              ];
+
+              $suffix .= Link::createFromRoute($this->t('Decline'), 'living_spaces_event.event_status', [
+                'living_spaces_event_invite' => $invite->id(),
+                'status' => $statuses[LIVING_SPACES_EVENT_DECLINED_STATUS] ? $statuses[LIVING_SPACES_EVENT_DECLINED_STATUS] : '',
+              ], $options)->toString();
+            }
           }
 
           $rows[$status->uuid()][] = [
             '#type' => 'markup',
-            '#markup' => $invite->getOwner()->getDisplayName(),
+            '#markup' => $owner->toLink($owner->getDisplayName())->toString(),
             '#suffix' => $suffix,
           ];
         }
