@@ -12,8 +12,6 @@ dependencies:
     - image
     - profile
     - user
-_core:
-  default_config_hash: _W4c-Pjk06XeQX4Q-UnsEoLwAfSygIDBGiUiPz1LJIg
 id: user.user.employee
 targetEntityType: user
 bundle: user
