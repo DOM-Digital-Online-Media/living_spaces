@@ -105,7 +105,7 @@ class LivingSpacesDefaultCreateSpace extends FormBase {
       '#type' => 'select',
       '#title' => $this->t('Template'),
       '#options' => $template_options,
-      '#empty_option' => $this->t('Select'),
+      '#empty_option' => $this->t(' - Select a value - '),
       '#empty_value' => '',
       '#default_value' => '',
       '#ajax' => [
@@ -154,7 +154,7 @@ class LivingSpacesDefaultCreateSpace extends FormBase {
       '#title' => $this->t('Parent'),
       '#options' => $parent_options,
       '#required' => $required,
-      '#empty_option' => $this->t('Select'),
+      '#empty_option' => $this->t(' - Select a value - '),
       '#empty_value' => '',
       '#default_value' => '',
       '#prefix' => '<div id="group-parent-wrapper">',

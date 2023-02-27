@@ -41,7 +41,7 @@ class LivingSpacesSectionPathArea extends AreaPluginBase {
       '#type' => 'select',
       '#title' => $this->t('Bundle'),
       '#options' => $options,
-      '#empty_option' => $this->t('Select'),
+      '#empty_option' => $this->t(' - Select a value - '),
       '#empty_value' => '',
       '#default_value' => $this->options['bundle'],
     ];
