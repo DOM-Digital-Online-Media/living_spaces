@@ -5,7 +5,6 @@ namespace Drupal\living_spaces_event\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -48,13 +47,6 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
   protected $redirect;
 
   /**
-   * Returns the renderer service.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected $renderer;
-
-  /**
    * Constructs a LivingSpacesEventStatusBlock block.
    *
    * @param array $configuration
@@ -69,16 +61,13 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
    *   Defines an account interface which represents the current user.
    * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect
    *   Provides an interface for redirect destinations.
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   Defines an interface for turning a render array into a string.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, RedirectDestinationInterface $redirect, RendererInterface $renderer) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, RedirectDestinationInterface $redirect) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->entityTypeManager = $entity_type_manager;
     $this->currentUser = $current_user;
     $this->redirect = $redirect;
-    $this->renderer = $renderer;
   }
 
   /**
@@ -91,8 +80,7 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('current_user'),
-      $container->get('redirect.destination'),
-      $container->get('renderer')
+      $container->get('redirect.destination')
     );
   }
 
@@ -196,12 +184,7 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
     }
 
     if (!empty($build)) {
-      $head = [
-        '#type' => 'markup',
-        '#markup' => "<div class='title'>{$title}</div>",
-      ];
-
-      $build['#prefix'] = $this->renderer->render($head);
+      $build['#prefix'] = "<div class='title'>{$title}</div>";
     }
 
     return $build;

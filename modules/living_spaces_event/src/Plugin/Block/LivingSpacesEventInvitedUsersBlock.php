@@ -197,6 +197,7 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
     $build['list'] = [
       '#theme' => 'living_spaces_event_invited_list',
       '#rows' => $rows,
+      '#prefix' => $rows ? '<div class="title">' . $this->t('Invitation') . '</div>' : '',
       '#cache' => [
         'tags' => $tags,
       ],
