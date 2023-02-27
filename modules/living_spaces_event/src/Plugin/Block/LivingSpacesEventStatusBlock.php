@@ -5,6 +5,7 @@ namespace Drupal\living_spaces_event\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -47,6 +48,13 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
   protected $redirect;
 
   /**
+   * Returns the renderer service.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
    * Constructs a LivingSpacesEventStatusBlock block.
    *
    * @param array $configuration
@@ -61,13 +69,16 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
    *   Defines an account interface which represents the current user.
    * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect
    *   Provides an interface for redirect destinations.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   Defines an interface for turning a render array into a string.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, RedirectDestinationInterface $redirect) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, RedirectDestinationInterface $redirect, RendererInterface $renderer) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->entityTypeManager = $entity_type_manager;
     $this->currentUser = $current_user;
     $this->redirect = $redirect;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -80,7 +91,8 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('current_user'),
-      $container->get('redirect.destination')
+      $container->get('redirect.destination'),
+      $container->get('renderer')
     );
   }
 
@@ -99,6 +111,8 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
 
     if ($invite_ids = living_spaces_event_check_user_status($event->id(), $this->currentUser->id())) {
       $invite_id = reset($invite_ids);
+
+      $title = $this->t('Would you like to accept the invitation for this event?');
 
       /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInviteInterface $invite */
       $invite = $this->entityTypeManager->getStorage('living_spaces_event_invite')->load($invite_id);
@@ -152,6 +166,8 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
       }
 
       if ($decline) {
+        $title = $this->t('You have accepted the invitation to this event.');
+
         $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
           'uuid' => LIVING_SPACES_EVENT_DECLINED_STATUS,
         ]);
@@ -177,6 +193,15 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
           ],
         ];
       }
+    }
+
+    if (!empty($build)) {
+      $head = [
+        '#type' => 'markup',
+        '#markup' => "<div class='title'>{$title}</div>",
+      ];
+
+      $build['#prefix'] = $this->renderer->render($head);
     }
 
     return $build;

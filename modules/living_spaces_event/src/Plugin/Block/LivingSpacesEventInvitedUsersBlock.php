@@ -131,8 +131,8 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
           $status = $invite->get('status')->entity;
 
           $suffix = '';
-          if ($this->currentUser->hasPermission('administer living spaces event invite') ||
-            $this->currentUser->id() == $owner->id()
+          if ($this->currentUser->id() == $owner->id() ||
+            $this->currentUser->hasPermission('administer living spaces event invite')
           ) {
             $accept = $decline = FALSE;
 
@@ -155,11 +155,7 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
             if ($accept) {
               $options = [
                 'attributes' => [
-                  'class' => [
-                    'btn',
-                    'btn-primary',
-                    'accept',
-                  ],
+                  'class' => ['btn', 'btn-primary', 'accept'],
                 ],
                 'query' => [
                   'destination' => $this->redirect->get(),
@@ -175,11 +171,7 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
             if ($decline) {
               $options = [
                 'attributes' => [
-                  'class' => [
-                    'btn',
-                    'btn-primary',
-                    'decline',
-                  ],
+                  'class' => ['btn', 'btn-primary', 'decline'],
                 ],
                 'query' => [
                   'destination' => $this->redirect->get(),
