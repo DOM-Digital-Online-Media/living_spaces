@@ -629,31 +629,6 @@ display:
         - url.query_args
         - user.permissions
       tags: {  }
-  groups:
-    display_plugin: block
-    id: groups
-    display_title: Spaces
-    position: 1
-    display_options:
-      display_extenders: {  }
-      display_description: ''
-      title: Spaces
-      defaults:
-        title: false
-        access: false
-      access:
-        type: perm
-        options:
-          perm: 'access living spaces overview'
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - url
-        - url.query_args
-        - user.permissions
-      tags: {  }
   preferred_spaces:
     display_plugin: entity_reference
     id: preferred_spaces

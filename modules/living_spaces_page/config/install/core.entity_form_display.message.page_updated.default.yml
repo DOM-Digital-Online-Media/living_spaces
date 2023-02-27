@@ -3,7 +3,10 @@ status: true
 dependencies:
   config:
     - field.field.message.page_updated.field_page
+    - field.field.message.page_updated.field_related_space
     - message.template.page_updated
+_core:
+  default_config_hash: HeRAywKnEBKaK83ciTfCq-PpQ2AcnWLfPTsPHS3yDsE
 id: message.page_updated.default
 targetEntityType: message
 bundle: page_updated
@@ -16,24 +19,34 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_page:
+    type: entity_reference_autocomplete
     weight: 12
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_related_space:
     type: entity_reference_autocomplete
+    weight: 13
     region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
     weight: 5
-    '#group': advanced
+    region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
-      match_limit: 10
-    region: content
     third_party_settings: {  }
+    '#group': advanced
 hidden: {  }

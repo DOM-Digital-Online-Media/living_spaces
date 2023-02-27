@@ -12,6 +12,7 @@ use Drupal\group\Entity\GroupContentInterface;
 use Drupal\group\Entity\GroupInterface;
 use Drupal\message\Entity\Message;
 use Drupal\user\UserInterface;
+use Drupal\views\ViewExecutable;
 
 const LIVING_SPACES_ACTIVITY_PERSONAL = '5538078f-4a95-4e4c-9924-85d05b924894';
 const LIVING_SPACES_ACTIVITY_GENERAL = 'd42f2dc9-7d97-44c4-90a0-f93abf903ae0';
@@ -68,6 +69,15 @@ function living_spaces_activity_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements hook_views_pre_render().
+ */
+function living_spaces_activity_views_pre_render(ViewExecutable $view) {
+  if ('message' == $view->id() && 'persistent' == $view->current_display) {
+    $view->element['#attached']['library'][] = 'bootstrap_barrio/alerts';
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_alter().
  */
 function living_spaces_activity_entity_type_alter(&$entity_types) {
@@ -103,6 +113,7 @@ function living_spaces_activity_form_message_template_form_alter(&$form, FormSta
  */
 function living_spaces_activity_group_content_insert(GroupContentInterface $content) {
   // @todo add check is content type is among field target bundles.
+  $space = \Drupal::request()->query->get('space');
   if ('group_membership' == $content->getContentPlugin()->getBaseId()) {
     /** @var \Drupal\message\Entity\Message $message */
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
@@ -110,6 +121,7 @@ function living_spaces_activity_group_content_insert(GroupContentInterface $cont
       'uid' => $content->getEntity()->id(),
       'field_group_content' => $content->id(),
       'field_group_label' => $content->getGroup()->label(),
+      'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
   }
@@ -118,6 +130,7 @@ function living_spaces_activity_group_content_insert(GroupContentInterface $cont
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'group_content_created',
       'field_group_content' => $content->id(),
+      'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
   }
@@ -128,11 +141,13 @@ function living_spaces_activity_group_content_insert(GroupContentInterface $cont
  */
 function living_spaces_activity_group_content_update(GroupContentInterface $content) {
   // @todo add check is content type is among field target bundles.
+  $space = \Drupal::request()->query->get('space');
   if ('group_membership' != $content->getContentPlugin()->getBaseId()) {
     /** @var \Drupal\message\Entity\Message $message */
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'group_content_updated',
       'field_group_content' => $content->id(),
+      'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
   }
@@ -143,12 +158,14 @@ function living_spaces_activity_group_content_update(GroupContentInterface $cont
  */
 function living_spaces_activity_group_content_delete(GroupContentInterface $content) {
   // @todo add check is content type is among field target bundles.
+  $space = \Drupal::request()->query->get('space');
   if ('group_membership' == $content->getContentPlugin()->getBaseId() && $content->getEntity()) {
     /** @var \Drupal\message\Entity\Message $message */
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'group_member_removed',
       'uid' => $content->getEntity()->id(),
       'field_group_label' => $content->getGroup()->label(),
+      'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
   }
@@ -190,6 +207,7 @@ function living_spaces_activity_get_message_counter($uid) {
     $query->condition('template', $templates, 'IN');
     $query->condition('uid', $uid);
     $query->condition('is_read', FALSE);
+    $query->accessCheck();
 
     if ($messages = $query->execute()) {
       return count($messages);

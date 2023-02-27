@@ -1,0 +1,9 @@
+entity.living_spaces_ban.collection:
+  title: 'Bans'
+  route_name: 'entity.living_spaces_ban.collection'
+  parent: 'system.admin_content'
+
+entity.living_spaces_ban_type.collection:
+  title: 'Ban types'
+  route_name: 'entity.living_spaces_ban_type.collection'
+  parent: 'system.admin_structure'

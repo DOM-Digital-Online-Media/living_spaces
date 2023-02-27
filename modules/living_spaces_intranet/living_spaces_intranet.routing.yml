@@ -5,3 +5,25 @@ living_spaces_intranet.create_employees:
     _title: 'Create employees'
   requirements:
     _permission: 'living space create employees'
+living_spaces_intranet.ban:
+  path: '/user-ban/{user}/{type}/{length}'
+  defaults:
+    _controller: '\Drupal\living_spaces_intranet\Controller\LivingSpacesBan::ban'
+    _title: 'Ban user'
+  requirements:
+    _custom_access: '\Drupal\living_spaces_intranet\Controller\LivingSpacesBan::banAccess'
+  options:
+    parameters:
+      user:
+        type: entity:user
+living_spaces_intranet.unban:
+  path: '/user-unban/{user}/{type}'
+  defaults:
+    _controller: '\Drupal\living_spaces_intranet\Controller\LivingSpacesBan::unban'
+    _title: 'Unban user'
+  requirements:
+    _custom_access: '\Drupal\living_spaces_intranet\Controller\LivingSpacesBan::unbanAccess'
+  options:
+    parameters:
+      user:
+        type: entity:user

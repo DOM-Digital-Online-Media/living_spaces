@@ -1,0 +1,4 @@
+entity.living_spaces_ban.canonical_tab:
+  title: 'Bans'
+  route_name: entity.living_spaces_ban.collection
+  base_route: system.admin_content

@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.message
+  module:
+    - views
+  theme:
+    - living_spaces_barrio
+id: views_block__message_persistent
+theme: living_spaces_barrio
+region: highlighted
+weight: 0
+provider: null
+plugin: 'views_block:message-persistent'
+settings:
+  id: 'views_block:message-persistent'
+  label: ''
+  label_display: visible
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility: {  }

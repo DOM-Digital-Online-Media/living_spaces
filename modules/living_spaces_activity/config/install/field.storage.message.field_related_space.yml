@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - group
+    - message
+id: message.field_related_space
+field_name: field_related_space
+entity_type: message
+type: entity_reference
+settings:
+  target_type: group
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

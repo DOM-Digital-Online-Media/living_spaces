@@ -5,6 +5,8 @@
  * Install/update/uninstall hooks for group module.
  */
 
+use Drupal\Core\Field\BaseFieldDefinition;
+
 /**
  * Implements hook_uninstall().
  */
@@ -33,4 +35,66 @@ function living_spaces_group_update_9001(&$sandbox) {
     'menu_name' => 'main',
   ]);
   $menu_link->save();
+}
+
+/**
+ * Add a field 'space' to entity types with enabled living space functionality.
+ */
+function living_spaces_group_update_9009(&$sandbox) {
+  $entity_types = Drupal::service('living_spaces_group.manager')->getEntityTypesOfLivingSpaceGroupTypes();
+
+  foreach ($entity_types as $entity_type) {
+    if ($entity_type !== 'user') {
+      $field_definition = BaseFieldDefinition::create('entity_reference')
+        ->setLabel(t('Space'))
+        ->setSetting('target_type', 'group')
+        ->setTranslatable(FALSE);
+      \Drupal::entityDefinitionUpdateManager()
+        ->installFieldStorageDefinition('space', $entity_type, 'living_spaces_group', $field_definition);
+    }
+  }
+}
+
+/**
+ * Remove a field 'space' from entity type 'user'.
+ */
+function living_spaces_group_update_9102(&$sandbox) {
+  $entity_definition_update_manager = Drupal::entityDefinitionUpdateManager();
+  // Delete the storage definition if it was defined before.
+  $storage_definition = $entity_definition_update_manager->getFieldStorageDefinition('space', 'user');
+  if ($storage_definition) {
+    $entity_definition_update_manager->uninstallFieldStorageDefinition($storage_definition);
+  }
+}
+
+/**
+ * Add a field 'allow_admins_to_edit_members' to entity type 'group'.
+ *
+ * Set undefined field to TRUE for space types 'project_space' and 'department'.
+ */
+function living_spaces_group_update_9101(&$sandbox) {
+  $field_name = 'allow_admins_to_edit_members';
+
+  $definition = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Allow space admins to edit member accounts'))
+    ->setDefaultValue(FALSE)
+    ->setDisplayOptions('form', [
+      'settings' => ['display_label' => TRUE],
+      'weight' => 0,
+    ])
+    ->setDisplayConfigurable('form', TRUE);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition($field_name, 'group', 'living_spaces_group', $definition);
+
+  $entityStorage = \Drupal::entityTypeManager()->getStorage('group');
+  $query = $entityStorage->getQuery();
+  $query->accessCheck(FALSE);
+  $query->condition('type', ['project_space', 'department'], 'IN');
+  $query->notExists($field_name);
+  $gids = $query->execute();
+  foreach ($entityStorage->loadMultiple($gids) as $group) {
+    $group->set($field_name, TRUE);
+    $group->save();
+  }
 }

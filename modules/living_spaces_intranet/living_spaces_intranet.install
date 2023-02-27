@@ -82,3 +82,15 @@ function living_spaces_intranet_uninstall() {
     $group_storage->delete($group_storage->loadMultiple($space));
   }
 }
+
+/**
+ * Define 'living_spaces_ban' entity type.
+ */
+function living_spaces_intranet_update_9001() {
+  $update_manager = \Drupal::entityDefinitionUpdateManager();
+  foreach (\Drupal::entityTypeManager()->getDefinitions() as $entity_type) {
+    if ('living_spaces_intranet' == $entity_type->getProvider()) {
+      $update_manager->installEntityType($entity_type);
+    }
+  }
+}

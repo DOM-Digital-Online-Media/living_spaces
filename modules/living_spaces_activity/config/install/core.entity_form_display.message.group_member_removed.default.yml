@@ -3,7 +3,10 @@ status: true
 dependencies:
   config:
     - field.field.message.group_member_removed.field_group_label
+    - field.field.message.group_member_removed.field_related_space
     - message.template.group_member_removed
+_core:
+  default_config_hash: dHj0dyD5fSWFHBFIj3j66JSM3Mq6I8h_liFdnYk28wg
 id: message.group_member_removed.default
 targetEntityType: message
 bundle: group_member_removed
@@ -16,22 +19,32 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_group_label:
+    type: string_textfield
     weight: 11
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
+  field_related_space:
+    type: entity_reference_autocomplete
+    weight: 12
     region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
     weight: 5
-    '#group': advanced
+    region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
-      match_limit: 10
-    region: content
     third_party_settings: {  }
+    '#group': advanced
 hidden: {  }

@@ -1,3 +1,7 @@
+administer ban:
+  title: 'Administer bans'
+  description: 'Gain full control over all ban configuration.'
+  restrict access: TRUE
 living space create employees:
   title: 'Access create employees form'
   description: 'Allow access to create employees form'
@@ -7,3 +11,6 @@ access intranet dashboard:
 delete shared offices space members:
   title: 'Delete shared office space members'
   description: 'Delete account of a shared office space'
+
+permission_callbacks:
+  - '\Drupal\living_spaces_intranet\Access\LivingSpacesBanPermissions::banPermissions'

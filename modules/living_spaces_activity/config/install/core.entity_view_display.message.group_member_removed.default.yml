@@ -3,26 +3,37 @@ status: true
 dependencies:
   config:
     - field.field.message.group_member_removed.field_group_label
+    - field.field.message.group_member_removed.field_related_space
     - message.template.group_member_removed
   module:
     - user
+_core:
+  default_config_hash: OxXUDamjN-y_FLRxQKpVQaCWMRdm9yUxtIvVigAWjwE
 id: message.group_member_removed.default
 targetEntityType: message
 bundle: group_member_removed
 mode: default
 content:
   field_group_label:
-    weight: 1
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 1
+    region: content
+  field_related_space:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
     region: content
   partial_0:
-    weight: 0
     settings: {  }
     third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   search_api_excerpt: true
