@@ -60,13 +60,13 @@ class LivingSpacesSectionPathArea extends AreaPluginBase {
     if (!$empty || !empty($this->options['empty'])) {
       if (!empty($this->options['bundle']) && !empty($this->options['title'])) {
         $gid = $this->view->args;
+
         if (is_numeric($gid[0]) && $space = \Drupal::entityTypeManager()->getStorage('group')->load($gid[0])) {
           if ($section = \Drupal::service('living_spaces_sections.manager')->getSectionFromGroupByType($space, $this->options['bundle'])) {
             return $section->toLink($this->options['title'])->toRenderable();
           }
         }
       }
-
     }
 
     return [];
