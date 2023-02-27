@@ -84,23 +84,28 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
       return $build;
     }
 
+    $event_invite_manager = $this->entityTypeManager->getStorage('living_spaces_event_invite');
+
+    $query = $event_invite_manager->getQuery();
+    $query->condition('event', $event->id());
+
+    $rows = [];
+    if ($ids = $query->execute()) {
+      /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInviteInterface $invite */
+      foreach ($event_invite_manager->loadMultiple($ids) as $invite) {
+        if (!$invite->get('status')->isEmpty()) {
+          /** @var \Drupal\taxonomy\TermInterface $status */
+          $status = $invite->get('status')->entity;
+
+          $owner = $invite->getOwner();
+          $rows[$status->uuid()][] = $owner->getDisplayName();
+        }
+      }
+    }
+
     $build['list'] = [
       '#theme' => 'living_spaces_event_invited_list',
-      '#rows' => [
-        [
-          'type' => 'accepted',
-          'items' => [
-            'User 1',
-            'User 2',
-          ],
-        ], [
-          'type' => 'declined',
-          'items' => [
-            'User 2',
-            'User 3',
-          ],
-        ],
-      ],
+      '#rows' => $rows,
       '#cache' => [
         'tags' => Cache::mergeTags($event->getCacheTags(), []),
       ],

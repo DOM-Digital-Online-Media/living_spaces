@@ -1,9 +1,8 @@
 <div class="event-invited-users">
-  {% for row in rows %}
-    <div class="type-{{ row.type }}">
-      {{ row.type }}
-      <div class="event-week-items">
-        {% for item in row.items %}
+  {% for type, row in rows %}
+    <div class="type-{{ type }}">
+      <div class="items">
+        {% for item in row %}
           <div class="item">
             {{ item }}
           </div>
