@@ -76,9 +76,9 @@ class LivingSpacesSectionPathBlock extends BlockBase implements ContainerFactory
    */
   public function defaultConfiguration() {
     return parent::defaultConfiguration() + [
-        'bundle' => '',
-        'label' => '',
-      ];
+      'bundle' => '',
+      'label' => '',
+    ];
   }
 
   /**
@@ -97,7 +97,7 @@ class LivingSpacesSectionPathBlock extends BlockBase implements ContainerFactory
       '#type' => 'select',
       '#title' => $this->t('Bundle'),
       '#options' => $options,
-      '#empty_option' => $this->t('Select'),
+      '#empty_option' => $this->t(' - Select a value - '),
       '#empty_value' => '',
       '#default_value' => isset($config['bundle']) ? $config['bundle'] : '',
     ];
