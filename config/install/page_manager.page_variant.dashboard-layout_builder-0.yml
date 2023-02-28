@@ -5,13 +5,12 @@ dependencies:
     - page_manager.page.dashboard
 id: dashboard-layout_builder-0
 label: Dashboard
-weight: 0
 variant: layout_builder
 variant_settings:
   id: layout_builder
+  uuid: 778094ca-c871-4ba0-8122-15a0b1e0b0fb
   label: null
   weight: 0
-  uuid: 778094ca-c871-4ba0-8122-15a0b1e0b0fb
   sections:
     -
       layout_id: barrio_col2-equal
@@ -25,28 +24,29 @@ variant_settings:
           configuration:
             id: 'views_block:message-user_activity'
             label: ''
-            label_display: visible
             provider: views
-            context_mapping: {  }
+            label_display: visible
             views_label: ''
             items_per_page: none
-          weight: 0
+            context_mapping: {  }
           additional: {  }
+          weight: 0
         91dbfc09-fade-424e-89e4-189af2e83a72:
           uuid: 91dbfc09-fade-424e-89e4-189af2e83a72
           region: second
           configuration:
             id: 'views_block:event_invites_and_chat_appointments-my_event_invites_and_chat_appointments_block'
             label: ''
-            label_display: visible
             provider: views
-            context_mapping: {  }
+            label_display: visible
             views_label: ''
             items_per_page: none
-          weight: 1
+            context_mapping: {  }
           additional: {  }
+          weight: 0
       third_party_settings: {  }
 page: dashboard
+weight: 0
 selection_criteria: {  }
 selection_logic: and
 static_context: {  }
