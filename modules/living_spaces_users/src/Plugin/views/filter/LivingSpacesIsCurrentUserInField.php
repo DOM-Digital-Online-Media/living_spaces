@@ -61,7 +61,7 @@ class LivingSpacesIsCurrentUserInField extends FilterPluginBase {
 
     $current_user_id = \Drupal::currentUser()->id();
     $condition = ($query->createConditionGroup('OR'));
-    foreach (explode("\n", $this->options['field_is_current_user']) as $field) {
+    foreach (explode(PHP_EOL, $this->options['field_is_current_user']) as $field) {
       $field = trim($field);
       if (!empty($field)) {
         $condition->addCondition($field, $current_user_id, '=');
