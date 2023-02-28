@@ -293,6 +293,10 @@ function living_spaces_event_living_spaces_event_type_insert(LivingSpaceEventTyp
 function living_spaces_event_theme($existing, $type, $theme, $path) {
   $items = [];
 
+  $items['views_view_living_spaces_event_week'] = [
+    'file' => 'living_spaces_event.theme.inc',
+  ];
+
   $items['living_spaces_event_fullcalendar_legend'] = [
     'variables' => ['types' => NULL],
     'file' => 'living_spaces_event.theme.inc',
