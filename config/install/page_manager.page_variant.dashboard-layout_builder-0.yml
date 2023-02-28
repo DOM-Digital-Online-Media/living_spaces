@@ -3,8 +3,6 @@ status: true
 dependencies:
   config:
     - page_manager.page.dashboard
-_core:
-  default_config_hash: XO-KZz9IwKxetL93dHcBoBMXmSNdaL86ZuBf02SIOwA
 id: dashboard-layout_builder-0
 label: Dashboard
 weight: 0
