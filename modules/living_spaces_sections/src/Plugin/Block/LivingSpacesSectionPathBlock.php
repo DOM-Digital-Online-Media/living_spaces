@@ -133,7 +133,7 @@ class LivingSpacesSectionPathBlock extends BlockBase implements ContainerFactory
       !empty($this->configuration['bundle']) &&
       $section = $this->sectionManager->getSectionFromGroupByType($space, $this->configuration['bundle'])
     ) {
-      return $section->toLink($this->configuration['title'])->toRenderable();
+      return $section->toLink($this->t($this->configuration['title']))->toRenderable();
     }
 
     return [];

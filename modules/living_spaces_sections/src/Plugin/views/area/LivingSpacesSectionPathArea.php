@@ -146,7 +146,7 @@ class LivingSpacesSectionPathArea extends AreaPluginBase {
 
         if (is_numeric($gid) && $space = $this->entityTypeManager->getStorage('group')->load($gid)) {
           if ($section = $this->sectionManager->getSectionFromGroupByType($space, $this->options['bundle'])) {
-            return $section->toLink($this->options['title'])->toRenderable();
+            return $section->toLink($this->t($this->options['title']))->toRenderable();
           }
         }
       }
