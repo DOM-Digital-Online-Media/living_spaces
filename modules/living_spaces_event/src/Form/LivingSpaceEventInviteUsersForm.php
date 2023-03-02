@@ -6,39 +6,11 @@ use Drupal\Core\Entity\Element\EntityAutocomplete;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\living_spaces_event\Entity\LivingSpaceEventInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Form handler for inviting users.
  */
 class LivingSpaceEventInviteUsersForm extends FormBase {
-
-  /**
-   * Returns the entity_type.manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * Constructs a LivingSpaceEventInviteUsersForm form.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Provides an interface for entity type managers.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
-    $this->entityTypeManager = $entity_type_manager;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager')
-    );
-  }
 
   /**
    * {@inheritdoc}
@@ -86,6 +58,9 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
         $event->save();
 
         $this->messenger()->addStatus($this->t('User has been invited.'));
+      }
+      else {
+        $this->messenger()->addWarning($this->t('User is already invited.'));
       }
     }
   }
