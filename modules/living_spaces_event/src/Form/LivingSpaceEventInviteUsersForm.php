@@ -2,12 +2,12 @@
 
 namespace Drupal\living_spaces_event\Form;
 
+use Drupal\Core\Entity\Element\EntityAutocomplete;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\living_spaces_event\Entity\LivingSpaceEventInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Url;
 
 /**
  * Form handler for inviting users.
@@ -55,12 +55,10 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
       return [];
     }
 
-    $form['user'] = [
-      '#type' => 'autocomplete_deluxe',
-      '#title' => $this->t('User name'),
-      '#multiple' => TRUE,
-      '#target_type' => 'user',
-      '#weight' => 2,
+    $form['invite'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Invite User'),
+      '#autocomplete_route_name' => 'living_spaces_event.invite_autocomplete',
     ];
 
     $form['submit'] = [
@@ -79,17 +77,17 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
     $info = $form_state->getBuildInfo();
     $values = $form_state->getValues();
 
-    /** @var \Drupal\group\Entity\GroupInterface $group */
-    $group = $info['args'][0];
+    /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInterface $event */
+    $event = $info['args'][0];
 
-    if (!empty($values['user'])) {
-      $manager = $this->entityTypeManager->getStorage('user');
-      foreach ($values['user'] as $value) {
-        $group->addMember($manager->load($value['target_id']));
+    if (!empty($values['invite']) && $match = EntityAutocomplete::extractEntityIdFromAutocompleteInput($values['invite'])) {
+      if (!living_spaces_event_check_user_status($event->id(), $match)) {
+        $event->set('invited_users', $match);
+        $event->save();
+
+        $this->messenger()->addStatus($this->t('User has been invited.'));
       }
     }
-
-    $this->messenger()->addStatus($this->t('Group membership has been saved.'));
   }
 
 }

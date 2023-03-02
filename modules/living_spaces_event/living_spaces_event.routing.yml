@@ -16,3 +16,10 @@ living_spaces_event.event_status:
     parameters:
       living_spaces_event_invite:
         type: entity:living_spaces_event_invite
+living_spaces_event.invite_autocomplete:
+  path: '/living-spaces-event/autocomplete'
+  defaults:
+    _controller: '\Drupal\living_spaces_event\Controller\LivingSpacesEventInviteAutoCompleteController::autocomplete'
+    _format: json
+  requirements:
+    _access: 'TRUE'

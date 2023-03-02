@@ -418,7 +418,6 @@ function living_spaces_event_inline_entity_form_reference_form_submit($reference
   if ($match = EntityAutocomplete::extractEntityIdFromAutocompleteInput($form_values['entity_id'])) {
     NestedArray::setValue($values, $reference_form['#parents'], ['entity_id' => $match]);
     $form_state->setValues($values);
-
   }
 }
 
