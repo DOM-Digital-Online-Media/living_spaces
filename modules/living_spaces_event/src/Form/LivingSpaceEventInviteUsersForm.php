@@ -35,8 +35,7 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
 
     $form['submit'] = [
       '#type' => 'submit',
-      '#value' => $this->t('Save'),
-      '#weight' => 3,
+      '#value' => $this->t('Invite'),
     ];
 
     return $form;
