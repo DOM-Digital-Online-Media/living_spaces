@@ -373,7 +373,6 @@ function living_spaces_event_theme($existing, $type, $theme, $path) {
 
   $items['living_spaces_event_invited_list'] = [
     'variables' => ['rows' => []],
-    'file' => 'living_spaces_event.theme.inc',
   ];
 
   return $items;
@@ -489,6 +488,10 @@ function living_spaces_event_living_spaces_event_action_info(LivingSpaceEventInt
       '#options' => [],
       '#url' => Url::fromRoute('entity.living_spaces_event.edit_form', [
         'living_spaces_event' => $event->id(),
+      ], [
+        'query' => [
+          'destination' => \Drupal::service('redirect.destination')->get(),
+        ],
       ]),
     ];
   }

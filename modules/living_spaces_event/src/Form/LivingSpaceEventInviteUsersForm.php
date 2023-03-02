@@ -62,6 +62,9 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
         $this->messenger()->addWarning($this->t('User is already invited.'));
       }
     }
+    else {
+      $this->messenger()->addWarning($this->t('There are no matches.'));
+    }
   }
 
 }
