@@ -55,41 +55,11 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
       return [];
     }
 
-    $target_type = 'user';
-    $selection_handler = 'default:user';
-
-    $settings = [
-      'include_anonymous' => '',
-      'filter' => ['type' => '_none'],
-      'target_bundles' => '',
-      'sort' => ['field' => '_none', 'direction' => 'ASC'],
-      'auto_create' => '',
-      'match_operator' => 'CONTAINS',
-    ];
-
-    $data = serialize($settings) . $target_type . $selection_handler;
-    $hmac = base64_encode(hash_hmac('sha256', $data, $this->settings->get('hash_salt'), TRUE));
-    $selection_settings_key = str_replace(['+', '/', '='], ['-', '_', ''], $hmac);
-
-    $key_value_storage = $this->keyValue->get('entity_autocomplete');
-    if (!$key_value_storage->has($selection_settings_key)) {
-      $key_value_storage->set($selection_settings_key, $settings);
-    }
-
-    $url = Url::fromRoute('autocomplete_deluxe.autocomplete', [
-      'target_type' => $target_type,
-      'selection_handler' => $selection_handler,
-      'selection_settings_key' => $selection_settings_key,
-    ], [
-      'absolute' => TRUE,
-    ])->getInternalPath();
-
     $form['user'] = [
       '#type' => 'autocomplete_deluxe',
       '#title' => $this->t('User name'),
-      '#autocomplete_deluxe_path' => $url,
       '#multiple' => TRUE,
-      '#target_type' => $target_type,
+      '#target_type' => 'user',
       '#weight' => 2,
     ];
 

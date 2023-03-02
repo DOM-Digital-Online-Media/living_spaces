@@ -158,6 +158,68 @@ third_party_settings:
               provider: living_spaces_event
               context_mapping:
                 living_spaces_event: layout_builder.entity
+            weight: 1
+            additional: {  }
+          b27bcc49-702e-462f-b638-ceb301e73c65:
+            uuid: b27bcc49-702e-462f-b638-ceb301e73c65
+            region: content
+            configuration:
+              id: 'field_block:living_spaces_event:room_occupied:label'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: string
+                label: hidden
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
+          df5234f0-a327-49c4-8f3e-ad5651130e02:
+            uuid: df5234f0-a327-49c4-8f3e-ad5651130e02
+            region: content
+            configuration:
+              id: 'field_block:living_spaces_event:room_occupied:field_start_date'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: datetime_default
+                label: above
+                settings:
+                  timezone_override: ''
+                  format_type: medium
+                third_party_settings: {  }
+            weight: 1
+            additional: {  }
+          e6199363-8555-4aa1-bddd-cf161ff29b91:
+            uuid: e6199363-8555-4aa1-bddd-cf161ff29b91
+            region: content
+            configuration:
+              id: 'field_block:living_spaces_event:room_occupied:field_end_date'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: datetime_default
+                label: above
+                settings:
+                  timezone_override: ''
+                  format_type: medium
+                third_party_settings: {  }
+            weight: 2
+            additional: {  }
+          be35589a-0fc4-4e9f-b6ea-a1f194cdd517:
+            uuid: be35589a-0fc4-4e9f-b6ea-a1f194cdd517
+            region: second
+            configuration:
+              id: living_spaces_event_invite_block
+              label: 'Invite users'
+              label_display: '0'
+              provider: living_spaces_event
+              context_mapping:
+                living_spaces_event: layout_builder.entity
             weight: 0
             additional: {  }
         third_party_settings: {  }
