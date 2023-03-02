@@ -84,7 +84,6 @@ class LivingSpacesIsCurrentUserInField extends FilterPluginBase {
       }
     }
     $query->addWhere($this->options['group'], $condition);
-
   }
 
 }
