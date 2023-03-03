@@ -114,7 +114,7 @@ class LivingSpaceSimplePermissionGlobalSettingsForm extends ConfigFormBase {
         '#type' => 'select',
         '#title' => $this->t('Permission name'),
         '#options' => $permissions,
-        '#empty_option' => t(' - Select a value - '),
+        '#empty_option' => $this->t(' - Select a value - '),
         '#empty_value' => 0,
         '#default_value' => !empty($config->get('permissions')[$i]) ? $config->get('permissions')[$i] : '',
       ];
@@ -156,7 +156,7 @@ class LivingSpaceSimplePermissionGlobalSettingsForm extends ConfigFormBase {
         '#type' => 'select',
         '#title' => $this->t('Permission name'),
         '#options' => $permissions,
-        '#empty_option' => t(' - Select a value - '),
+        '#empty_option' => $this->t(' - Select a value - '),
         '#empty_value' => 0,
         '#default_value' => !empty($config->get('names')[$i]['old']) ? $config->get('names')[$i]['old'] : '',
       ];

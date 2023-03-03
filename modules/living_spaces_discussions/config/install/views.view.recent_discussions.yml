@@ -435,16 +435,17 @@ display:
       title: 'Recent Discussions'
       header: {  }
       footer:
-        views_block_area:
-          id: views_block_area
+        section_path:
+          id: section_path
           table: views
-          field: views_block_area
+          field: section_path
           relationship: none
           group_type: group
           admin_label: ''
-          empty: false
-          block_id: living_spaces_discussions_link_block
-          plugin_id: views_block_area
+          plugin_id: section_path
+          empty: true
+          bundle: discussions
+          title: 'All discussions'
       empty: {  }
       relationships:
         gc__node:
