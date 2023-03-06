@@ -12,8 +12,8 @@ access_logic: and
 access_conditions:
   -
     id: user_permission
-    permission: 'view spaces event invite'
     negate: false
     context_mapping:
       user: '@user.current_user_context:current_user'
+    permission: 'access my event page'
 parameters: {  }
