@@ -68,7 +68,6 @@ function template_preprocess_views_view_living_spaces_event_week(&$variables) {
     }
     else {
       // Save unprocessed rows for next hook_preprocess_HOOK()
-      // @see dip_chat_counseling_preprocess_views_view_living_spaces_event_week().
       $variables['#unprocessed_rows'][] = $row;
     }
   }
