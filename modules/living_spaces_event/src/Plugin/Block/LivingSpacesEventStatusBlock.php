@@ -120,6 +120,7 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
             break;
 
           case LIVING_SPACES_EVENT_ACCEPTED_STATUS:
+            $title = $this->t('You have accepted the invitation to this event.');
             $decline = TRUE;
             break;
 
@@ -154,8 +155,6 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
       }
 
       if ($decline) {
-        $title = $this->t('You have accepted the invitation to this event.');
-
         $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
           'uuid' => LIVING_SPACES_EVENT_DECLINED_STATUS,
         ]);
