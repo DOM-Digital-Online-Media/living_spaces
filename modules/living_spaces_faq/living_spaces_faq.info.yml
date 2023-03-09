@@ -10,6 +10,7 @@ dependencies:
   - views_field_view
   - page_manager
   - views
+  - config_rewrite
 
 default_content:
   menu_link_content:
