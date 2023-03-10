@@ -36,6 +36,7 @@ function living_spaces_group_privacy_entity_base_field_info(EntityTypeInterface 
       ->setCardinality(1)
       ->setRevisionable(FALSE)
       ->setTranslatable(FALSE)
+      ->setRequired(TRUE)
       ->addConstraint('LivingSpacesGroupPrivacy')
       ->setDisplayOptions('form', [
         'type' => 'options_buttons',
