@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: event
+label: Event
+target_entity_type_id: living_spaces_event
+description: ''

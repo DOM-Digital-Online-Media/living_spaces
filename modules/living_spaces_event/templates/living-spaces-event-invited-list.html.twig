@@ -1,0 +1,13 @@
+<div class="event-invited-users">
+  {% for type, row in rows %}
+    <div class="type-{{ type }}">
+      <div class="items">
+        {% for item in row %}
+          <div class="item">
+            {{ item }}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
