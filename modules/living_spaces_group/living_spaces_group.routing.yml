@@ -70,3 +70,7 @@ living_spaces_group.group_join:
   requirements:
     _group_permission: 'join group'
     _group_member: 'FALSE'
+  options:
+    parameters:
+      group:
+        type: entity:group
