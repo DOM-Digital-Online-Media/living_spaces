@@ -222,8 +222,7 @@ class LivingSpacesGroupController extends ControllerBase {
       return new RedirectResponse($query->get('destination'));
     }
 
-    $url = Url::fromRoute('<front>');
-    return new RedirectResponse($url->toString());
+    return new RedirectResponse($group->toUrl()->toString());
   }
 
 }
