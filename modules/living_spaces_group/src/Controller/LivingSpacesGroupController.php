@@ -210,11 +210,12 @@ class LivingSpacesGroupController extends ControllerBase {
     $group_content = GroupContent::create([
       'type' => $plugin->getContentTypeConfigId(),
       'gid' => $group->id(),
-      'entity_id' => $this->currentUser->id(),
+      'entity_id' => $this->currentUser()->id(),
     ]);
 
     $group_content->save();
 
+    $this->messenger()->addStatus($this->t('You have joined the group.'));
     $query = $this->requestStack->getCurrentRequest()->query;
 
     if ($query->has('destination')) {
