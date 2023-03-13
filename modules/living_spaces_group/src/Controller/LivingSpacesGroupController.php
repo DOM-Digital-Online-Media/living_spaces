@@ -4,14 +4,44 @@ namespace Drupal\living_spaces_group\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
+use Drupal\group\Entity\GroupContent;
 use Drupal\group\Entity\GroupInterface;
+use Drupal\living_spaces_intranet\LivingSpacesBansManagerInterface;
 use Drupal\user\UserInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Returns responses for Space Group routes.
  */
 class LivingSpacesGroupController extends ControllerBase {
+
+  /**
+   * Returns the request_stack service.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
+   * Constructs a LivingSpacesGroupController object.
+   *
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack that controls the lifecycle of requests.
+   */
+  public function __construct(RequestStack $request_stack) {
+    $this->requestStack = $request_stack;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('request_stack')
+    );
+  }
 
   /**
    * Removes member from space and redirects to space members page.
@@ -168,6 +198,32 @@ class LivingSpacesGroupController extends ControllerBase {
 
     $this->messenger()->addWarning($this->t('Add a group of <b>@type</b> type to the "Preferred spaces" field.', ['@type' => $type]));
     return $this->redirect('entity.user.edit_form', ['user' => $this->currentUser()->id()], ['absolute' => TRUE]);
+  }
+
+  /**
+   * Returns response for the join space route.
+   */
+  public function join(GroupInterface $group) {
+    /** @var \Drupal\group\Plugin\GroupContentEnablerInterface $plugin */
+    $plugin = $group->getGroupType()->getContentPlugin('group_membership');
+
+    $group_content = GroupContent::create([
+      'type' => $plugin->getContentTypeConfigId(),
+      'gid' => $group->id(),
+      'entity_id' => $this->currentUser->id(),
+    ]);
+
+    $group_content->save();
+
+    $query = $this->requestStack->getCurrentRequest()->query;
+
+    if ($query->has('destination')) {
+      $query->get('destination');
+      return new RedirectResponse($query->get('destination'));
+    }
+
+    $url = Url::fromRoute('<front>');
+    return new RedirectResponse($url->toString());
   }
 
 }
