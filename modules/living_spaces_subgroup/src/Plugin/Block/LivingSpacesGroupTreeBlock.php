@@ -120,22 +120,13 @@ class LivingSpacesGroupTreeBlock extends BlockBase implements ContainerFactoryPl
         ];
 
         foreach ($this->entityTypeManager->getStorage('group')->loadMultiple($children) as $child) {
-          if ($links = $this->moduleHandler->invokeAll('living_spaces_subgroup_child_actions_info', [$child])) {
-            $build['children'][] = [
-              '#theme' => 'dropdown',
-              '#id' => "space-actions-{$group->id()}-{$child->id()}",
-              '#button_class' => 'btn-sm',
-              '#button' => $child->label(),
-              '#links' => $links,
-            ];
-          }
-          else {
-            $build['children'][] = [
-              '#type' => 'html_tag',
-              '#tag' => 'h4',
-              '#value' => $child->label(),
-            ];
-          }
+          $build['children'][] = [
+            '#theme' => 'dropdown',
+            '#id' => "space-actions-{$group->id()}-{$child->id()}",
+            '#button_class' => 'btn-sm',
+            '#button' => $child->label(),
+            '#links' => $this->moduleHandler->invokeAll('living_spaces_subgroup_child_actions_info', [$child]),
+          ];
         }
       }
     }
