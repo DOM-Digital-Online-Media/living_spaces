@@ -3,8 +3,8 @@ status: true
 dependencies:
   config:
     - field.field.node.page.body
-    - field.field.node.page.field_custom_id
     - field.field.node.page.field_exposed_to_frontend
+    - field.field.node.page.field_page_category
     - field.field.node.page.field_path
     - node.type.page
   module:
@@ -28,8 +28,8 @@ content:
     weight: 0
     region: content
 hidden:
-  field_custom_id: true
   field_exposed_to_frontend: true
+  field_page_category: true
   field_path: true
   langcode: true
   search_api_excerpt: true
