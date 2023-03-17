@@ -277,6 +277,7 @@
       let tmp = document.createElement("div");
       tmp.style.position = "absolute";
       tmp.style.left = "-100%";
+      tmp.style.width = el.clientWidth;
       tmp.innerHTML = des;
       document.body.appendChild(tmp);
       let assumedHeight = tmp.getElementsByClassName('dropbutton')[0].clientHeight;
