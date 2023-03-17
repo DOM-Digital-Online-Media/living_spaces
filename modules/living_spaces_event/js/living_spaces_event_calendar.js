@@ -290,7 +290,7 @@
       dialogOptions.movable = false;
       dialogOptions.resizable = false;
       dialogOptions.width = el.clientWidth;
-      dialogOptions.height = assumedHeight ? assumedHeight + 28 : 100;
+      dialogOptions.height = assumedHeight ? assumedHeight + 28 : 124;
       dialogOptions.title = dialogOptions.title ? dialogOptions.title : thisEvent.title.replace(/(<([^>]+)>)/ig, "");
       dialogOptions.html = des;
 
