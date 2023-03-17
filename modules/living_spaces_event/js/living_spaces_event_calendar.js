@@ -274,6 +274,14 @@
         parentElement: el,
       });
 
+      let tmp = document.createElement("div");
+      tmp.style.position = "absolute";
+      tmp.style.left = "-100%";
+      tmp.innerHTML = des;
+      document.body.appendChild(tmp);
+      let assumedHeight = tmp.getElementsByClassName('dropbutton')[0].clientHeight;
+      tmp.remove();
+
       // Dialog options.
       let dialogOptions = JSON.parse(viewSettings.dialog_options);
       dialogOptions.left = el.getBoundingClientRect().left;
@@ -281,11 +289,11 @@
       dialogOptions.movable = false;
       dialogOptions.resizable = false;
       dialogOptions.width = el.clientWidth;
-      dialogOptions.height = 100;
+      dialogOptions.height = assumedHeight ? assumedHeight + 28 : 100;
       dialogOptions.title = dialogOptions.title ? dialogOptions.title : thisEvent.title.replace(/(<([^>]+)>)/ig, "");
       dialogOptions.html = des;
 
-      // Close old wondow.
+      // Close old window.
       if (dialogs[dialogIndex] !== undefined) {
         dialogs[dialogIndex].hide();
       }
