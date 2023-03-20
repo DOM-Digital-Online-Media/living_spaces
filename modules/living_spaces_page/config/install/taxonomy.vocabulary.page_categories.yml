@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Page Categories'
+vid: page_categories
+description: ''
+weight: 0
