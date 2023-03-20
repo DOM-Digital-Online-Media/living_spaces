@@ -103,23 +103,8 @@ function living_spaces_group_privacy_form_group_form_alter(&$form, FormStateInte
       $access = $group->hasPermission('access living spaces privacy', $user);
     }
   }
-  /** @var \Drupal\group\Entity\GroupInterface $group */
-  $group = $form_state->getFormObject()->getEntity();
-  $bundles = [
-    'department',
-    'chat_counseling',
-    'mail_counseling',
-    'telephone_counseling',
-    'on_site_counseling',
-  ];
-  if (in_array($group->bundle(), $bundles)) {
-    $default_value = 'private';
-    if (isset($form['living_space_privacy']['widget']['#options'][$default_value])) {
-      $form['living_space_privacy']['widget']['#default_value'] = $default_value;
-    }
-  }
 
-  if (!$access && $group) {
+  if (!$access && $group = $form_state->getFormObject()->getEntity()) {
     $access = $group->hasPermission('access living spaces privacy', $user);
   }
 
