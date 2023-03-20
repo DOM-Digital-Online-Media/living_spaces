@@ -341,3 +341,17 @@ function living_spaces_intranet_form_user_form_alter(&$form, FormStateInterface 
   }
 
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_intranet_form_group_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\group\Entity\GroupInterface $group */
+  $group = $form_state->getFormObject()->getEntity();
+  if ('department' == $group->bundle()) {
+    $default_value = 'private';
+    if (isset($form['living_space_privacy']['widget']['#options'][$default_value])) {
+      $form['living_space_privacy']['widget']['#default_value'] = $default_value;
+    }
+  }
+}
