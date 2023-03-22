@@ -94,3 +94,14 @@ function living_spaces_intranet_update_9001() {
     }
   }
 }
+
+/**
+ * Reimporting spaces templates.
+ */
+function living_spaces_intranet_update_9002() {
+    try {
+        \Drupal::service('default_content.importer')
+            ->importContent('living_spaces_intranet');
+    } catch (Exception $e) {
+    }
+}
