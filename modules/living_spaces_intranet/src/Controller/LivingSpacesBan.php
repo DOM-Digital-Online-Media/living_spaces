@@ -66,7 +66,6 @@ class LivingSpacesBan extends ControllerBase {
     $query = $this->requestStack->getCurrentRequest()->query;
 
     if ($query->has('destination')) {
-      $query->get('destination');
       return new RedirectResponse($query->get('destination'));
     }
 
@@ -93,7 +92,6 @@ class LivingSpacesBan extends ControllerBase {
     $query = $this->requestStack->getCurrentRequest()->query;
 
     if ($query->has('destination')) {
-      $query->get('destination');
       return new RedirectResponse($query->get('destination'));
     }
 

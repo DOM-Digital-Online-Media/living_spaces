@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_custom_id
+    - taxonomy.vocabulary.page_categories
+id: taxonomy_term.page_categories.field_custom_id
+field_name: field_custom_id
+entity_type: taxonomy_term
+bundle: page_categories
+label: 'Custom ID'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

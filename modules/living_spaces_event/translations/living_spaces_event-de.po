@@ -31,3 +31,9 @@ msgstr "Von"
 
 msgid "Until"
 msgstr "Bis"
+
+msgid "Would you like to accept the invitation for this event?"
+msgstr "Bitte antworten Sie auf die Einladung zu diesem Termin:"
+
+msgid "You have accepted the invitation to this event."
+msgstr "Sie haben sich zu diesem Termin angemeldet."

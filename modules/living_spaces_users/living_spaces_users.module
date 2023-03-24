@@ -224,3 +224,20 @@ function living_spaces_users_living_spaces_group_exports_info($names_only = TRUE
 
   return $results;
 }
+
+/**
+ * Implements hook_views_data().
+ */
+function living_spaces_users_views_data() {
+  $data = [];
+
+  $data['views']['living_spaces_is_current_user_in_field'] = [
+    'title' => t('Current User is present in the field'),
+    'filter' => [
+      'title' => t('Current User is present in the field'),
+      'id' => 'living_spaces_is_current_user_in_field',
+    ],
+  ];
+
+  return $data;
+}

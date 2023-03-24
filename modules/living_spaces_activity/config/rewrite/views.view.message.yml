@@ -1085,11 +1085,11 @@ display:
           validate_options: {  }
           break_phrase: false
           not: false
-        field_space_target_id:
-          id: field_space_target_id
-          table: node__field_space
-          field: field_space_target_id
-          relationship: field_page
+        field_related_space_target_id:
+          id: field_related_space_target_id
+          table: message__field_related_space
+          field: field_related_space_target_id
+          relationship: none
           group_type: group
           admin_label: ''
           plugin_id: numeric

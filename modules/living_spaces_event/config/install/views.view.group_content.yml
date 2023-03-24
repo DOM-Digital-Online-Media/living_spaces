@@ -410,7 +410,19 @@ display:
           group_content_plugins:
             'living_spaces_event:test': '0'
       header: {  }
-      footer: {  }
+      footer:
+        section_path:
+          id: section_path
+          table: views
+          field: section_path
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: section_path
+          label: ''
+          empty: true
+          bundle: events
+          title: 'All events'
       display_extenders: {  }
     cache_metadata:
       max-age: -1

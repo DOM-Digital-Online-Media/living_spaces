@@ -169,6 +169,12 @@ class LivingSpacesGroupMembersBlock extends BlockBase implements ContainerFactor
    * {@inheritdoc}
    */
   public function build() {
+    $space = $this->getContextValue('group');
+
+    if (!empty($space->in_preview)) {
+      return [];
+    }
+
     $tabs = $this->getTabOptions();
     $build = [
       '#theme' => 'horizontal_tabs',

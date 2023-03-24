@@ -4,6 +4,8 @@ dependencies:
   config:
     - field.field.node.page.body
     - field.field.node.page.field_exposed_to_frontend
+    - field.field.node.page.field_page_category
+    - field.field.node.page.field_path
     - node.type.page
   module:
     - path
@@ -35,6 +37,24 @@ content:
     region: content
     settings:
       display_label: true
+    third_party_settings: {  }
+  field_page_category:
+    type: entity_reference_autocomplete
+    weight: 29
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_path:
+    type: string_textfield
+    weight: 28
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   langcode:
     type: language_select
