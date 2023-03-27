@@ -100,8 +100,6 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
         }
 
 
-
-
         $this->messenger()->addStatus($this->t('User has been invited.'));
       }
       else {
