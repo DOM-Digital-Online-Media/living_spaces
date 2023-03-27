@@ -5,3 +5,21 @@ living_spaces_event.agenda_autocomplete:
     _format: json
   requirements:
     _access: 'TRUE'
+living_spaces_event.event_status:
+  path: '/living-spaces-event-status/{living_spaces_event_invite}/{status}'
+  defaults:
+    _controller: '\Drupal\living_spaces_event\Controller\LivingSpacesEventStatusController::changeStatus'
+    _title: 'Change event status'
+  requirements:
+    _custom_access: '\Drupal\living_spaces_event\Controller\LivingSpacesEventStatusController::access'
+  options:
+    parameters:
+      living_spaces_event_invite:
+        type: entity:living_spaces_event_invite
+living_spaces_event.invite_autocomplete:
+  path: '/living-spaces-event/autocomplete'
+  defaults:
+    _controller: '\Drupal\living_spaces_event\Controller\LivingSpacesEventInviteAutoCompleteController::autocomplete'
+    _format: json
+  requirements:
+    _access: 'TRUE'

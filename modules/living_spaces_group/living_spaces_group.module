@@ -455,6 +455,16 @@ function living_spaces_group_group_operations_alter(array &$operations, GroupInt
       }
     }
   }
+
+  if (isset($operations['group-join'])) {
+    $operations['group-join']['url'] = Url::fromRoute('living_spaces_group.group_join', [
+      'group' => $group->id(),
+    ], [
+      'query' => [
+        'destination' => \Drupal::service('redirect.destination')->get(),
+      ],
+    ]);
+  }
 }
 
 /**
