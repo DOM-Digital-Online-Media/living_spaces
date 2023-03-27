@@ -649,3 +649,79 @@ function living_spaces_event_views_exposed_form_after_build($form, FormStateInte
 
   return $form;
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_event_form_user_admin_settings_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $config = \Drupal::configFactory();
+  $config_settings = $config->getEditable('user.settings');
+  $config_mail = $config->getEditable('user.mail');
+
+  $form['email_invited_user_to_the_event'] = [
+    '#type' => 'details',
+    '#title' => t('A user was invited to an event'),
+    '#group' => 'email',
+  ];
+
+  $form['email_invited_user_to_the_event']['email_invited_user_to_the_event_notify'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Notify user'),
+    '#default_value' => $config_settings->get('notify.email_invited_user_to_the_event'),
+  ];
+
+  $form['email_invited_user_to_the_event']['email_invited_user_to_the_event_subject'] = [
+    '#type' => 'textfield',
+    '#title' => t('Subject'),
+    '#default_value' => $config_mail->get('email_invited_user_to_the_event.subject'),
+    '#maxlength' => 180,
+    '#states' => [
+      'invisible' => [
+        'input[name="email_invited_user_to_the_event_notify"]' => ['checked' => FALSE],
+      ],
+    ],
+  ];
+
+  $form['email_invited_user_to_the_event']['email_invited_user_to_the_event_body'] = [
+    '#type' => 'textarea',
+    '#title' => t('Body'),
+    '#default_value' => $config_mail->get('email_invited_user_to_the_event.body'),
+    '#rows' => 15,
+    '#states' => [
+      'invisible' => [
+        'input[name="email_invited_user_to_the_event_notify"]' => ['checked' => FALSE],
+      ],
+    ],
+  ];
+
+  $form['actions']['submit']['#submit'][] = 'living_spaces_event_user_settings_form_submit';
+}
+
+/**
+ * Provides submit callback for user admin settings form.
+ */
+function living_spaces_event_user_settings_form_submit($form, FormStateInterface $form_state) {
+  \Drupal::configFactory()->getEditable('user.mail')
+    ->set('email_invited_user_to_the_event.subject', $form_state->getValue('email_invited_user_to_the_event_subject'))
+    ->set('email_invited_user_to_the_event.body', $form_state->getValue('email_invited_user_to_the_event_body'))
+    ->save();
+
+  \Drupal::configFactory()->getEditable('user.settings')
+    ->set('notify.email_invited_user_to_the_event', $form_state->getValue('email_invited_user_to_the_event_notify'))
+    ->save();
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function living_spaces_event_tokens($type, $tokens, array $data) {
+  $replacements = [];
+  if ($type == 'event' && !empty($data['event'])) {
+    /** @var LivingSpaceEventInterface $event */
+    $event = $data['event'];
+    $replacements['[event:title]'] = $event->label();
+    $replacements['[event:url]'] = $event->toUrl();
+  }
+  return $replacements;
+}
+
