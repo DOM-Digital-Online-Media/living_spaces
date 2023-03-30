@@ -46,6 +46,22 @@ class LivingSpacesEventStatusController extends ControllerBase {
    */
   public function changeStatus(LivingSpaceEventInviteInterface $living_spaces_event_invite, $status) {
     $living_spaces_event_invite->set('status', $status);
+    if (
+      $status == 3 &&
+      ($inviter = $living_spaces_event_invite->get('inviter')->first()) &&
+      $living_spaces_event_invite->get('uid')->first()->getValue() == $this->currentUser()->id()
+    ) {
+
+      /** @var \Drupal\message\Entity\Message $message */
+      $message = $this->entityTypeManager()->getStorage('message')->create([
+        'template' => 'user_sent_event_invitation',
+        'uid' => $inviter->getValue(),
+        'field_event' => $living_spaces_event_invite->get('event')->first()->getValue(),
+        'field_invited_user' => $this->currentUser()->id(),
+      ]);
+      $message->save();
+
+    }
     $living_spaces_event_invite->save();
 
     $this->messenger()->addStatus($this->t('The status has been changed.'));
