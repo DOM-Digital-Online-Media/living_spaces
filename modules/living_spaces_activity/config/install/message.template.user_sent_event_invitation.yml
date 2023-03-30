@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.full_html
+template: user_sent_event_invitation
+label: 'User sent the invitation to the event'
+description: ''
+text:
+  -
+    value: "<p>[message:field_invited_user:entity:name] has accepted the invitation to [message:field_event:entity:label]. <a href=\"[message:field_event:entity:url]\">Click here to go to the event.</a></p>\r\n"
+    format: full_html
+settings:
+  'token options':
+    clear: false
+    'token replace': true
+  purge_override: false
+  purge_methods: {  }
+category: 5538078f-4a95-4e4c-9924-85d05b924894

@@ -6,6 +6,7 @@ dependencies:
     - message.template.group_member_removed
     - message.template.persistent
     - message.template.user_invited_to_the_event
+    - message.template.user_sent_event_invitation
     - user.role.authenticated
   module:
     - group
@@ -1747,6 +1748,7 @@ display:
             group_member_removed: group_member_removed
             persistent: persistent
             user_invited_to_the_event: user_invited_to_the_event
+            user_sent_event_invitation: user_sent_event_invitation
           group: 1
           exposed: false
           expose:
