@@ -227,6 +227,7 @@ function living_spaces_event_living_spaces_event_insert(LivingSpaceEventInterfac
   $invite = $entity_manager->getStorage('living_spaces_event_invite')->create([
     'event' => $event->id(),
     'uid' => $event->getOwnerId(),
+    'inviter' => \Drupal::currentUser()->id(),
     'status' => $terms ? reset($terms)->id() : '',
   ]);
   $invite->save();
@@ -282,6 +283,7 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
               $invite = $entity_manager->getStorage('living_spaces_event_invite')->create([
                 'event' => $event->id(),
                 'uid' => $uid,
+                'inviter' => \Drupal::currentUser()->id(),
                 'status' => $terms ? reset($terms)->id() : '',
               ]);
 
@@ -305,6 +307,7 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
         $invite = $entity_manager->getStorage('living_spaces_event_invite')->create([
           'event' => $event->id(),
           'uid' => $user['target_id'],
+          'inviter' => \Drupal::currentUser()->id(),
           'status' => $terms ? reset($terms)->id() : '',
         ]);
 

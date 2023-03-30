@@ -45,24 +45,41 @@ class LivingSpacesEventStatusController extends ControllerBase {
    * Callback for 'change event status' route.
    */
   public function changeStatus(LivingSpaceEventInviteInterface $living_spaces_event_invite, $status) {
-    $living_spaces_event_invite->set('status', $status);
-    if (
-      $status == 3 &&
-      ($inviter = $living_spaces_event_invite->get('inviter')->first()) &&
-      $living_spaces_event_invite->get('uid')->first()->getValue() == $this->currentUser()->id()
-    ) {
+    if ($status == 'delete') {
 
       /** @var \Drupal\message\Entity\Message $message */
       $message = $this->entityTypeManager()->getStorage('message')->create([
-        'template' => 'user_sent_event_invitation',
-        'uid' => $inviter->getValue(),
+        'template' => 'user_removed_from_invite_list',
+        'uid' => $living_spaces_event_invite->get('uid')->first()->getValue(),
         'field_event' => $living_spaces_event_invite->get('event')->first()->getValue(),
-        'field_invited_user' => $this->currentUser()->id(),
       ]);
       $message->save();
 
+      $living_spaces_event_invite->delete();
+
     }
-    $living_spaces_event_invite->save();
+    else {
+      $living_spaces_event_invite->set('status', $status);
+      if (
+        ($current_status = $living_spaces_event_invite->get('status')->entity) &&
+        $current_status->uuid() == LIVING_SPACES_EVENT_ACCEPTED_STATUS &&
+        ($inviter = $living_spaces_event_invite->get('inviter')->first()) &&
+        $living_spaces_event_invite->get('uid')->first()->target_id == $this->currentUser()->id()
+      ) {
+
+        /** @var \Drupal\message\Entity\Message $message */
+        $message = $this->entityTypeManager()->getStorage('message')->create([
+          'template' => 'user_sent_event_invitation',
+          'uid' => $inviter->getValue(),
+          'field_event' => $living_spaces_event_invite->get('event')->first()->getValue(),
+          'field_invited_user' => $this->currentUser()->id(),
+        ]);
+        $message->save();
+
+      }
+      $living_spaces_event_invite->save();
+
+    }
 
     $this->messenger()->addStatus($this->t('The status has been changed.'));
     $query = $this->requestStack->getCurrentRequest()->query;
