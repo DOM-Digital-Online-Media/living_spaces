@@ -44,5 +44,5 @@ default:
       entity: 1b83cb06-bddb-429a-8c0f-5de96ab0baae
   allow_admins_to_edit_members:
     -
-      value: false
+      value: true
 
