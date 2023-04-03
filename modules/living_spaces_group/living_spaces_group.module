@@ -256,15 +256,7 @@ function living_spaces_group_form_group_form_alter(&$form, FormStateInterface $f
   }
 
   if (isset($form['allow_admins_to_edit_members'])) {
-    if (
-      $group->isNew()
-      && in_array($group->bundle(), ['project_space', 'department'])
-    ) {
-      $form['allow_admins_to_edit_members']['widget']['value']['#default_value'] = TRUE;
-    }
-
     $form['allow_admins_to_edit_members']['#access'] = \Drupal::currentUser()->hasPermission('manage access of admins to edit accounts in mutual space');
-
   }
 }
 
