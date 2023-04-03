@@ -1,0 +1,4 @@
+text:
+  -
+    value: "<p>You have been invited to the event [message:field_event:entity:label]. <a href=\"[message:field_event:entity:url]\">Please click here to RSVP.</a></p>\r\n"
+    format: full_html

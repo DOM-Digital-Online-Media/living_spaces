@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.message.field_invited_user
+    - message.template.user_sent_event_invitation
+id: message.user_sent_event_invitation.field_invited_user
+field_name: field_invited_user
+entity_type: message
+bundle: user_sent_event_invitation
+label: 'Invited user'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    filter:
+      type: _none
+    include_anonymous: false
+field_type: entity_reference

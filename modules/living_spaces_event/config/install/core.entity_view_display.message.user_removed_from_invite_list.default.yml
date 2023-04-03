@@ -1,0 +1,29 @@
+uuid: 2a4d93b0-b959-45e5-bb85-375fa80d9641
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.message.user_removed_from_invite_list.field_event
+    - message.template.user_removed_from_invite_list
+  module:
+    - user
+id: message.user_removed_from_invite_list.default
+targetEntityType: message
+bundle: user_removed_from_invite_list
+mode: default
+content:
+  field_event:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  partial_0:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

@@ -62,7 +62,7 @@ function template_preprocess_views_view_living_spaces_event_week(&$variables) {
 
     if ($event && $event->hasField('field_start_date')) {
       $start = strtotime($event->get('field_start_date')->getValue()[0]['value']);
-      $items[$date_formatter->format($start, 'custom', 'N') - 1]['items'][] = [
+      $items[$date_formatter->format($start, 'custom', 'N') - 1]['items'][$event->id()] = [
         'content' => $row,
       ];
     }

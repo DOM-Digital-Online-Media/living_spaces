@@ -5,9 +5,12 @@ dependencies:
     - message.template.group_member_added
     - message.template.group_member_removed
     - message.template.persistent
+    - message.template.user_invited_to_the_event
+    - message.template.user_sent_event_invitation
     - user.role.authenticated
   module:
     - group
+    - living_spaces_activity
     - message
     - message_ui
     - node
@@ -1391,40 +1394,6 @@ display:
           validate_options: {  }
           break_phrase: true
           not: false
-        field_space_target_id:
-          id: field_space_target_id
-          table: node__field_space
-          field: field_space_target_id
-          relationship: field_page
-          group_type: group
-          admin_label: ''
-          plugin_id: numeric
-          default_action: default
-          exception:
-            value: all
-            title_enable: false
-            title: All
-          title_enable: false
-          title: ''
-          default_argument_type: living_spaces_group_joined_spaces
-          default_argument_options: {  }
-          default_argument_skip_url: false
-          summary_options:
-            base_path: ''
-            count: true
-            override: false
-            items_per_page: 25
-          summary:
-            sort_order: asc
-            number_of_records: 0
-            format: default_summary
-          specify_validation: false
-          validate:
-            type: none
-            fail: 'not found'
-          validate_options: {  }
-          break_phrase: true
-          not: false
         field_related_space_target_id:
           id: field_related_space_target_id
           table: message__field_related_space
@@ -1778,6 +1747,8 @@ display:
             group_member_added: group_member_added
             group_member_removed: group_member_removed
             persistent: persistent
+            user_invited_to_the_event: user_invited_to_the_event
+            user_sent_event_invitation: user_sent_event_invitation
           group: 1
           exposed: false
           expose:

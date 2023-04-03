@@ -1,0 +1,40 @@
+uuid: 2b83a484-79ec-4c33-b9af-88d25a2ca110
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.message.user_removed_from_invite_list.field_event
+    - message.template.user_removed_from_invite_list
+id: message.user_removed_from_invite_list.default
+targetEntityType: message
+bundle: user_removed_from_invite_list
+mode: default
+content:
+  created:
+    type: datetime_timestamp
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_event:
+    type: entity_reference_autocomplete
+    weight: 12
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 5
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    '#group': advanced
+hidden: {  }
