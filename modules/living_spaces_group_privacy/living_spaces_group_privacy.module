@@ -169,6 +169,15 @@ function living_spaces_group_privacy_group_access(GroupInterface $group, $operat
 }
 
 /**
+ * Implements hook_living_spaces_group_exclude_permissions().
+ */
+function  living_spaces_group_privacy_living_spaces_group_exclude_permissions() {
+  $permissions = ['delete private group'];
+
+  return $permissions;
+}
+
+/**
  * Implements hook_node_access_records().
  */
 function living_spaces_group_privacy_node_access_records(NodeInterface $node) {
