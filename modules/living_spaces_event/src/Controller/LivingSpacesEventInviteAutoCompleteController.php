@@ -53,7 +53,7 @@ class LivingSpacesEventInviteAutoCompleteController extends ControllerBase {
       foreach ($group_manager->loadMultiple($groups) as $group) {
         $name = $group->label();
         $results[] = [
-          'value' => "{$name} ({$group->id()}) [group]",
+          'value' => "{$name} ({$group->id()}) [space]",
           'label' => $name,
         ];
       }

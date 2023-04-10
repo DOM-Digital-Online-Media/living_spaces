@@ -280,6 +280,7 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
         foreach ($memberships as $membership) {
           if ($uid = $membership->getUser()->id()) {
             if (!living_spaces_event_check_user_status($event->id(), $uid)) {
+              // @todo: check if the user is a member of the space.
               $invite = $entity_manager->getStorage('living_spaces_event_invite')->create([
                 'event' => $event->id(),
                 'uid' => $uid,
@@ -304,6 +305,7 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
 
     foreach ($event->get('invited_users')->getValue() as $user) {
       if (!living_spaces_event_check_user_status($event->id(), $user['target_id'])) {
+        // @todo: check if the user is a member of the space.
         $invite = $entity_manager->getStorage('living_spaces_event_invite')->create([
           'event' => $event->id(),
           'uid' => $user['target_id'],
