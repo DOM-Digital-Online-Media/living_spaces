@@ -61,7 +61,7 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
 
     $form['invite'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Invite User'),
+      '#title' => $this->t('Invite'),
       '#autocomplete_route_name' => 'living_spaces_event.invite_autocomplete',
     ];
 
