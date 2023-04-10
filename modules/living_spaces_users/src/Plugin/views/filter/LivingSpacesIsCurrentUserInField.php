@@ -3,7 +3,9 @@
 namespace Drupal\living_spaces_users\Plugin\views\filter;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\search_api\Query\ConditionGroup;
 use Drupal\views\Plugin\views\filter\FilterPluginBase;
+use Drupal\views_contextual_filters_or\Plugin\views\query\ExtendedSql;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -74,16 +76,29 @@ class LivingSpacesIsCurrentUserInField extends FilterPluginBase {
 
     /** @var \Drupal\views_contextual_filters_or\Plugin\views\query\ExtendedSearchApiQuery $query */
     $query = $this->query;
-
     $current_user_id = $this->currentUser->id();
-    $condition = ($query->createConditionGroup('OR'));
-    foreach (explode(PHP_EOL, $this->options['field_is_current_user']) as $field) {
-      $field = trim($field);
-      if (!empty($field)) {
-        $condition->addCondition($field, $current_user_id, '=');
+
+    if ($query instanceof ExtendedSql) {
+      $orGroup = $query->setWhereGroup('OR', $this->options['group']);
+      foreach (explode(PHP_EOL, $this->options['field_is_current_user']) as $field) {
+        $field = trim($field);
+        if (!empty($field)) {
+          $query->addWhere($orGroup, $field, $current_user_id, '=');
+        }
       }
     }
-    $query->addWhere($this->options['group'], $condition);
+    else {
+      $condition = new ConditionGroup('OR');
+      //    $condition = ($query->createConditionGroup('OR'));
+      foreach (explode(PHP_EOL, $this->options['field_is_current_user']) as $field) {
+        $field = trim($field);
+        if (!empty($field)) {
+          $condition->addCondition($field, $current_user_id, '=');
+        }
+      }
+      $query->addWhere($this->options['group'], $condition);
+
+    }
   }
 
 }
