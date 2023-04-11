@@ -53,21 +53,19 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
 
     if (!empty($values['invite']) && $match = EntityAutocomplete::extractEntityIdFromAutocompleteInput($values['invite'])) {
       if (strpos($values['invite'], '[user]')) {
-        if (!living_spaces_event_check_user_status($event->id(), $match)) {
-          $event->set('invited_users', $match);
-          $event->save();
+        $event->set('invited_users', $match);
+        $event->save();
 
-          $this->messenger()->addStatus($this->t('User has been invited.'));
-        }
-        else {
-          $this->messenger()->addWarning($this->t('User is already invited.'));
-        }
+        $this->messenger()->addStatus($this->t('User has been invited.'));
       }
       elseif (strpos($values['invite'], '[space]')) {
         $event->set('invited_spaces', $match);
         $event->save();
 
         $this->messenger()->addStatus($this->t('Space members have been invited.'));
+      }
+      else {
+        $this->messenger()->addWarning($this->t('There are no matches.'));
       }
     }
     else {
