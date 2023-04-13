@@ -42,6 +42,7 @@ function living_spaces_users_form_user_form_alter(&$form, FormStateInterface $fo
   }
 
   if (isset($form['account']['pass'])) {
+    $form['account']['pass']['#after_build'][] = 'living_spaces_users_pass_after_build';
     $access = FALSE;
 
     if ($current_user->hasPermission('change any passwords')) {
@@ -101,6 +102,21 @@ function living_spaces_users_get_user_level(AccountInterface $account, $weights 
   }
 
   return $level;
+}
+
+/**
+ * Provides after build callback for the pass form element.
+ */
+function living_spaces_users_pass_after_build($element, FormStateInterface $form_state) {
+  if (isset($element['pass1'])) {
+    $element['pass1']['#title'] = t('New Password');
+  }
+
+  if (isset($element['pass2'])) {
+    $element['pass2']['#title'] = t('Confirm new password');
+  }
+
+  return $element;
 }
 
 /**
