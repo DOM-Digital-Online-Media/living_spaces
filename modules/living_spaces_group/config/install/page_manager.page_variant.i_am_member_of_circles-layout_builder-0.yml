@@ -1,0 +1,50 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - page_manager.page.i_am_member_of_circles
+id: i_am_member_of_circles-layout_builder-0
+label: 'Layout Builder'
+weight: 0
+variant: layout_builder
+variant_settings:
+  id: layout_builder
+  label: null
+  weight: 0
+  uuid: 36c06b8f-821f-4174-8bff-fe354a8ba706
+  sections:
+    -
+      layout_id: barrio_col2-3-9
+      layout_settings:
+        label: ''
+        context_mapping: {  }
+      components:
+        d1c3054b-fd70-4ed2-9764-89cd4ccc0008:
+          uuid: d1c3054b-fd70-4ed2-9764-89cd4ccc0008
+          region: first
+          configuration:
+            id: living_spaces_group_links_i_am_member
+            label: 'Links for member Spaces and Circles'
+            label_display: '0'
+            provider: living_spaces_group
+            context_mapping: {  }
+          weight: 0
+          additional: {  }
+        0c850abd-792b-4aa0-9a5c-9214e88c89b6:
+          uuid: 0c850abd-792b-4aa0-9a5c-9214e88c89b6
+          region: second
+          configuration:
+            id: 'views_block:spaces-member_of_circles'
+            label: ''
+            label_display: '0'
+            provider: views
+            context_mapping: {  }
+            views_label: ''
+            items_per_page: none
+          weight: 0
+          additional: {  }
+      third_party_settings: {  }
+page: i_am_member_of_circles
+selection_criteria: {  }
+selection_logic: and
+static_context: {  }
