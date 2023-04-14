@@ -7,6 +7,7 @@ dependencies:
   - default_content
   - menu_item_role_access
   - language
+  - living_spaces_group
 
 default_content:
   menu_link_content:
@@ -15,3 +16,4 @@ default_content:
     - 5cd55d3d-3f6d-490b-b354-c1c9c6470991
     - aaf9a661-c053-4028-985e-22ba52670991
     - c4ce400d-959a-4fab-b99a-64eacf67e723
+    - 436e7a5e-7eb0-4ba7-928c-b9064865f174

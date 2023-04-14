@@ -131,7 +131,7 @@ class LivingSpacesGroupInUserJoinedSpaces extends FilterPluginBase {
         default => 'NOT IN',
       };
 
-      $joined_spaces = [];
+      $joined_spaces = [0];
 
       $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
       foreach ($user->get('joined_spaces')->getValue() as $value) {
