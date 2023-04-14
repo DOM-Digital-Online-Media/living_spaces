@@ -59,16 +59,6 @@ class LivingSpacesGroupJoinedSpaces extends InOperator {
    * {@inheritdoc}
    */
   public function init(ViewExecutable $view, DisplayPluginBase $display, array &$options = NULL) {
-    $joined_spaces_ids = array_keys($this->generateOptions());
-    if (!empty($options['value'])) {
-      $options['value'] = $joined_spaces_ids;
-    }
-    if (!empty($options['group_info']['group_items'][1]['value'])) {
-      $options['group_info']['group_items'][1]['value'] = $joined_spaces_ids;
-    }
-    if (!empty($options['group_info']['group_items'][2]['value'])) {
-      $options['group_info']['group_items'][2]['value'] = $joined_spaces_ids;
-    }
     parent::init($view, $display, $options);
     $this->valueTitle = $this->t('Joined spaces');
     $this->definition['options callback'] = [$this, 'generateOptions'];
