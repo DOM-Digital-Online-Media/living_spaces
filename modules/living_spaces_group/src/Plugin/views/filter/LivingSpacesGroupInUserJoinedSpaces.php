@@ -132,7 +132,6 @@ class LivingSpacesGroupInUserJoinedSpaces extends FilterPluginBase {
       };
 
       $joined_spaces = [0];
-
       $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
       foreach ($user->get('joined_spaces')->getValue() as $value) {
         if ($space = $this->entityTypeManager->getStorage('group')->load($value['target_id'])) {
@@ -146,7 +145,6 @@ class LivingSpacesGroupInUserJoinedSpaces extends FilterPluginBase {
         $joined_spaces,
         $operator
       );
-
     }
 
   }

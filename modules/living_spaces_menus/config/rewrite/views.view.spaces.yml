@@ -288,8 +288,6 @@ display:
           required: false
           group_content_plugins:
             group_membership: group_membership
-            'dip_chat_appointment:chat_appointment': '0'
-            'dip_mail_shift:mail_shift': '0'
             'group_node:agenda': '0'
             'group_node:changelog': '0'
             'group_node:discussion_post': '0'

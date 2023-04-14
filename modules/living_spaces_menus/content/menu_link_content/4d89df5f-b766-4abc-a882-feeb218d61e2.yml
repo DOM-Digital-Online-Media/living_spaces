@@ -39,7 +39,11 @@ default:
     -
       target_id: administrator
     -
+      target_id: assistant_to_the_office_manager
+    -
       target_id: client_admin
+    -
+      target_id: external_employee
     -
       target_id: former_employee
     -

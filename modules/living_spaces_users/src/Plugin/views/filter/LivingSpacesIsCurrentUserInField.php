@@ -79,17 +79,16 @@ class LivingSpacesIsCurrentUserInField extends FilterPluginBase {
     $current_user_id = $this->currentUser->id();
 
     if ($query instanceof ExtendedSql) {
-      $orGroup = $query->setWhereGroup('OR', $this->options['group']);
+      $or_group = $query->setWhereGroup('OR', $this->options['group']);
       foreach (explode(PHP_EOL, $this->options['field_is_current_user']) as $field) {
         $field = trim($field);
         if (!empty($field)) {
-          $query->addWhere($orGroup, $field, $current_user_id, '=');
+          $query->addWhere($or_group, $field, $current_user_id, '=');
         }
       }
     }
     else {
       $condition = new ConditionGroup('OR');
-      //    $condition = ($query->createConditionGroup('OR'));
       foreach (explode(PHP_EOL, $this->options['field_is_current_user']) as $field) {
         $field = trim($field);
         if (!empty($field)) {

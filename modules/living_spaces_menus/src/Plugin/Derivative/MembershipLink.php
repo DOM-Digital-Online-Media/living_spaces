@@ -43,24 +43,25 @@ class MembershipLink extends DeriverBase implements ContainerDeriverInterface {
    */
   public function getDerivativeDefinitions($base_plugin_definition) {
     $links = [];
-    $view = Views::getView('spaces');
-    $view->setDisplay('menu_member_of_spaces');
-    $view->execute();
-    $view_result = $view->result;
+    if ($view = Views::getView('spaces')) {
+      $view->setDisplay('menu_member_of_spaces');
+      $view->execute();
+      $view_result = $view->result;
 
-    if (!empty($view_result)) {
-      foreach ($view->result as $row) {
-        /** @var \Drupal\group\Entity\GroupInterface $group */
-        if ($group = $row->_entity) {
-          $links[$group->id()] = [
-            'title' => $group->label(),
-            'parent' => 'menu_link_content:436e7a5e-7eb0-4ba7-928c-b9064865f174',
-            '#cache' => [
-              'tags' => ['user:' . $this->currentUser->id()],
-            ],
-            'route_name' => $group->toUrl()->getRouteName(),
-            'route_parameters' => ['group' => $group->id()],
-          ] + $base_plugin_definition;
+      if (!empty($view_result)) {
+        foreach ($view->result as $row) {
+          /** @var \Drupal\group\Entity\GroupInterface $group */
+          if ($group = $row->_entity) {
+            $links[$group->id()] = [
+              'title' => $group->label(),
+              'parent' => 'menu_link_content:436e7a5e-7eb0-4ba7-928c-b9064865f174',
+              '#cache' => [
+                'tags' => ['user:' . $this->currentUser->id()],
+              ],
+              'route_name' => $group->toUrl()->getRouteName(),
+              'route_parameters' => ['group' => $group->id()],
+            ] + $base_plugin_definition;
+          }
         }
       }
     }
