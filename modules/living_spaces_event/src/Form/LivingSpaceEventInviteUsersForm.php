@@ -21,27 +21,11 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
   protected $entityTypeManager;
 
   /**
-   * The mail manager.
-   *
-   * @var \Drupal\Core\Mail\MailManagerInterface
-   */
-  protected $mailManager;
-
-  /**
-   * The config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     $instance = parent::create($container);
     $instance->entityTypeManager = $container->get('entity_type.manager');
-    $instance->mailManager = $container->get('plugin.manager.mail');
-    $instance->configFactory = $container->get('config.factory');
     return $instance;
   }
 
@@ -105,7 +89,6 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
             ]);
             $this->logger('Space event')->notice($message);
             $this->messenger()->addWarning($message);
-
           }
         }
         else {
