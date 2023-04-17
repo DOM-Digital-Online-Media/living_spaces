@@ -350,7 +350,6 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
  * Implements hook_ENTITY_TYPE_insert().
  */
 function living_spaces_event_living_spaces_event_invite_insert(LivingSpaceEventInviteInterface $invite) {
-  // Ref #41677 - create notification and email to invited user to the event.
   if (
     ($event = $invite->get('event')->entity) &&
     ($account = $invite->get('uid')->entity)
