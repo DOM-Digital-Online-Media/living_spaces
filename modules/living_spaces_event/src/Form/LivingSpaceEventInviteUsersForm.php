@@ -86,22 +86,6 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
     if (!empty($values['invite']) && $match = EntityAutocomplete::extractEntityIdFromAutocompleteInput($values['invite'])) {
       if (!living_spaces_event_check_user_status($event->id(), $match)) {
         $event->set('invited_users', $match);
-
-        $message = $this->entityTypeManager->getStorage('message')->create([
-          'template' => 'user_invited_to_the_event',
-          'uid' => $match,
-          'field_event' => $event->id(),
-        ]);
-        $message->save();
-
-        $config_settings = $this->configFactory->getEditable('user.settings');
-        if ($config_settings->get('notify.email_invited_user_to_the_event')) {
-          $account = $this->entityTypeManager->getStorage('user')->load($match);
-          if ($account->isActive() && $account->getEmail()) {
-            $params['event'] = $event;
-            $this->mailManager->mail('living_spaces_event', 'email_invited_user_to_the_event', $account->getEmail(), $account->getPreferredLangcode(), $params);
-          }
-        }
         $event->save();
 
         $this->messenger()->addStatus($this->t('User has been invited.'));

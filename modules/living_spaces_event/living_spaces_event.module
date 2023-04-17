@@ -21,6 +21,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\group\Entity\GroupContentInterface;
+use Drupal\living_spaces_event\Entity\LivingSpaceEventInviteInterface;
 use Drupal\living_spaces_event\Entity\LivingSpaceEventTypeInterface;
 use Drupal\living_spaces_event\Entity\LivingSpaceEventInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -316,6 +317,40 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
     }
 
     $event->set('invited_users', NULL);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_event_living_spaces_event_invite_insert(LivingSpaceEventInviteInterface $invite) {
+  // Ref #41677 - create notification and email to invited user to the event.
+  $event = $invite->get('event')->referencedEntities();
+  $account = $invite->get('uid')->referencedEntities();
+  $event = reset($event);
+  $account = reset($account);
+
+  if ($event && $account) {
+    $message = \Drupal::entityTypeManager()->getStorage('message')->create([
+      'template' => 'user_invited_to_the_event',
+      'uid' => $account->id(),
+      'field_event' => $event->id(),
+    ]);
+    $message->save();
+
+    if (\Drupal::config('user.settings')->get('notify.email_invited_user_to_the_event')) {
+      if ($account->isActive() && $account->getEmail()) {
+        $params['event'] = $event;
+
+        \Drupal::service('plugin.manager.mail')->mail(
+          'living_spaces_event',
+          'email_invited_user_to_the_event',
+          $account->getEmail(),
+          $account->getPreferredLangcode(),
+          $params
+        );
+      }
+    }
   }
 }
 
