@@ -40,6 +40,18 @@ function template_preprocess_views_view_living_spaces_activity_notification(&$va
 
     $footer = Link::createFromRoute(t('Mark all as read'), $route, $parameters, $options)->toString();
     $variables['links'][] = ['#markup' => '<span class="dropdown-item-text">' . $footer . '</span>'];
+
+    $options = [
+      'attributes' => [
+        'id' => 'view-all-messages',
+        'class' => ['btn', 'btn-default', 'btn-sm'],
+      ],
+    ];
+
+    $route = 'view.message.my_notifications_page';
+
+    $footer = Link::createFromRoute(t('Show all notifications'), $route, [], $options)->toString();
+    $variables['links'][] = ['#markup' => '<span class="dropdown-item-text">' . $footer . '</span>'];
   }
   else {
     $variables['links'][] = ['#markup' => '<span class="dropdown-item-text">' . t('There are no new notifications for you.') . '</span>'];

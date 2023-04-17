@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Form handler for inviting users.
  */
 class LivingSpaceEventInviteUsersForm extends FormBase {
+
   /**
    * Returns the entity_type.manager service.
    *
@@ -61,7 +62,7 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
 
     $form['invite'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Invite User'),
+      '#title' => $this->t('Invite'),
       '#autocomplete_route_name' => 'living_spaces_event.invite_autocomplete',
     ];
 
@@ -84,30 +85,42 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
     $event = $info['args'][0];
 
     if (!empty($values['invite']) && $match = EntityAutocomplete::extractEntityIdFromAutocompleteInput($values['invite'])) {
-      if (!living_spaces_event_check_user_status($event->id(), $match)) {
+      if (strpos($values['invite'], '[user]')) {
+        if (!$event->get('space')->isEmpty() && !living_spaces_event_check_user_status($event->id(), $match)) {
+          /** @var \Drupal\group\Entity\Group $space */
+          $space = $event->get('space')->entity;
 
-        $space = $event->get('space')->entity;
+          $group_content_storage = $this->entityTypeManager->getStorage('group_content');
+          if ($group_content_storage->loadByGroup($space, 'group_membership', ['entity_id' => $match])) {
+            $event->set('invited_users', $match);
+            $event->save();
 
-        $group_content_storage = $this->entityTypeManager->getStorage('group_content');
-        // Check if the user is a member of event space.
-        if ($group_content_storage->loadByGroup($space, 'group_membership', ['entity_id' => $match])) {
-          $event->set('invited_users', $match);
-          $event->save();
-          $this->messenger()->addStatus($this->t('User has been invited.'));
+            $this->messenger()->addStatus($this->t('User has been invited.'));
+          }
+          else {
+            $this->messenger()->addWarning($this->t('User doesn\'t have a membership in this space.'));
+            $member = $this->entityTypeManager->getStorage('user')->load($match);
+            $message = $this->t('<strong>@user</strong> could not be invited to this @event event, because they are missing a membership in this space.', [
+              '@user' => $member->getDisplayName(),
+              '@event' => $event->toLink($event->label())->toString(),
+            ]);
+            $this->logger('Space event')->notice($message);
+            $this->messenger()->addWarning($message);
+
+          }
         }
         else {
-          $member = $this->entityTypeManager->getStorage('user')->load($match);
-          $message = $this->t('<strong>@user</strong> could not be invited to this @event event, because they are missing a membership in this space.', [
-            '@user' => $member->getDisplayName(),
-            '@event' => $event->toLink($event->label())->toString(),
-          ]);
-          $this->logger('Space event')->notice($message);
-          $this->messenger()->addWarning($message);
+          $this->messenger()->addWarning($this->t('User is already invited.'));
         }
+      }
+      elseif (strpos($values['invite'], '[space]')) {
+        $event->set('invited_spaces', $match);
+        $event->save();
 
+        $this->messenger()->addStatus($this->t('Space members have been invited.'));
       }
       else {
-        $this->messenger()->addWarning($this->t('User is already invited.'));
+        $this->messenger()->addWarning($this->t('There are no matches.'));
       }
     }
     else {
