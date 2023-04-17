@@ -85,10 +85,26 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
 
     if (!empty($values['invite']) && $match = EntityAutocomplete::extractEntityIdFromAutocompleteInput($values['invite'])) {
       if (!living_spaces_event_check_user_status($event->id(), $match)) {
-        $event->set('invited_users', $match);
-        $event->save();
 
-        $this->messenger()->addStatus($this->t('User has been invited.'));
+        $space = $event->get('space')->entity;
+
+        $group_content_storage = $this->entityTypeManager->getStorage('group_content');
+        // Check if the user is a member of event space.
+        if ($group_content_storage->loadByGroup($space, 'group_membership', ['entity_id' => $match])) {
+          $event->set('invited_users', $match);
+          $event->save();
+          $this->messenger()->addStatus($this->t('User has been invited.'));
+        }
+        else {
+          $member = $this->entityTypeManager->getStorage('user')->load($match);
+          $message = $this->t('<strong>@user</strong> could not be invited to this @event event, because they are missing a membership in this space.', [
+            '@user' => $member->getDisplayName(),
+            '@event' => $event->toLink($event->label())->toString(),
+          ]);
+          $this->logger('Space event')->notice($message);
+          $this->messenger()->addWarning($message);
+        }
+
       }
       else {
         $this->messenger()->addWarning($this->t('User is already invited.'));
