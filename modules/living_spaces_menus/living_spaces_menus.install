@@ -57,21 +57,22 @@ function living_spaces_menus_update_9002(&$sandbox) {
       $item->save();
     }
   }
+}
 
-  /**
-   * Delete menu link content and update it from yml.
-   */
-  function living_spaces_menus_update_9003() {
-    if (function_exists('living_spaces_menus_uninstall')) {
-      living_spaces_menus_uninstall();
-    }
 
-    try {
-      \Drupal::service('default_content.importer')
-        ->importContent('living_spaces_menus');
-    }
-    catch (Exception $e) {
-    }
+/**
+ * Delete menu link content and update it from yml.
+ */
+function living_spaces_menus_update_9003() {
+  if (function_exists('living_spaces_menus_uninstall')) {
+    living_spaces_menus_uninstall();
   }
 
+  try {
+    \Drupal::service('default_content.importer')
+      ->importContent('living_spaces_menus');
+  }
+  catch (Exception $e) {
+  }
+  \Drupal::service('plugin.manager.menu.link')->rebuild();
 }

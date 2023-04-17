@@ -41,9 +41,9 @@ function living_spaces_group_views_data_alter(array &$data) {
 
   $data['user__joined_spaces']['living_spaces_group_current_user_member'] = [
     'title' => t('Membership status'),
+    'help' => t('I am a member of the space.'),
+    'real field' => 'entity_id',
     'field' => [
-      'title' => t('Membership status'),
-      'help' => t('I am a member of the space.'),
       'id' => 'living_spaces_group_current_user_member',
     ],
   ];
