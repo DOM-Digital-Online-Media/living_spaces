@@ -62,3 +62,15 @@ living_spaces_group.preferred_spaces:
     _title: 'Preferred spaces'
   requirements:
     _user_is_logged_in: 'TRUE'
+living_spaces_group.group_join:
+  path: '/group-join/{group}'
+  defaults:
+    _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupController::join'
+    _title: 'Join group'
+  requirements:
+    _group_permission: 'join group'
+    _group_member: 'FALSE'
+  options:
+    parameters:
+      group:
+        type: entity:group

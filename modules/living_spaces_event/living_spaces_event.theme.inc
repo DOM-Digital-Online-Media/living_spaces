@@ -43,9 +43,11 @@ function template_preprocess_views_view_living_spaces_event_week(&$variables) {
     ];
   }
 
+  $variables['#unprocessed_rows'] = [];
   foreach ($variables['rows'] as $row) {
     /** @var \Drupal\group\Entity\GroupContentInterface $content */
     $content = $row['#row']->_entity;
+    $event = NULL;
 
     if ($content instanceof LivingSpaceEventInviteInterface) {
       /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInterface $event */
@@ -53,13 +55,21 @@ function template_preprocess_views_view_living_spaces_event_week(&$variables) {
     }
     else {
       /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInterface $event */
-      $event = $content->getEntity();
+      if (method_exists($content, 'getEntity')) {
+        $event = $content->getEntity();
+      }
     }
 
-    $start = strtotime($event->get('field_start_date')->getValue()[0]['value']);
-    $items[$date_formatter->format($start, 'custom', 'N') - 1]['items'][] = [
-      'content' => $row,
-    ];
+    if ($event && $event->hasField('field_start_date')) {
+      $start = strtotime($event->get('field_start_date')->getValue()[0]['value']);
+      $items[$date_formatter->format($start, 'custom', 'N') - 1]['items'][$event->id()] = [
+        'content' => $row,
+      ];
+    }
+    else {
+      // Save unprocessed rows for next hook_preprocess_HOOK()
+      $variables['#unprocessed_rows'][] = $row;
+    }
   }
 
   $variables['rows'] = $items;

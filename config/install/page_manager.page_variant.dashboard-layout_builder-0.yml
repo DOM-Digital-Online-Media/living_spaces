@@ -31,11 +31,11 @@ variant_settings:
             context_mapping: {  }
           additional: {  }
           weight: 0
-        3310a1ac-c5a7-42c0-a06c-2d172bae4b08:
-          uuid: 3310a1ac-c5a7-42c0-a06c-2d172bae4b08
+        91dbfc09-fade-424e-89e4-189af2e83a72:
+          uuid: 91dbfc09-fade-424e-89e4-189af2e83a72
           region: second
           configuration:
-            id: 'views_block:event_invites-my_events_block'
+            id: 'views_block:event_invites_and_chat_appointments-my_event_invites_and_chat_appointments_block'
             label: ''
             provider: views
             label_display: visible

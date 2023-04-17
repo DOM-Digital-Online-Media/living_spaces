@@ -7,6 +7,7 @@
 
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\node\NodeInterface;
@@ -46,6 +47,25 @@ function living_spaces_page_entity_base_field_info(EntityTypeInterface $entity_t
   }
 
   return $fields;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function living_spaces_page_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  switch ($form_id) {
+    case 'node_page_form':
+    case 'node_page_edit_form':
+      $fields = ['revision_information', 'options', 'meta', 'author'];
+
+      foreach ($fields as $field) {
+        if (array_key_exists($field, $form)) {
+          $form[$field]['#access'] = FALSE;
+        }
+      }
+      break;
+
+  }
 }
 
 /**
@@ -129,6 +149,7 @@ function living_spaces_page_node_insert(NodeInterface $entity) {
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'page_created',
       'field_page' => $entity->id(),
+      'field_page_label' => $entity->label(),
       'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
@@ -145,6 +166,7 @@ function living_spaces_page_node_update(NodeInterface $entity) {
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'page_updated',
       'field_page' => $entity->id(),
+      'field_page_label' => $entity->label(),
       'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
