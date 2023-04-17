@@ -152,21 +152,21 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
 
             }
 
+            $options = [
+              'attributes' => [
+                'class' => ['btn', 'btn-secondary', 'btn-primary', 'delete'],
+              ],
+              'query' => [
+                'destination' => $this->redirect->get(),
+              ],
+            ];
+
+            $suffix .= Link::createFromRoute($this->t('Delete'), 'living_spaces_event.event_status', [
+              'living_spaces_event_invite' => $invite->id(),
+              'status' => 'delete',
+            ], $options)->toString();
+
             if ($accept) {
-              $options = [
-                'attributes' => [
-                  'class' => ['btn', 'btn-secondary', 'btn-primary', 'delete'],
-                ],
-                'query' => [
-                  'destination' => $this->redirect->get(),
-                ],
-              ];
-
-              $suffix .= Link::createFromRoute($this->t('Delete'), 'living_spaces_event.event_status', [
-                'living_spaces_event_invite' => $invite->id(),
-                'status' => 'delete',
-              ], $options)->toString();
-
               $options = [
                 'attributes' => [
                   'class' => ['btn', 'btn-primary', 'accept'],

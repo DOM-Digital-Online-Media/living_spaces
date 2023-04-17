@@ -3,7 +3,6 @@
 namespace Drupal\living_spaces_event\Form;
 
 use Drupal\Core\Entity\Element\EntityAutocomplete;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\living_spaces_event\Entity\LivingSpaceEventInterface;
@@ -22,22 +21,12 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
   protected $entityTypeManager;
 
   /**
-   * Constructs a LivingSpaceEventInviteUsersForm form.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Provides an interface for entity type managers.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
-    $this->entityTypeManager = $entity_type_manager;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager')
-    );
+    $instance = parent::create($container);
+    $instance->entityTypeManager = $container->get('entity_type.manager');
+    return $instance;
   }
 
   /**
@@ -93,7 +82,13 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
             $this->messenger()->addStatus($this->t('User has been invited.'));
           }
           else {
-            $this->messenger()->addWarning($this->t('User doesn\'t have a membership in this space.'));
+            $member = $this->entityTypeManager->getStorage('user')->load($match);
+            $message = $this->t('<strong>@user</strong> could not be invited to this @event event, because they are missing a membership in this space.', [
+              '@user' => $member->getDisplayName(),
+              '@event' => $event->toLink($event->label())->toString(),
+            ]);
+            $this->logger('Space event')->notice($message);
+            $this->messenger()->addWarning($message);
           }
         }
         else {
