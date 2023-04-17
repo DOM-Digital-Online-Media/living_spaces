@@ -98,7 +98,6 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
             $this->messenger()->addStatus($this->t('User has been invited.'));
           }
           else {
-            $this->messenger()->addWarning($this->t('User doesn\'t have a membership in this space.'));
             $member = $this->entityTypeManager->getStorage('user')->load($match);
             $message = $this->t('<strong>@user</strong> could not be invited to this @event event, because they are missing a membership in this space.', [
               '@user' => $member->getDisplayName(),
