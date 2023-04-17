@@ -718,7 +718,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      title: Spaces
+      title: Circles
       fields:
         label:
           id: label
@@ -730,7 +730,7 @@ display:
           entity_type: null
           entity_field: label
           plugin_id: field
-          label: Title
+          label: 'Circle Title'
           exclude: false
           alter:
             alter_text: false
@@ -794,7 +794,7 @@ display:
           admin_label: ''
           entity_type: group
           plugin_id: living_spaces_group_privacy_field
-          label: Access
+          label: Privacy
           exclude: false
           alter:
             alter_text: false
@@ -977,7 +977,7 @@ display:
       path: membership/circles
       menu:
         type: tab
-        title: 'I am Member of Circles'
+        title: Circles
         description: 'I am a member of Circles'
         weight: 0
         expanded: false
@@ -1012,7 +1012,7 @@ display:
           entity_type: null
           entity_field: label
           plugin_id: field
-          label: Title
+          label: 'Space Title'
           exclude: false
           alter:
             alter_text: false
@@ -1192,7 +1192,7 @@ display:
           admin_label: ''
           entity_type: group
           plugin_id: living_spaces_group_privacy_field
-          label: Access
+          label: Privacy
           exclude: false
           alter:
             alter_text: false
@@ -1521,12 +1521,13 @@ display:
           entity_type: group
           plugin_id: living_spaces_group_user_joined_spaces
           operator: '='
-          value: ''
+          value:
+            - ''
           group: 1
           exposed: true
           expose:
             operator_id: ''
-            label: 'I am a member of the space'
+            label: 'Membership status'
             description: ''
             use_operator: false
             operator: living_spaces_group_user_joined_spaces_1_op
@@ -1671,11 +1672,11 @@ display:
       path: membership/spaces
       menu:
         type: 'default tab'
-        title: 'I am a member of Spaces'
+        title: Spaces
         description: 'I am a member of Spaces'
         weight: -10
         expanded: false
-        menu_name: membership
+        menu_name: account
         parent: ''
         context: '0'
       tab_options:

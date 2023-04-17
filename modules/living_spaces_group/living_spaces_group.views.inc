@@ -42,7 +42,7 @@ function living_spaces_group_views_data_alter(array &$data) {
   $data['user__joined_spaces']['living_spaces_group_current_user_member'] = [
     'title' => t('Membership status'),
     'help' => t('I am a member of the space.'),
-    'real field' => 'entity_id',
+    'real field' => 'bundle',
     'field' => [
       'id' => 'living_spaces_group_current_user_member',
     ],
@@ -51,7 +51,7 @@ function living_spaces_group_views_data_alter(array &$data) {
   $data['groups_field_data']['living_spaces_group_user_joined_spaces'] = [
     'title' => t('Membership status'),
     'filter' => [
-      'title' => t('I am a member of the space'),
+      'title' => t('Membership status'),
       'field' => 'id',
       'id' => 'living_spaces_group_user_joined_spaces',
     ],
