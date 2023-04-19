@@ -4,3 +4,17 @@
  * @file
  * Contains functions and hooks for living_spaces_menus.module.
  */
+
+use Drupal\user\UserInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function living_spaces_menus_user_update(UserInterface $user) {
+  $field = 'joined_spaces';
+  if ($user->hasField($field)) {
+    if (!$user->get($field)->equals($user->original->get($field))) {
+      \Drupal::service('plugin.manager.menu.link')->rebuild();
+    }
+  }
+}

@@ -80,6 +80,14 @@ class LivingSpacesActivityMarkMessagesController extends ControllerBase {
     $output = $this->renderer->render($output);
     $response->addCommand(new ReplaceCommand('.js-view-dom-id-message-user_notifications', $output));
 
+    $view = Views::getView('message');
+    $view->setDisplay('my_notifications_page');
+    $view->setArguments([$user]);
+    $output = $view->render();
+
+    $output = $this->renderer->render($output);
+    $response->addCommand(new ReplaceCommand('.js-view-dom-id-message-my-notifications', $output));
+
     $counter = [
       '#type' => 'html_tag',
       '#tag' => 'span',

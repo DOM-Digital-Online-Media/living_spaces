@@ -149,6 +149,7 @@ function living_spaces_page_node_insert(NodeInterface $entity) {
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'page_created',
       'field_page' => $entity->id(),
+      'field_page_label' => $entity->label(),
       'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
@@ -165,6 +166,7 @@ function living_spaces_page_node_update(NodeInterface $entity) {
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'page_updated',
       'field_page' => $entity->id(),
+      'field_page_label' => $entity->label(),
       'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();

@@ -38,4 +38,23 @@ function living_spaces_group_views_data_alter(array &$data) {
       'id' => 'living_spaces_group_joined_spaces',
     ],
   ];
+
+  $data['user__joined_spaces']['living_spaces_group_current_user_member'] = [
+    'title' => t('Membership status'),
+    'help' => t('I am a member of the space.'),
+    'real field' => 'bundle',
+    'field' => [
+      'id' => 'living_spaces_group_current_user_member',
+    ],
+  ];
+
+  $data['groups_field_data']['living_spaces_group_user_joined_spaces'] = [
+    'title' => t('Membership status'),
+    'filter' => [
+      'title' => t('Membership status'),
+      'field' => 'id',
+      'id' => 'living_spaces_group_user_joined_spaces',
+    ],
+  ];
+
 }
