@@ -152,19 +152,20 @@ function hook_living_spaces_group_action_info(\Drupal\group\Entity\GroupInterfac
  *
  * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
  *   Current route.
+ * @param \Drupal\Core\Breadcrumb\Breadcrumb|NULL $breadcrumb
+ *   An array of breadcrumbs.
  *
  * @return array
  *   An array of breadcrumbs configs.
  */
-function hook_living_spaces_breadcrumbs_info(\Drupal\Core\Routing\RouteMatchInterface $route_match) {
+function hook_living_spaces_breadcrumbs_info(\Drupal\Core\Routing\RouteMatchInterface $route_match, \Drupal\Core\Breadcrumb\Breadcrumb &$breadcrumb = NULL) {
   if ('entity.group.canonical' == $route_match->getRouteName()) {
     $parameters = $route_match->getParameters()->all();
 
+    $breadcrumb->addLink(\Drupal\Core\Link::createFromRoute($parameters['group']->label(), '<none>'));
+
     return [
       'applies' => TRUE,
-      'breadcrumbs' => [
-        \Drupal\Core\Link::createFromRoute($parameters['group']->label(), '<none>')
-      ],
     ];
   }
 

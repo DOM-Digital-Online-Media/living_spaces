@@ -46,12 +46,11 @@ class LivingSpacesGroupBreadcrumbs implements BreadcrumbBuilderInterface {
    */
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
-    $breadcrumb->addLink(Link::createFromRoute($this->t('Home'), '<front>'));
+    $breadcrumb->addCacheContexts(['route', 'url.path', 'languages']);
+    $breadcrumb->addCacheableDependency($route_match);
 
-    $items = $this->moduleHandler->invokeAll('living_spaces_breadcrumbs_info', [$route_match]);
-    foreach ($items['breadcrumbs'] as $item) {
-      $breadcrumb->addLink($item);
-    }
+    $breadcrumb->addLink(Link::createFromRoute($this->t('Start'), '<front>'));
+    $this->moduleHandler->invokeAll('living_spaces_breadcrumbs_info', [$route_match, $breadcrumb]);
 
     return $breadcrumb;
   }

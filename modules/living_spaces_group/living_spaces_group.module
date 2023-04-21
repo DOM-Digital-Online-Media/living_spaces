@@ -20,6 +20,7 @@ use Drupal\user\UserInterface;
 use Drupal\user\Entity\Role;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Link;
 
 /**
@@ -514,19 +515,28 @@ function living_spaces_group_update_joined_spaces(UserInterface $user) {
 /**
  * Implements hook_living_spaces_group_exclude_permissions().
  */
-function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match) {
+function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
+  $applies = FALSE;
   if ('entity.group.canonical' == $route_match->getRouteName()) {
+    $applies = TRUE;
     $parameters = $route_match->getParameters()->all();
 
-    return [
-      'applies' => TRUE,
-      'breadcrumbs' => [
-        Link::createFromRoute($parameters['group']->label(), '<none>')
-      ],
-    ];
+    if (!empty($breadcrumb)) {
+      $breadcrumb->addLink(Link::createFromRoute($parameters['group']->label(), '<none>'));
+      $breadcrumb->addCacheableDependency($parameters['group']);
+    }
   }
 
-  return [];
+  if ('page_manager.page_view_spaces_spaces-layout_builder-0' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute(t('Spaces'), '<none>'));
+    }
+  }
+
+  return ['applies' => $applies];
 }
 
 /**
