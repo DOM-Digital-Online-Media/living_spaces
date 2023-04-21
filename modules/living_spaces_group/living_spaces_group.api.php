@@ -148,6 +148,30 @@ function hook_living_spaces_group_action_info(\Drupal\group\Entity\GroupInterfac
 }
 
 /**
+ * Provide a list of breadcrumbs for provided route.
+ *
+ * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+ *   Current route.
+ *
+ * @return array
+ *   An array of breadcrumbs configs.
+ */
+function hook_living_spaces_breadcrumbs_info(\Drupal\Core\Routing\RouteMatchInterface $route_match) {
+  if ('entity.group.canonical' == $route_match->getRouteName()) {
+    $parameters = $route_match->getParameters()->all();
+
+    return [
+      'applies' => TRUE,
+      'breadcrumbs' => [
+        \Drupal\Core\Link::createFromRoute($parameters['group']->label(), '<none>')
+      ],
+    ];
+  }
+
+  return [];
+}
+
+/**
  * Provide a list of permissions to exclude for office managers.
  *
  * @return array
