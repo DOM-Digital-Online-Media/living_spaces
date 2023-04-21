@@ -10,6 +10,6 @@ services:
     decoration_priority: 9
   living_spaces_group.breadcrumb:
     class: Drupal\living_spaces_group\LivingSpacesGroupBreadcrumbs
-    arguments: ['@module_handler']
+    arguments: ['@module_handler', '@config.factory']
     tags:
       - { name: breadcrumb_builder, priority: 1100 }

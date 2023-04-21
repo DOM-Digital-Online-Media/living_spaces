@@ -144,7 +144,9 @@ function living_spaces_subgroup_system_breadcrumb_alter(Breadcrumb &$breadcrumb,
     if ($parents = $manager->getGroupsParents($group, FALSE)) {
       $breadcrumb = new Breadcrumb();
       $breadcrumb->addCacheContexts(['route', 'url.path', 'languages']);
-      $breadcrumb->addLink(Link::createFromRoute(t('Start'), '<front>'));
+
+      $home = \Drupal::config('easy_breadcrumb.settings')->get('home_segment_title');
+      $breadcrumb->addLink(Link::createFromRoute(!empty($home) ? $home : t('Start'), '<front>'));
 
       foreach ($parents as $parent) {
         $breadcrumb->addLink($parent->toLink());

@@ -4,6 +4,7 @@ namespace Drupal\living_spaces_group;
 
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Link;
@@ -23,13 +24,23 @@ class LivingSpacesGroupBreadcrumbs implements BreadcrumbBuilderInterface {
   protected $moduleHandler;
 
   /**
+   * Returns the config.factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactory
+   */
+  protected $config;
+
+  /**
    * Constructs a LivingSpacesGroupBreadcrumbs object.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Interface for classes that manage a set of enabled modules.
+   * @param \Drupal\Core\Config\ConfigFactory $config
+   *   Defines the configuration object factory.
    */
-  public function __construct(ModuleHandlerInterface $module_handler) {
+  public function __construct(ModuleHandlerInterface $module_handler, ConfigFactory $config) {
     $this->moduleHandler = $module_handler;
+    $this->config = $config;
   }
 
   /**
@@ -49,7 +60,8 @@ class LivingSpacesGroupBreadcrumbs implements BreadcrumbBuilderInterface {
     $breadcrumb->addCacheContexts(['route', 'url.path', 'languages']);
     $breadcrumb->addCacheableDependency($route_match);
 
-    $breadcrumb->addLink(Link::createFromRoute($this->t('Start'), '<front>'));
+    $home = $this->config->get('easy_breadcrumb.settings')->get('home_segment_title');
+    $breadcrumb->addLink(Link::createFromRoute(!empty($home) ? $home : $this->t('Start'), '<front>'));
     $this->moduleHandler->invokeAll('living_spaces_breadcrumbs_info', [$route_match, $breadcrumb]);
 
     return $breadcrumb;
