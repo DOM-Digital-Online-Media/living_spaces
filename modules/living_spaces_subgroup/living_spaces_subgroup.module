@@ -141,14 +141,18 @@ function living_spaces_subgroup_system_breadcrumb_alter(Breadcrumb &$breadcrumb,
     /** @var \Drupal\living_spaces_subgroup\LivingSpacesSubgroupManagerInterface $manager */
     $manager = \Drupal::service('living_spaces_subgroup.manager');
     $group = $route_match->getParameter('group');
-    if ($parents = $manager->getGroupsParents($group)) {
+    if ($parents = $manager->getGroupsParents($group, FALSE)) {
       $breadcrumb = new Breadcrumb();
+      $breadcrumb->addCacheContexts(['route', 'url.path', 'languages']);
       $breadcrumb->addLink(Link::createFromRoute(t('Start'), '<front>'));
 
       foreach ($parents as $parent) {
         $breadcrumb->addLink($parent->toLink());
         $breadcrumb->addCacheableDependency($parent);
       }
+
+      $breadcrumb->addLink(Link::createFromRoute($group->label(), '<none>'));
+      $breadcrumb->addCacheableDependency($group);
     }
   }
 }
