@@ -148,7 +148,7 @@ function hook_living_spaces_group_action_info(\Drupal\group\Entity\GroupInterfac
 }
 
 /**
- * Provide a list of breadcrumbs for provided route.
+ * Provide a list of breadcrumbs for the current route.
  *
  * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
  *   Current route.
@@ -158,11 +158,14 @@ function hook_living_spaces_group_action_info(\Drupal\group\Entity\GroupInterfac
  * @return array
  *   An array of breadcrumbs configs.
  */
-function hook_living_spaces_breadcrumbs_info(\Drupal\Core\Routing\RouteMatchInterface $route_match, \Drupal\Core\Breadcrumb\Breadcrumb &$breadcrumb = NULL) {
+function hook_living_spaces_breadcrumbs_info(\Drupal\Core\Routing\RouteMatchInterface $route_match, \Drupal\Core\Breadcrumb\Breadcrumb $breadcrumb = NULL) {
   if ('entity.group.canonical' == $route_match->getRouteName()) {
     $parameters = $route_match->getParameters()->all();
 
-    $breadcrumb->addLink(\Drupal\Core\Link::createFromRoute($parameters['group']->label(), '<none>'));
+    if (!empty($breadcrumb)) {
+      $breadcrumb->addLink(\Drupal\Core\Link::createFromRoute($parameters['group']->label(), '<none>'));
+      $breadcrumb->addCacheableDependency($parameters['group']);
+    }
 
     return [
       'applies' => TRUE,
