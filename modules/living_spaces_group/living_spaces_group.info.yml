@@ -8,6 +8,7 @@ interface translation server pattern: profiles/contrib/living_spaces/modules/liv
 dependencies:
   - autocomplete_deluxe
   - group
+  - easy_breadcrumb
   - living_spaces_default_configs
   - living_spaces_entity_extra
   - living_spaces_group_privacy
