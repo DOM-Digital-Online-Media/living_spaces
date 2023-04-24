@@ -155,8 +155,8 @@ function hook_living_spaces_group_action_info(\Drupal\group\Entity\GroupInterfac
  * @param \Drupal\Core\Breadcrumb\Breadcrumb|NULL $breadcrumb
  *   An array of breadcrumbs.
  *
- * @return array
- *   An array of breadcrumbs configs.
+ * @return bool
+ *   Flag to check if we should apply breadcrumbs.
  */
 function hook_living_spaces_breadcrumbs_info(\Drupal\Core\Routing\RouteMatchInterface $route_match, \Drupal\Core\Breadcrumb\Breadcrumb $breadcrumb = NULL) {
   if ('entity.group.canonical' == $route_match->getRouteName()) {
@@ -167,12 +167,10 @@ function hook_living_spaces_breadcrumbs_info(\Drupal\Core\Routing\RouteMatchInte
       $breadcrumb->addCacheableDependency($parameters['group']);
     }
 
-    return [
-      'applies' => TRUE,
-    ];
+    return TRUE;
   }
 
-  return [];
+  return FALSE;
 }
 
 /**

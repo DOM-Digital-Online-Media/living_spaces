@@ -513,7 +513,7 @@ function living_spaces_group_update_joined_spaces(UserInterface $user) {
 }
 
 /**
- * Implements hook_living_spaces_group_exclude_permissions().
+ * Implements hook_living_spaces_breadcrumbs_info().
  */
 function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
   $applies = FALSE;
@@ -536,7 +536,7 @@ function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface 
     }
   }
 
-  return ['applies' => $applies];
+  return $applies;
 }
 
 /**
