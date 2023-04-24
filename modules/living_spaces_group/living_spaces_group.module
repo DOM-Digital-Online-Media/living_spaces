@@ -517,6 +517,7 @@ function living_spaces_group_update_joined_spaces(UserInterface $user) {
  */
 function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
   $applies = FALSE;
+
   if ('entity.group.canonical' == $route_match->getRouteName()) {
     $applies = TRUE;
     $parameters = $route_match->getParameters()->all();
@@ -524,6 +525,14 @@ function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface 
     if (!empty($breadcrumb)) {
       $breadcrumb->addLink(Link::createFromRoute($parameters['group']->label(), '<none>'));
       $breadcrumb->addCacheableDependency($parameters['group']);
+    }
+  }
+
+  if ('page_manager.page_view_dashboard_dashboard-layout_builder-0' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $breadcrumb->addLink(Link::createFromRoute(t('Dashboard'), '<none>'));
     }
   }
 
