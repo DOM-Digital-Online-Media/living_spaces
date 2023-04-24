@@ -174,6 +174,18 @@ function hook_living_spaces_breadcrumbs_info(\Drupal\Core\Routing\RouteMatchInte
 }
 
 /**
+ * Provide an alter callback for breadcrumbs.
+ *
+ * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+ *   Current route.
+ * @param \Drupal\Core\Breadcrumb\Breadcrumb|NULL $breadcrumb
+ *   An array of breadcrumbs.
+ */
+function hook_living_spaces_breadcrumbs_info_alter(\Drupal\Core\Routing\RouteMatchInterface $route_match, \Drupal\Core\Breadcrumb\Breadcrumb $breadcrumb ) {
+  $breadcrumb->addCacheContexts(['languages']);
+}
+
+/**
  * Provide a list of permissions to exclude for office managers.
  *
  * @return array

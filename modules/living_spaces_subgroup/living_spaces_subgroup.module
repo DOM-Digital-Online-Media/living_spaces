@@ -131,16 +131,14 @@ function living_spaces_subgroup_living_spaces_group_remove_group_content_alter(G
 }
 
 /**
- * Implements hook_system_breadcrumb_alter().
+ * Implements hook_living_spaces_breadcrumbs_info_alter().
  */
-function living_spaces_subgroup_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
+function living_spaces_subgroup_living_spaces_breadcrumbs_info_alter(RouteMatchInterface $route_match, Breadcrumb &$breadcrumb) {
   if ($route_match->getRouteName() === 'entity.group.canonical') {
-    // Make sure we have breadcrumbs cached per group.
-    $breadcrumb->addCacheableDependency($route_match);
-
     /** @var \Drupal\living_spaces_subgroup\LivingSpacesSubgroupManagerInterface $manager */
     $manager = \Drupal::service('living_spaces_subgroup.manager');
     $group = $route_match->getParameter('group');
+
     if ($parents = $manager->getGroupsParents($group, FALSE)) {
       $breadcrumb = new Breadcrumb();
       $breadcrumb->addCacheContexts(['route', 'url.path', 'languages']);
