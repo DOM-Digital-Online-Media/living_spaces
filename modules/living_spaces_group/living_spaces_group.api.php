@@ -178,7 +178,7 @@ function hook_living_spaces_breadcrumbs_info(\Drupal\Core\Routing\RouteMatchInte
  *
  * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
  *   Current route.
- * @param \Drupal\Core\Breadcrumb\Breadcrumb|NULL $breadcrumb
+ * @param \Drupal\Core\Breadcrumb\Breadcrumb $breadcrumb
  *   An array of breadcrumbs.
  */
 function hook_living_spaces_breadcrumbs_info_alter(\Drupal\Core\Routing\RouteMatchInterface $route_match, \Drupal\Core\Breadcrumb\Breadcrumb $breadcrumb ) {
