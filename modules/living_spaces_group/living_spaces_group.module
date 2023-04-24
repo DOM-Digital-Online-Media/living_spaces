@@ -536,6 +536,17 @@ function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface 
     }
   }
 
+  if ('entity.taxonomy_vocabulary.overview_form' == $route_match->getRouteName() &&
+    'chat_subjects' == $route_match->getParameter('taxonomy_vocabulary')->id()
+  ) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute(t('Chat Subjects'), '<none>'));
+    }
+  }
+
   return $applies;
 }
 

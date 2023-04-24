@@ -5,9 +5,12 @@
  * Contains living_spaces_protected_area.module.
  */
 
+use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\living_spaces_protected_area\Entity\LivingSpacesProtectedAreaAccessGrantInterface;
 use Drupal\living_spaces_protected_area\Entity\LivingSpacesProtectedAreaAccessAreaInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
@@ -216,4 +219,21 @@ function living_spaces_protected_area_get_entity_bundles($type) {
   }
 
   return $options;
+}
+
+/**
+ * Implements hook_living_spaces_breadcrumbs_info().
+ */
+function living_spaces_protected_area_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
+  $applies = FALSE;
+  if ('view.access_area.access_area' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute(t('Protected Areas'), '<none>'));
+    }
+  }
+
+  return $applies;
 }

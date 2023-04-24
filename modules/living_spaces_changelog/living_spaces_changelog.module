@@ -6,6 +6,9 @@
  */
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Breadcrumb\Breadcrumb;
+use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
 
@@ -49,4 +52,21 @@ function living_spaces_changelog_node_access(NodeInterface $entity, $operation, 
   }
 
   return $access;
+}
+
+/**
+ * Implements hook_living_spaces_breadcrumbs_info().
+ */
+function living_spaces_changelog_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
+  $applies = FALSE;
+  if ('view.content.admin_changelog' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute(t('Changelog'), '<none>'));
+    }
+  }
+
+  return $applies;
 }
