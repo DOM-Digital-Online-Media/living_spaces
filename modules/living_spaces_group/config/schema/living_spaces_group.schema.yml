@@ -25,3 +25,9 @@ block.settings.living_spaces_group_members:
       label: 'Enabled exports'
       sequence:
         type: string
+    members_view_label:
+      type: label
+      label: Members view label
+    admins_view_label:
+      type: label
+      label: Administrators view label
