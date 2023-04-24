@@ -98,3 +98,25 @@ function living_spaces_group_update_9101(&$sandbox) {
     $group->save();
   }
 }
+
+/**
+ * Add a field 'allow_admins_to_edit_members' to entity type 'group'.
+ */
+function living_spaces_group_update_9103(&$sandbox) {
+  $field_name = 'allow_admins_to_edit_members';
+  $table_name = 'groups_field_data';
+
+  if (!\Drupal::database()->schema()->fieldExists($table_name, $field_name)) {
+    $definition = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Allow space admins to edit member accounts'))
+      ->setDefaultValue(FALSE)
+      ->setDisplayOptions('form', [
+        'settings' => ['display_label' => TRUE],
+        'weight' => 0,
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'group', 'living_spaces_group', $definition);
+  }
+}

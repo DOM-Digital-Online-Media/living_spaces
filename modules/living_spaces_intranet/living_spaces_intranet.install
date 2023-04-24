@@ -94,3 +94,27 @@ function living_spaces_intranet_update_9001() {
     }
   }
 }
+
+/**
+ * Update default "allow_admins_to_edit_members" value.
+ */
+function living_spaces_intranet_update_9002() {
+  $uuid_list = [
+    'c7ecd1bf-9377-49cc-b0fd-a06bb246847a',
+    '5ab99cc1-45b7-45ec-a9b4-865e7958e553',
+  ];
+
+  $groups_list = \Drupal::entityTypeManager()
+    ->getStorage('group')
+    ->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('uuid', $uuid_list, 'IN')
+    ->execute();
+
+  $groups = \Drupal::entityTypeManager()->getStorage('group')->loadMultiple($groups_list);
+
+  foreach ($groups as $group) {
+    $group->set('allow_admins_to_edit_members', TRUE);
+    $group->save();
+  }
+}
