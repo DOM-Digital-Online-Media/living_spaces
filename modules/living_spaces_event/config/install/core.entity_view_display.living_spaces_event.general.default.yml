@@ -7,38 +7,256 @@ dependencies:
     - living_spaces_event.living_spaces_event_type.general
   module:
     - datetime
+    - layout_builder
+  theme:
+    - bootstrap_barrio
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: barrio_col2-9-3
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+        components:
+          05290d10-e26b-4f75-a08d-7c6800c2e216:
+            uuid: 05290d10-e26b-4f75-a08d-7c6800c2e216
+            region: top
+            configuration:
+              id: living_spaces_event_actions_block
+              label: 'Event actions'
+              label_display: '0'
+              provider: living_spaces_event
+              context_mapping:
+                living_spaces_event: layout_builder.entity
+            weight: 0
+            additional: {  }
+          299445bb-d3c8-4aeb-b4a7-75ff4032e7ef:
+            uuid: 299445bb-d3c8-4aeb-b4a7-75ff4032e7ef
+            region: first
+            configuration:
+              id: living_spaces_event_status_block
+              label: 'Change event status'
+              label_display: '0'
+              provider: living_spaces_event
+              context_mapping:
+                living_spaces_event: layout_builder.entity
+            weight: 0
+            additional: {  }
+          2c488d0a-10a8-4f1f-b287-4e650c32cfb9:
+            uuid: 2c488d0a-10a8-4f1f-b287-4e650c32cfb9
+            region: first
+            configuration:
+              id: living_spaces_page_title_block
+              label: 'Page Title'
+              label_display: '0'
+              provider: living_spaces
+              context_mapping: {  }
+              lead:
+                -
+                  lead_text: ''
+                  lead_path: ''
+              include_hr: 0
+            weight: 1
+            additional: {  }
+          6d532559-11fe-4278-8f3f-cfe0e4876a07:
+            uuid: 6d532559-11fe-4278-8f3f-cfe0e4876a07
+            region: first
+            configuration:
+              id: 'field_block:living_spaces_event:general:type'
+              label: 'Spaces event type'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: hidden
+                settings:
+                  link: false
+                third_party_settings:
+                  empty_fields:
+                    handler: ''
+            weight: 7
+            additional: {  }
+          cbfacc80-6368-436c-9f7c-a1537b6fb145:
+            uuid: cbfacc80-6368-436c-9f7c-a1537b6fb145
+            region: first
+            configuration:
+              id: living_spaces_event_metadata_block
+              label: 'Event metadata'
+              label_display: '0'
+              provider: living_spaces_event
+              context_mapping:
+                living_spaces_event: layout_builder.entity
+            weight: 3
+            additional: {  }
+          cbf8cf58-9d38-4d8b-822e-adf82d613a13:
+            uuid: cbf8cf58-9d38-4d8b-822e-adf82d613a13
+            region: first
+            configuration:
+              id: living_spaces_event_base_info_block
+              label: 'Event base info'
+              label_display: '0'
+              provider: living_spaces_event
+              context_mapping:
+                living_spaces_event: layout_builder.entity
+            weight: 5
+            additional: {  }
+          829743b2-e0f8-4fb2-bced-55635cba13bc:
+            uuid: 829743b2-e0f8-4fb2-bced-55635cba13bc
+            region: first
+            configuration:
+              id: 'field_block:living_spaces_event:general:description'
+              label: Description
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings:
+                  empty_fields:
+                    handler: ''
+            weight: 6
+            additional: {  }
+          6b31d6c3-94fd-474e-a796-b006155e8094:
+            uuid: 6b31d6c3-94fd-474e-a796-b006155e8094
+            region: first
+            configuration:
+              id: 'field_block:living_spaces_event:general:comment'
+              label: Comments
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: comment_default
+                label: hidden
+                settings:
+                  view_mode: default
+                  pager_id: 0
+                third_party_settings:
+                  empty_fields:
+                    handler: ''
+            weight: 8
+            additional: {  }
+          7175bfec-73d9-4df3-b15c-4c72af6984a5:
+            uuid: 7175bfec-73d9-4df3-b15c-4c72af6984a5
+            region: second
+            configuration:
+              id: living_spaces_event_invited_users_block
+              label: 'Invited users'
+              label_display: '0'
+              provider: living_spaces_event
+              context_mapping:
+                living_spaces_event: layout_builder.entity
+            weight: 1
+            additional: {  }
+          e8ed60e9-669d-4ef4-9215-ba747d6700c0:
+            uuid: e8ed60e9-669d-4ef4-9215-ba747d6700c0
+            region: content
+            configuration:
+              id: 'field_block:living_spaces_event:general:label'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: string
+                label: hidden
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
+          1f1a43a4-c477-47c0-b6f9-1f858d0d4f22:
+            uuid: 1f1a43a4-c477-47c0-b6f9-1f858d0d4f22
+            region: content
+            configuration:
+              id: 'field_block:living_spaces_event:general:field_start_date'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: datetime_default
+                label: above
+                settings:
+                  timezone_override: ''
+                  format_type: medium
+                third_party_settings: {  }
+            weight: 1
+            additional: {  }
+          8c0e1ffe-5a4a-4808-98db-68270543192b:
+            uuid: 8c0e1ffe-5a4a-4808-98db-68270543192b
+            region: content
+            configuration:
+              id: 'field_block:living_spaces_event:general:field_end_date'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: datetime_default
+                label: above
+                settings:
+                  timezone_override: ''
+                  format_type: medium
+                third_party_settings: {  }
+            weight: 2
+            additional: {  }
+          5d2fc4a9-60bd-41a4-aff9-4ebe2b1f5765:
+            uuid: 5d2fc4a9-60bd-41a4-aff9-4ebe2b1f5765
+            region: second
+            configuration:
+              id: living_spaces_event_invite_block
+              label: 'Invite users'
+              label_display: '0'
+              provider: living_spaces_event
+              context_mapping:
+                living_spaces_event: layout_builder.entity
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
 id: living_spaces_event.general.default
 targetEntityType: living_spaces_event
 bundle: general
 mode: default
 content:
   field_end_date:
-    weight: 2
+    type: datetime_default
     label: above
     settings:
-      format_type: medium
       timezone_override: ''
+      format_type: medium
     third_party_settings: {  }
-    type: datetime_default
+    weight: 2
     region: content
   field_start_date:
-    weight: 1
+    type: datetime_default
     label: above
     settings:
-      format_type: medium
       timezone_override: ''
+      format_type: medium
     third_party_settings: {  }
-    type: datetime_default
+    weight: 1
     region: content
   label:
-    label: hidden
     type: string
-    weight: 0
-    region: content
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
+  comment: true
+  description: true
   langcode: true
   location: true
   search_api_excerpt: true

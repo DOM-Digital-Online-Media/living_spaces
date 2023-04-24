@@ -3,6 +3,8 @@
 namespace Drupal\living_spaces_group;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\group\Entity\GroupInterface;
 
 /**
  * Manager for group related methods.
@@ -42,6 +44,41 @@ class LivingSpacesGroupManager implements LivingSpacesGroupManagerInterface {
     $query->condition('is_living_space', TRUE);
     $types = $query->execute();
     return is_array($types) ? $types : [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getEntityTypesOfLivingSpaceGroupTypes() {
+    $types = $this->getLivingSpaceGroupTypes();
+    $entity_types = [];
+    foreach ($types as $type) {
+      /** @var \Drupal\group\Entity\GroupContentType[] $group_content_types */
+      $group_content_types = $this->entityTypeManager
+        ->getStorage('group_content_type')
+        ->loadByProperties(['group_type' => $type]);
+      foreach ($group_content_types as $group_content_type) {
+        $plugin = $group_content_type->getContentPlugin();
+        $entity_type = $plugin->getEntityTypeId();
+        $entity_types[$entity_type] = $entity_type;
+      }
+    }
+    return $entity_types;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isUserSpaceAdmin(AccountInterface $account, GroupInterface $group) {
+    /** @var \Drupal\group\Entity\Storage\GroupRoleStorageInterface $role_storage */
+    $role_storage = $this->entityTypeManager->getStorage('group_role');
+    $roles = $role_storage->loadByUserAndGroup($account, $group);
+    foreach ($roles as $role) {
+      if ($role->get('is_space_admin')) {
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
 
 }

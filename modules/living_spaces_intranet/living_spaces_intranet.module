@@ -100,21 +100,23 @@ function living_spaces_intranet_user_access(EntityInterface $entity, $operation,
     $user_spaces = $entity->get('joined_spaces')->getValue();
     $user_spaces = array_column($user_spaces, 'target_id');
 
+    $same = array_intersect($own_spaces, $user_spaces);
     if (
       ($operation === 'delete') &&
       $current->hasPermission('delete shared offices space members')
     ) {
-      $same = array_intersect($own_spaces, $user_spaces);
       foreach ($same as $group_id) {
         /** @var \Drupal\group\Entity\GroupInterface $group */
-        $group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id);
-        if ($group->hasPermission('manage living space member account', $current)) {
+        if (
+          ($group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id))
+          && $group->allow_admins_to_edit_members->value
+          && \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($account, $group)
+        ) {
           return AccessResult::allowed();
         }
       }
     }
 
-    $same = array_intersect($own_spaces, $user_spaces);
     if ($operation === 'view' && !empty($same)) {
       return AccessResult::allowed();
     }
@@ -122,8 +124,11 @@ function living_spaces_intranet_user_access(EntityInterface $entity, $operation,
     if ($operation === 'update') {
       foreach ($same as $group_id) {
         /** @var \Drupal\group\Entity\GroupInterface $group */
-        $group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id);
-        if ($group->hasPermission('manage living space member account', $current)) {
+        if (
+          ($group = \Drupal::entityTypeManager()->getStorage('group')->load($group_id))
+          && $group->allow_admins_to_edit_members->value
+          && \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($account, $group)
+        ) {
           return AccessResult::allowed();
         }
       }
@@ -316,5 +321,37 @@ function living_spaces_intranet_employee_form_submit($form, FormStateInterface $
       ':url' => $account->toUrl()->toString(),
       '%name' => $account->getAccountName(),
     ]));
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function living_spaces_intranet_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  if (isset($form['account']['roles']['#options'])) {
+    // Set options of available roles for current user.
+    $current_user = \Drupal::currentUser();
+    $assignable_roles = \Drupal::service('delegatable_roles')
+      ->getAssignableRoles($current_user);
+    if (isset($form['account']['roles']['#options']['authenticated'])) {
+      $assignable_roles['authenticated'] = $form['account']['roles']['#options']['authenticated'];
+    }
+    $form['account']['roles']['#options'] = array_intersect($form['account']['roles']['#options'], $assignable_roles);
+  }
+
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_intranet_form_group_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\group\Entity\GroupInterface $group */
+  $group = $form_state->getFormObject()->getEntity();
+  if ('department' == $group->bundle()) {
+    $default_value = 'private';
+    if (isset($form['living_space_privacy']['widget']['#options'][$default_value])) {
+      $form['living_space_privacy']['widget']['#default_value'] = $default_value;
+    }
   }
 }

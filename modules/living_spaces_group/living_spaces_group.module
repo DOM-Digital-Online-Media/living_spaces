@@ -120,6 +120,29 @@ function living_spaces_group_group_content_presave(EntityInterface $entity) {
 function living_spaces_group_entity_base_field_info(EntityTypeInterface $entity_type) {
   $fields = [];
 
+  $entity_types = Drupal::service('living_spaces_group.manager')->getEntityTypesOfLivingSpaceGroupTypes();
+  // Add field 'space' to all entity types except 'user'.
+  if (
+    $entity_type->id() !== 'user'
+    && in_array($entity_type->id(), $entity_types)
+  ) {
+    $fields['space'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Space'))
+      ->setSetting('target_type', 'group')
+      ->setTranslatable(FALSE);
+  }
+
+  if ($entity_type->id() == 'group') {
+    $fields['allow_admins_to_edit_members'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Allow space admins to edit member accounts'))
+      ->setDefaultValue(FALSE)
+      ->setDisplayOptions('form', [
+        'settings' => ['display_label' => TRUE],
+        'weight' => 0,
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+  }
+
   if (in_array($entity_type->id(), ['group_role', 'group_content'])) {
     $description = $entity_type->id() === 'group_role'
       ? t('Mark group role as admin role for space type.')
@@ -231,6 +254,10 @@ function living_spaces_group_form_group_form_alter(&$form, FormStateInterface $f
   if (isset($form['protected'])) {
     $form['protected']['#access'] = \Drupal::currentUser()->hasPermission('manage protected spaces');
   }
+
+  if (isset($form['allow_admins_to_edit_members'])) {
+    $form['allow_admins_to_edit_members']['#access'] = \Drupal::currentUser()->hasPermission('manage access of admins to edit accounts in mutual space');
+  }
 }
 
 /**
@@ -281,22 +308,12 @@ function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE
   }
   $current_user = \Drupal::currentUser()->getAccount();
 
-  /** @var \Drupal\group\Entity\Storage\GroupRoleStorageInterface $role_storage */
-  $role_storage = \Drupal::entityTypeManager()->getStorage('group_role');
-  $roles = $role_storage->loadByUserAndGroup($user, $space);
-  $user_is_admin = FALSE;
-  foreach ($roles as $role) {
-    $user_is_admin = $role->get('is_space_admin') ? TRUE : $user_is_admin;
-  }
+  $user_is_admin = \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($user, $space);
   $route = $user_is_admin
     ? 'living_spaces_group.remove_admin'
     : 'living_spaces_group.assign_admin';
 
-  $roles = $role_storage->loadByUserAndGroup($current_user, $space);
-  $current_is_admin = FALSE;
-  foreach ($roles as $role) {
-    $current_is_admin = $role->get('is_space_admin') ? TRUE : $current_is_admin;
-  }
+  $current_is_admin = \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($current_user, $space);
 
   $links = [
     'view_profile' => [
@@ -310,8 +327,10 @@ function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE
 
   $cache = CacheableMetadata::createFromObject($current_user);
   $cache->applyTo($links['view_profile']);
-  if ($space->getOwnerId() !== $user->id() &&
-    ($current_is_admin || $space->hasPermission('manage space members', $current_user))
+  if (
+    $space->getOwnerId() !== $user->id()
+    && $current_user->id() != $user->id()
+    && ($current_is_admin || $space->hasPermission('manage space members', $current_user))
   ) {
     $links['remove_from_space'] = [
       '#type' => 'link',
@@ -428,6 +447,16 @@ function living_spaces_group_group_operations_alter(array &$operations, GroupInt
       }
     }
   }
+
+  if (isset($operations['group-join'])) {
+    $operations['group-join']['url'] = Url::fromRoute('living_spaces_group.group_join', [
+      'group' => $group->id(),
+    ], [
+      'query' => [
+        'destination' => \Drupal::service('redirect.destination')->get(),
+      ],
+    ]);
+  }
 }
 
 /**
@@ -448,9 +477,16 @@ function living_spaces_group_entity_operation_alter(array &$operations, EntityIn
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function living_spaces_group_group_content_insert(GroupContentInterface $entity) {
-  if ($entity->getEntity() instanceof UserInterface) {
-    living_spaces_group_update_joined_spaces($entity->getEntity());
+function living_spaces_group_group_content_insert(GroupContentInterface $group_content_entity) {
+  $entity = $group_content_entity->getEntity();
+
+  if ($entity && $entity->hasField('space') && $entity->get('space')->isEmpty()) {
+    $entity->set('space', $group_content_entity->getGroup()->id());
+    $entity->save();
+  }
+
+  if ($group_content_entity->getEntity() instanceof UserInterface) {
+    living_spaces_group_update_joined_spaces($group_content_entity->getEntity());
   }
 }
 

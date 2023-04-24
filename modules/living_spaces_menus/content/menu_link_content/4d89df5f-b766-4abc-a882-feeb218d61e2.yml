@@ -18,7 +18,8 @@ default:
     -
       uri: 'route:<nolink>'
       title: ''
-      options: {  }
+      options:
+        attributes: {  }
   external:
     -
       value: false
@@ -27,7 +28,7 @@ default:
       value: false
   weight:
     -
-      value: 1
+      value: -46
   expanded:
     -
       value: true

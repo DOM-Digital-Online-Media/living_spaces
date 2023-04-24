@@ -4,6 +4,8 @@ dependencies:
   config:
     - field.field.node.page.body
     - field.field.node.page.field_exposed_to_frontend
+    - field.field.node.page.field_page_category
+    - field.field.node.page.field_path
     - node.type.page
   module:
     - text
@@ -20,21 +22,14 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
-  field_exposed_to_frontend:
-    type: boolean
-    label: above
-    settings:
-      format: default
-      format_custom_false: ''
-      format_custom_true: ''
-    third_party_settings: {  }
-    weight: 2
-    region: content
   links:
     settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content
 hidden:
+  field_exposed_to_frontend: true
+  field_page_category: true
+  field_path: true
   langcode: true
   search_api_excerpt: true

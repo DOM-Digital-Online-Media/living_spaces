@@ -8,36 +8,36 @@ dependencies:
     - views
 id: members_roles-block_display-0
 label: 'Members & Roles'
+weight: 0
 variant: block_display
 variant_settings:
+  id: block_display
+  label: null
+  weight: 0
+  uuid: 3f8105a5-3be8-4779-bea1-c652fa7ca20c
   blocks:
     44804150-7643-45a5-a9fa-bd5cf0f43c4c:
       id: living_spaces_group_overview_block
       label: 'Space overview'
+      label_display: '0'
       provider: living_spaces_group
-      label_display: '0'
-      region: top
-      weight: 0
-      uuid: 44804150-7643-45a5-a9fa-bd5cf0f43c4c
       context_mapping: {  }
-    d03111fb-aabe-42d0-b7b6-38176e16a222:
-      id: 'views_block:members-members_roles'
-      label: ''
-      provider: views
+      region: top
+      weight: -9
+      uuid: 44804150-7643-45a5-a9fa-bd5cf0f43c4c
+    b12e2d5b-e9cc-4e53-ada0-4f8a2a2853a0:
+      id: 'views_block:members-people'
+      label: Members
       label_display: '0'
-      views_label: ''
+      provider: views
+      context_mapping: {  }
+      views_label: Members
       items_per_page: none
       region: top
-      weight: 0
-      uuid: d03111fb-aabe-42d0-b7b6-38176e16a222
-      context_mapping: {  }
-  id: block_display
-  uuid: 3f8105a5-3be8-4779-bea1-c652fa7ca20c
-  label: null
-  weight: 0
+      weight: -8
+      uuid: b12e2d5b-e9cc-4e53-ada0-4f8a2a2853a0
   page_title: 'Members & Roles'
 page: members_roles
-weight: 0
 selection_criteria: {  }
 selection_logic: and
 static_context: {  }

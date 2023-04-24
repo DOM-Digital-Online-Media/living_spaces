@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.message.user_invited_to_the_event.field_event
+    - message.template.user_invited_to_the_event
+  module:
+    - user
+id: message.user_invited_to_the_event.default
+targetEntityType: message
+bundle: user_invited_to_the_event
+mode: default
+content:
+  field_event:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  partial_0:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

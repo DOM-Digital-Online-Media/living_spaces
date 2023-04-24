@@ -200,6 +200,16 @@ class LivingSpacesSectionsSettingsForm extends FormBase {
       }
       $form_state->setStorage($form_storage);
 
+      if ($this->group && $this->currentUser()->hasPermission('manage access of admins to edit accounts in mutual space')) {
+        $allow_admins_to_edit_members_value = $this->group->allow_admins_to_edit_members->value ?? FALSE;
+        $form['allow_admins_to_edit_members'] = [
+          '#type' => 'checkbox',
+          '#title' => $this->t('Allow space admins to edit member accounts'),
+          '#weight' => -100,
+          '#default_value' => $allow_admins_to_edit_members_value,
+        ];
+      }
+
       $form['submit'] = [
         '#type' => 'submit',
         '#button_type' => 'primary',
@@ -239,6 +249,14 @@ class LivingSpacesSectionsSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    if ($this->group) {
+      $value = $form_state->getValue('allow_admins_to_edit_members');
+      if (!is_null($value)) {
+        $this->group->set('allow_admins_to_edit_members', $value);
+        $this->group->save();
+      }
+    }
+
     $form_storage = $form_state->getStorage();
     $sections = array_keys(array_filter($form_state->getValue('sections')));
     $field_values = [];

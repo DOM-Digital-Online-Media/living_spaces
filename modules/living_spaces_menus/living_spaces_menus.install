@@ -17,6 +17,8 @@ function living_spaces_menus_uninstall() {
       '4d89df5f-b766-4abc-a882-feeb218d61e2',
       '5cd55d3d-3f6d-490b-b354-c1c9c6470991',
       'aaf9a661-c053-4028-985e-22ba52670991',
+      'c4ce400d-959a-4fab-b99a-64eacf67e723',
+      '436e7a5e-7eb0-4ba7-928c-b9064865f174',
     ]]);
   if (!empty($link)) {
     $link_storage->delete($link);
@@ -34,7 +36,8 @@ function living_spaces_menus_update_9001() {
   try {
     \Drupal::service('default_content.importer')
       ->importContent('living_spaces_menus');
-  } catch (Exception $e) {
+  }
+  catch (Exception $e) {
   }
 }
 
@@ -54,4 +57,22 @@ function living_spaces_menus_update_9002(&$sandbox) {
       $item->save();
     }
   }
+}
+
+
+/**
+ * Delete menu link content and update it from yml.
+ */
+function living_spaces_menus_update_9003() {
+  if (function_exists('living_spaces_menus_uninstall')) {
+    living_spaces_menus_uninstall();
+  }
+
+  try {
+    \Drupal::service('default_content.importer')
+      ->importContent('living_spaces_menus');
+  }
+  catch (Exception $e) {
+  }
+  \Drupal::service('plugin.manager.menu.link')->rebuild();
 }

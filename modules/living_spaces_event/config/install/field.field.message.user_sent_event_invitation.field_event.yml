@@ -1,0 +1,36 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.message.field_event
+    - living_spaces_event.living_spaces_event_type.event
+    - living_spaces_event.living_spaces_event_type.general
+    - living_spaces_event.living_spaces_event_type.room_occupied
+    - living_spaces_event.living_spaces_event_type.supervision
+    - living_spaces_event.living_spaces_event_type.training
+    - message.template.user_sent_event_invitation
+id: message.user_sent_event_invitation.field_event
+field_name: field_event
+entity_type: message
+bundle: user_sent_event_invitation
+label: Event
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:living_spaces_event'
+  handler_settings:
+    target_bundles:
+      event: event
+      general: general
+      room_occupied: room_occupied
+      supervision: supervision
+      training: training
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: event
+field_type: entity_reference
