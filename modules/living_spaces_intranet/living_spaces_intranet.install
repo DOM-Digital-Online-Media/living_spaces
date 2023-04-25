@@ -118,3 +118,15 @@ function living_spaces_intranet_update_9002() {
     $group->save();
   }
 }
+
+/**
+ * Update default content 'Project Space' and 'Department Space'.
+ */
+function living_spaces_intranet_update_9003(&$sandbox) {
+  try {
+    \Drupal::service('default_content.importer')
+      ->importContent('living_spaces_intranet');
+  }
+  catch (Exception $e) {
+  }
+}

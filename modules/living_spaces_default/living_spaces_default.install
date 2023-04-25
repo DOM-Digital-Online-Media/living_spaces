@@ -30,3 +30,15 @@ function living_spaces_default_uninstall($is_syncing) {
     $group_storage->delete($group_storage->loadMultiple($space));
   }
 }
+
+/**
+ * Update default content 'Standard Space'.
+ */
+function living_spaces_default_update_9001(&$sandbox) {
+  try {
+    \Drupal::service('default_content.importer')
+      ->importContent('living_spaces_default');
+  }
+  catch (Exception $e) {
+  }
+}

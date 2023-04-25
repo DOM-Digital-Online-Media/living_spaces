@@ -42,7 +42,23 @@ default:
       entity: 7ec4e426-4ef5-4948-9817-8face23eaec0
     -
       entity: 1b83cb06-bddb-429a-8c0f-5de96ab0baae
-  allow_admins_to_edit_members:
+  content_translation_source:
     -
-      value: true
-
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+translations:
+  de:
+    label:
+      -
+        value: Projektraum
+    revision_translation_affected:
+      -
+        value: true
+    content_translation_source:
+      -
+        value: en
+    content_translation_outdated:
+      -
+        value: false
