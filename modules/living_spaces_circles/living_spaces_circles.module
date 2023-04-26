@@ -5,12 +5,14 @@
  * Contains living_spaces_circles.module.
  */
 
+use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\group\Entity\GroupInterface;
 use Drupal\Core\Url;
-use Drupal\group\Entity\GroupRoleInterface;
 
 /**
  * Implements hook_entity_base_field_info().
@@ -90,4 +92,21 @@ function living_spaces_circles_entity_operation_alter(array &$operations, Entity
       }
     }
   }
+}
+
+/**
+ * Implements hook_living_spaces_breadcrumbs_info().
+ */
+function living_spaces_circles_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
+  $applies = FALSE;
+  if ('view.groups.circles' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute(t('Circles'), '<none>'));
+    }
+  }
+
+  return $applies;
 }

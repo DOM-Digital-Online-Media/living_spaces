@@ -55,6 +55,7 @@ install:
   - redirect
   - views_contextual_filters_or
   # </dev>
+  - easy_breadcrumb
   - language
   - locale
   - content_translation

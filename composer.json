@@ -36,6 +36,7 @@
         "drupal/config_rewrite": "^1.4",
         "drupal/default_content": "^2.0",
         "drupal/devel": "^4.0",
+        "drupal/easy_breadcrumb": "^2.0",
         "drupal/empty_fields": "^1.0@beta",
         "drupal/entity_clone": "^1.0@beta",
         "drupal/field_ipaddress": "^2.0",

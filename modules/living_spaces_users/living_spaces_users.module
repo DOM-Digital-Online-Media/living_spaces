@@ -6,8 +6,11 @@
  */
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\profile\Entity\ProfileInterface;
@@ -256,4 +259,30 @@ function living_spaces_users_views_data() {
   ];
 
   return $data;
+}
+
+/**
+ * Implements hook_living_spaces_breadcrumbs_info().
+ */
+function living_spaces_users_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
+  $applies = FALSE;
+  if ('view.users.employee' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute(t('Employees'), '<none>'));
+    }
+  }
+
+  if ('flood_control.unblock_form' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute(t('Automatic Bans'), '<none>'));
+    }
+  }
+
+  return $applies;
 }

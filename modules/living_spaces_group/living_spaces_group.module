@@ -19,6 +19,9 @@ use Drupal\group\Entity\GroupContentInterface;
 use Drupal\user\UserInterface;
 use Drupal\user\Entity\Role;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Breadcrumb\Breadcrumb;
+use Drupal\Core\Link;
 
 /**
  * Implements hook_entity_type_alter().
@@ -507,6 +510,53 @@ function living_spaces_group_update_joined_spaces(UserInterface $user) {
 
   $user->set('joined_spaces', $gids);
   $user->save();
+}
+
+/**
+ * Implements hook_living_spaces_breadcrumbs_info().
+ */
+function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
+  $applies = FALSE;
+
+  if ('entity.group.canonical' == $route_match->getRouteName()) {
+    $applies = TRUE;
+    $parameters = $route_match->getParameters()->all();
+
+    if (!empty($breadcrumb)) {
+      $breadcrumb->addLink(Link::createFromRoute($parameters['group']->label(), '<none>'));
+      $breadcrumb->addCacheableDependency($parameters['group']);
+    }
+  }
+
+  if ('page_manager.page_view_dashboard_dashboard-layout_builder-0' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $breadcrumb->addLink(Link::createFromRoute(t('Dashboard'), '<none>'));
+    }
+  }
+
+  if ('page_manager.page_view_spaces_spaces-layout_builder-0' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute(t('Spaces'), '<none>'));
+    }
+  }
+
+  if ('entity.taxonomy_vocabulary.overview_form' == $route_match->getRouteName() &&
+    'chat_subjects' == $route_match->getParameter('taxonomy_vocabulary')->id()
+  ) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute(t('Chat Subjects'), '<none>'));
+    }
+  }
+
+  return $applies;
 }
 
 /**
