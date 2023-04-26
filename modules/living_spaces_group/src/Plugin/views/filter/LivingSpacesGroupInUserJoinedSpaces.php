@@ -126,10 +126,7 @@ class LivingSpacesGroupInUserJoinedSpaces extends FilterPluginBase {
     $this->ensureMyTable();
 
     if (isset($this->value[0])) {
-      $operator = match ($this->value[0]) {
-        'yes' => 'IN',
-        default => 'NOT IN',
-      };
+      $operator = $this->value[0] == 'yes' ? 'IN' : 'NOT IN';
 
       $joined_spaces = [0];
       $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
