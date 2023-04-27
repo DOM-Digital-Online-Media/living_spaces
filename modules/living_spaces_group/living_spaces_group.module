@@ -24,6 +24,27 @@ use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Link;
 
 /**
+ * Implements hook_ENTITY_TYPE_load().
+ */
+function living_spaces_group_group_type_load(&$entities) {
+  if (\Drupal::service('config.installer')->isSyncing()) {
+    return;
+  }
+
+  if ('living_spaces_group.exclude_spaces' == \Drupal::routeMatch()->getRouteName()) {
+    return;
+  }
+
+  if ($spaces = \Drupal::config('living_spaces_group.exclude_spaces')->get('spaces')) {
+    foreach ($entities as $name => $entity) {
+      if (in_array($name, $spaces)) {
+        unset($entities[$name]);
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_entity_type_alter().
  */
 function living_spaces_group_entity_type_alter(&$entity_types) {

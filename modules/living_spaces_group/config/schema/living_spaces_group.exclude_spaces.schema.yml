@@ -1,0 +1,9 @@
+living_spaces_group.exclude_spaces:
+  type: config_object
+  label: 'Exclude spaces'
+  mapping:
+    spaces:
+      type: sequence
+      label: 'Space'
+      sequence:
+        type: string
