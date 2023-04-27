@@ -74,3 +74,12 @@ living_spaces_group.group_join:
     parameters:
       group:
         type: entity:group
+living_spaces_group.exclude_spaces:
+  path: '/admin/config/living-spaces/exclude-spaces'
+  defaults:
+    _form: '\Drupal\living_spaces_group\Form\LivingSpaceExcludeSpacesForm'
+    _title: 'Exclude spaces'
+  requirements:
+    _permission: 'manage exclude spaces'
+  options:
+    _admin_route: TRUE
