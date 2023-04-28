@@ -75,6 +75,7 @@ class LivingSpaceExcludeSpacesForm extends ConfigFormBase {
       '#title' => $this->t('Spaces'),
       '#options' => $options,
       '#default_value' => !empty($config->get('spaces')) ? $config->get('spaces') : [],
+      '#description' => $this->t('You should clear the cache after changing space configs.'),
     ];
 
     return parent::buildForm($form, $form_state);
