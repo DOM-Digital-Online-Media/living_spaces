@@ -138,6 +138,10 @@ function living_spaces_intranet_user_access(EntityInterface $entity, $operation,
     }
   }
 
+  if ($operation === 'view' && !$current->hasPermission('administer users')) {
+    return AccessResult::forbidden();
+  }
+
   return AccessResult::neutral();
 }
 
