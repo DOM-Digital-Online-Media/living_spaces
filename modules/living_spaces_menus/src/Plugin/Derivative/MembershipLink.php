@@ -43,7 +43,7 @@ class MembershipLink extends DeriverBase implements ContainerDeriverInterface {
    */
   public function getDerivativeDefinitions($base_plugin_definition) {
     $links = [];
-    if ($view = Views::getView('spaces')) {
+    if ($view = Views::getView('membership')) {
       $view->setDisplay('menu_member_of_spaces');
       $view->execute();
       $view_result = $view->result;
