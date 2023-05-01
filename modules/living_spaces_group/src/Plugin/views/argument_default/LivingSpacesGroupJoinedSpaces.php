@@ -80,7 +80,7 @@ class LivingSpacesGroupJoinedSpaces extends ArgumentDefaultPluginBase implements
       ->load($this->currentUser->id());
     $spaces = array_column($user->get('joined_spaces')->getValue(), 'target_id');
 
-    return !empty($spaces) ? implode('+', $spaces) : NULL;
+    return !empty($spaces) ? implode('+', $spaces) : '0';
   }
 
   /**
