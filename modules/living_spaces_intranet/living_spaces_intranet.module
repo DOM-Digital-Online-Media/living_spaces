@@ -298,7 +298,7 @@ function living_spaces_intranet_entity_field_access_alter(array &$grants, array 
  * Implements hook_form_FORM_ID_alter().
  */
 function living_spaces_intranet_form_user_employee_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if (!empty($form['account']['mail']) && $config = \Drupal::config('user.settings')->get('employee_required_mail')) {
+  if (!empty($form['account']['mail']) && \Drupal::config('user.settings')->get('employee_required_mail')) {
     $form['account']['mail']['#required'] = TRUE;
   }
 
