@@ -2,6 +2,7 @@
 
 namespace Drupal\living_spaces_default\Form;
 
+use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -15,6 +16,13 @@ use Drupal\Core\Url;
  * Form handler for adding groups.
  */
 class LivingSpacesDefaultCreateSpace extends FormBase {
+
+  /**
+   * Returns the config.factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactory
+   */
+  protected $config;
 
   /**
    * Returns the entity_type.manager service.
@@ -47,6 +55,8 @@ class LivingSpacesDefaultCreateSpace extends FormBase {
   /**
    * Constructs a LivingSpacesGroupForm form.
    *
+   * @param \Drupal\Core\Config\ConfigFactory $config
+   *   Defines the configuration object factory.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Provides an interface for entity type managers.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -56,7 +66,8 @@ class LivingSpacesDefaultCreateSpace extends FormBase {
    * @param \Drupal\Core\Database\Connection $database
    *   The database connection to be used.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, LivingSpacesGroupManagerInterface $living_spaces_manager, Connection $database) {
+  public function __construct(ConfigFactory $config, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, LivingSpacesGroupManagerInterface $living_spaces_manager, Connection $database) {
+    $this->config = $config;
     $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;
     $this->livingSpacesManager = $living_spaces_manager;
@@ -68,6 +79,7 @@ class LivingSpacesDefaultCreateSpace extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('config.factory'),
       $container->get('entity_type.manager'),
       $container->get('module_handler'),
       $container->get('living_spaces_group.manager'),
@@ -87,8 +99,11 @@ class LivingSpacesDefaultCreateSpace extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $group_types = $template_options = [];
+    $spaces = $this->config->get('living_spaces_group.exclude_spaces')->get('spaces');
+
     foreach ($this->entityTypeManager->getStorage('group_type')->loadMultiple() as $group_type) {
-      if ($this->currentUser()->hasPermission("create {$group_type->id()} group")) {
+      if ($this->currentUser()->hasPermission("create {$group_type->id()} group") &&
+        (empty($spaces) || !in_array($group_type->id(), $spaces))) {
         $group_types[] = $group_type->id();
       }
     }
