@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\living_spaces_page\Routing;
+namespace Drupal\living_spaces_event\Routing;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\EnhancerInterface;
@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 
 /**
- * LivingSpacesPageEnhancer class.
+ * LivingSpacesEventEnhancer class.
  */
-class LivingSpacesPageEnhancer implements EnhancerInterface {
+class LivingSpacesEventEnhancer implements EnhancerInterface {
 
   /**
    * Returns the entity_type.manager service.
@@ -21,7 +21,7 @@ class LivingSpacesPageEnhancer implements EnhancerInterface {
   protected $entityTypeManager;
 
   /**
-   * Constructs a LivingSpacesPageEnhancer object.
+   * Constructs a LivingSpacesEventEnhancer object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Provides an interface for entity type managers.
@@ -35,7 +35,7 @@ class LivingSpacesPageEnhancer implements EnhancerInterface {
    */
   protected function applies(Route $route) {
     $parameters = $route->getOption('parameters') ?: [];
-    return !empty($parameters['node']);
+    return !empty($parameters['living_spaces_event']);
   }
 
   /**
@@ -48,20 +48,12 @@ class LivingSpacesPageEnhancer implements EnhancerInterface {
       return $defaults;
     }
 
-    /** @var \Drupal\node\NodeInterface $node */
-    $node = $defaults['node'];
-    if ('page' == $node->bundle()) {
-      $entity_manager = $this->entityTypeManager->getStorage('group');
-      $query = $entity_manager->getQuery();
-      $query->condition('content_sections', $node->id());
-      $query->accessCheck(FALSE);
+    /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInterface $event */
+    $event = $defaults['living_spaces_event'];
 
-      if ($group_ids = $query->execute()) {
-        $gid = reset($group_ids);
-
-        $route->setDefault('group', $gid);
-        $defaults['group'] = $gid;
-      }
+    if ($group = $event->get('space')->entity) {
+      $route->setDefault('group', $group->id());
+      $defaults['group'] = $group->id();
     }
 
     return $defaults;
