@@ -16,8 +16,11 @@ use Drupal\comment\CommentInterface;
 use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\group\Entity\GroupContentInterface;
@@ -957,4 +960,39 @@ function living_spaces_event_mail_tokens(&$replacements, $data, $options) {
     $replacements['[event:title]'] = $data['event']->label();
     $replacements['[event:url]'] = $data['event']->toUrl('canonical', ['absolute' => TRUE])->toString();
   }
+}
+
+/**
+ * Implements hook_living_spaces_breadcrumbs_info().
+ */
+function living_spaces_event_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
+  $applies = FALSE;
+
+  if (in_array($route_match->getRouteName(), ['entity.living_spaces_event.canonical', 'entity.living_spaces_event.edit_form'])) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
+
+      /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInterface $event */
+      $event = $parameters['living_spaces_event'];
+
+      if ($group = $event->get('space')->entity) {
+        $breadcrumb->addLink($group->toLink($group->label()));
+        $breadcrumb->addCacheableDependency($group);
+      }
+
+      if ($group && $section = \Drupal::service('living_spaces_sections.manager')->getSectionFromGroupByType($group, 'events')) {
+        $breadcrumb->addLink(Link::createFromRoute(t('Events'), 'living_spaces_sections.section_view', ['group' => $group->id(), 'section' => $section->getPath()]));
+      }
+      else {
+        $breadcrumb->addLink(Link::createFromRoute(t('Events'), '<none>'));
+      }
+
+      $breadcrumb->addLink(Link::createFromRoute($event->label(), '<none>'));
+      $breadcrumb->addCacheableDependency($event);
+    }
+  }
+
+  return $applies;
 }
