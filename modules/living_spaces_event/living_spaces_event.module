@@ -968,7 +968,7 @@ function living_spaces_event_mail_tokens(&$replacements, $data, $options) {
 function living_spaces_event_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
   $applies = FALSE;
 
-  if (in_array($route_match->getRouteName(), ['entity.living_spaces_event.canonical', 'entity.living_spaces_event.edit_form'])) {
+  if (in_array($route_match->getRouteName(), ['entity.living_spaces_event.canonical', 'entity.living_spaces_event.edit_form', 'entity.living_spaces_event.delete_form'])) {
     $applies = TRUE;
 
     if (!empty($breadcrumb)) {
