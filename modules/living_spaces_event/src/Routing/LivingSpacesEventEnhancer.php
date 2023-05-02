@@ -35,7 +35,8 @@ class LivingSpacesEventEnhancer implements EnhancerInterface {
    */
   protected function applies(Route $route) {
     $parameters = $route->getOption('parameters') ?: [];
-    return !empty($parameters['living_spaces_event']);
+
+    return !empty($parameters['living_spaces_event']) || !empty($parameters['node']);
   }
 
   /**
@@ -48,12 +49,30 @@ class LivingSpacesEventEnhancer implements EnhancerInterface {
       return $defaults;
     }
 
-    /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInterface $event */
-    $event = $defaults['living_spaces_event'];
+    $gid = NULL;
+    if (!empty($defaults['living_spaces_event'])) {
+      /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInterface $event */
+      $event = $defaults['living_spaces_event'];
 
-    if ($group = $event->get('space')->entity) {
-      $route->setDefault('group', $group->id());
-      $defaults['group'] = $group->id();
+      if ($group = $event->get('space')->entity) {
+        $gid = $group->id();
+      }
+    }
+
+    if (!empty($defaults['node'])) {
+      /** @var \Drupal\node\NodeInterface $node */
+      $node = $defaults['node'];
+
+      if (in_array($node->bundle(), ['agenda', 'protocol'])) {
+        if ($group = $node->get('space')->entity) {
+          $gid = $group->id();
+        }
+      }
+    }
+
+    if ($gid) {
+      $route->setDefault('group', $gid);
+      $defaults['group'] = $gid;
     }
 
     return $defaults;
