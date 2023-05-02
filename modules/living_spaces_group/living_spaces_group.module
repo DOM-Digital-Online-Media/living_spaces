@@ -532,6 +532,22 @@ function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface 
     }
   }
 
+  if ('page_manager.page_view_living_space_members_living_space_members-layout_builder-0' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
+
+      /** @var \Drupal\group\Entity\GroupInterface $group */
+      $group = $parameters['group'];
+
+      $breadcrumb->addLink($group->toLink($group->label()));
+      $breadcrumb->addCacheableDependency($group);
+
+      $breadcrumb->addLink(Link::createFromRoute(t('Members'), '<none>'));
+    }
+  }
+
   if ('entity.group_content.create_page' == $route_match->getRouteName()) {
     $applies = TRUE;
 
