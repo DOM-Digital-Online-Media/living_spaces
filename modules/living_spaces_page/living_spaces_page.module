@@ -376,7 +376,36 @@ function living_spaces_page_living_spaces_breadcrumbs_info(RouteMatchInterface $
         $breadcrumb->addLink(Link::createFromRoute(t('Create Page'), '<none>'));
       }
     }
+  }
 
+  if ('entity.node.canonical' == $route_match->getRouteName()) {
+    $parameters = $route_match->getParameters()->all();
+
+    /** @var \Drupal\node\NodeInterface $node */
+    $node = $parameters['node'];
+
+    if ('page' == $node->bundle()) {
+      $applies = TRUE;
+
+      if (!empty($breadcrumb)) {
+        $group_manager = \Drupal::entityTypeManager()->getStorage('group');
+
+        $query = $group_manager->getQuery();
+        $query->condition('content_sections', $node->id());
+        $query->accessCheck(FALSE);
+
+        if ($gids = $query->execute()) {
+          $gid = reset($gids);
+
+          if ($group = $group_manager->load($gid)) {
+            $breadcrumb->addLink($group->toLink($group->label()));
+            $breadcrumb->addCacheableDependency($group);
+          }
+        }
+
+        $breadcrumb->addLink(Link::createFromRoute($node->label(), '<none>'));
+      }
+    }
   }
 
   return $applies;
