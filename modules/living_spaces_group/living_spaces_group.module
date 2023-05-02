@@ -548,6 +548,106 @@ function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface 
     }
   }
 
+  if ('entity.group.edit_form' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
+
+      /** @var \Drupal\group\Entity\GroupInterface $group */
+      $group = $parameters['group'];
+
+      $breadcrumb->addLink($group->toLink($group->label()));
+      $breadcrumb->addCacheableDependency($group);
+
+      $breadcrumb->addLink(Link::createFromRoute(t('Edit @group', ['@group' => $group->label()]), '<none>'));
+    }
+  }
+
+  if ('entity.group.delete_form' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
+
+      /** @var \Drupal\group\Entity\GroupInterface $group */
+      $group = $parameters['group'];
+
+      $breadcrumb->addLink($group->toLink($group->label()));
+      $breadcrumb->addCacheableDependency($group);
+
+      $breadcrumb->addLink(Link::createFromRoute(t('Delete @group', ['@group' => $group->label()]), '<none>'));
+    }
+  }
+
+  if ('view.group_nodes.page_1' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
+
+      /** @var \Drupal\group\Entity\GroupInterface $group */
+      $group = $parameters['group'];
+
+      $breadcrumb->addLink($group->toLink($group->label()));
+      $breadcrumb->addCacheableDependency($group);
+
+      $breadcrumb->addLink(Link::createFromRoute(t('Nodes'), '<none>'));
+    }
+  }
+
+  if ('entity.group_content.collection' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
+
+      /** @var \Drupal\group\Entity\GroupInterface $group */
+      $group = $parameters['group'];
+
+      $breadcrumb->addLink($group->toLink($group->label()));
+      $breadcrumb->addCacheableDependency($group);
+
+      $breadcrumb->addLink(Link::createFromRoute(t('All entities'), '<none>'));
+    }
+  }
+
+  if ('entity.group_content.add_page' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
+
+      /** @var \Drupal\group\Entity\GroupInterface $group */
+      $group = $parameters['group'];
+
+      $breadcrumb->addLink($group->toLink($group->label()));
+      $breadcrumb->addCacheableDependency($group);
+
+      $breadcrumb->addLink(Link::createFromRoute(t('Add existing content'), '<none>'));
+    }
+  }
+
+  if ('entity.group_content.add_form' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
+
+      /** @var \Drupal\group\Entity\GroupInterface $group */
+      $group = $parameters['group'];
+      $plugin_id = $parameters['plugin_id'];
+
+      /** @var \Drupal\group\Plugin\GroupContentEnablerInterface $plugin */
+      $plugin = $group->getGroupType()->getContentPlugin($plugin_id);
+
+      $breadcrumb->addLink($group->toLink($group->label()));
+      $breadcrumb->addCacheableDependency($group);
+
+      $breadcrumb->addLink(Link::createFromRoute(t('Add @plugin', ['@plugin' => $plugin->getLabel()]), '<none>'));
+    }
+  }
+
   if ('entity.group_content.create_page' == $route_match->getRouteName()) {
     $applies = TRUE;
 
