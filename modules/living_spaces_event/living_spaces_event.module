@@ -994,5 +994,33 @@ function living_spaces_event_living_spaces_breadcrumbs_info(RouteMatchInterface 
     }
   }
 
+  if (in_array($route_match->getRouteName(), ['entity.node.canonical', 'entity.node.edit_form'])) {
+    $parameters = $route_match->getParameters()->all();
+
+    /** @var \Drupal\node\NodeInterface $node */
+    $node = $parameters['node'];
+
+    if (in_array($node->bundle(), ['agenda', 'protocol'])) {
+      $applies = TRUE;
+
+      if (!empty($breadcrumb)) {
+        if ($group = $node->get('space')->entity) {
+          $breadcrumb->addLink($group->toLink($group->label()));
+          $breadcrumb->addCacheableDependency($group);
+        }
+
+        if ($group && $section = \Drupal::service('living_spaces_sections.manager')->getSectionFromGroupByType($group, 'events')) {
+          $breadcrumb->addLink(Link::createFromRoute(t('Events'), 'living_spaces_sections.section_view', ['group' => $group->id(), 'section' => $section->getPath()]));
+        }
+        else {
+          $breadcrumb->addLink(Link::createFromRoute(t('Events'), '<none>'));
+        }
+
+        $breadcrumb->addLink(Link::createFromRoute($node->label(), '<none>'));
+        $breadcrumb->addCacheableDependency($node);
+      }
+    }
+  }
+
   return $applies;
 }
