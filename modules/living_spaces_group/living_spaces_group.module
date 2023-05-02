@@ -16,12 +16,39 @@ use Drupal\Core\Url;
 use Drupal\group\Entity\GroupInterface;
 use Drupal\group\Entity\GroupRoleInterface;
 use Drupal\group\Entity\GroupContentInterface;
+use Drupal\group\Entity\GroupTypeInterface;
 use Drupal\user\UserInterface;
 use Drupal\user\Entity\Role;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Link;
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function living_spaces_group_group_type_access(GroupTypeInterface $type, $operation, AccountInterface $account) {
+  if ($spaces = \Drupal::config('living_spaces_group.exclude_spaces')->get('spaces')) {
+    if (in_array($type->id(), $spaces)) {
+      return AccessResult::forbidden();
+    }
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_create_access().
+ */
+function living_spaces_group_group_create_access(AccountInterface $account, array $context, $entity_bundle) {
+  if ($spaces = \Drupal::config('living_spaces_group.exclude_spaces')->get('spaces')) {
+    if (in_array($entity_bundle, $spaces)) {
+      return AccessResult::forbidden();
+    }
+  }
+
+  return AccessResult::neutral();
+}
 
 /**
  * Implements hook_entity_type_alter().

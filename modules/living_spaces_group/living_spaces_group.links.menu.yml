@@ -3,3 +3,7 @@ living_spaces_group.update_memberships:
   description: 'Launches batch process to re-save all space memberships with latest dynamic values.'
   route_name: living_spaces_group.update_memberships
   parent: system.admin_config_development
+living_spaces_group.exclude_spaces:
+  title: 'Exclude spaces'
+  route_name: living_spaces_group.exclude_spaces
+  parent: living_spaces.settings_overview

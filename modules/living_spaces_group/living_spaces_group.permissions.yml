@@ -10,3 +10,6 @@ add members to administered space:
 manage access of admins to edit accounts in mutual space:
   title: 'Manage access of admins to edit accounts in mutual space'
   description: 'Allow access to the checkbox "Allow space admins to edit member accounts" in the group setting.'
+manage exclude spaces:
+  title: 'Manage exclude spaces'
+  description: 'Allow access to manage protected spaces'
