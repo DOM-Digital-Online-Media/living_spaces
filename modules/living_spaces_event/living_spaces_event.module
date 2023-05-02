@@ -1016,7 +1016,9 @@ function living_spaces_event_living_spaces_breadcrumbs_info(RouteMatchInterface 
           $breadcrumb->addLink(Link::createFromRoute(t('Events'), '<none>'));
         }
 
-        $breadcrumb->addLink(Link::createFromRoute($node->label(), '<none>'));
+        $prefix = $route_match->getRouteName() == 'entity.node.edit_form' ? t('Edit') . ' ' : '';
+
+        $breadcrumb->addLink(Link::createFromRoute($prefix . $node->label(), '<none>'));
         $breadcrumb->addCacheableDependency($node);
       }
     }

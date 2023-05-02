@@ -5,9 +5,12 @@
  * Contains functions and hooks for living_spaces_page.module.
  */
 
+use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\node\NodeInterface;
@@ -345,4 +348,36 @@ function living_spaces_page_living_spaces_group_remove_group_content_alter(Group
       $items['node'][] = $value['target_id'];
     }
   }
+}
+
+/**
+ * Implements hook_living_spaces_breadcrumbs_info().
+ */
+function living_spaces_page_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
+  $applies = FALSE;
+
+  if ('node.add' == $route_match->getRouteName()) {
+    $parameters = $route_match->getParameters()->all();
+
+    /** @var \Drupal\node\NodeTypeInterface $type */
+    $type = $parameters['node_type'];
+
+    if ('page' == $type->id()) {
+      $applies = TRUE;
+
+      if (!empty($breadcrumb)) {
+        $space = \Drupal::request()->query->get('space');
+
+        if ($group = \Drupal::entityTypeManager()->getStorage('group')->load($space)) {
+          $breadcrumb->addLink($group->toLink($group->label()));
+          $breadcrumb->addCacheableDependency($group);
+        }
+
+        $breadcrumb->addLink(Link::createFromRoute(t('Create Page'), '<none>'));
+      }
+    }
+
+  }
+
+  return $applies;
 }
