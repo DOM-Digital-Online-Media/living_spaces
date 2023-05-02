@@ -40,12 +40,14 @@ function hook_living_spaces_group_type_info() {
  *   Living space group entity, required if $names_only is FALSE.
  * @param \Drupal\user\UserInterface|null $user
  *   User for which actions are shown, required if $names_only is FALSE.
+ * @param bool $inherited_from_circle
+ *   User inherited from circles, required if $names_only is FALSE.
  *
  * @return array
  *   If $names_only param is TRUE then label of actions will be returned,
  *   if it is FALSE then render arrays for action links returned.
  */
-function hook_living_spaces_group_actions_info($names_only = TRUE, \Drupal\group\Entity\GroupInterface $space = NULL, \Drupal\user\UserInterface $user = NULL) {
+function hook_living_spaces_group_actions_info($names_only = TRUE, \Drupal\group\Entity\GroupInterface $space = NULL, \Drupal\user\UserInterface $user = NULL, $inherited_from_circle = FALSE) {
   return [
     'remove_from_space' => $names_only ? t('Remove from space') : [
       '#type' => 'link',

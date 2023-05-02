@@ -299,7 +299,7 @@ function living_spaces_group_menu_local_tasks_alter(&$data, $route_name, Refinab
 /**
  * Implements hook_living_spaces_group_actions_info().
  */
-function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE, GroupInterface $space = NULL, UserInterface $user = NULL) {
+function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE, GroupInterface $space = NULL, UserInterface $user = NULL, $inherited_from_circle = FALSE) {
   if ($names_only || !$space->id()) {
     return [
       'view_profile' => t('Show profile'),
@@ -310,13 +310,6 @@ function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE
     ];
   }
   $current_user = \Drupal::currentUser()->getAccount();
-
-  $user_is_admin = \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($user, $space);
-  $route = $user_is_admin
-    ? 'living_spaces_group.remove_admin'
-    : 'living_spaces_group.assign_admin';
-
-  $current_is_admin = \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($current_user, $space);
 
   $links = [
     'view_profile' => [
@@ -330,6 +323,18 @@ function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE
 
   $cache = CacheableMetadata::createFromObject($current_user);
   $cache->applyTo($links['view_profile']);
+
+  if ($inherited_from_circle) {
+    return $links;
+  }
+
+  $user_is_admin = \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($user, $space);
+  $route = $user_is_admin
+    ? 'living_spaces_group.remove_admin'
+    : 'living_spaces_group.assign_admin';
+
+  $current_is_admin = \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($current_user, $space);
+
   if (
     $space->getOwnerId() !== $user->id()
     && $current_user->id() != $user->id()
