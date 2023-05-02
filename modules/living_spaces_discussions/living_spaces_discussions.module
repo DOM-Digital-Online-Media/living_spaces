@@ -80,7 +80,7 @@ function living_spaces_discussions_comment_access(CommentInterface $comment, $op
 function living_spaces_discussions_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
   $applies = FALSE;
 
-  if (in_array($route_match->getRouteName(), ['entity.node.canonical', 'entity.node.edit_form'])) {
+  if (in_array($route_match->getRouteName(), ['entity.node.canonical', 'entity.node.edit_form', 'entity.node.delete_form'])) {
     $parameters = $route_match->getParameters()->all();
 
     /** @var \Drupal\node\NodeInterface $node */

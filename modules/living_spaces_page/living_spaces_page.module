@@ -378,7 +378,7 @@ function living_spaces_page_living_spaces_breadcrumbs_info(RouteMatchInterface $
     }
   }
 
-  if ('entity.node.canonical' == $route_match->getRouteName()) {
+  if (in_array($route_match->getRouteName(), ['entity.node.canonical', 'entity.node.edit_form', 'entity.node.delete_form'])) {
     $parameters = $route_match->getParameters()->all();
 
     /** @var \Drupal\node\NodeInterface $node */
