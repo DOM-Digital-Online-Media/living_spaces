@@ -11,8 +11,3 @@ services:
     decorates: group_permission.checker
     decoration_priority: 1
     arguments: ['@living_spaces_subgroup.checker_decorator.inner', '@living_spaces_subgroup.manager']
-  living_spaces_subgroup.breadcrumb:
-    class: Drupal\living_spaces_subgroup\LivingSpacesSubGroupBreadcrumbs
-    arguments: ['@config.factory', '@living_spaces_subgroup.manager']
-    tags:
-      - { name: breadcrumb_builder, priority: 1101 }
