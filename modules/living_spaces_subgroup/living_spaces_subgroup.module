@@ -131,33 +131,6 @@ function living_spaces_subgroup_living_spaces_group_remove_group_content_alter(G
 }
 
 /**
- * Implements hook_living_spaces_breadcrumbs_info_alter().
- */
-function living_spaces_subgroup_living_spaces_breadcrumbs_info_alter(RouteMatchInterface $route_match, Breadcrumb &$breadcrumb) {
-  if ($route_match->getRouteName() === 'entity.group.canonical') {
-    /** @var \Drupal\living_spaces_subgroup\LivingSpacesSubgroupManagerInterface $manager */
-    $manager = \Drupal::service('living_spaces_subgroup.manager');
-    $group = $route_match->getParameter('group');
-
-    if ($parents = $manager->getGroupsParents($group, FALSE)) {
-      $breadcrumb = new Breadcrumb();
-      $breadcrumb->addCacheContexts(['route', 'url.path', 'languages']);
-
-      $home = \Drupal::config('easy_breadcrumb.settings')->get('home_segment_title');
-      $breadcrumb->addLink(Link::createFromRoute(!empty($home) ? $home : t('Start'), '<front>'));
-
-      foreach ($parents as $parent) {
-        $breadcrumb->addLink($parent->toLink());
-        $breadcrumb->addCacheableDependency($parent);
-      }
-
-      $breadcrumb->addLink(Link::createFromRoute($group->label(), '<none>'));
-      $breadcrumb->addCacheableDependency($group);
-    }
-  }
-}
-
-/**
  * Implements hook_theme().
  */
 function living_spaces_subgroup_theme($existing, $type, $theme, $path) {
