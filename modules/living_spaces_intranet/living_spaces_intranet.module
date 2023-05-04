@@ -207,6 +207,12 @@ function living_spaces_intranet_form_user_admin_settings_alter(&$form, FormState
   $config_settings = $config->getEditable('user.settings');
   $config_mail = $config->getEditable('user.mail');
 
+  $form['employee_required_mail'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Allow employee accounts without email address'),
+    '#default_value' => $config_settings->get('employee_required_mail'),
+  ];
+
   $form['email_admin_created_no_email'] = [
     '#type' => 'details',
     '#title' => t('Welcome (new user created by administrator with no e-mail address)'),
@@ -257,6 +263,7 @@ function living_spaces_intranet_user_settings_form_submit($form, FormStateInterf
 
   \Drupal::configFactory()->getEditable('user.settings')
     ->set('notify.email_admin_created_no_email', $form_state->getValue('email_admin_created_no_email_notify'))
+    ->set('employee_required_mail', $form_state->getValue('employee_required_mail'))
     ->save();
 }
 
@@ -295,6 +302,10 @@ function living_spaces_intranet_entity_field_access_alter(array &$grants, array 
  * Implements hook_form_FORM_ID_alter().
  */
 function living_spaces_intranet_form_user_employee_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (!empty($form['account']['mail']) && \Drupal::config('user.settings')->get('employee_required_mail')) {
+    $form['account']['mail']['#required'] = TRUE;
+  }
+
   $form['account']['pass']['#required'] = FALSE;
   $form['account']['pass']['#access'] = FALSE;
 
