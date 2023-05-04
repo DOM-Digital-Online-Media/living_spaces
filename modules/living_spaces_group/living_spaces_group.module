@@ -572,3 +572,53 @@ function living_spaces_group_living_spaces_group_exclude_permissions() {
 
   return $permissions;
 }
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function living_spaces_group_group_update(GroupInterface $group) {
+  if (!$group->hasField('circles')) {
+    return;
+  }
+  $circle_ids = array_column($group->get('circles')->getValue(), 'target_id');
+  $original_ids = array_column($group->original->get('circles')->getValue(), 'target_id');
+
+  $removed = array_diff($original_ids, $circle_ids);
+  foreach ($removed as $id) {
+    $circle = \Drupal::entityTypeManager()->getStorage('group')->load($id);
+    /** @var \Drupal\group\GroupMembershipLoaderInterface $membership_loader */
+    $membership_loader = \Drupal::service('group.membership_loader');
+    $memberships = $membership_loader->loadByGroup($circle);
+    foreach ($memberships as $membership) {
+      if ($member = $membership->getUser()) {
+        $message = \Drupal::entityTypeManager()->getStorage('message')->create([
+          'template' => 'group_member_removed',
+          'uid' => $member->id(),
+          'field_group_label' => $group->label(),
+          'field_related_space' => ['target_id' => $group->id()],
+        ]);
+        $message->save();
+      }
+    }
+  }
+
+  $added = array_diff($circle_ids, $original_ids);
+  foreach ($added as $id) {
+    $circle = \Drupal::entityTypeManager()->getStorage('group')->load($id);
+    /** @var \Drupal\group\GroupMembershipLoaderInterface $membership_loader */
+    $membership_loader = \Drupal::service('group.membership_loader');
+    $memberships = $membership_loader->loadByGroup($circle);
+    foreach ($memberships as $membership) {
+      if ($member = $membership->getUser()) {
+        $message = \Drupal::entityTypeManager()->getStorage('message')->create([
+          'template' => 'group_member_added',
+          'uid' => $member->id(),
+          'field_group_label' => $group->label(),
+          'field_related_space' => ['target_id' => $group->id()],
+        ]);
+        $message->save();
+      }
+    }
+  }
+
+}
