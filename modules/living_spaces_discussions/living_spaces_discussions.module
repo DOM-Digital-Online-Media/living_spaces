@@ -96,7 +96,7 @@ function living_spaces_discussions_living_spaces_breadcrumbs_info(RouteMatchInte
         }
 
         if ($group && $section = \Drupal::service('living_spaces_sections.manager')->getSectionFromGroupByType($group, 'discussions')) {
-          $breadcrumb->addLink(Link::createFromRoute(t('Discussions'), 'living_spaces_sections.section_view', ['group' => $group->id(), 'section' => $section->getPath()]));
+          $breadcrumb->addLink(Link::createFromRoute($section->getTabLabel(), 'living_spaces_sections.section_view', ['group' => $group->id(), 'section' => $section->getPath()]));
         }
         else {
           $breadcrumb->addLink(Link::createFromRoute(t('Discussions'), '<none>'));

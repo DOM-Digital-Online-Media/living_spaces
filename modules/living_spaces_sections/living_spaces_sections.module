@@ -433,7 +433,7 @@ function living_spaces_sections_living_spaces_breadcrumbs_info(RouteMatchInterfa
       $breadcrumb->addLink($group->toLink($group->label()));
       $breadcrumb->addCacheableDependency($group);
 
-      $breadcrumb->addLink($section->toLink($section->label()));
+      $breadcrumb->addLink($section->toLink($section->getTabLabel()));
       $breadcrumb->addCacheableDependency($section);
 
       $breadcrumb->addLink(Link::createFromRoute(t('Sub-Section Settings'), '<none>'));
@@ -459,7 +459,7 @@ function living_spaces_sections_living_spaces_breadcrumbs_info(RouteMatchInterfa
       $breadcrumb->addLink($group->toLink($group->label()));
       $breadcrumb->addCacheableDependency($group);
 
-      $breadcrumb->addLink(Link::createFromRoute($section->label(), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute($section->getTabLabel(), '<none>'));
       $breadcrumb->addCacheableDependency($section);
     }
   }
@@ -487,10 +487,10 @@ function living_spaces_sections_living_spaces_breadcrumbs_info(RouteMatchInterfa
       $breadcrumb->addLink($group->toLink($group->label()));
       $breadcrumb->addCacheableDependency($group);
 
-      $breadcrumb->addLink($section->toLink($section->label()));
+      $breadcrumb->addLink($section->toLink($section->getTabLabel()));
       $breadcrumb->addCacheableDependency($section);
 
-      $breadcrumb->addLink(Link::createFromRoute($sub_section->label(), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute($section->getTabLabel(), '<none>'));
       $breadcrumb->addCacheableDependency($sub_section);
     }
   }
