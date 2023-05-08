@@ -8,6 +8,8 @@
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -73,6 +75,9 @@ function living_spaces_users_form_user_form_alter(&$form, FormStateInterface $fo
     }
 
     $form['account']['pass']['#access'] = $access;
+    if ($access && $form_state->get('user_pass_reset')) {
+      $form['account']['pass']['#required'] = TRUE;
+    }
   }
 }
 
@@ -285,4 +290,36 @@ function living_spaces_users_living_spaces_breadcrumbs_info(RouteMatchInterface 
   }
 
   return $applies;
+}
+
+/**
+ * Implements hook_entity_base_field_info_alter().
+ */
+function living_spaces_users_entity_base_field_info_alter(&$fields, EntityTypeInterface $entity_type) {
+  if ('user' == $entity_type->id() && !empty($fields['mail'])) {
+    $fields['mail']->addConstraint('UserEmailEmpty');
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_users_user_insert(EntityInterface $entity) {
+  /** @var \Drupal\user\UserInterface $entity */
+  if (empty($entity->getEmail())) {
+    $current_user = Drupal::currentUser();
+    if ($email = $current_user->getEmail()) {
+      $params['account'] = $entity;
+      $op = 'register_admin_created';
+      $site_mail = \Drupal::config('system.site')->get('mail_notification');
+      if (empty($site_mail)) {
+        $site_mail = \Drupal::config('system.site')->get('mail');
+      }
+      if (empty($site_mail)) {
+        $site_mail = ini_get('sendmail_from');
+      }
+      \Drupal::service('plugin.manager.mail')->mail('user', $op, $email, $current_user->getPreferredLangcode(), $params, $site_mail);
+    }
+
+  }
 }
