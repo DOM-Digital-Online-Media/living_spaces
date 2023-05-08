@@ -200,6 +200,16 @@ function living_spaces_intranet_entity_type_build(array &$entity_types) {
 }
 
 /**
+ * Implements hook_config_schema_info_alter().
+ */
+function living_spaces_intranet_config_schema_info_alter(&$definitions) {
+  $definitions['user.mail']['mapping']['email_admin_created_no_email'] = [
+    'type' => 'mail',
+    'label' => 'Welcome (new user created by administrator with no e-mail address)',
+  ];
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function living_spaces_intranet_form_user_admin_settings_alter(&$form, FormStateInterface $form_state, $form_id) {
