@@ -97,9 +97,6 @@
             "drupal/fullcalendar_view": {
                 "Loading items as needed by AJAX": "https://www.drupal.org/files/issues/2023-01-10/2960335-61.patch",
                 "Integration with Search API": "https://www.drupal.org/files/issues/2023-05-04/solr_autoloading-3089238-27.patch"
-            },
-            "drupal/nodejs": {
-                "Drupal 9 compatibility": "https://www.drupal.org/files/issues/2021-07-12/drupal-9-update-3166681-7.patch"
             }
         },
          "enable-patching": true
