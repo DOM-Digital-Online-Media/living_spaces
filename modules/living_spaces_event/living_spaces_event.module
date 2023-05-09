@@ -791,7 +791,8 @@ function living_spaces_event_config_item_form_remove(array &$form, FormStateInte
  */
 function living_spaces_event_js_alter(&$javascript, AttachedAssetsInterface $assets) {
   if (isset($javascript['modules/contrib/fullcalendar_view/js/fullcalendar_view.js'])) {
-    $path = drupal_get_path('module', 'living_spaces_event') . '/js/living_spaces_event_calendar.js';
+    $path = \Drupal::service('extension.path.resolver')
+      ->getPath('module', 'living_spaces_event') . '/js/living_spaces_event_calendar.js';
     $javascript['modules/contrib/fullcalendar_view/js/fullcalendar_view.js']['data'] = $path;
   }
 }

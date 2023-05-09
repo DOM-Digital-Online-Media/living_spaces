@@ -124,9 +124,39 @@
     let thisEvent = info.event;
     let viewIndex = parseInt(this.el.getAttribute("calendar-view-index"));
     let viewSettings = drupalSettings.fullCalendarView[viewIndex];
+    let des = thisEvent.extendedProps.des;
+    // Show the event detail in a pop up dialog.
+    if (viewSettings.dialogWindow) {
+      let dataDialogOptionsDetails = {};
+      if (des == '') {
+        return false;
+      }
+      const jsFrame = new JSFrame({
+        //Set the parent element to which the jsFrame is attached here.
+        parentElement:info.el,
+      });
+      // Position offset.
+      let posOffset = dialogIndex * 20;
+      // Dialog options.
+      let dialogOptions = JSON.parse(viewSettings.dialog_options);
+      dialogOptions.left += posOffset + info.jsEvent.pageX;
+      dialogOptions.top += posOffset + info.jsEvent.pageY;
+      dialogOptions.title = dialogOptions.title ? dialogOptions.title : thisEvent.title.replace(/(<([^>]+)>)/ig,"");
+      dialogOptions.html = des;
+      //Create window
+      dialogs[dialogIndex] = jsFrame.create(dialogOptions);
+      dialogs[dialogIndex].show();
+      dialogIndex++;
+      return false;
+    }
 
     // Open a new window to show the details of the event.
     if (thisEvent.url) {
+      let eventURL = new URL(thisEvent.url, location.origin);
+      if (eventURL.origin === "null") {
+        // Invalid URL.
+        return false;
+      }
       if (viewSettings.openEntityInNewTab) {
         // Open a new window to show the details of the event.
         window.open(thisEvent.url);
@@ -218,6 +248,14 @@
         });
 
     }
+  }
+
+  function datesRender (info) {
+    Drupal.attachBehaviors(info.el);
+  }
+
+  function datesDestroy (info) {
+    Drupal.detachBehaviors(info.el);
   }
 
   // Triggered after a view’s non-date-related DOM structure has been rendered.
@@ -341,12 +379,46 @@
         calendarOptions.eventClick = eventClick;
         // Bind the drop event handler.
         calendarOptions.eventDrop = eventDrop;
+        // Trigger Drupal behaviors when calendar events are updated.
+        calendarOptions.datesRender = datesRender;
+        // Trigger Drupal behaviors when calendar events are destroyed.
+        calendarOptions.datesDestroy = datesDestroy;
         // Bind the view skeleton render handler.
         calendarOptions.viewSkeletonRender = viewSkeletonRender;
         // Bind the event mouse enter handler.
         calendarOptions.eventMouseEnter = eventMouseEnter;
         // Bind the event mouse leave handler.
         calendarOptions.eventMouseLeave = eventMouseLeave;
+
+        calendarOptions.eventSources.forEach(function (item, index) {
+          calendarOptions.eventSources[index].extraParams = function () {
+            let data = {
+              view_name: viewSettings.view_name,
+              view_display_id: viewSettings.view_display_id,
+              view_args: viewSettings.view_args,
+              view_path: viewSettings.view_path,
+              view_dom_id: viewSettings.view_dom_id,
+              view_base_path: viewSettings.view_base_path,
+              pager_element: viewSettings.pager_element
+            }
+
+            // Take exposed form field values and pass as part of Ajax request to load the events.
+            let exposed_form_data = new FormData($("form#views-exposed-form-".concat(viewSettings.view_name.replace(/_/g, '-'), "-").concat(viewSettings.view_display_id.replace(/_/g, '-')))[0]);
+            for (const pair of exposed_form_data.entries()) {
+              data[pair[0]] = pair[1];
+            }
+            return data;
+          };
+        })
+        calendarOptions.loading = function (isLoading) {
+          if (isLoading) {
+            this.setOption('noEventsMessage', 'Loading events...');
+          }
+          else {
+            // Restore back to original message.
+            this.setOption('noEventsMessage', 'No events to display');
+          }
+        }
         // Language select element.
         var localeSelectorEl = document.getElementById('locale-selector-' + viewIndex);
         // Initial the calendar.
@@ -419,7 +491,7 @@
   // The workaround is to ckeck the document state
   // every 100 milliseconds until it is completed.
   // @see https://www.drupal.org/project/drupal/issues/2794099#comment-13274828
-  var checkReadyState = setInterval(function () {
+  var checkReadyState = setInterval(function() {
     if (
       document.readyState === "complete" &&
       $('.js-drupal-fullcalendar').length > 0
@@ -432,14 +504,14 @@
 
   // After an Ajax call, the calendar objects need to rebuild,
   // to reflect the changes, such as Ajax filter.
-  $( document ).ajaxComplete(function (event, request, settings) {
+  $( document ).ajaxComplete(function(event, request, settings) {
     // Remove the existing calendars except updating Ajax events.
     if (
       drupalSettings.calendar &&
       settings.url !== '/fullcalendar-view-event-update'
     ) {
       // Rebuild the calendars.
-      drupalSettings.calendar.forEach(function (calendar) {
+      drupalSettings.calendar.forEach(function(calendar) {
         calendar.destroy();
       });
       //Re-build calendars.

@@ -7,7 +7,9 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\dip_chat_counseling\Entity\DipChatAppointmentInterface;
 use Drupal\fullcalendar_view\Plugin\FullcalendarViewProcessorInterface;
+use Drupal\living_spaces_event\Entity\LivingSpaceEventInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Http\RequestStack;
 
@@ -91,15 +93,12 @@ class LivingSpacesEventFullcalendarView extends PluginBase implements Fullcalend
         }
 
         $options = Json::decode($data['calendar_options']);
-        foreach ($options['events'] as &$event) {
-          $query = $this->database->select('living_spaces_event', 'lse');
-          $query->fields('lse');
-          $query->condition('lse.id', $event['eid']);
-          $result = $query->execute()->fetchAssoc();
-
-          $event['className'] = !empty($result['type']) ? $result['type'] : '';
+        foreach ($options['events'] as $i => &$event) {
+          $entity = $variables['rows'][$i]->_entity ?? NULL;
+          if ($entity instanceof LivingSpaceEventInterface) {
+            $event['className'] = $entity->bundle();
+          }
         }
-
         $data['calendar_options'] = Json::encode($options);
       }
     }
