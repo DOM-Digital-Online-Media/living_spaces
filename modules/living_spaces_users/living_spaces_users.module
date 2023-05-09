@@ -300,26 +300,3 @@ function living_spaces_users_entity_base_field_info_alter(&$fields, EntityTypeIn
     $fields['mail']->addConstraint('UserEmailEmpty');
   }
 }
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function living_spaces_users_user_insert(EntityInterface $entity) {
-  /** @var \Drupal\user\UserInterface $entity */
-  if (empty($entity->getEmail())) {
-    $current_user = Drupal::currentUser();
-    if ($email = $current_user->getEmail()) {
-      $params['account'] = $entity;
-      $op = 'register_admin_created';
-      $site_mail = \Drupal::config('system.site')->get('mail_notification');
-      if (empty($site_mail)) {
-        $site_mail = \Drupal::config('system.site')->get('mail');
-      }
-      if (empty($site_mail)) {
-        $site_mail = ini_get('sendmail_from');
-      }
-      \Drupal::service('plugin.manager.mail')->mail('user', $op, $email, $current_user->getPreferredLangcode(), $params, $site_mail);
-    }
-
-  }
-}
