@@ -197,7 +197,7 @@ class LivingSpacesCirclesAddPeopleForm extends FormBase {
 
       // Update Members Tab.
       $group_ids = [$group->id()];
-      if ($group->hasField('circles')) {
+      if (!$group->get('circles')->isEmpty()) {
         $group_ids = array_merge($group_ids, array_column($group->get('circles')->getValue(), 'target_id'));
       }
 
