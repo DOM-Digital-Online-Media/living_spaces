@@ -5,10 +5,13 @@
  * Contains functions and hooks for living_spaces_sections module.
  */
 
+use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\living_spaces_sections\LivingSpacesSectionsHtmlRouteProvider;
 use Drupal\living_spaces_sections\Entity\LivingSpacesSectionInterface;
 use Drupal\group\Entity\GroupInterface;
@@ -387,4 +390,110 @@ function living_spaces_sections_group_presave(GroupInterface $group) {
       $group->set(LIVING_SPACES_SECTIONS_FIELD, $sections);
     }
   }
+}
+
+/**
+ * Implements hook_living_spaces_breadcrumbs_info().
+ */
+function living_spaces_sections_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
+  $applies = FALSE;
+
+  if ('living_spaces_sections.sections_form' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
+
+      /** @var \Drupal\group\Entity\GroupInterface $group */
+      $group = $parameters['group'];
+
+      $breadcrumb->addLink($group->toLink($group->label()));
+      $breadcrumb->addCacheableDependency($group);
+
+      $breadcrumb->addLink(Link::createFromRoute(t('Section Settings'), '<none>'));
+    }
+  }
+
+  if ('living_spaces_sections.sub_sections_form' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
+
+      /** @var \Drupal\group\Entity\GroupInterface $group */
+      $group = $parameters['group'];
+      $path = $parameters['section'];
+
+      /** @var \Drupal\living_spaces_sections\LivingSpacesSectionsManagerInterface $section_manager */
+      $section_manager = \Drupal::service('living_spaces_sections.manager');
+
+      /** @var \Drupal\living_spaces_sections\Entity\LivingSpacesSectionInterface $section */
+      $section = $section_manager->getSectionFromGroupByPath($group, $path);
+
+      $breadcrumb->addLink($group->toLink($group->label()));
+      $breadcrumb->addCacheableDependency($group);
+
+      $breadcrumb->addLink($section->toLink($section->getTabLabel()));
+      $breadcrumb->addCacheableDependency($section);
+
+      $breadcrumb->addLink(Link::createFromRoute(t('Sub-Section Settings'), '<none>'));
+    }
+  }
+
+  if (LivingSpacesSectionsHtmlRouteProvider::SECTION_ROUTE == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
+
+      /** @var \Drupal\group\Entity\GroupInterface $group */
+      $group = $parameters['group'];
+      $path = $parameters['section'];
+
+      /** @var \Drupal\living_spaces_sections\LivingSpacesSectionsManagerInterface $section_manager */
+      $section_manager = \Drupal::service('living_spaces_sections.manager');
+
+      /** @var \Drupal\living_spaces_sections\Entity\LivingSpacesSectionInterface $section */
+      $section = $section_manager->getSectionFromGroupByPath($group, $path);
+
+      $breadcrumb->addLink($group->toLink($group->label()));
+      $breadcrumb->addCacheableDependency($group);
+
+      $breadcrumb->addLink(Link::createFromRoute($section->getTabLabel(), '<none>'));
+      $breadcrumb->addCacheableDependency($section);
+    }
+  }
+
+  if (LivingSpacesSectionsHtmlRouteProvider::SUB_SECTION_ROUTE == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
+
+      /** @var \Drupal\group\Entity\GroupInterface $group */
+      $group = $parameters['group'];
+      $path = $parameters['section'];
+      $sub = $parameters['sub_section'];
+
+      /** @var \Drupal\living_spaces_sections\LivingSpacesSectionsManagerInterface $section_manager */
+      $section_manager = \Drupal::service('living_spaces_sections.manager');
+
+      /** @var \Drupal\living_spaces_sections\Entity\LivingSpacesSectionInterface $section */
+      $section = $section_manager->getSectionFromGroupByPath($group, $path);
+
+      /** @var \Drupal\living_spaces_sections\Entity\LivingSpacesSectionInterface $sub_section */
+      $sub_section = $section_manager->getSectionFromGroupByPath($group, "{$path}/{$sub}");
+
+      $breadcrumb->addLink($group->toLink($group->label()));
+      $breadcrumb->addCacheableDependency($group);
+
+      $breadcrumb->addLink($section->toLink($section->getTabLabel()));
+      $breadcrumb->addCacheableDependency($section);
+
+      $breadcrumb->addLink(Link::createFromRoute($section->getTabLabel(), '<none>'));
+      $breadcrumb->addCacheableDependency($sub_section);
+    }
+  }
+
+  return $applies;
 }

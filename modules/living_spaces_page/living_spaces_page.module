@@ -5,9 +5,12 @@
  * Contains functions and hooks for living_spaces_page.module.
  */
 
+use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\node\NodeInterface;
@@ -345,4 +348,67 @@ function living_spaces_page_living_spaces_group_remove_group_content_alter(Group
       $items['node'][] = $value['target_id'];
     }
   }
+}
+
+/**
+ * Implements hook_living_spaces_breadcrumbs_info().
+ */
+function living_spaces_page_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
+  $applies = FALSE;
+
+  if ('node.add' == $route_match->getRouteName()) {
+    $parameters = $route_match->getParameters()->all();
+
+    /** @var \Drupal\node\NodeTypeInterface $type */
+    $type = $parameters['node_type'];
+
+    if ('page' == $type->id()) {
+      $applies = TRUE;
+
+      if (!empty($breadcrumb)) {
+        $space = \Drupal::request()->query->get('space');
+
+        if ($group = \Drupal::entityTypeManager()->getStorage('group')->load($space)) {
+          $breadcrumb->addLink($group->toLink($group->label()));
+          $breadcrumb->addCacheableDependency($group);
+        }
+
+        $breadcrumb->addLink(Link::createFromRoute(t('Create Page'), '<none>'));
+      }
+    }
+  }
+
+  if (in_array($route_match->getRouteName(), ['entity.node.canonical', 'entity.node.edit_form', 'entity.node.delete_form'])) {
+    $parameters = $route_match->getParameters()->all();
+
+    /** @var \Drupal\node\NodeInterface $node */
+    $node = $parameters['node'];
+
+    if ('page' == $node->bundle()) {
+      $applies = TRUE;
+
+      if (!empty($breadcrumb)) {
+        $group_manager = \Drupal::entityTypeManager()->getStorage('group');
+
+        $query = $group_manager->getQuery();
+        $query->condition('content_sections', $node->id());
+        $query->accessCheck(FALSE);
+
+        if ($gids = $query->execute()) {
+          $gid = reset($gids);
+
+          if ($group = $group_manager->load($gid)) {
+            $breadcrumb->addLink($group->toLink($group->label()));
+            $breadcrumb->addCacheableDependency($group);
+          }
+        }
+
+        $prefix = $route_match->getRouteName() == 'entity.node.edit_form' ? t('Edit') . ' ' : '';
+
+        $breadcrumb->addLink(Link::createFromRoute($prefix . $node->label(), '<none>'));
+      }
+    }
+  }
+
+  return $applies;
 }

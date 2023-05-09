@@ -6,7 +6,6 @@
  */
 
 use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\Core\Link;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -16,6 +15,16 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\group\Entity\GroupInterface;
 use Drupal\living_spaces_subgroup\LivingSpacesSubgroupAccessControlHandler;
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function living_spaces_subgroup_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'living_spaces_breadcrumbs_info') {
+    unset($implementations['living_spaces_subgroup']);
+    $implementations = array_merge(['living_spaces_subgroup' => NULL], $implementations);
+  }
+}
 
 /**
  * Implements hook_entity_type_alter().
@@ -131,30 +140,30 @@ function living_spaces_subgroup_living_spaces_group_remove_group_content_alter(G
 }
 
 /**
- * Implements hook_living_spaces_breadcrumbs_info_alter().
+ * Implements hook_living_spaces_breadcrumbs_info().
  */
-function living_spaces_subgroup_living_spaces_breadcrumbs_info_alter(RouteMatchInterface $route_match, Breadcrumb &$breadcrumb) {
-  if ($route_match->getRouteName() === 'entity.group.canonical') {
+function living_spaces_subgroup_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
+  $applies = FALSE;
+
+  if (!empty($breadcrumb) && $group = $route_match->getParameter('group')) {
+    if (!$group instanceof GroupInterface) {
+      $group = \Drupal::entityTypeManager()->getStorage('group')->load($group);
+    }
+
     /** @var \Drupal\living_spaces_subgroup\LivingSpacesSubgroupManagerInterface $manager */
     $manager = \Drupal::service('living_spaces_subgroup.manager');
-    $group = $route_match->getParameter('group');
 
     if ($parents = $manager->getGroupsParents($group, FALSE)) {
-      $breadcrumb = new Breadcrumb();
-      $breadcrumb->addCacheContexts(['route', 'url.path', 'languages']);
-
-      $home = \Drupal::config('easy_breadcrumb.settings')->get('home_segment_title');
-      $breadcrumb->addLink(Link::createFromRoute(!empty($home) ? $home : t('Start'), '<front>'));
+      $applies = TRUE;
 
       foreach ($parents as $parent) {
         $breadcrumb->addLink($parent->toLink());
         $breadcrumb->addCacheableDependency($parent);
       }
-
-      $breadcrumb->addLink(Link::createFromRoute($group->label(), '<none>'));
-      $breadcrumb->addCacheableDependency($group);
     }
   }
+
+  return $applies;
 }
 
 /**

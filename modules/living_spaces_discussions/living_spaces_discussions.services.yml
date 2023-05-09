@@ -1,0 +1,6 @@
+services:
+  living_spaces_discussions.route_enhancer:
+    class: Drupal\living_spaces_discussions\Routing\LivingSpacesDiscussionsEnhancer
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: route_enhancer, priority: 100 }

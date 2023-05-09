@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\living_spaces_page\Routing;
+namespace Drupal\living_spaces_discussions\Routing;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\EnhancerInterface;
@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 
 /**
- * LivingSpacesPageEnhancer class.
+ * LivingSpacesDiscussionsEnhancer class.
  */
-class LivingSpacesPageEnhancer implements EnhancerInterface {
+class LivingSpacesDiscussionsEnhancer implements EnhancerInterface {
 
   /**
    * Returns the entity_type.manager service.
@@ -21,7 +21,7 @@ class LivingSpacesPageEnhancer implements EnhancerInterface {
   protected $entityTypeManager;
 
   /**
-   * Constructs a LivingSpacesPageEnhancer object.
+   * Constructs a LivingSpacesDiscussionsEnhancer object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Provides an interface for entity type managers.
@@ -51,14 +51,10 @@ class LivingSpacesPageEnhancer implements EnhancerInterface {
 
     /** @var \Drupal\node\NodeInterface $node */
     $node = $defaults['node'];
-    if ('page' == $node->bundle()) {
-      $entity_manager = $this->entityTypeManager->getStorage('group');
-      $query = $entity_manager->getQuery();
-      $query->condition('content_sections', $node->id());
-      $query->accessCheck(FALSE);
 
-      if ($group_ids = $query->execute()) {
-        $gid = reset($group_ids);
+    if ('discussion_post' == $node->bundle()) {
+      if ($group = $node->get('space')->entity) {
+        $gid = $group->id();
 
         $route->setDefault('group', $gid);
         $defaults['group'] = $gid;
