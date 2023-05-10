@@ -8,6 +8,7 @@ dependencies:
   - fullcalendar_view
   - inline_entity_form
   - living_spaces_activity
+  - living_spaces_circles
   - living_spaces_default_configs
   - living_spaces_group
   - living_spaces_sections

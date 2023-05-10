@@ -230,7 +230,11 @@ class LivingSpacesGroupMembersBlock extends BlockBase implements ContainerFactor
     $build = [];
     switch ($tab) {
       case 'members':
-        $build['members'] = $this->getMembersViewRender($group->id());
+        $group_ids = [$group->id()];
+        if ($group->hasField('circles')) {
+          $group_ids = array_merge($group_ids, array_column($group->get('circles')->getValue(), 'target_id'));
+        }
+        $build['members'] = $this->getMembersViewRender(implode('+', $group_ids));
         $build['contact'] = $this->getContactActionsRender($group);
         $build['export'] = $this->getExportActionsViewRender($group);
         break;

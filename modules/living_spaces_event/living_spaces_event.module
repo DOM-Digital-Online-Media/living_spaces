@@ -287,9 +287,12 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
             if (!$event->get('space')->isEmpty() && !living_spaces_event_check_user_status($event->id(), $member->id())) {
               /** @var \Drupal\group\Entity\Group $space */
               $space = $event->get('space')->entity;
-
+              $circle_ids = array_column($space->get('circles')->getValue(), 'target_id');
               // Check if the user is a member of event space.
-              if ($group_content_storage->loadByGroup($space, 'group_membership', ['entity_id' => $member->id()])) {
+              if (
+                in_array($invited_space['target_id'], $circle_ids) ||
+                $group_content_storage->loadByGroup($space, 'group_membership', ['entity_id' => $member->id()])
+              ) {
                 $invite = $entity_manager->getStorage('living_spaces_event_invite')->create([
                   'event' => $event->id(),
                   'uid' => $member->id(),

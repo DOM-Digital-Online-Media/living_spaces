@@ -7,6 +7,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\group\Entity\GroupInterface;
@@ -193,6 +194,23 @@ class LivingSpacesCirclesAddPeopleForm extends FormBase {
       $form['circle']['value_field']['#value'] = '';
 
       $response->addCommand(new ReplaceCommand('*[id^=living-spaces-circles-add-people-form]', $form));
+
+      // Update Members Tab.
+      $group_ids = [$group->id()];
+      if (!$group->get('circles')->isEmpty()) {
+        $group_ids = array_merge($group_ids, array_column($group->get('circles')->getValue(), 'target_id'));
+      }
+
+      $view = Views::getView('members');
+      $member_tab = [
+        '#type' => 'view',
+        '#view' => $view,
+        '#name' => 'members',
+        '#display_id' => 'members_by_role',
+        '#arguments' => [implode('+', $group_ids)],
+      ];
+      $response->addCommand(new ReplaceCommand('#members-tabsContent .views-element-container .view-content.row', $member_tab));
+
     }
     else {
       foreach ($errors as $error) {
