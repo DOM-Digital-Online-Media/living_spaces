@@ -9,6 +9,7 @@ label: Administrator
 weight: 3
 is_admin: false
 permissions:
+  - 'access employees overview'
   - 'administer users'
   - 'change any passwords'
   - 'create contact_data profile'
