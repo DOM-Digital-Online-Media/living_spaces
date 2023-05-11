@@ -11,13 +11,6 @@ use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 
 /**
- * Implements hook_install().
- */
-function living_spaces_event_install() {
-  \Drupal::service('theme_installer')->install(['bootstrap_barrio']);
-}
-
-/**
  * Implements hook_uninstall().
  */
 function living_spaces_event_uninstall($is_syncing) {
