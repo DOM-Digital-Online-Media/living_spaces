@@ -1,8 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  config:
-    - group.type.circle
   module:
     - group
     - living_spaces_group_privacy
