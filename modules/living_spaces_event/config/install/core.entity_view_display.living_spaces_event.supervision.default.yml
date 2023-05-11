@@ -8,8 +8,6 @@ dependencies:
   module:
     - datetime
     - layout_builder
-  theme:
-    - bootstrap_barrio
 third_party_settings:
   layout_builder:
     enabled: true
