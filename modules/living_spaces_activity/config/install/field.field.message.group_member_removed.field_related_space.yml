@@ -3,14 +3,6 @@ status: true
 dependencies:
   config:
     - field.storage.message.field_related_space
-    - group.type.chat_counseling
-    - group.type.circle
-    - group.type.department
-    - group.type.living_space
-    - group.type.mail_counseling
-    - group.type.on_site_counseling
-    - group.type.project_space
-    - group.type.telephone_counseling
     - message.template.group_member_removed
 id: message.group_member_removed.field_related_space
 field_name: field_related_space
