@@ -13,4 +13,14 @@ permissions_ui: true
 permissions:
   - 'view group'
   - 'view group_membership content'
+  - 'delete own group_node:agenda entity'
+  - 'update own group_node:agenda entity'
+  - 'view calendar section of a living space'
+  - 'view documents section of a living space'
+  - 'view group_node:agenda entity'
+  - 'view private group'
+  - 'view public group'
+  - 'view published pages'
+  - 'view discussions section of a living space'
+  - 'view events section of a living space'
 is_space_admin: false

@@ -1,0 +1,21 @@
+third_party_settings:
+  layout_builder:
+    sections:
+        components:
+          b0d181fc-94f3-4449-acf1-869a63565326:
+            uuid: b0d181fc-94f3-4449-acf1-869a63565326
+            region: bottom
+            configuration:
+              id: 'views_block:user_groups-circles_of_user'
+              label: ''
+              provider: views
+              label_display: visible
+              views_label: ''
+              items_per_page: none
+              exposed_type_filter:
+                user_group_types:
+                  value:
+                    circle: circle
+              context_mapping: {  }
+            additional: {  }
+            weight: 4

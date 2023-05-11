@@ -23,4 +23,6 @@ permissions:
   - 'update own group_membership content'
   - 'view group'
   - 'view group_membership content'
+  - 'view discussions section of a living space'
+  - 'view events section of a living space'
 is_space_admin: true

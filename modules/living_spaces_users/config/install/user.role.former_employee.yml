@@ -18,3 +18,5 @@ permissions:
   - 'update own core profile'
   - 'view own contact_data profile'
   - 'view own core profile'
+  - 'view own profile'
+  - 'view paragraph content faq'

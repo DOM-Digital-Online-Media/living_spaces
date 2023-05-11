@@ -48,4 +48,6 @@ permissions:
   - 'view latest group version'
   - 'view own unpublished group'
   - 'view published pages'
+  - 'view discussions section of a living space'
+  - 'view events section of a living space'
 is_space_admin: true
