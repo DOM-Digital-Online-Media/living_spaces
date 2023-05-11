@@ -7,6 +7,7 @@
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
@@ -48,6 +49,30 @@ function living_spaces_group_group_create_access(AccountInterface $account, arra
   }
 
   return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function living_spaces_group_query_entity_query_alter(SelectInterface $query) {
+  if ($query->getMetaData('entity_type') === 'group' && $spaces = \Drupal::config('living_spaces_group.exclude_spaces')->get('spaces')) {
+    foreach ($query->getTables() as $table => $info) {
+      if (is_array($info) && 'groups' == $info['table']) {
+        $query->join('groups_field_data', 'groups_field_data', "groups_field_data.id = {$table}.id");
+        $query->condition('groups_field_data.type', $spaces, 'NOT IN');
+        break;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function living_spaces_group_query_views_entity_query_alter(SelectInterface $query) {
+  if ($query->getMetaData('entity_type') === 'group' && $spaces = \Drupal::config('living_spaces_group.exclude_spaces')->get('spaces')) {
+    $query->condition('groups_field_data.type', $spaces, 'NOT IN');
+  }
 }
 
 /**
