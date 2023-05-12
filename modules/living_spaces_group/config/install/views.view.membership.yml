@@ -3,14 +3,10 @@ status: true
 dependencies:
   module:
     - group
-    - living_spaces_group
     - living_spaces_group_privacy
     - living_spaces_subgroup
     - living_spaces_users
     - user
-  enforced:
-    module:
-      - living_spaces_group
 id: membership
 label: Membership
 module: views

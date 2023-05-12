@@ -1,9 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  enforced:
-    module:
-      - living_spaces_group
   module:
     - user
 id: living_spaces_group_change_role_action

@@ -1,12 +1,8 @@
 langcode: en
 status: true
 dependencies:
-  enforced:
-    module:
-      - living_spaces_event
   module:
     - datetime
-    - living_spaces_event
 id: living_spaces_event.field_start_date
 field_name: field_start_date
 entity_type: living_spaces_event

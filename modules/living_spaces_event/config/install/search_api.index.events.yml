@@ -68,9 +68,7 @@ field_settings:
     datasource_id: 'entity:living_spaces_event'
     property_path: label
     type: solr_text_unstemmed
-    dependencies:
-      module:
-        - living_spaces_event
+    dependencies: {  }
   space:
     label: Space
     datasource_id: 'entity:living_spaces_event'
@@ -84,17 +82,13 @@ field_settings:
     datasource_id: 'entity:living_spaces_event'
     property_path: status
     type: boolean
-    dependencies:
-      module:
-        - living_spaces_event
+    dependencies: {  }
   type:
     label: 'Spaces event type'
     datasource_id: 'entity:living_spaces_event'
     property_path: type
     type: string
-    dependencies:
-      module:
-        - living_spaces_event
+    dependencies: {  }
 datasource_settings:
   'entity:living_spaces_event':
     bundles:

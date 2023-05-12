@@ -1,9 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  enforced:
-    module:
-      - living_spaces_event
+dependencies: {  }
 name: 'Agenda Topic Type'
 vid: agenda_topic
 description: ''

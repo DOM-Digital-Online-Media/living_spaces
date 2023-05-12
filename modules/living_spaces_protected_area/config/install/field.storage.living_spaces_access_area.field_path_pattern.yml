@@ -1,9 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  enforced:
-    module:
-      - living_spaces_protected_area
+dependencies: {  }
 id: living_spaces_access_area.field_path_pattern
 field_name: field_path_pattern
 entity_type: living_spaces_access_area

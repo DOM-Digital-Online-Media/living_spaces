@@ -1,9 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  enforced:
-    module:
-      - living_spaces_protected_area
   module:
     - options
 id: living_spaces_access_area.field_entity_type

@@ -4,7 +4,6 @@ dependencies:
   config:
     - page_manager.page.living_space_members
   module:
-    - living_spaces_group
     - living_spaces_group_privacy
 id: living_space_members-layout_builder-0
 label: 'Space Members'

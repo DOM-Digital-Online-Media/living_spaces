@@ -1,9 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  enforced:
-    module:
-      - living_spaces_event
   module:
     - entity_reference_revisions
     - node

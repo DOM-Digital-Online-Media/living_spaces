@@ -10,7 +10,6 @@ dependencies:
     - user.role.authenticated
   module:
     - group
-    - living_spaces_activity
     - message
     - message_ui
     - node

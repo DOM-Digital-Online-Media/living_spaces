@@ -1,9 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  enforced:
-    module:
-      - living_spaces_users
+dependencies: {  }
 id: client_admin
 label: Administrator
 weight: 3

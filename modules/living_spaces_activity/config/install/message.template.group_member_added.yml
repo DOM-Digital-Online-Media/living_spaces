@@ -1,9 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  enforced:
-    module:
-      - living_spaces_activity
   config:
     - filter.format.full_html
 template: group_member_added

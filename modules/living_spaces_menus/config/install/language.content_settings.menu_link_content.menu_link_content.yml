@@ -1,9 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  enforced:
-    module:
-      - living_spaces_menus
   module:
     - content_translation
     - menu_link_content

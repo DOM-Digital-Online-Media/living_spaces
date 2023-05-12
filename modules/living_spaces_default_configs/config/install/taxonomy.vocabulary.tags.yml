@@ -1,9 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  enforced:
-    module:
-      - living_spaces_default_configs
+dependencies: {  }
 name: Tags
 vid: tags
 description: 'Use tags to group articles on similar topics into categories.'

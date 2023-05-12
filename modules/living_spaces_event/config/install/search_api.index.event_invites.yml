@@ -63,8 +63,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.living_spaces_event.field_end_date
-      module:
-        - living_spaces_event
   field_start_date:
     label: 'Event » Space event » Start date'
     datasource_id: 'entity:living_spaces_event_invite'
@@ -73,40 +71,30 @@ field_settings:
     dependencies:
       config:
         - field.storage.living_spaces_event.field_start_date
-      module:
-        - living_spaces_event
   label:
     label: 'Event » Space event » Title'
     datasource_id: 'entity:living_spaces_event_invite'
     property_path: 'event:entity:label'
     type: 'solr_text_custom:ngram'
-    dependencies:
-      module:
-        - living_spaces_event
+    dependencies: {  }
   status:
     label: Status
     datasource_id: 'entity:living_spaces_event_invite'
     property_path: status
     type: integer
-    dependencies:
-      module:
-        - living_spaces_event
+    dependencies: {  }
   type:
     label: 'Event » Space event » Spaces event type'
     datasource_id: 'entity:living_spaces_event_invite'
     property_path: 'event:entity:type'
     type: string
-    dependencies:
-      module:
-        - living_spaces_event
+    dependencies: {  }
   uid:
     label: User
     datasource_id: 'entity:living_spaces_event_invite'
     property_path: uid
     type: integer
-    dependencies:
-      module:
-        - living_spaces_event
+    dependencies: {  }
   uuid:
     label: 'Status » Taxonomy term » UUID'
     datasource_id: 'entity:living_spaces_event_invite'
@@ -114,7 +102,6 @@ field_settings:
     type: string
     dependencies:
       module:
-        - living_spaces_event
         - taxonomy
 datasource_settings:
   'entity:living_spaces_event_invite': {  }

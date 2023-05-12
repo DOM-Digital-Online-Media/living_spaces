@@ -4,8 +4,6 @@ dependencies:
   config:
     - group.type.living_space
     - living_spaces_event.living_spaces_event_type.event
-  module:
-    - living_spaces_event
 id: group_content_type_433311c7ab532
 label: 'Standard: Space event (Event)'
 description: 'Adds <em class="placeholder">Event</em> space event to groups both publicly and privately.'

@@ -9,9 +9,6 @@ dependencies:
     - datetime
     - fullcalendar_view
     - search_api
-  enforced:
-    module:
-      - living_spaces_event
 id: calendar
 label: Calendar
 module: views

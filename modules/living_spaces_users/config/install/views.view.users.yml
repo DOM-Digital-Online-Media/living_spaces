@@ -1,9 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  enforced:
-    module:
-      - living_spaces_users
   config:
     - field.storage.profile.field_first_name
     - field.storage.profile.field_last_name

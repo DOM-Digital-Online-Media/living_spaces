@@ -1,9 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  enforced:
-    module:
-      - living_spaces_default_configs
+dependencies: {  }
 name: 'Restricted HTML'
 format: restricted_html
 weight: 1
