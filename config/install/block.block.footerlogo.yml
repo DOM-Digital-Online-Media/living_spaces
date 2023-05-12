@@ -1,8 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  module:
-    - living_spaces
   theme:
     - living_spaces_barrio
 id: footerlogo

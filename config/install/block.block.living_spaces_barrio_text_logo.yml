@@ -3,7 +3,6 @@ status: true
 dependencies:
   module:
     - dom_bootstrap
-    - living_spaces_group
   theme:
     - living_spaces_barrio
 id: living_spaces_barrio_text_logo

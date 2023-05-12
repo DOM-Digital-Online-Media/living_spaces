@@ -13,9 +13,6 @@ dependencies:
     - image
     - languagefield
     - layout_builder
-    - living_spaces_circles
-    - living_spaces_group
-    - living_spaces_users
     - user
     - views
   theme:

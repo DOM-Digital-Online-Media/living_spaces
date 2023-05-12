@@ -1,6 +1,6 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
   module:
     - profile
 id: profile.field_email
