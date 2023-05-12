@@ -2,7 +2,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.dip_chat_appointment.field_appointmentdate
     - field.storage.living_spaces_event.field_end_date
     - field.storage.living_spaces_event.field_start_date
     - search_api.index.event_invites_and_chat_appointments
@@ -801,7 +800,6 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
       tags:
-        - 'config:field.storage.dip_chat_appointment.field_appointmentdate'
         - 'config:field.storage.living_spaces_event.field_end_date'
         - 'config:field.storage.living_spaces_event.field_start_date'
         - 'config:search_api.index.event_invites_and_chat_appointments'
@@ -820,7 +818,6 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
       tags:
-        - 'config:field.storage.dip_chat_appointment.field_appointmentdate'
         - 'config:field.storage.living_spaces_event.field_end_date'
         - 'config:field.storage.living_spaces_event.field_start_date'
         - 'config:search_api.index.event_invites_and_chat_appointments'
