@@ -1,8 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  config:
-    - group.type.circle
   module:
     - group
     - living_spaces_group
@@ -922,18 +920,6 @@ display:
           required: false
           group_content_plugins:
             group_membership: group_membership
-            'dip_chat_appointment:chat_appointment': '0'
-            'dip_mail_shift:mail_shift': '0'
-            'group_node:agenda': '0'
-            'group_node:changelog': '0'
-            'group_node:discussion_post': '0'
-            'group_node:page': '0'
-            'group_node:protocol': '0'
-            'living_spaces_event:event': '0'
-            'living_spaces_event:general': '0'
-            'living_spaces_event:room_occupied': '0'
-            'living_spaces_event:supervision': '0'
-            'living_spaces_event:training': '0'
         gc__user:
           id: gc__user
           table: group_content_field_data
@@ -1617,8 +1603,6 @@ display:
           required: false
           group_content_plugins:
             group_membership: group_membership
-            'dip_chat_appointment:chat_appointment': '0'
-            'dip_mail_shift:mail_shift': '0'
             'group_node:agenda': '0'
             'group_node:changelog': '0'
             'group_node:discussion_post': '0'

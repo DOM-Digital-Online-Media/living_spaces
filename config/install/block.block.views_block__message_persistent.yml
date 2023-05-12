@@ -5,6 +5,7 @@ dependencies:
     - views.view.message
   module:
     - views
+    - message
   theme:
     - living_spaces_barrio
 id: views_block__message_persistent

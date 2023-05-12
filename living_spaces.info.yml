@@ -44,7 +44,6 @@ install:
   - views
   - views_ui
   # </standard profile>
-  # <dev>
   - admin_toolbar
   - admin_toolbar_tools
   - devel
@@ -54,8 +53,10 @@ install:
   - empty_fields
   - redirect
   - views_contextual_filters_or
-  # </dev>
   - easy_breadcrumb
+  - message
+  - message_ui
+  - nodejs
   - language
   - locale
   - content_translation
