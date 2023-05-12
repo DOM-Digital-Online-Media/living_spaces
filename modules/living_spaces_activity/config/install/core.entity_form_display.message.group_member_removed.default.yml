@@ -5,8 +5,6 @@ dependencies:
     - field.field.message.group_member_removed.field_group_label
     - field.field.message.group_member_removed.field_related_space
     - message.template.group_member_removed
-_core:
-  default_config_hash: dHj0dyD5fSWFHBFIj3j66JSM3Mq6I8h_liFdnYk28wg
 id: message.group_member_removed.default
 targetEntityType: message
 bundle: group_member_removed

@@ -112,8 +112,6 @@ status_canceled:
     --  [site:name] team
   subject: 'Account details for [user:display-name] at [site:name] (canceled)'
 langcode: en
-_core:
-  default_config_hash: XcgosOepJxgEPlITLHaf0iS0kKeA_-Zus_XcQGrN-Rg
 email_admin_created_no_email:
   subject: 'Account details for [user:display-name] at [site:name]'
   body: "You have created an account for [user:display-name]. One time login link for the user:\r\n\r\n[user:one-time-login-url]\r\n\r\nThis link can only be used once to log in and will lead the user to a page where the user can set their password.\r\n\r\n--  [site:name] team"

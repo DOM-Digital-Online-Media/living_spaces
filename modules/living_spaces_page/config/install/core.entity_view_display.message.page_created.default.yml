@@ -7,8 +7,6 @@ dependencies:
     - message.template.page_created
   module:
     - user
-_core:
-  default_config_hash: qdXC8c7Wa2RJaX7OJf1AOZ7uB8AbdBecU-xlw4hVbYQ
 id: message.page_created.default
 targetEntityType: message
 bundle: page_created

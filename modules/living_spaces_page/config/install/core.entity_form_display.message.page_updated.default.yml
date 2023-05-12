@@ -5,8 +5,6 @@ dependencies:
     - field.field.message.page_updated.field_page
     - field.field.message.page_updated.field_related_space
     - message.template.page_updated
-_core:
-  default_config_hash: HeRAywKnEBKaK83ciTfCq-PpQ2AcnWLfPTsPHS3yDsE
 id: message.page_updated.default
 targetEntityType: message
 bundle: page_updated

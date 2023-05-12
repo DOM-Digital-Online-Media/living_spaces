@@ -7,8 +7,6 @@ dependencies:
     - message.template.group_content_created
   module:
     - user
-_core:
-  default_config_hash: n210nev18vUeyrECR2Rqxr7Gqkw-AyFgkB6wtp9ku30
 id: message.group_content_created.default
 targetEntityType: message
 bundle: group_content_created
