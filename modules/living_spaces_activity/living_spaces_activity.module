@@ -102,9 +102,11 @@ function living_spaces_activity_views_pre_render(ViewExecutable $view) {
  * Implements hook_ENTITY_TYPE_alter().
  */
 function living_spaces_activity_entity_type_alter(&$entity_types) {
-  $configs = $entity_types['message_template']->get('config_export');
-  $configs[] = 'category';
-  $entity_types['message_template']->set('config_export', $configs);
+  if (isset($entity_types['message_template'])) {
+    $configs = $entity_types['message_template']->get('config_export');
+    $configs[] = 'category';
+    $entity_types['message_template']->set('config_export', $configs);
+  }
 }
 
 /**

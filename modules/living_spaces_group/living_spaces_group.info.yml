@@ -24,6 +24,7 @@ dependencies:
   - system
   - image
   - search_api
+  - role_delegation
 
 default_content:
   menu_link_content:
