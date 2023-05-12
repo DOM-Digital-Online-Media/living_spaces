@@ -70,26 +70,26 @@ install:
   - site_settings_type_permissions
   - dom_paragraphs_extra
   - dom_faq
-  - living_spaces_default_configs
-  - living_spaces_users
-  - living_spaces_group
-  - living_spaces_sections
-  - living_spaces_discussions
-  - living_spaces_activity
-  - living_spaces_page
-  - living_spaces_default
-  - living_spaces_subgroup
-  - living_spaces_entity_extra
-  - living_spaces_group_privacy
-  - living_spaces_simple_permissions
-  - living_spaces_intranet
   - dom_field_extra
-  - living_spaces_faq
-  - living_spaces_circles
+  - living_spaces_activity
   - living_spaces_changelog
+  - living_spaces_circles
+  - living_spaces_default
+  - living_spaces_default_configs
+  - living_spaces_discussions
+  - living_spaces_entity_extra
   - living_spaces_event
+  - living_spaces_faq
+  - living_spaces_group
+  - living_spaces_group_privacy
+  - living_spaces_intranet
   - living_spaces_menus
+  - living_spaces_page
   - living_spaces_protected_area
+  - living_spaces_sections
+  - living_spaces_simple_permissions
+  - living_spaces_subgroup
+  - living_spaces_users
 
 themes:
   - living_spaces_barrio
