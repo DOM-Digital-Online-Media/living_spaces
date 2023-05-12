@@ -1,4 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.full_html
+template: user_removed_from_invite_list
+label: 'User was removed from the invite list'
+description: ''
 text:
   -
     value: '<p>You have been removed from the event [message:field_event:entity:label]. <a href="[message:field_event:entity:url]">Click here to go to the event.</a></p>'
     format: full_html
+settings:
+  'token options':
+    clear: false
+    'token replace': true
+  purge_override: false
+  purge_methods: {  }
+category: 5538078f-4a95-4e4c-9924-85d05b924894
