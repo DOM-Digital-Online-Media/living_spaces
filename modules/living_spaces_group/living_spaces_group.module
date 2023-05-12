@@ -177,12 +177,12 @@ function living_spaces_group_group_content_presave(EntityInterface $entity) {
 function living_spaces_group_entity_base_field_info(EntityTypeInterface $entity_type) {
   $fields = [];
 
-  $entity_types = Drupal::service('living_spaces_group.manager')->getEntityTypesOfLivingSpaceGroupTypes();
+  /** @var \Drupal\living_spaces_group\LivingSpacesGroupManagerInterface $living_space_manager */
+  $living_space_manager = \Drupal::service('living_spaces_group.manager');
+  $entity_types = $living_space_manager->getEntityTypesOfLivingSpaceGroupTypes();
+
   // Add field 'space' to all entity types except 'user'.
-  if (
-    $entity_type->id() !== 'user'
-    && in_array($entity_type->id(), $entity_types)
-  ) {
+  if ($entity_type->id() !== 'user' && in_array($entity_type->id(), $entity_types)) {
     $fields['space'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Space'))
       ->setSetting('target_type', 'group')
