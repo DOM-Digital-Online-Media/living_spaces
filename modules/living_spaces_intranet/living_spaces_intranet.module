@@ -319,8 +319,11 @@ function living_spaces_intranet_entity_field_access_alter(array &$grants, array 
  * Implements hook_form_FORM_ID_alter().
  */
 function living_spaces_intranet_form_user_employee_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if (!empty($form['account']['mail']) && \Drupal::config('user.settings')->get('employee_required_mail')) {
-    $form['account']['mail']['#required'] = TRUE;
+  if (
+    !empty($form['account']['mail']) &&
+    (\Drupal::config('user.settings')->get('employee_required_mail') || !\Drupal::currentUser()->getEmail())
+  ) {
+    $form['account']['mail']['#element_validate'] = ['_living_spaces_intranet_user_employee_email_validate'];
   }
 
   $form['account']['pass']['#required'] = FALSE;
@@ -330,6 +333,16 @@ function living_spaces_intranet_form_user_employee_form_alter(&$form, FormStateI
   $form['account']['notify']['#access'] = FALSE;
 
   $form['actions']['submit']['#submit'][] = 'living_spaces_intranet_employee_form_submit';
+}
+
+/**
+ * Empty email field validation.
+ */
+function _living_spaces_intranet_user_employee_email_validate($element, $form_state) {
+  $value = $form_state->getValue($element['#parents']);
+  if (empty($value)) {
+    $form_state->setError($element, t('Email field is required.'));
+  }
 }
 
 /**
