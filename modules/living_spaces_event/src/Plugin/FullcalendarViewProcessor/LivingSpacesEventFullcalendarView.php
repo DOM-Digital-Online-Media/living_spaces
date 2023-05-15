@@ -93,7 +93,7 @@ class LivingSpacesEventFullcalendarView extends PluginBase implements Fullcalend
         }
 
         $options = Json::decode($data['calendar_options']);
-        foreach ($options['events'] as $i => &$event) {
+        foreach ($options['events'] ?? [] as $i => &$event) {
           $entity = $variables['rows'][$i]->_entity ?? NULL;
           if ($entity instanceof LivingSpaceEventInterface) {
             $event['className'] = $entity->bundle();
