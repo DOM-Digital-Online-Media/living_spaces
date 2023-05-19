@@ -49,18 +49,20 @@ class LivingSpacesGroupPrivacyGroupQueryAccessHandler extends GroupQueryAccessHa
     $calculated_permissions = $this->groupPermissionCalculator->calculatePermissions($account);
     $allowed_ids = $allowed_any_by_status_ids = $allowed_own_by_status_ids = $member_group_ids = [];
     $check_published = $operation === 'view';
+
+    $query = $this->database->select('groups_field_data', 'gfd');
+    $query->fields('gfd', ['id', 'type', 'living_space_privacy']);
+    $query->distinct();
+    $query->condition('gfd.living_space_privacy', NULL, 'IS NOT NULL');
+    $results = $query->execute()->fetchAll();
+
     foreach ($calculated_permissions->getItems() as $item) {
       $identifier = $item->getIdentifier();
       $scope = $item->getScope();
 
-      if ($scope === CGPII::SCOPE_GROUP_TYPE) {
-        $query = $this->database->select('groups_field_data', 'gfd');
-        $query->fields('gfd', ['id', 'living_space_privacy']);
-        $query->condition('gfd.type', $identifier);
-        $query->condition('gfd.living_space_privacy', NULL, 'IS NOT NULL');
-
-        if ($results = $query->execute()->fetchAll()) {
-          foreach ($results as $result) {
+      if ($scope === CGPII::SCOPE_GROUP_TYPE && $results) {
+        foreach ($results as $result) {
+          if ($result->type == $identifier) {
             $living_space_privacy = $result->living_space_privacy;
             if (!$check_published && $item->hasPermission("{$operation} {$living_space_privacy} group")) {
               $allowed_ids['group'][] = $result->id;
