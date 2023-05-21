@@ -11,7 +11,7 @@ label: 'Group member has been removed'
 description: ''
 text:
   -
-    value: "<p>You were removed from space [message:field_group_label].</p>\r\n"
+    value: "<p>[message:greeting] removed from space [message:field_group_label].</p>\r\n"
     format: full_html
 settings:
   'token options':
