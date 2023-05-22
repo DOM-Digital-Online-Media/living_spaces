@@ -1,0 +1,18 @@
+uuid: 5da58e0f-14b8-4ce7-8e87-764d27667525
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.content_type.living_space-group_node-protocol
+id: group_content.living_space-group_node-protocol.label
+field_name: label
+entity_type: group_content
+bundle: living_space-group_node-protocol
+label: Title
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

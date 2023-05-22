@@ -1,0 +1,20 @@
+uuid: 3af11e35-764e-4a09-bca9-f77ac5bf93ea
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.project_space
+  module:
+    - path
+id: group.project_space.path
+field_name: path
+entity_type: group
+bundle: project_space
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

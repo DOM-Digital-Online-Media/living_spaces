@@ -1,0 +1,20 @@
+uuid: 1e62531f-b904-4485-99b4-11dea6ddd154
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.content_type.project_space-group_membership
+  module:
+    - path
+id: group_content.project_space-group_membership.path
+field_name: path
+entity_type: group_content
+bundle: project_space-group_membership
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

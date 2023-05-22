@@ -1,0 +1,20 @@
+uuid: c2dd244b-5877-434c-a4b9-972ad9d8314d
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.content_type.living_space-group_node-protocol
+id: group_content.living_space-group_node-protocol.uid
+field_name: uid
+entity_type: group_content
+bundle: living_space-group_node-protocol
+label: 'Group content creator'
+description: 'The username of the group content creator.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\group\Entity\GroupContent::getDefaultEntityOwner'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

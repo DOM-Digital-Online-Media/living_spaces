@@ -1,0 +1,20 @@
+uuid: 10b217b2-4956-44bb-8e55-eec2887b75d0
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.project_space
+id: group.project_space.uid
+field_name: uid
+entity_type: group
+bundle: project_space
+label: 'Group creator'
+description: 'The username of the group creator.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\group\Entity\Group::getDefaultEntityOwner'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

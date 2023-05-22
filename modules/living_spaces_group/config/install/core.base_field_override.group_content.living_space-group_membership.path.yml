@@ -1,0 +1,20 @@
+uuid: 84b59b36-8ac3-4a30-9342-d0375ff1aa7a
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.content_type.living_space-group_membership
+  module:
+    - path
+id: group_content.living_space-group_membership.path
+field_name: path
+entity_type: group_content
+bundle: living_space-group_membership
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path
