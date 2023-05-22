@@ -24,20 +24,15 @@ function living_spaces_activity_token_info() {
 function living_spaces_activity_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
   $replacements = [];
 
-  // $type = "entity"
-  // $data['entity_type'] = "message"
-  // $data['entity']
-
   if ($type == 'message' && !empty($data[$type])) {
     /** @var \Drupal\message\MessageInterface $message */
     $message = $data[$type];
 
     foreach ($tokens as $name => $original) {
       if ('greeting' == $name) {
-        if ($message->hasField('uid') && $message->uid->target_id !== \Drupal::currentUser()->id()) {
+        if ($message->getOwnerId() !== \Drupal::currentUser()->id()) {
           /** @var \Drupal\user\UserInterface $user */
-          $user = $message->uid->entity;
-          $replacements[$original] = $user->getAccountName() . ' ' . t('was');
+          $replacements[$original] = $message->getOwner()->getAccountName() . ' ' . t('was');
         }
         else {
           $replacements[$original] = t('You were');
