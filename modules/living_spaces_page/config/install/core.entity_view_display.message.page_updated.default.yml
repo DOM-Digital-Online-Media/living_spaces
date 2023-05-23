@@ -7,8 +7,6 @@ dependencies:
     - message.template.page_updated
   module:
     - user
-_core:
-  default_config_hash: Btu_pFXb3g1LAWRj9UQU_JUcm5h62_8MLZvBOrp76IE
 id: message.page_updated.default
 targetEntityType: message
 bundle: page_updated

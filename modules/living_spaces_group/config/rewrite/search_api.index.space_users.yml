@@ -7,17 +7,13 @@ field_settings:
     datasource_id: 'entity:user'
     property_path: joined_spaces
     type: solr_text_unstemmed
-    dependencies:
-      module:
-        - living_spaces_group
+    dependencies: {  }
   joined_spaces_ids:
     label: Spaces
     datasource_id: 'entity:user'
     property_path: joined_spaces
     type: integer
-    dependencies:
-      module:
-        - living_spaces_group
+    dependencies: {  }
   label:
     label: 'Spaces » Group » Title'
     datasource_id: 'entity:user'
@@ -26,7 +22,6 @@ field_settings:
     dependencies:
       module:
         - group
-        - living_spaces_group
   ngram_label:
     label: 'Spaces » Group » Title'
     datasource_id: 'entity:user'
@@ -35,4 +30,3 @@ field_settings:
     dependencies:
       module:
         - group
-        - living_spaces_group

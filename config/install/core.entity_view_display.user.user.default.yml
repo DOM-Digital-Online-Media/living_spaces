@@ -13,9 +13,6 @@ dependencies:
     - image
     - languagefield
     - layout_builder
-    - living_spaces_circles
-    - living_spaces_group
-    - living_spaces_users
     - user
     - views
   theme:
@@ -219,8 +216,6 @@ third_party_settings:
             additional: {  }
             weight: 2
         third_party_settings: {  }
-_core:
-  default_config_hash: V51QPCKkgNREKtSmB9Iu2wmAMEpktVpnzklWaZV8UYo
 id: user.user.default
 targetEntityType: user
 bundle: user

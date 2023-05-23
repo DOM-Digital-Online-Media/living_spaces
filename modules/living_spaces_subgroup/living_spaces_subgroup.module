@@ -30,8 +30,10 @@ function living_spaces_subgroup_module_implements_alter(&$implementations, $hook
  * Implements hook_entity_type_alter().
  */
 function living_spaces_subgroup_entity_type_alter(array &$entity_types) {
-  /** @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
-  $entity_types['group']->setAccessClass(LivingSpacesSubgroupAccessControlHandler::class);
+  if (isset($entity_types['group'])) {
+    /** @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+    $entity_types['group']->setAccessClass(LivingSpacesSubgroupAccessControlHandler::class);
+  }
 }
 
 /**

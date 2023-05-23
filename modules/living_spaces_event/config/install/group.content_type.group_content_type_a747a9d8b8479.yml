@@ -4,8 +4,6 @@ dependencies:
   config:
     - group.type.living_space
     - living_spaces_event.living_spaces_event_type.supervision
-  module:
-    - living_spaces_event
 id: group_content_type_a747a9d8b8479
 label: 'Standard: Space event (Supervision)'
 description: 'Adds <em class="placeholder">Supervision</em> space event to groups both publicly and privately.'

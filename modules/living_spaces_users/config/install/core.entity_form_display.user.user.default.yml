@@ -11,9 +11,6 @@ dependencies:
     - image
     - path
     - user
-  enforced:
-    module:
-      - living_spaces_users
 id: user.user.default
 targetEntityType: user
 bundle: user

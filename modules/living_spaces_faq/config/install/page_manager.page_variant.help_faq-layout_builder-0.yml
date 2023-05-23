@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - page_manager.page.help_faq
+    - views.view.intranet_faq
 id: help_faq-layout_builder-0
 label: Page
 variant: layout_builder

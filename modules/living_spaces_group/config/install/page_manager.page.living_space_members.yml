@@ -1,9 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  enforced:
-    module:
-      - living_spaces_group
+dependencies: {  }
 id: living_space_members
 label: Members
 description: ''

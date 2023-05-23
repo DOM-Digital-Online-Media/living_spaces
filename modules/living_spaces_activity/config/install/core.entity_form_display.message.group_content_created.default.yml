@@ -5,8 +5,6 @@ dependencies:
     - field.field.message.group_content_created.field_group_content
     - field.field.message.group_content_created.field_related_space
     - message.template.group_content_created
-_core:
-  default_config_hash: Sh-DFCI1qYiCuZqUS6614FsTs7vaA_2cNuTrCvKqnY0
 id: message.group_content_created.default
 targetEntityType: message
 bundle: group_content_created

@@ -8,8 +8,6 @@ dependencies:
     - message.template.group_member_added
   module:
     - user
-_core:
-  default_config_hash: MlUA4dalTUfmcq0Wybo6hrQgKbQSjYYeqtWrVG94IP8
 id: message.group_member_added.default
 targetEntityType: message
 bundle: group_member_added

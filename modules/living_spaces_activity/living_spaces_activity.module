@@ -8,6 +8,7 @@
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\field\FieldConfigInterface;
 use Drupal\group\Entity\GroupContentInterface;
 use Drupal\group\Entity\GroupInterface;
 use Drupal\message\Entity\Message;
@@ -33,6 +34,26 @@ function living_spaces_activity_entity_base_field_info(EntityTypeInterface $enti
   }
 
   return $fields;
+}
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function living_spaces_activity_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle) {
+  if ('message' == $entity_type->id() && isset($fields['field_related_space'])) {
+    /** @var \Drupal\field\FieldConfigInterface $related_spaces */
+    $related_spaces = $fields['field_related_space'];
+    $settings = $related_spaces->getSettings();
+
+    $bundles = [];
+    /** @var \Drupal\group\Entity\GroupTypeInterface $group_type */
+    foreach (\Drupal::entityTypeManager()->getStorage('group_type')->loadMultiple() as $group_type) {
+      $bundles[$group_type->id()] = $group_type->id();
+    }
+
+    $settings['handler_settings']['target_bundles'] = $bundles;
+    $fields['field_related_space']->setSettings($settings);
+  }
 }
 
 /**
@@ -81,9 +102,11 @@ function living_spaces_activity_views_pre_render(ViewExecutable $view) {
  * Implements hook_ENTITY_TYPE_alter().
  */
 function living_spaces_activity_entity_type_alter(&$entity_types) {
-  $configs = $entity_types['message_template']->get('config_export');
-  $configs[] = 'category';
-  $entity_types['message_template']->set('config_export', $configs);
+  if (isset($entity_types['message_template'])) {
+    $configs = $entity_types['message_template']->get('config_export');
+    $configs[] = 'category';
+    $entity_types['message_template']->set('config_export', $configs);
+  }
 }
 
 /**

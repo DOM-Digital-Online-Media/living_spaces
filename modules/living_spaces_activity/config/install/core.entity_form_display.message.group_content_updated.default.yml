@@ -5,8 +5,6 @@ dependencies:
     - field.field.message.group_content_updated.field_group_content
     - field.field.message.group_content_updated.field_related_space
     - message.template.group_content_updated
-_core:
-  default_config_hash: COMy7AcVXCtPNsu5q0s6fbFBVAgq1cBIeQJXVhsrrpg
 id: message.group_content_updated.default
 targetEntityType: message
 bundle: group_content_updated

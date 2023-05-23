@@ -1,9 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  enforced:
-    module:
-      - living_spaces_discussions
   config:
     - field.storage.node.body
     - node.type.discussion_post

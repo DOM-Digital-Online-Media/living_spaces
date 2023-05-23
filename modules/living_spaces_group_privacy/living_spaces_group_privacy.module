@@ -21,7 +21,9 @@ define('LIVING_SPACES_PRIVACY_PUBLIC_GROUP', 1);
  * Implements hook_entity_type_alter().
  */
 function living_spaces_group_privacy_entity_type_alter(&$entity_types) {
-  $entity_types['group']->setHandlerClass('query_access', 'Drupal\living_spaces_group_privacy\Access\LivingSpacesGroupPrivacyGroupQueryAccessHandler');
+  if (isset($entity_types['group'])) {
+    $entity_types['group']->setHandlerClass('query_access', 'Drupal\living_spaces_group_privacy\Access\LivingSpacesGroupPrivacyGroupQueryAccessHandler');
+  }
 }
 
 /**

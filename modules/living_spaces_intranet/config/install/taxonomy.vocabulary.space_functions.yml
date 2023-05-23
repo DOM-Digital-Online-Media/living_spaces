@@ -1,9 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  enforced:
-    module:
-      - living_spaces_intranet
+dependencies: {  }
 name: 'Space functions'
 vid: space_functions
 description: ''

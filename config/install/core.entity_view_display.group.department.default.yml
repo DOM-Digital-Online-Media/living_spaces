@@ -11,8 +11,6 @@ dependencies:
     - views.view.recent_discussions
   module:
     - layout_builder
-    - living_spaces_group
-    - living_spaces_subgroup
     - options
     - views
   theme:

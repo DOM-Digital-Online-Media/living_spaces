@@ -23,4 +23,8 @@ permissions:
   - 'view living_spaces_event:supervision entity'
   - 'view living_spaces_event:training content'
   - 'view living_spaces_event:training entity'
+  - 'create group_node:discussion_post entity'
+  - 'delete own group_node:discussion_post entity'
+  - 'update own group_node:discussion_post entity'
+  - 'view group_node:discussion_post entity'
 is_space_admin: false

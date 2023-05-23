@@ -430,7 +430,9 @@ function living_spaces_event_user_delete(UserInterface $user) {
  * Implements hook_entity_bundle_info_alter().
  */
 function living_spaces_event_entity_bundle_info_alter(&$bundles) {
-  $bundles['living_spaces_section']['events']['class'] = 'Drupal\living_spaces_event\Entity\LivingSpacesEvents';
+  if (isset($bundles['living_spaces_section']['events'])) {
+    $bundles['living_spaces_section']['events']['class'] = 'Drupal\living_spaces_event\Entity\LivingSpacesEvents';
+  }
 }
 
 /**

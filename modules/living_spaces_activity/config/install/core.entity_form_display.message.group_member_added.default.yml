@@ -6,8 +6,6 @@ dependencies:
     - field.field.message.group_member_added.field_group_label
     - field.field.message.group_member_added.field_related_space
     - message.template.group_member_added
-_core:
-  default_config_hash: Nms9yoCCdIi8GmePlchxii7oWT7kABc13UF4G6I3W8c
 id: message.group_member_added.default
 targetEntityType: message
 bundle: group_member_added

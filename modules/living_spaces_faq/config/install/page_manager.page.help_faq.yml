@@ -1,9 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  enforced:
-    module:
-      - living_spaces_faq
   module:
     - user_permission_condition
 id: help_faq

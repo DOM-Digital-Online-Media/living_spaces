@@ -7,8 +7,6 @@ dependencies:
     - message.template.group_member_removed
   module:
     - user
-_core:
-  default_config_hash: OxXUDamjN-y_FLRxQKpVQaCWMRdm9yUxtIvVigAWjwE
 id: message.group_member_removed.default
 targetEntityType: message
 bundle: group_member_removed

@@ -19,7 +19,9 @@ use \Drupal\comment\CommentInterface;
  * Implements hook_entity_bundle_info_alter().
  */
 function living_spaces_discussions_entity_bundle_info_alter(&$bundles) {
-  $bundles['living_spaces_section']['discussions']['class'] = 'Drupal\living_spaces_discussions\Entity\LivingSpacesDiscussions';
+  if (isset($bundles['living_spaces_section']['discussions'])) {
+    $bundles['living_spaces_section']['discussions']['class'] = 'Drupal\living_spaces_discussions\Entity\LivingSpacesDiscussions';
+  }
 }
 
 /**

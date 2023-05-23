@@ -4,8 +4,6 @@ dependencies:
   config:
     - group.type.living_space
     - living_spaces_event.living_spaces_event_type.room_occupied
-  module:
-    - living_spaces_event
 id: group_content_type_c618dad3b19f9
 label: 'Standard: Space event (Room occupied)'
 description: 'Adds <em class="placeholder">Room occupied</em> space event to groups both publicly and privately.'

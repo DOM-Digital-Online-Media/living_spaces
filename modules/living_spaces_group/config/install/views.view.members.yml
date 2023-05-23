@@ -6,12 +6,8 @@ dependencies:
     - group.content_type.living_space-group_membership
   module:
     - group
-    - living_spaces_group
     - role_delegation
     - user
-  enforced:
-    module:
-      - living_spaces_group
 id: members
 label: Members
 module: views

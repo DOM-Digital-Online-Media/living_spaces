@@ -3,22 +3,19 @@ status: true
 dependencies:
   module:
     - options
-    - profile
-id: profile.field_gender
-field_name: field_gender
-entity_type: profile
+    - taxonomy
+id: taxonomy_term.field_availability
+field_name: field_availability
+entity_type: taxonomy_term
 type: list_string
 settings:
   allowed_values:
     -
-      value: m
-      label: Male
+      value: i
+      label: intranet
     -
-      value: f
-      label: Female
-    -
-      value: 'n'
-      label: 'Non-binary gender'
+      value: w
+      label: website
   allowed_values_function: ''
 module: options
 locked: false

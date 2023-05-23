@@ -1,8 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  module:
-    - living_spaces_users
   theme:
     - living_spaces_barrio
 id: living_spaces_barrio_user_notifications

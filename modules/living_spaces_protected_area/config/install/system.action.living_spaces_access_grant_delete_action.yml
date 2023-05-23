@@ -1,9 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  enforced:
-    module:
-      - living_spaces_protected_area
+dependencies: {  }
 id: living_spaces_access_grant_delete_action
 label: 'Deactivate access grant'
 type: living_spaces_access_grant

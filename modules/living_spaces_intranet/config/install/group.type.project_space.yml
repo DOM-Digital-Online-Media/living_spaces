@@ -1,9 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  enforced:
-    module:
-      - living_spaces_intranet
+dependencies: {  }
 id: project_space
 label: 'Project space'
 description: 'Group type that provides all features of Standard type with additional permissions for space administrators.'

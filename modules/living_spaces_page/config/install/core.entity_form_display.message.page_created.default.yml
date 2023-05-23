@@ -5,8 +5,6 @@ dependencies:
     - field.field.message.page_created.field_page
     - field.field.message.page_created.field_related_space
     - message.template.page_created
-_core:
-  default_config_hash: ZUIy2v121OmMBOuNjuBneQkVqyCV4tF1aJ6zfMa6Tt8
 id: message.page_created.default
 targetEntityType: message
 bundle: page_created
