@@ -6,7 +6,6 @@ dependencies:
     - message.template.group_member_removed
     - message.template.persistent
     - message.template.user_invited_to_the_event
-    - message.template.user_removed_from_invite_list
     - message.template.user_sent_event_invitation
     - user.role.authenticated
   module:
@@ -15,8 +14,6 @@ dependencies:
     - message_ui
     - node
     - user
-_core:
-  default_config_hash: GKrcfaIe9qBlUC4cSTPci6aze8glF3EohYpBrN0chic
 id: message
 label: Message
 module: views
@@ -1797,42 +1794,6 @@ display:
           validate_options: {  }
           break_phrase: false
           not: false
-        uid:
-          id: uid
-          table: message_field_data
-          field: uid
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: message
-          entity_field: uid
-          plugin_id: numeric
-          default_action: default
-          exception:
-            value: all
-            title_enable: false
-            title: All
-          title_enable: false
-          title: ''
-          default_argument_type: current_user
-          default_argument_options: {  }
-          default_argument_skip_url: false
-          summary_options:
-            base_path: ''
-            count: true
-            override: false
-            items_per_page: 25
-          summary:
-            sort_order: asc
-            number_of_records: 0
-            format: default_summary
-          specify_validation: false
-          validate:
-            type: none
-            fail: 'not found'
-          validate_options: {  }
-          break_phrase: false
-          not: false
       filters: {  }
       filter_groups:
         operator: AND
@@ -1900,7 +1861,6 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user
         - user.permissions
       tags: {  }
   user_notifications:
@@ -2155,7 +2115,6 @@ display:
             persistent: persistent
             user_invited_to_the_event: user_invited_to_the_event
             user_sent_event_invitation: user_sent_event_invitation
-            user_removed_from_invite_list: user_removed_from_invite_list
           group: 1
           exposed: false
           expose:

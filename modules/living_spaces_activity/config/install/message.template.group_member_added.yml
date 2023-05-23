@@ -8,7 +8,7 @@ label: 'Group member has been added'
 description: ''
 text:
   -
-    value: "<p><a href=\"[message:field_group_content:entity:group:url]\">You were added to space [message:field_group_label].</a></p>\r\n"
+    value: "<p><a href=\"[message:field_group_content:entity:group:url]\">[message:greeting] added to space [message:field_group_label].</a></p>\r\n"
     format: full_html
 settings:
   'token options':
