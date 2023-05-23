@@ -1,0 +1,22 @@
+uuid: c27feb02-00ce-4520-be33-7b43cb4f3f31
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department
+id: group.department.status
+field_name: status
+entity_type: group
+bundle: department
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

@@ -1,0 +1,18 @@
+uuid: 725c36c4-e714-47a5-8759-425dfb3c6425
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.content_type.department-group_node-protocol
+id: group_content.department-group_node-protocol.created
+field_name: created
+entity_type: group_content
+bundle: department-group_node-protocol
+label: 'Created on'
+description: 'The time that the group content was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

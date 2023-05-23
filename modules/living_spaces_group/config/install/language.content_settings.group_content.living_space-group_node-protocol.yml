@@ -1,0 +1,18 @@
+uuid: ffed2291-64b6-4fe4-ba97-786cdb3dec50
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.content_type.living_space-group_node-protocol
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: group_content.living_space-group_node-protocol
+target_entity_type_id: group_content
+target_bundle: living_space-group_node-protocol
+default_langcode: site_default
+language_alterable: false

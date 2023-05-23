@@ -1,0 +1,18 @@
+uuid: cf303a34-4cd9-4662-8b34-ca325479ba22
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.content_type.living_space-group_node-protocol
+id: group_content.living_space-group_node-protocol.created
+field_name: created
+entity_type: group_content
+bundle: living_space-group_node-protocol
+label: 'Created on'
+description: 'The time that the group content was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

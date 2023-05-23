@@ -1,0 +1,18 @@
+uuid: af9bf825-312b-4700-b0f5-995e85f0da51
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.content_type.department-group_node-protocol
+id: group_content.department-group_node-protocol.label
+field_name: label
+entity_type: group_content
+bundle: department-group_node-protocol
+label: Title
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

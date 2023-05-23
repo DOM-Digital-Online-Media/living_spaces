@@ -1,0 +1,18 @@
+uuid: f6a14c28-68ba-463f-b742-e887aadc404a
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.content_type.project_space-group_node-agenda
+id: group_content.project_space-group_node-agenda.label
+field_name: label
+entity_type: group_content
+bundle: project_space-group_node-agenda
+label: Title
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

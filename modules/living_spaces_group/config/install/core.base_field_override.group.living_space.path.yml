@@ -1,0 +1,20 @@
+uuid: ee300d2a-826a-44c0-80f6-587fbde77817
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.living_space
+  module:
+    - path
+id: group.living_space.path
+field_name: path
+entity_type: group
+bundle: living_space
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

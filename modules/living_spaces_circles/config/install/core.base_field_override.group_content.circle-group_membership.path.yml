@@ -1,0 +1,20 @@
+uuid: 3d30bea4-dc2e-4fcb-8f62-da6e871aef99
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.content_type.circle-group_membership
+  module:
+    - path
+id: group_content.circle-group_membership.path
+field_name: path
+entity_type: group_content
+bundle: circle-group_membership
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

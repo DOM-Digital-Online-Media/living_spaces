@@ -1,0 +1,18 @@
+uuid: ea4215e5-75df-4e9d-9db3-5c306c339a61
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.content_type.living_space-group_node-protocol
+id: group_content.living_space-group_node-protocol.changed
+field_name: changed
+entity_type: group_content
+bundle: living_space-group_node-protocol
+label: 'Changed on'
+description: 'The time that the group content was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

@@ -1,0 +1,18 @@
+uuid: 09bc8e0e-a2d4-44fd-8d86-548fd8a29a92
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.content_type.department-group_membership
+id: group_content.department-group_membership.label
+field_name: label
+entity_type: group_content
+bundle: department-group_membership
+label: Title
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,18 @@
+uuid: d7eefcb3-213f-45bd-927c-c838574bf8d9
+langcode: de
+status: true
+dependencies:
+  config:
+    - group.type.project_space
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+    bundle_settings:
+      untranslatable_fields_hide: '1'
+id: group.project_space
+target_entity_type_id: group
+target_bundle: project_space
+default_langcode: site_default
+language_alterable: false
