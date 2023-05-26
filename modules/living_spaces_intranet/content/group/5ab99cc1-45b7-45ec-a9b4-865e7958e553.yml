@@ -45,4 +45,3 @@ default:
   allow_admins_to_edit_members:
     -
       value: true
-
