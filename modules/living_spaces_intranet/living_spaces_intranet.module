@@ -328,6 +328,8 @@ function living_spaces_intranet_form_user_employee_form_alter(&$form, FormStateI
     $form['account']['mail']['#element_validate'] = ['_living_spaces_intranet_user_employee_email_validate'];
   }
 
+  $form['#attributes']['data-user-info-from-browser'] = FALSE;
+
   $form['account']['pass']['#required'] = FALSE;
   $form['account']['pass']['#access'] = FALSE;
 
