@@ -52,6 +52,33 @@ function living_spaces_group_group_create_access(AccountInterface $account, arra
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_group_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\views\ViewExecutable $view */
+  $view = $form_state->get('view');
+
+  /** @var \Drupal\views\Plugin\views\filter\Bundle $filter */
+  foreach ($view->filter as $name => $filter) {
+    if ('group' == $filter->getEntityType() &&
+      'type' == $filter->field &&
+      $filter->options['exposed']
+    ) {
+      $id = $filter->options['expose']['identifier'];
+
+      // Remove excluded bundles from exposed filters.
+      if (isset($form[$id]['#options']) && $spaces = \Drupal::config('living_spaces_group.exclude_spaces')->get('spaces')) {
+        foreach ($form[$id]['#options'] as $bundle => $option) {
+          if (in_array($bundle, $spaces)) {
+            unset($form[$id]['#options'][$bundle]);
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_query_TAG_alter().
  */
 function living_spaces_group_query_entity_query_alter(SelectInterface $query) {
