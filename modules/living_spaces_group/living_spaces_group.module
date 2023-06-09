@@ -24,6 +24,8 @@ use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Link;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_ENTITY_TYPE_access().
@@ -279,11 +281,64 @@ function living_spaces_group_entity_base_field_info(EntityTypeInterface $entity_
     $fields['joined_spaces'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Spaces'))
       ->setSetting('target_type', 'group')
+      ->setSetting('handler', 'views')
+      ->setSetting('handler_settings', [
+        'view' => [
+          'view_name' => 'groups',
+          'display_name' => 'spaces_to_join',
+        ],
+      ])
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
-      ->setTranslatable(FALSE);
+      ->setTranslatable(FALSE)
+      ->setDisplayConfigurable('form', TRUE);
   }
 
   return $fields;
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function living_spaces_group_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+  if ('groups' == $view->id() && 'spaces_to_join' == $view->current_display) {
+    $current_user = Drupal::currentUser();
+    if ($current_user->hasPermission('add members to any space')) {
+      foreach ($query->where as &$condition_group) {
+        foreach ($condition_group['conditions'] as $key => $condition) {
+          if ($condition['field'] == 'groups_field_data.id' && $condition['operator'] == 'IN') {
+            unset($condition_group['conditions'][$key]);
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_group_form_user_employee_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $current_user = Drupal::currentUser();
+  if (
+    isset($form['joined_spaces']) &&
+    !$current_user->hasPermission('add members to any space') &&
+    !$current_user->hasPermission('add members to administered space')
+  ) {
+    $form['joined_spaces']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_group_user_insert(UserInterface $user) {
+  $space_ids = array_column($user->get('joined_spaces')->getValue(), 'target_id');
+  $groups = \Drupal::entityTypeManager()->getStorage('group')->loadMultiple($space_ids);
+
+  /** @var Drupal\group\Entity\GroupInterface $group */
+  foreach ($groups as $group) {
+    $group->addMember($user);
+  }
 }
 
 /**
