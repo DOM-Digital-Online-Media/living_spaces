@@ -29,7 +29,7 @@
         "dom-digital-online-media/dom_faq": "^1.4",
         "dom-digital-online-media/dom_field_extra": "^1.0",
         "dom-digital-online-media/dom_paragraphs_extra": "^1.1",
-        "drupal/admin_toolbar": "^2.2",
+        "drupal/admin_toolbar": "^3.4",
         "drupal/address": "^1.9",
         "drupal/autocomplete_deluxe": "^2.0.0",
         "drupal/bootstrap_barrio": "^5.5@beta",
