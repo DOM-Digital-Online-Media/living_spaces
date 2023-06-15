@@ -786,12 +786,14 @@ display:
           hide_empty: true
       defaults:
         title: false
+        use_ajax: false
         style: false
         row: false
         fields: false
         sorts: false
         filters: false
         filter_groups: false
+      use_ajax: true
       display_description: ''
       exposed_block: true
       display_extenders: {  }
