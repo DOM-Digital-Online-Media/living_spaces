@@ -60,9 +60,9 @@ function living_spaces_group_form_views_exposed_form_alter(&$form, FormStateInte
   /** @var \Drupal\views\ViewExecutable $view */
   $view = $form_state->get('view');
 
-  /** @var \Drupal\views\Plugin\views\filter\Bundle $filter */
+  /** @var \Drupal\views\Plugin\views\filter\FilterPluginBase $filter */
   foreach ($view->filter as $name => $filter) {
-    if ('group' == $filter->getEntityType() &&
+    if ('groups_field_data' == $filter->table &&
       'type' == $filter->field &&
       $filter->options['exposed']
     ) {
