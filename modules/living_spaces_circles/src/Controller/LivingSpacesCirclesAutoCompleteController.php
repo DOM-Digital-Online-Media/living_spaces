@@ -17,17 +17,15 @@ class LivingSpacesCirclesAutoCompleteController extends ControllerBase {
    */
   public function autocomplete(Request $request) {
     $results = [];
-    $input = $request->query->get('q');
-
-    if (!$input) {
-      return new JsonResponse($results);
-    }
+    $input = trim($request->query->get('q'));
 
     $group_manager = $this->entityTypeManager()->getStorage('group');
 
     $query = $group_manager->getQuery();
     $query->condition('type', 'circle');
-    $query->condition('label', '%' . Xss::filter($input) . '%', 'LIKE');
+    if ($input) {
+      $query->condition('label', '%' . Xss::filter($input) . '%', 'LIKE');
+    }
     $query->condition('status', TRUE);
     $query->range(0, 10);
 
