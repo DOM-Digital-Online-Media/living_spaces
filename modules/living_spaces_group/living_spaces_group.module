@@ -471,19 +471,10 @@ function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE
 
   $current_is_admin = \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($current_user, $space);
 
-  $allow_only_lower = FALSE;
-  if (!$current_is_admin && $space->hasPermission('administer members', $current_user)) {
-    $allow_only_lower = living_spaces_users_get_user_level($current_user) <= living_spaces_users_get_user_level($user);
-  }
-
   if (
     $space->getOwnerId() !== $user->id()
     && $current_user->id() != $user->id()
-    && (
-      $current_is_admin ||
-      $allow_only_lower ||
-      $space->hasPermission('manage space members', $current_user)
-    )
+    && ($current_is_admin || $space->hasPermission('manage space members', $current_user))
   ) {
     $links['remove_from_space'] = [
       '#type' => 'link',
