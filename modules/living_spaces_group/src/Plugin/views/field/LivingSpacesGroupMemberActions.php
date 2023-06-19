@@ -4,10 +4,7 @@ namespace Drupal\living_spaces_group\Plugin\views\field;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Routing\CurrentRouteMatch;
-use Drupal\example\ExampleInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -27,13 +24,6 @@ class LivingSpacesGroupMemberActions extends FieldPluginBase {
   protected $entityTypeManager;
 
   /**
-   * The current route match service.
-   *
-   * @var \Drupal\Core\Routing\CurrentRouteMatch
-   */
-  protected $currentRouteMatch;
-
-  /**
    * Constructs a new SpaceMemberActions instance.
    *
    * @param array $configuration
@@ -44,13 +34,10 @@ class LivingSpacesGroupMemberActions extends FieldPluginBase {
    *   The plugin implementation definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Provides an interface for entity type managers.
-   * @param \Drupal\Core\Routing\CurrentRouteMatch $current_route_match
-   *   The current route match service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, CurrentRouteMatch $current_route_match) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entity_type_manager;
-    $this->currentRouteMatch = $current_route_match;
   }
 
   /**
@@ -61,8 +48,7 @@ class LivingSpacesGroupMemberActions extends FieldPluginBase {
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity_type.manager'),
-      $container->get('current_route_match')
+      $container->get('entity_type.manager')
     );
   }
 
