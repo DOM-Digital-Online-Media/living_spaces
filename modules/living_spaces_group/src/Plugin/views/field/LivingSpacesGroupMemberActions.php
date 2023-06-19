@@ -129,7 +129,8 @@ class LivingSpacesGroupMemberActions extends FieldPluginBase {
     $suffix = '';
     /** @var \Drupal\group\Entity\GroupInterface $group */
     $group = $values->_relationship_entities['gid'];
-    $inherited_from_circle = $group->id() !== $this->currentRouteMatch->getRawParameter('group');
+    $inherited_from_circle = !isset($values->groups_field_data_group_content_field_data_template);
+    // The circle does not have template field.
     if ($inherited_from_circle) {
       $suffix = ' (' . trim($group->label()) . ')';
     }
