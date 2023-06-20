@@ -209,7 +209,7 @@ class LivingSpacesCirclesAddPeopleForm extends FormBase {
         '#display_id' => 'members_by_role',
         '#arguments' => [implode('+', $group_ids)],
       ];
-      $response->addCommand(new ReplaceCommand('#members-tabsContent .views-element-container .view-content.row', $member_tab));
+      $response->addCommand(new ReplaceCommand('#members-tabsContent .views-element-container', $member_tab));
 
     }
     else {
