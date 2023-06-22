@@ -93,7 +93,7 @@ class LivingSpacesGroupTreeBlock extends BlockBase implements ContainerFactoryPl
         $build['parent'] = [
           '#type' => 'html_tag',
           '#tag' => 'div',
-          '#value' => $this->t('Space parent: %parent', ['%parent' => $parent->toLink()->toString()]),
+          '#value' => $this->t('Space parent: @parent', ['@parent' => $parent->toLink()->toString()]),
           '#attributes' => [
             'class' => ['parent'],
           ],
@@ -103,7 +103,7 @@ class LivingSpacesGroupTreeBlock extends BlockBase implements ContainerFactoryPl
       $build['space'] = [
         '#type' => 'html_tag',
         '#tag' => 'div',
-        '#value' => $this->t('Space: <b>%space</b>', ['%space' => $group->label()]),
+        '#value' => $this->t('Space: <b>@space</b>', ['@space' => $group->label()]),
         '#attributes' => [
           'class' => ['space'],
         ],
