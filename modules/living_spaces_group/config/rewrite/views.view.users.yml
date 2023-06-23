@@ -1221,14 +1221,6 @@ display:
                 title: Blocked
                 operator: '='
                 value: '0'
-              -
-                title: Active
-                operator: '='
-                value: '1'
-              -
-                title: Blocked
-                operator: '='
-                value: '0'
         ngram_label:
           id: ngram_label
           table: search_api_index_space_users
