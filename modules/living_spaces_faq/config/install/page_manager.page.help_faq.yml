@@ -4,7 +4,7 @@ dependencies:
   module:
     - user_permission_condition
 id: help_faq
-label: 'Help FAQ'
+label: 'FAQ'
 description: ''
 use_admin_theme: false
 path: /faq
@@ -12,8 +12,8 @@ access_logic: and
 access_conditions:
   -
     id: user_permission
-    permission: 'view paragraph content faq'
     negate: false
     context_mapping:
       user: '@user.current_user_context:current_user'
+    permission: 'view paragraph content faq'
 parameters: {  }
