@@ -13,8 +13,8 @@ function living_spaces_faq_install() {
 
   /** @var \Drupal\path_alias\Entity\PathAlias $alias */
   $alias = $entity_manager->create([
-    'path' => '/help-faq',
-    'alias' => '/hilfe-faq',
+    'path' => '/faq',
+    'alias' => '/faq',
     'langcode' => 'de',
   ]);
 
@@ -27,8 +27,8 @@ function living_spaces_faq_install() {
 function living_spaces_faq_uninstall() {
   $entity_manager = \Drupal::entityTypeManager()->getStorage('path_alias');
   $aliases = $entity_manager->loadByProperties([
-    'path' => '/help-faq',
-    'alias' => '/hilfe-faq',
+    'path' => '/faq',
+    'alias' => '/faq',
     'langcode' => 'de',
   ]);
 
