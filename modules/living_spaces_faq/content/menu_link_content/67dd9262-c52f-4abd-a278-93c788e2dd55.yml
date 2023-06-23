@@ -16,7 +16,7 @@ default:
       value: footer-menu
   link:
     -
-      uri: 'internal:/help-faq'
+      uri: 'internal:/faq'
       title: ''
       options:
         attributes: {  }

@@ -412,7 +412,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: '<a href="help-faq?category={{ tid }}">{{ name }}</a>'
+            text: '<a href="faq?category={{ tid }}">{{ name }}</a>'
             make_link: false
             path: ''
             absolute: false
@@ -566,7 +566,7 @@ display:
           empty: false
           tokenize: false
           content:
-            value: '<a href="help-faq">Show all</a>'
+            value: '<a href="faq">Show all</a>'
             format: basic_html
           plugin_id: text
     cache_metadata:

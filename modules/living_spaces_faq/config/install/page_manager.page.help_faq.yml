@@ -7,7 +7,7 @@ id: help_faq
 label: 'Help FAQ'
 description: ''
 use_admin_theme: false
-path: /help-faq
+path: /faq
 access_logic: and
 access_conditions:
   -
