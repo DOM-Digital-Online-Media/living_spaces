@@ -313,7 +313,7 @@ display:
     display_plugin: block
     position: 1
     display_options:
-      title: ''
+      title: 'Here you will find helpful answers to important questions:'
       arguments:
         tid:
           id: tid
