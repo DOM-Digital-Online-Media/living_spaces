@@ -368,7 +368,7 @@ function living_spaces_page_living_spaces_breadcrumbs_info(RouteMatchInterface $
       if (!empty($breadcrumb)) {
         $space = \Drupal::request()->query->get('space');
 
-        if ($group = \Drupal::entityTypeManager()->getStorage('group')->load($space)) {
+        if ($space && $group = \Drupal::entityTypeManager()->getStorage('group')->load($space)) {
           $breadcrumb->addLink($group->toLink($group->label()));
           $breadcrumb->addCacheableDependency($group);
         }
