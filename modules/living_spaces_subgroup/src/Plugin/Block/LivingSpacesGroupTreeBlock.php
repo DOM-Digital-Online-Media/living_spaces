@@ -88,48 +88,48 @@ class LivingSpacesGroupTreeBlock extends BlockBase implements ContainerFactoryPl
   public function build() {
     $build = [];
 
-    if ($group = $this->getContextValue('group')) {
-      if ($parent = $this->subGroupManager->getGroupsParent($group)) {
-        $build['parent'] = [
-          '#type' => 'html_tag',
-          '#tag' => 'div',
-          '#value' => $this->t('Space parent: %parent', ['%parent' => $parent->toLink()->toString()]),
-          '#attributes' => [
-            'class' => ['parent'],
-          ],
-        ];
-      }
-
-      $build['space'] = [
-        '#type' => 'html_tag',
-        '#tag' => 'div',
-        '#value' => $this->t('Space: <b>%space</b>', ['%space' => $group->label()]),
-        '#attributes' => [
-          'class' => ['space'],
-        ],
-      ];
-
-      if ($children = $this->subGroupManager->getGroupsChildren($group)) {
-        $build['children'] = [
-          '#type' => 'html_tag',
-          '#tag' => 'div',
-          '#value' => $this->t('Space children:'),
-          '#attributes' => [
-            'class' => ['children'],
-          ],
-        ];
-
-        foreach ($this->entityTypeManager->getStorage('group')->loadMultiple($children) as $child) {
-          $build['children'][] = [
-            '#theme' => 'dropdown',
-            '#id' => "space-actions-{$group->id()}-{$child->id()}",
-            '#button_class' => 'btn-sm',
-            '#button' => $child->label(),
-            '#links' => $this->moduleHandler->invokeAll('living_spaces_subgroup_child_actions_info', [$child]),
-          ];
-        }
-      }
-    }
+//    if ($group = $this->getContextValue('group')) {
+//      if ($parent = $this->subGroupManager->getGroupsParent($group)) {
+//        $build['parent'] = [
+//          '#type' => 'html_tag',
+//          '#tag' => 'div',
+//          '#value' => $this->t('Space parent: %parent', ['%parent' => $parent->toLink()->toString()]),
+//          '#attributes' => [
+//            'class' => ['parent'],
+//          ],
+//        ];
+//      }
+//
+//      $build['space'] = [
+//        '#type' => 'html_tag',
+//        '#tag' => 'div',
+//        '#value' => $this->t('Space: <b>%space</b>', ['%space' => $group->label()]),
+//        '#attributes' => [
+//          'class' => ['space'],
+//        ],
+//      ];
+//
+//      if ($children = $this->subGroupManager->getGroupsChildren($group)) {
+//        $build['children'] = [
+//          '#type' => 'html_tag',
+//          '#tag' => 'div',
+//          '#value' => $this->t('Space children:'),
+//          '#attributes' => [
+//            'class' => ['children'],
+//          ],
+//        ];
+//
+//        foreach ($this->entityTypeManager->getStorage('group')->loadMultiple($children) as $child) {
+//          $build['children'][] = [
+//            '#theme' => 'dropdown',
+//            '#id' => "space-actions-{$group->id()}-{$child->id()}",
+//            '#button_class' => 'btn-sm',
+//            '#button' => $child->label(),
+//            '#links' => $this->moduleHandler->invokeAll('living_spaces_subgroup_child_actions_info', [$child]),
+//          ];
+//        }
+//      }
+//    }
 
     return $build;
   }
