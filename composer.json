@@ -1,7 +1,7 @@
 {
     "name": "dom-digital-online-media/living_spaces",
     "description": "Distribution for user spaces (groups) that designed for extranet/intranet workflow.",
-    "type": "drupal-profile",
+    "type": "drupal-custom-profile",
     "license": "GPL-2.0-or-later",
     "minimum-stability": "dev",
     "prefer-stable": true,
