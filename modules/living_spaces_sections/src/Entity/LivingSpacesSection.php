@@ -114,8 +114,8 @@ class LivingSpacesSection extends ContentEntityBase implements LivingSpacesSecti
   /**
    * {@inheritdoc}
    */
-  public function setGroup(GroupInterface $space) {
-    $this->group = $space;
+  public function setGroup(GroupInterface $group) {
+    $this->group = $group;
     return $this;
   }
 
@@ -350,18 +350,11 @@ class LivingSpacesSection extends ContentEntityBase implements LivingSpacesSecti
   /**
    * Sets the entity as published.
    *
-   * @param bool|null $published
-   *   (optional and deprecated) TRUE to set this entity to published, FALSE to
-   *   set it to unpublished. Defaults to NULL. This parameter is deprecated in
-   *   Drupal 8.3.0 and will be removed before Drupal 9.0.0. Use this method,
-   *   without any parameter, to set the entity as published and
-   *   setUnpublished() to set the entity as unpublished.
-   *
    * @return $this
    *
    * @see \Drupal\Core\Entity\EntityPublishedInterface::setUnpublished()
    */
-  public function setPublished($published = NULL) {
+  public function setPublished() {
     // We don't need status for living space section.
     return $this;
   }

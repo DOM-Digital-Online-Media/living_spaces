@@ -8,6 +8,13 @@ targetEntityType: group
 bundle: project_space
 mode: default
 content:
+  allow_admins_to_edit_members:
+    type: boolean_checkbox
+    weight: 1
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   label:
     type: string_textfield
     weight: 0
@@ -18,19 +25,26 @@ content:
     third_party_settings: {  }
   living_space_privacy:
     type: options_buttons
-    weight: 2
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }
   parent:
     type: entity_reference_autocomplete
-    weight: 1
+    weight: 2
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  protected:
+    type: boolean_checkbox
+    weight: 4
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
 hidden:
   content_sections: true

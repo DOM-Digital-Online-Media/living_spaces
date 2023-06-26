@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.project_space
+    - user.role.client_admin
+id: project_space-administrator
+label: Administrator
+weight: -95
+admin: false
+scope: outsider
+global_role: client_admin
+group_type: project_space
+permissions:
+  - 'administer members'
+  - 'create group_node:discussion_post entity'
+  - 'delete any group_node:discussion_post entity'
+  - 'update any group_node:discussion_post entity'
+  - 'view group_node:discussion_post entity'
+is_space_admin: false

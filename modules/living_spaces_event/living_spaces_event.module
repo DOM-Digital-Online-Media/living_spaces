@@ -23,7 +23,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\group\Entity\GroupContentInterface;
+use Drupal\group\Entity\GroupRelationshipInterface;
 use Drupal\living_spaces_event\Entity\LivingSpaceEventInviteInterface;
 use Drupal\living_spaces_event\Entity\LivingSpaceEventTypeInterface;
 use Drupal\living_spaces_event\Entity\LivingSpaceEventInterface;
@@ -241,6 +241,8 @@ function living_spaces_event_living_spaces_event_insert(LivingSpaceEventInterfac
  * Implements hook_ENTITY_TYPE_presave().
  */
 function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterface $event) {
+  /** @var \Drupal\group\GroupMembershipLoaderInterface $membership_loader */
+  $membership_loader = \Drupal::service('group.membership_loader');
   $entity_manager = \Drupal::entityTypeManager();
 
   if (!$event->get('agenda')->isEmpty() && !$event->get('space')->isEmpty()) {
@@ -249,19 +251,21 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
       'content_plugin' => 'group_node:agenda',
     ];
 
-    if ($group_content_types = $entity_manager->getStorage('group_content_type')->loadByProperties($properties)) {
-      $group_content_type = reset($group_content_types);
+    if ($relationship_type = $entity_manager->getStorage('group_relationship_type')->loadByProperties($properties)) {
+      $relationship_type = reset($relationship_type);
 
       foreach ($event->get('agenda')->getValue() as $value) {
         $properties = [
-          'type' => $group_content_type->id(),
+          'plugin_id' => 'group_node:agenda',
           'gid' => $event->get('space')->getString(),
           'entity_id' => $value['target_id'],
         ];
 
-        if (!$entity_manager->getStorage('group_content')->loadByProperties($properties)) {
-          $group_content = $entity_manager->getStorage('group_content')->create($properties);
-          $group_content->save();
+        $relationship_storage = $entity_manager
+          ->getStorage('group_relationship');
+        if (!$relationship_storage->loadByProperties($properties)) {
+          $relationship = $relationship_storage->create($properties);
+          $relationship->save();
         }
       }
     }
@@ -272,27 +276,19 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
       'uuid' => LIVING_SPACES_EVENT_INVITED_STATUS,
     ]);
 
-    /** @var \Drupal\group\GroupMembershipLoaderInterface $membership_loader */
-    $membership_loader = \Drupal::service('group.membership_loader');
-    $group_content_storage = \Drupal::entityTypeManager()->getStorage('group_content');
-
     foreach ($event->get('invited_spaces')->getValue() as $invited_space) {
+      /** @var \Drupal\group\Entity\GroupInterface $group */
       if ($group = $entity_manager->getStorage('group')->load($invited_space['target_id'])) {
-        /** @var \Drupal\group\Entity\GroupInterface $membership */
-        $memberships = $membership_loader->loadByGroup($group);
-
-        /** @var \Drupal\group\GroupMembership $membership */
-        foreach ($memberships as $membership) {
+        foreach ($membership_loader->loadByGroup($group) as $membership) {
           if ($member = $membership->getUser()) {
-            if (!$event->get('space')->isEmpty() && !living_spaces_event_check_user_status($event->id(), $member->id())) {
+            if (!$event->get('space')->isEmpty()
+          && !living_spaces_event_check_user_status($event->id(), $member->id())) {
               /** @var \Drupal\group\Entity\Group $space */
               $space = $event->get('space')->entity;
               $circle_ids = array_column($space->get('circles')->getValue(), 'target_id');
               // Check if the user is a member of event space.
-              if (
-                in_array($invited_space['target_id'], $circle_ids) ||
-                $group_content_storage->loadByGroup($space, 'group_membership', ['entity_id' => $member->id()])
-              ) {
+              if (in_array($invited_space['target_id'], $circle_ids)
+            || $membership_loader->load($space, $member)) {
                 $invite = $entity_manager->getStorage('living_spaces_event_invite')->create([
                   'event' => $event->id(),
                   'uid' => $member->id(),
@@ -322,26 +318,31 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
       'uuid' => LIVING_SPACES_EVENT_INVITED_STATUS,
     ]);
 
-    $group_content_storage = \Drupal::entityTypeManager()->getStorage('group_content');
-    foreach ($event->get('invited_users')->getValue() as $user) {
-      if (!$event->get('space')->isEmpty() && !living_spaces_event_check_user_status($event->id(), $user['target_id'])) {
+    // @todo Replace loading users with new class for AccountInterface or change
+    // way of checking for membership where we don't need AccountInterface.
+
+    /** @var \Drupal\user\UserInterface $user */
+    foreach ($event->get('invited_users')->referencedEntities() as $user) {
+      if (!$event->get('space')->isEmpty()
+    && !living_spaces_event_check_user_status($event->id(), $user->id())) {
         /** @var \Drupal\group\Entity\Group $space */
         $space = $event->get('space')->entity;
 
         // Check if the user is a member of event space.
-        if ($group_content_storage->loadByGroup($space, 'group_membership', ['entity_id' => $user['target_id']])) {
-          $invite = $entity_manager->getStorage('living_spaces_event_invite')->create([
-            'event' => $event->id(),
-            'uid' => $user['target_id'],
-            'inviter' => \Drupal::currentUser()->id(),
-            'status' => $terms ? reset($terms)->id() : '',
-          ]);
+        if ($membership_loader->load($space, $user)) {
+          $invite = $entity_manager
+            ->getStorage('living_spaces_event_invite')->create([
+              'event' => $event->id(),
+              'uid' => $user->id(),
+              'inviter' => \Drupal::currentUser()->id(),
+              'status' => $terms ? reset($terms)->id() : '',
+            ]);
 
           $invite->save();
         }
         else {
           \Drupal::logger('Space event')->notice('<strong>@user</strong> could not be invited to this @event event, because they are missing a membership in this space.', [
-            '@user' => \Drupal::entityTypeManager()->getStorage('user')->load($user['target_id'])->getDisplayName(),
+            '@user' => $user->getDisplayName(),
             '@event' => $event->toLink($event->label())->toString(),
           ]);
         }
@@ -439,7 +440,7 @@ function living_spaces_event_entity_bundle_info_alter(&$bundles) {
  * Implements hook_ENTITY_TYPE_insert().
  */
 function living_spaces_event_living_spaces_event_type_insert(LivingSpaceEventTypeInterface $space_event_type) {
-  \Drupal::service('plugin.manager.group_content_enabler')->clearCachedDefinitions();
+  \Drupal::service('group_relation_type.manager')->clearCachedDefinitions();
 }
 
 /**
@@ -695,10 +696,10 @@ function living_spaces_event_node_insert(NodeInterface $entity) {
 /**
  * Implements hook_living_spaces_sections_content_alter().
  */
-function living_spaces_event_living_spaces_sections_content_alter(GroupContentInterface $content, &$section) {
-  if ($content->getEntity() instanceof NodeInterface &&
-    in_array($content->getEntity()->bundle(), ['agenda', 'protocol']) &&
-    $data = \Drupal::service('living_spaces_sections.manager')->getSectionFromGroupByType($content->getGroup(), 'events')
+function living_spaces_event_living_spaces_sections_content_alter(GroupRelationshipInterface $relationship, &$section) {
+  if ($relationship->getEntity() instanceof NodeInterface &&
+    in_array($relationship->getEntity()->bundle(), ['agenda', 'protocol']) &&
+    $data = \Drupal::service('living_spaces_sections.manager')->getSectionFromGroupByType($relationship->getGroup(), 'events')
   ) {
     $section = $data;
   }

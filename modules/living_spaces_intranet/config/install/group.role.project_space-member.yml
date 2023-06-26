@@ -3,28 +3,36 @@ status: true
 dependencies:
   config:
     - group.type.project_space
+    - user.role.authenticated
 id: project_space-member
 label: Member
 weight: -100
-internal: true
-audience: member
+admin: false
+scope: insider
+global_role: authenticated
 group_type: project_space
-permissions_ui: true
 permissions:
-  - 'view group'
-  - 'view group_membership content'
-  - 'view living_spaces_event:event content'
-  - 'view living_spaces_event:event entity'
-  - 'view living_spaces_event:general content'
-  - 'view living_spaces_event:general entity'
-  - 'view living_spaces_event:room_occupied content'
-  - 'view living_spaces_event:room_occupied entity'
-  - 'view living_spaces_event:supervision content'
-  - 'view living_spaces_event:supervision entity'
-  - 'view living_spaces_event:training content'
-  - 'view living_spaces_event:training entity'
   - 'create group_node:discussion_post entity'
+  - 'delete own group_node:agenda entity'
   - 'delete own group_node:discussion_post entity'
+  - 'update own group_node:agenda entity'
   - 'update own group_node:discussion_post entity'
+  - 'view discussions section of a living space'
+  - 'view events section of a living space'
+  - 'view group'
+  - 'view group_membership relationship'
+  - 'view group_node:agenda entity'
   - 'view group_node:discussion_post entity'
+  - 'view living_spaces_event:event entity'
+  - 'view living_spaces_event:event relationship'
+  - 'view living_spaces_event:general entity'
+  - 'view living_spaces_event:general relationship'
+  - 'view living_spaces_event:room_occupied entity'
+  - 'view living_spaces_event:room_occupied relationship'
+  - 'view living_spaces_event:supervision entity'
+  - 'view living_spaces_event:supervision relationship'
+  - 'view living_spaces_event:training entity'
+  - 'view living_spaces_event:training relationship'
+  - 'view private group'
+  - 'view public group'
 is_space_admin: false

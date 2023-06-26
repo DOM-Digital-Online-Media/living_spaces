@@ -45,6 +45,7 @@ function living_spaces_intranet_form_user_login_form_alter(&$form, FormStateInte
  * Provides validate callback for user login form.
  */
 function living_spaces_intranet_user_login_validate(&$form, FormStateInterface $form_state) {
+  /** @var \Drupal\user\UserInterface $account */
   if ($account = user_load_by_name($form_state->getValue('name'))) {
     /** @var \Drupal\living_spaces_intranet\LivingSpacesBansManagerInterface $ban_manager */
     $ban_manager = \Drupal::service('living_spaces_bans.manager');

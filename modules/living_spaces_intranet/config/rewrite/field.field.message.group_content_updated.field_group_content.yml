@@ -1,37 +1,37 @@
 dependencies:
   config:
-    - group.content_type.department-group_node-agenda
-    - group.content_type.department-group_node-protocol
-    - group.content_type.group_content_type_1266597b53320
-    - group.content_type.group_content_type_4f2b1972921d2
-    - group.content_type.group_content_type_64993866055f1
-    - group.content_type.group_content_type_676c0d734d54d
-    - group.content_type.group_content_type_6a198e9cd74d8
-    - group.content_type.group_content_type_6a5bcaa0e2cc2
-    - group.content_type.group_content_type_8a25fe7cb5d03
-    - group.content_type.group_content_type_94ac5cb87e1b3
-    - group.content_type.group_content_type_a3f3193191964
-    - group.content_type.group_content_type_a64dad17707cd
-    - group.content_type.group_content_type_bc0e733967be8
-    - group.content_type.group_content_type_c5c74debf685e
-    - group.content_type.group_content_type_f2e6bbaad05b4
-    - group.content_type.project_space-group_node-agenda
+    - group.relationship_type.department-0c08cffdd29a2babffd95
+    - group.relationship_type.department-3c116df195fcf5a1b49df
+    - group.relationship_type.department-4a6c34d88d045acfa6c01
+    - group.relationship_type.department-8d417d3bd0b09858597e9
+    - group.relationship_type.department-c01b49fefadc540aec091
+    - group.relationship_type.department-f18f6184f0f7872278793
+    - group.relationship_type.department-group_node-agenda
+    - group.relationship_type.department-group_node-protocol
+    - group.relationship_type.project_space-0c08cffdd29a2babff
+    - group.relationship_type.project_space-304c39b447cbf317ba
+    - group.relationship_type.project_space-3c116df195fcf5a1b4
+    - group.relationship_type.project_space-4a6c34d88d045acfa6
+    - group.relationship_type.project_space-8d417d3bd0b0985859
+    - group.relationship_type.project_space-c01b49fefadc540aec
+    - group.relationship_type.project_space-f18f6184f0f7872278
+    - group.relationship_type.project_space-group_node-agenda
 settings:
   handler_settings:
     target_bundles:
       department-group_node-agenda: department-group_node-agenda
-      group_content_type_64993866055f1: group_content_type_64993866055f1
+      department-3c116df195fcf5a1b49df: department-3c116df195fcf5a1b49df
       department-group_node-protocol: department-group_node-protocol
-      group_content_type_f2e6bbaad05b4: group_content_type_f2e6bbaad05b4
-      group_content_type_a3f3193191964: group_content_type_a3f3193191964
-      group_content_type_1266597b53320: group_content_type_1266597b53320
-      group_content_type_bc0e733967be8: group_content_type_bc0e733967be8
-      group_content_type_6a5bcaa0e2cc2: group_content_type_6a5bcaa0e2cc2
+      department-4a6c34d88d045acfa6c01: department-4a6c34d88d045acfa6c01
+      department-f18f6184f0f7872278793: department-f18f6184f0f7872278793
+      department-8d417d3bd0b09858597e9: department-8d417d3bd0b09858597e9
+      department-0c08cffdd29a2babffd95: department-0c08cffdd29a2babffd95
+      department-c01b49fefadc540aec091: department-c01b49fefadc540aec091
       project_space-group_node-agenda: project_space-group_node-agenda
-      group_content_type_a64dad17707cd: group_content_type_a64dad17707cd
-      group_content_type_4f2b1972921d2: group_content_type_4f2b1972921d2
-      group_content_type_c5c74debf685e: group_content_type_c5c74debf685e
-      group_content_type_94ac5cb87e1b3: group_content_type_94ac5cb87e1b3
-      group_content_type_8a25fe7cb5d03: group_content_type_8a25fe7cb5d03
-      group_content_type_6a198e9cd74d8: group_content_type_6a198e9cd74d8
-      group_content_type_676c0d734d54d: group_content_type_676c0d734d54d
+      project_space-3c116df195fcf5a1b4: project_space-3c116df195fcf5a1b4
+      project_space-304c39b447cbf317ba: project_space-304c39b447cbf317ba
+      project_space-4a6c34d88d045acfa6: project_space-4a6c34d88d045acfa6
+      project_space-f18f6184f0f7872278: project_space-f18f6184f0f7872278
+      project_space-8d417d3bd0b0985859: project_space-8d417d3bd0b0985859
+      project_space-0c08cffdd29a2babff: project_space-0c08cffdd29a2babff
+      project_space-c01b49fefadc540aec: project_space-c01b49fefadc540aec

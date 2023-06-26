@@ -37,7 +37,7 @@ function living_spaces_sections_entity_base_field_info(EntityTypeInterface $enti
         ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED);
       break;
 
-    case 'group_content':
+    case 'group_relationship':
       $fields['section'] = BaseFieldDefinition::create('entity_reference')
         ->setLabel(t('Section'))
         ->setSetting('target_type', 'living_spaces_section')

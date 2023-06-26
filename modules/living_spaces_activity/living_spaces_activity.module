@@ -8,9 +8,8 @@
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\field\FieldConfigInterface;
-use Drupal\group\Entity\GroupContentInterface;
 use Drupal\group\Entity\GroupInterface;
+use Drupal\group\Entity\GroupRelationshipInterface;
 use Drupal\message\Entity\Message;
 use Drupal\user\UserInterface;
 use Drupal\views\ViewExecutable;
@@ -134,16 +133,16 @@ function living_spaces_activity_form_message_template_form_alter(&$form, FormSta
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function living_spaces_activity_group_content_insert(GroupContentInterface $content) {
+function living_spaces_activity_group_relationship_insert(GroupRelationshipInterface $relationship) {
   // @todo add check is content type is among field target bundles.
   $space = \Drupal::request()->query->get('space');
-  if ('group_membership' == $content->getContentPlugin()->getBaseId()) {
+  if ('group_membership' == $relationship->getPluginId()) {
     /** @var \Drupal\message\Entity\Message $message */
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'group_member_added',
-      'uid' => $content->getEntity()->id(),
-      'field_group_content' => $content->id(),
-      'field_group_label' => $content->getGroup()->label(),
+      'uid' => $relationship->getEntity()->id(),
+      'field_group_content' => $relationship->id(),
+      'field_group_label' => $relationship->getGroup()->label(),
       'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
@@ -152,7 +151,7 @@ function living_spaces_activity_group_content_insert(GroupContentInterface $cont
     /** @var \Drupal\message\Entity\Message $message */
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'group_content_created',
-      'field_group_content' => $content->id(),
+      'field_group_content' => $relationship->id(),
       'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
@@ -162,14 +161,14 @@ function living_spaces_activity_group_content_insert(GroupContentInterface $cont
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
-function living_spaces_activity_group_content_update(GroupContentInterface $content) {
+function living_spaces_activity_group_relationship_update(GroupRelationshipInterface $relationship) {
   // @todo add check is content type is among field target bundles.
   $space = \Drupal::request()->query->get('space');
-  if ('group_membership' != $content->getContentPlugin()->getBaseId()) {
+  if ('group_membership' != $relationship->getPluginId()) {
     /** @var \Drupal\message\Entity\Message $message */
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'group_content_updated',
-      'field_group_content' => $content->id(),
+      'field_group_content' => $relationship->id(),
       'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
@@ -179,15 +178,15 @@ function living_spaces_activity_group_content_update(GroupContentInterface $cont
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function living_spaces_activity_group_content_delete(GroupContentInterface $content) {
+function living_spaces_activity_group_relationship_delete(GroupRelationshipInterface $relationship) {
   // @todo add check is content type is among field target bundles.
   $space = \Drupal::request()->query->get('space');
-  if ('group_membership' == $content->getContentPlugin()->getBaseId() && $content->getEntity()) {
+  if ('group_membership' == $relationship->getPluginId() && $relationship->getEntity()) {
     /** @var \Drupal\message\Entity\Message $message */
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
       'template' => 'group_member_removed',
-      'uid' => $content->getEntity()->id(),
-      'field_group_label' => $content->getGroup()->label(),
+      'uid' => $relationship->getEntity()->id(),
+      'field_group_label' => $relationship->getGroup()->label(),
       'field_related_space' => ['target_id' => $space],
     ]);
     $message->save();
@@ -245,8 +244,8 @@ function living_spaces_activity_get_message_counter($uid) {
  */
 function living_spaces_activity_living_spaces_group_remove_group_content_alter(GroupInterface $space, array &$items) {
   $ids = [];
-  foreach ($space->getContent() as $content) {
-    $ids[] = $content->id();
+  foreach ($space->getRelationships() as $relationship) {
+    $ids[] = $relationship->id();
   }
 
   if ($ids) {

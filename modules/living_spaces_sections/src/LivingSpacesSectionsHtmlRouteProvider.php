@@ -56,7 +56,7 @@ class LivingSpacesSectionsHtmlRouteProvider extends AdminHtmlRouteProvider {
       ->setRequirements([
         'group' => '\d+',
         'section' => '[a-z0-9-]+',
-        '_custom_access' => '\Drupal\living_spaces_sections\LivingSpacesSectionsRouteAccessController::checkViewAccess'
+        '_custom_access' => '\Drupal\living_spaces_sections\LivingSpacesSectionsRouteAccessController::checkViewAccess',
       ])
       ->setOption('parameters', [
         'group' => ['type' => 'entity:group'],
@@ -83,7 +83,7 @@ class LivingSpacesSectionsHtmlRouteProvider extends AdminHtmlRouteProvider {
         'group' => '\d+',
         'section' => '[a-z0-9-]+',
         'sub_section' => '[a-z0-9-]+',
-        '_custom_access' => '\Drupal\living_spaces_sections\LivingSpacesSectionsRouteAccessController::checkViewAccess'
+        '_custom_access' => '\Drupal\living_spaces_sections\LivingSpacesSectionsRouteAccessController::checkViewAccess',
       ])
       ->setOption('parameters', [
         'group' => ['type' => 'entity:group'],

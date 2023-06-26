@@ -21,11 +21,19 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
   protected $entityTypeManager;
 
   /**
+   * Returns the group.membership_loader service.
+   *
+   * @var \Drupal\group\GroupMembershipLoaderInterface
+   */
+  protected $membershipLoader;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     $instance = parent::create($container);
     $instance->entityTypeManager = $container->get('entity_type.manager');
+    $instance->membershipLoader = $container->get('group.membership_loader');
     return $instance;
   }
 
@@ -70,19 +78,21 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
 
     if (!empty($values['invite']) && $match = EntityAutocomplete::extractEntityIdFromAutocompleteInput($values['invite'])) {
       if (strpos($values['invite'], '[user]')) {
-        if (!$event->get('space')->isEmpty() && !living_spaces_event_check_user_status($event->id(), $match)) {
+        if (!$event->get('space')->isEmpty()
+      && !living_spaces_event_check_user_status($event->id(), $match)) {
           /** @var \Drupal\group\Entity\Group $space */
           $space = $event->get('space')->entity;
+          /** @var \Drupal\user\UserInterface $member */
+          $member = $this->entityTypeManager->getStorage('user')
+            ->load($match);
 
-          $group_content_storage = $this->entityTypeManager->getStorage('group_content');
-          if ($group_content_storage->loadByGroup($space, 'group_membership', ['entity_id' => $match])) {
+          if ($this->membershipLoader->load($space, $member)) {
             $event->set('invited_users', $match);
             $event->save();
 
             $this->messenger()->addStatus($this->t('User has been invited.'));
           }
           else {
-            $member = $this->entityTypeManager->getStorage('user')->load($match);
             $message = $this->t('<strong>@user</strong> could not be invited to this @event event, because they are missing a membership in this space.', [
               '@user' => $member->getDisplayName(),
               '@event' => $event->toLink($event->label())->toString(),

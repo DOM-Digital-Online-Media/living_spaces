@@ -1,7 +1,7 @@
 dependencies:
   config:
-    - group.content_type.department-group_membership
-    - group.content_type.project_space-group_membership
+    - group.relationship_type.department-group_membership
+    - group.relationship_type.project_space-group_membership
 settings:
   handler_settings:
     target_bundles:

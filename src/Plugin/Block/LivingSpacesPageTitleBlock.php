@@ -142,12 +142,12 @@ class LivingSpacesPageTitleBlock extends BlockBase implements ContainerFactoryPl
       $form['lead_fieldset']['lead_items'][$i]['lead_text'] = [
         '#type' => 'textarea',
         '#title' => $this->t('Lead text'),
-        '#default_value' => isset($config['lead'][$i]['lead_text']) ? $config['lead'][$i]['lead_text'] : '',
+        '#default_value' => $config['lead'][$i]['lead_text'] ?? '',
       ];
       $form['lead_fieldset']['lead_items'][$i]['lead_path'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Lead path'),
-        '#default_value' => isset($config['lead'][$i]['lead_path']) ? $config['lead'][$i]['lead_path'] : '',
+        '#default_value' => $config['lead'][$i]['lead_path'] ?? '',
         '#suffix' => '<br />',
       ];
     }
@@ -196,7 +196,7 @@ class LivingSpacesPageTitleBlock extends BlockBase implements ContainerFactoryPl
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
     $lead_fieldset = $form_state->getValue('lead_fieldset');
-    $items = isset($lead_fieldset['lead_items']) ? $lead_fieldset['lead_items'] : [];
+    $items = $lead_fieldset['lead_items'] ?? [];
 
     $this->configuration['lead'] = $items;
     $this->configuration['include_hr'] = $form_state->getValue('include_hr');

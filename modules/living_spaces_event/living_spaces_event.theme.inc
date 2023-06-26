@@ -45,7 +45,7 @@ function template_preprocess_views_view_living_spaces_event_week(&$variables) {
 
   $variables['#unprocessed_rows'] = [];
   foreach ($variables['rows'] as $row) {
-    /** @var \Drupal\group\Entity\GroupContentInterface $content */
+    /** @var \Drupal\group\Entity\GroupRelationshipInterface $content */
     $content = $row['#row']->_entity;
     $event = NULL;
 

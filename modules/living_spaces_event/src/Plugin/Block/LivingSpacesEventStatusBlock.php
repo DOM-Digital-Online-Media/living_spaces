@@ -100,8 +100,6 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
     if ($invite_ids = living_spaces_event_check_user_status($event->id(), $this->currentUser->id())) {
       $invite_id = reset($invite_ids);
 
-      $title = $this->t('Would you like to accept the invitation for this event?');
-
       /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInviteInterface $invite */
       $invite = $this->entityTypeManager->getStorage('living_spaces_event_invite')->load($invite_id);
 
@@ -183,7 +181,7 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
     }
 
     if (!empty($build)) {
-      $build['#prefix'] = "<div class='title'>{$title}</div>";
+      $build['#prefix'] = "<div class='title'>{$this->t('Would you like to accept the invitation for this event?')}</div>";
     }
 
     return $build;

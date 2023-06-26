@@ -194,7 +194,7 @@ class LivingSpacesSectionsSettingsForm extends FormBase {
             '#default_value' => $section,
             '#living_space' => $this->group ? $this->group : NULL,
             '#section' => $this->section ? $this->section : NULL,
-            '#element_validate' => [[get_class(), 'inlineEntityFormValidate']]
+            '#element_validate' => [[get_class(), 'inlineEntityFormValidate']],
           ],
         ];
       }

@@ -12,7 +12,7 @@ interface LivingSpacesBansManagerInterface {
   /**
    * Returns a list of user bans.
    *
-   * @param AccountInterface $user
+   * @param \Drupal\Core\Session\AccountInterface $user
    *   User entity.
    * @param array $types
    *   An array of ban bundles.
@@ -25,7 +25,7 @@ interface LivingSpacesBansManagerInterface {
   /**
    * Adds user ban.
    *
-   * @param AccountInterface $user
+   * @param \Drupal\Core\Session\AccountInterface $user
    *   User entity.
    * @param array $data
    *   Array of values.
@@ -35,7 +35,7 @@ interface LivingSpacesBansManagerInterface {
   /**
    * Removes user bans.
    *
-   * @param AccountInterface $user
+   * @param \Drupal\Core\Session\AccountInterface $user
    *   User entity.
    * @param array $types
    *   An array of ban bundles.

@@ -27,13 +27,6 @@ class LivingSpacesSiteCopyrightBlock extends BlockBase implements ContainerFacto
   protected $configFactory;
 
   /**
-   * The file storage service.
-   *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
-   */
-  protected $fileStorage;
-
-  /**
    * Constructs a LivingSpacesPageTitleBlock block.
    *
    * @param array $configuration

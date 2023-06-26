@@ -3,14 +3,16 @@ status: true
 dependencies:
   config:
     - group.type.circle
+    - user.role.authenticated
 id: circle-outsider
 label: Outsider
 weight: -101
-internal: true
-audience: outsider
+admin: false
+scope: outsider
+global_role: authenticated
 group_type: circle
-permissions_ui: true
 permissions:
   - 'join group'
   - 'join public group'
   - 'view public group'
+is_space_admin: false

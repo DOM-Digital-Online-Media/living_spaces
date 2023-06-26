@@ -17,7 +17,7 @@ use Drupal\group\Entity\GroupInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
- * Defines a base living_spaces_group_privacy implementation that most plugins will extend.
+ * Defines living_spaces_group_privacy implementation for most plugins to use.
  */
 class LivingSpacesGroupPrivacyBase extends PluginBase implements LivingSpacesGroupPrivacyInterface {
   use StringTranslationTrait;

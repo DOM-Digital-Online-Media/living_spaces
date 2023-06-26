@@ -22,15 +22,16 @@ class LivingSpacesEvents extends LivingSpacesSection {
         'plugin' => 'living_spaces_event',
       ])->toRenderable();
 
-      if ($group->getGroupType()->hasContentPlugin('group_node:agenda')) {
-        $actions['create_agenda'] = Link::createFromRoute($this->t('Create Agenda'), 'entity.group_content.create_form', [
+      // @todo Check is plugin ids correct.
+      if ($group->getGroupType()->hasPlugin('group_node:agenda')) {
+        $actions['create_agenda'] = Link::createFromRoute($this->t('Create Agenda'), 'entity.group_relationship.create_form', [
           'group' => $group->id(),
           'plugin_id' => 'group_node:agenda',
         ])->toRenderable();
       }
 
-      if ($group->getGroupType()->hasContentPlugin('group_node:protocol')) {
-        $actions['create_protocol'] = Link::createFromRoute($this->t('Create Protocol'), 'entity.group_content.create_form', [
+      if ($group->getGroupType()->hasPlugin('group_node:protocol')) {
+        $actions['create_protocol'] = Link::createFromRoute($this->t('Create Protocol'), 'entity.group_relationship.create_form', [
           'group' => $group->id(),
           'plugin_id' => 'group_node:protocol',
         ])->toRenderable();

@@ -1,19 +1,19 @@
 dependencies:
   config:
-    - group.content_type.group_content_type_a747a9d8b8479
-    - group.content_type.group_content_type_be52e1ad6ae41
-    - group.content_type.group_content_type_433311c7ab532
-    - group.content_type.group_content_type_c618dad3b19f9
-    - group.content_type.group_content_type_08c54fb9dd8aa
-    - group.content_type.living_space-group_node-agenda
-    - group.content_type.living_space-group_node-protocol
+    - group.relationship_type.living_space-0c08cffdd29a2babffd
+    - group.relationship_type.living_space-4a6c34d88d045acfa6c
+    - group.relationship_type.living_space-8d417d3bd0b09858597
+    - group.relationship_type.living_space-c01b49fefadc540aec0
+    - group.relationship_type.living_space-f18f6184f0f78722787
+    - group.relationship_type.living_space-group_node-agenda
+    - group.relationship_type.living_space-group_node-protocol
 settings:
   handler_settings:
     target_bundles:
-      group_content_type_a747a9d8b8479: group_content_type_a747a9d8b8479
-      group_content_type_be52e1ad6ae41: group_content_type_be52e1ad6ae41
-      group_content_type_433311c7ab532: group_content_type_433311c7ab532
-      group_content_type_c618dad3b19f9: group_content_type_c618dad3b19f9
-      group_content_type_08c54fb9dd8aa: group_content_type_08c54fb9dd8aa
+      living_space-0c08cffdd29a2babffd: living_space-0c08cffdd29a2babffd
+      living_space-4a6c34d88d045acfa6c: living_space-4a6c34d88d045acfa6c
+      living_space-8d417d3bd0b09858597: living_space-8d417d3bd0b09858597
+      living_space-c01b49fefadc540aec0: living_space-c01b49fefadc540aec0
+      living_space-f18f6184f0f78722787: living_space-f18f6184f0f78722787
       living_space-group_node-agenda: living_space-group_node-agenda
       living_space-group_node-protocol: living_space-group_node-protocol

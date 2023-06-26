@@ -281,7 +281,7 @@ function living_spaces_page_menu_local_tasks_alter(&$data, $route_name, Refinabl
     'living_spaces_sections.sections_form',
     'living_spaces_sections.sub_sections_form',
     'entity.group.delete_form',
-    'entity.group_content.collection',
+    'entity.group_relationship.collection',
     'view.group_members.page_1',
     'entity.group.devel_load',
     'entity.group.clone_form',

@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - field.storage.message.field_related_space
+    - group.type.living_space
     - message.template.group_content_created
 id: message.group_content_created.field_related_space
 field_name: field_related_space

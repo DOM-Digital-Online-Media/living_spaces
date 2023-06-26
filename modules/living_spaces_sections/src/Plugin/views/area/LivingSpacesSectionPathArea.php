@@ -144,6 +144,7 @@ class LivingSpacesSectionPathArea extends AreaPluginBase {
           $gid = $args[0];
         }
 
+        /** @var \Drupal\group\Entity\GroupInterface $space */
         if (is_numeric($gid) && $space = $this->entityTypeManager->getStorage('group')->load($gid)) {
           if ($section = $this->sectionManager->getSectionFromGroupByType($space, $this->options['bundle'])) {
             return $section->toLink($this->t($this->options['title']))->toRenderable();

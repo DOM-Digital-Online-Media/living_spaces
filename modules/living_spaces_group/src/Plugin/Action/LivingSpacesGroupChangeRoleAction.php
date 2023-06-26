@@ -102,7 +102,7 @@ class LivingSpacesGroupChangeRoleAction extends ActionBase implements ContainerF
    * {@inheritdoc}
    */
   public function access($object, AccountInterface $account = NULL, $return_as_object = FALSE) {
-    $user = $account ? $account : $this->currentUser;
+    $user = $account ?: $this->currentUser;
     return $user->hasPermission('manage living spaces');
   }
 

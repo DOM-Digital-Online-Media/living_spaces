@@ -6,13 +6,11 @@
  */
 
 use Drupal\Core\Database\Query\SelectInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\group\Entity\Group;
 use Drupal\group\Entity\GroupInterface;
-use Drupal\group\QueryAccess\EntityQueryAlter;
 
 /**
  * Implements hook_entity_base_field_info().

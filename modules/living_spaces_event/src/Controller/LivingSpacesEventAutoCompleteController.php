@@ -56,14 +56,14 @@ class LivingSpacesEventAutoCompleteController extends ControllerBase {
       'content_plugin' => 'group_node:agenda',
     ];
 
-    if ($group_content_types = $this->entityTypeManager()->getStorage('group_content_type')->loadByProperties($properties)) {
-      $group_content_type = reset($group_content_types);
+    if ($relationship_type = $this->entityTypeManager()->getStorage('group_relationship_type')->loadByProperties($properties)) {
+      $relationship_type = reset($relationship_type);
 
       $query = $this->database->select('node_field_data', 'n');
       $query->fields('n', ['nid', 'title']);
-      $query->join('group_content_field_data', 'gc', 'n.nid = gc.entity_id AND gc.gid = :gid AND gc.type = :type', [
+      $query->join('group_relationship_field_data', 'gc', 'n.nid = gc.entity_id AND gc.gid = :gid AND gc.type = :type', [
         ':gid' => $group,
-        ':type' => $group_content_type->id(),
+        ':type' => $relationship_type->id(),
       ]);
       $query->leftJoin('living_spaces_event__agenda', 'a', 'n.nid = a.agenda_target_id');
       $query->isNull('a.agenda_target_id');

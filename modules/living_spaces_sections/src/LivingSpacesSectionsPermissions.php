@@ -19,9 +19,11 @@ class LivingSpacesSectionsPermissions {
     $types = LivingSpacesSectionType::loadMultiple();
 
     foreach ($types as $type) {
-      $permissions["view {$type->id()} section of a living space"] = $this->t('View %name section of a living space', [
-        '%name' => $type->label(),
-      ])->__toString();
+      $permissions["view {$type->id()} section of a living space"] = [
+        'title' => $this->t('View %name section of a living space', [
+          '%name' => $type->label(),
+        ])->__toString(),
+      ];
     }
     return $permissions;
   }

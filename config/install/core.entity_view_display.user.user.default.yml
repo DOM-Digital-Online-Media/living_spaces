@@ -6,21 +6,19 @@ dependencies:
     - field.field.user.user.field_last_ip_address
     - field.field.user.user.field_spoken_languages
     - field.field.user.user.user_picture
-    - image.style.thumbnail
     - views.view.user_groups
   module:
-    - field_ipaddress
-    - image
-    - languagefield
     - layout_builder
+    - living_spaces
+    - living_spaces_group
     - user
     - views
   theme:
     - bootstrap_barrio
 third_party_settings:
   layout_builder:
-    allow_custom: false
     enabled: true
+    allow_custom: false
     sections:
       -
         layout_id: barrio_col2-equal
@@ -28,242 +26,214 @@ third_party_settings:
           label: ''
           context_mapping: {  }
         components:
-          0b42320e-cde1-4351-ac54-abbe0ad1d898:
-            uuid: 0b42320e-cde1-4351-ac54-abbe0ad1d898
+          e9590d38-9d5a-4cae-a27b-e6c9b192973a:
+            uuid: e9590d38-9d5a-4cae-a27b-e6c9b192973a
+            region: top
+            configuration:
+              id: living_spaces_page_title_block
+              label: 'Page Title'
+              label_display: '0'
+              provider: living_spaces
+              context_mapping: {  }
+              lead:
+                -
+                  lead_text: ''
+                  lead_path: ''
+              include_hr: 1
+            weight: 0
+            additional: {  }
+          16479871-01ca-490e-9ff5-3d66fd1ab274:
+            uuid: 16479871-01ca-490e-9ff5-3d66fd1ab274
             region: first
             configuration:
               id: 'field_block:user:user:user_picture'
-              label: 'Profile picture'
-              provider: layout_builder
+              label: Picture
               label_display: '0'
-              formatter:
-                label: hidden
-                type: image
-                settings:
-                  image_style: thumbnail
-                  image_link: ''
-                third_party_settings:
-                  empty_fields:
-                    handler: ''
+              provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
                 view_mode: view_mode
-            additional: {  }
+              formatter:
+                type: image
+                label: hidden
+                settings:
+                  image_link: ''
+                  image_style: thumbnail
+                  image_loading:
+                    attribute: lazy
+                third_party_settings:
+                  empty_fields:
+                    handler: ''
             weight: 0
-          c30c6bc1-9cc6-4bc2-aae0-08c68b2217be:
-            uuid: c30c6bc1-9cc6-4bc2-aae0-08c68b2217be
+            additional: {  }
+          53b55a4b-cb44-4d75-90a5-c946f592ab26:
+            uuid: 53b55a4b-cb44-4d75-90a5-c946f592ab26
             region: first
             configuration:
               id: 'field_block:user:user:core_profiles'
               label: 'Basic Data profiles'
-              provider: layout_builder
               label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
-                label: hidden
                 type: entity_reference_entity_view
+                label: hidden
                 settings:
                   view_mode: first_last_names
                 third_party_settings:
                   empty_fields:
                     handler: ''
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-            additional: {  }
             weight: 1
-          ef892fdd-a462-480a-be8e-d2866ab10238:
-            uuid: ef892fdd-a462-480a-be8e-d2866ab10238
+            additional: {  }
+          8173b353-70c2-46fd-8ae7-3d3ad53225f2:
+            uuid: 8173b353-70c2-46fd-8ae7-3d3ad53225f2
             region: first
             configuration:
               id: 'field_block:user:user:roles'
               label: Roles
-              provider: layout_builder
               label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
-                label: inline
                 type: entity_reference_label
+                label: inline
                 settings:
                   link: false
                 third_party_settings:
                   empty_fields:
                     handler: ''
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-            additional: {  }
             weight: 2
-          6c222d41-e61d-44e4-9c40-d73a49776d51:
-            uuid: 6c222d41-e61d-44e4-9c40-d73a49776d51
+            additional: {  }
+          dfbcb475-249f-4967-997e-a6aebad7efc7:
+            uuid: dfbcb475-249f-4967-997e-a6aebad7efc7
             region: second
             configuration:
               id: 'field_block:user:user:mail'
               label: Email
-              provider: layout_builder
               label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
-                label: inline
                 type: email_mailto
+                label: inline
                 settings: {  }
                 third_party_settings:
                   empty_fields:
                     handler: ''
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
+            weight: 0
             additional: {  }
-            weight: 1
-          f936f574-c200-4aec-ad60-c6bd0557ff3f:
-            uuid: f936f574-c200-4aec-ad60-c6bd0557ff3f
+          63c900d2-cda6-48cb-a1a0-8eeba0fcca22:
+            uuid: 63c900d2-cda6-48cb-a1a0-8eeba0fcca22
             region: second
             configuration:
               id: 'field_block:user:user:contact_data_profiles'
               label: 'Contact Data profiles'
-              provider: layout_builder
               label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
-                label: hidden
                 type: entity_reference_entity_view
+                label: hidden
                 settings:
                   view_mode: phones_address
                 third_party_settings:
                   empty_fields:
                     handler: ''
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
+            weight: 1
             additional: {  }
-            weight: 3
-          50fb1162-d4a9-4725-b532-d064a7dc6e0e:
-            uuid: 50fb1162-d4a9-4725-b532-d064a7dc6e0e
+          ffa95d2b-1e41-408f-a18b-2ab1dd680949:
+            uuid: ffa95d2b-1e41-408f-a18b-2ab1dd680949
             region: second
             configuration:
               id: 'field_block:user:user:core_profiles'
               label: 'Basic Data profiles'
-              provider: layout_builder
               label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
-                label: hidden
                 type: entity_reference_entity_view
+                label: hidden
                 settings:
                   view_mode: birthday_denomination_occupation
                 third_party_settings:
                   empty_fields:
                     handler: ''
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
+            weight: 2
             additional: {  }
-            weight: 4
-          08549dee-9108-4e69-ad50-4f8eae68ecb8:
-            uuid: 08549dee-9108-4e69-ad50-4f8eae68ecb8
-            region: top
+          4a8b0323-1071-4810-a2cf-7fd67a373910:
+            uuid: 4a8b0323-1071-4810-a2cf-7fd67a373910
+            region: bottom
             configuration:
-              id: living_spaces_page_title_block
-              label: 'Page Title'
-              provider: living_spaces
+              id: living_spaces_group_user_footer_title
+              label: 'User view footer title'
               label_display: '0'
-              context_mapping: {  }
-            additional: {  }
+              provider: living_spaces_group
+              context_mapping:
+                user: layout_builder.entity
             weight: 0
-          e65007bf-9855-4716-be9a-34aa49cc1cc3:
-            uuid: e65007bf-9855-4716-be9a-34aa49cc1cc3
+            additional: {  }
+          53517295-7f6d-4ec9-9eda-590a1cbdc5a9:
+            uuid: 53517295-7f6d-4ec9-9eda-590a1cbdc5a9
             region: bottom
             configuration:
               id: 'field_block:user:user:joined_spaces'
               label: Spaces
-              provider: layout_builder
               label_display: visible
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
-                label: hidden
                 type: entity_reference_label
+                label: hidden
                 settings:
                   link: true
                 third_party_settings:
                   empty_fields:
                     handler: ''
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
+            weight: 1
             additional: {  }
-            weight: 3
-          b0d181fc-94f3-4449-acf1-869a63565326:
-            uuid: b0d181fc-94f3-4449-acf1-869a63565326
+          60f1bf3f-d51a-4789-bbd9-749e03f8cfbe:
+            uuid: 60f1bf3f-d51a-4789-bbd9-749e03f8cfbe
             region: bottom
             configuration:
               id: 'views_block:user_groups-circles_of_user'
               label: ''
-              provider: views
               label_display: visible
+              provider: views
+              context_mapping: {  }
               views_label: ''
               items_per_page: none
-              exposed_type_filter:
-                user_group_types:
-                  value:
-                    circle: circle
-              context_mapping: {  }
-            additional: {  }
-            weight: 4
-          6f845a00-470a-4b51-b975-f18269c60826:
-            uuid: 6f845a00-470a-4b51-b975-f18269c60826
-            region: bottom
-            configuration:
-              id: living_spaces_group_user_footer_title
-              label: 'User view footer title'
-              provider: living_spaces_users
-              label_display: '0'
-              context_mapping:
-                user: layout_builder.entity
-            additional: {  }
             weight: 2
+            additional: {  }
         third_party_settings: {  }
 id: user.user.default
 targetEntityType: user
 bundle: user
 mode: default
 content:
-  field_favorite_spaces:
-    weight: 8
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    type: entity_reference_label
-    region: content
-  field_last_ip_address:
-    weight: 6
-    label: above
+  member_for:
     settings: {  }
     third_party_settings: {  }
-    type: ipaddress_default
-    region: content
-  field_spoken_languages:
-    weight: 7
-    label: above
-    settings:
-      link_to_entity: false
-      format:
-        name: name
-    third_party_settings: {  }
-    type: languagefield_default
-    region: content
-  member_for:
     weight: 5
     region: content
-    settings: {  }
-    third_party_settings: {  }
-  user_picture:
-    type: image
-    weight: 0
-    region: content
-    settings:
-      image_style: thumbnail
-      image_link: content
-    third_party_settings: {  }
-    label: hidden
 hidden:
   contact_data_profiles: true
   core_profiles: true
   employee_data_profiles: true
+  field_favorite_spaces: true
+  field_last_ip_address: true
+  field_spoken_languages: true
   langcode: true
   search_api_excerpt: true
-  voluntary_information_profiles: true
+  user_picture: true
