@@ -185,7 +185,8 @@ class LivingSpacesGroupMembersBlock extends BlockBase implements ContainerFactor
       if ($tab) {
         $build['#items'][] = [
           'id' => $tab,
-          'header' => $this->configuration["{$tab}_label"] ?? $tabs[$tab],
+          // Use t() to enable translation.
+          'header' => $this->t($this->configuration["{$tab}_label"] ?? $tabs[$tab]),
           'body' => $this->getTabContent($tab),
         ];
       }

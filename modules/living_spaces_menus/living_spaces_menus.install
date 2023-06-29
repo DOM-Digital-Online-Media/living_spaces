@@ -76,3 +76,20 @@ function living_spaces_menus_update_9003() {
   }
   \Drupal::service('plugin.manager.menu.link')->rebuild();
 }
+
+/**
+ * Delete menu link content and update it from yml.
+ */
+function living_spaces_menus_update_9004() {
+  if (function_exists('living_spaces_menus_uninstall')) {
+    living_spaces_menus_uninstall();
+  }
+
+  try {
+    \Drupal::service('default_content.importer')
+      ->importContent('living_spaces_menus');
+  }
+  catch (Exception $e) {
+  }
+  \Drupal::service('plugin.manager.menu.link')->rebuild();
+}

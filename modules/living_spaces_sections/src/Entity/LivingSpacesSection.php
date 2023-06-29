@@ -264,7 +264,9 @@ class LivingSpacesSection extends ContentEntityBase implements LivingSpacesSecti
    */
   public function getTabLabel() {
     $value = $this->get('tab')->getString();
-    return empty($value) ? $this->label() : $value;
+    $label = empty($value) ? $this->label() : $value;
+    // Used t() to enable translation.
+    return $this->t($label);
   }
 
   /**
