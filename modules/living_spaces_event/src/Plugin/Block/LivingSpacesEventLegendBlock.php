@@ -82,7 +82,8 @@ class LivingSpacesEventLegendBlock extends BlockBase implements ContainerFactory
 
     $types = [];
     foreach ($this->entitytypeBuildInfo->getBundleInfo('living_spaces_event') as $name => $bundle) {
-      if ($section->getGroup()->getGroupType()->hasContentPlugin("living_spaces_event:{$name}")) {
+      // @todo Check if plugin id is correct.
+      if ($section->getGroup()->getGroupType()->hasPlugin("living_spaces_event:{$name}")) {
         $types[$name]['entity_type'] = 'living_spaces_event';
         $types[$name]['field_name'] = 'field_start_date';
         $types[$name]['bundle'] = $name;

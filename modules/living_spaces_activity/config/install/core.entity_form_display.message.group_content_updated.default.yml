@@ -18,7 +18,7 @@ content:
     third_party_settings: {  }
   field_group_content:
     type: entity_reference_autocomplete
-    weight: 11
+    weight: 12
     region: content
     settings:
       match_operator: CONTAINS
@@ -26,10 +26,9 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    field_name: field_group_content
   field_related_space:
     type: entity_reference_autocomplete
-    weight: 12
+    weight: 13
     region: content
     settings:
       match_operator: CONTAINS

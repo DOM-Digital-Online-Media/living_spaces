@@ -14,7 +14,7 @@ class LivingSpacesDefaultRouteSubscriber extends RouteSubscriberBase {
    * {@inheritdoc}
    */
   protected function alterRoutes(RouteCollection $collection) {
-    if ($route = $collection->get('entity.group_content.add_form')) {
+    if ($route = $collection->get('entity.group_relationship.add_form')) {
       $route->addRequirements(['_living_spaces_default_access_check' => '1']);
     }
     if ($route = $collection->get('entity.group.join')) {

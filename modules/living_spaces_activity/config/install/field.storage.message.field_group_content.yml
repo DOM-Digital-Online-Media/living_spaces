@@ -9,7 +9,7 @@ field_name: field_group_content
 entity_type: message
 type: entity_reference
 settings:
-  target_type: group_content
+  target_type: group_relationship
 module: core
 locked: false
 cardinality: 1

@@ -8,13 +8,13 @@
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\group\Entity\GroupInterface;
 use Drupal\profile\Entity\ProfileInterface;
 
 /**
@@ -225,7 +225,7 @@ function living_spaces_users_user_cancel($edit, $account, $method) {
 /**
  * Implements hook_living_spaces_group_exports_info().
  */
-function living_spaces_users_living_spaces_group_exports_info($names_only = TRUE, \Drupal\group\Entity\GroupInterface $space = NULL) {
+function living_spaces_users_living_spaces_group_exports_info($names_only = TRUE, GroupInterface $space = NULL) {
   $full_export_label = t('Members list (Full data)');
   if ($names_only) {
     return [

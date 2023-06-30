@@ -53,14 +53,12 @@ class LivingSpacesGroupManager implements LivingSpacesGroupManagerInterface {
     $types = $this->getLivingSpaceGroupTypes();
     $entity_types = [];
     foreach ($types as $type) {
-      /** @var \Drupal\group\Entity\GroupContentType[] $group_content_types */
-      $group_content_types = $this->entityTypeManager
-        ->getStorage('group_content_type')
+      /** @var \Drupal\group\Entity\GroupRelationshipTypeInterface[] $relationship_types */
+      $relationship_types = $this->entityTypeManager
+        ->getStorage('group_relationship_type')
         ->loadByProperties(['group_type' => $type]);
-      foreach ($group_content_types as $group_content_type) {
-        $plugin = $group_content_type->getContentPlugin();
-        $entity_type = $plugin->getEntityTypeId();
-        $entity_types[$entity_type] = $entity_type;
+      foreach ($relationship_types as $relationship_type) {
+        $entity_types[$relationship_type->getEntityTypeId()] = $relationship_type->getEntityTypeId();
       }
     }
     return $entity_types;

@@ -6,7 +6,6 @@ use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\living_spaces_group\LivingSpacesGroupManager;
 use Drupal\living_spaces_group\LivingSpacesGroupManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -85,20 +84,19 @@ class LivingSpacesGroupUpdateMembershipsForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $types = $this->livingSpacesManager->getLivingSpaceGroupTypes();
-    foreach ($types as &$type) {
-      $type = $type . '-group_membership';
-    }
 
-    $content = $this->entityTypeManager->getStorage('group_content')
+    $memberships = $this->entityTypeManager
+      ->getStorage('group_relationship')
       ->getQuery()
-      ->condition('type', $types, 'IN')
+      ->condition('type', 'group_membership')
+      ->condition('group_type', $types, 'IN')
       ->execute();
 
     $batch_builder = (new BatchBuilder())
       ->setTitle(t('Updating space memberships'))
       ->setFinishCallback([__CLASS__, 'finishedCallback'])
       ->setInitMessage(t('Fetching all memberships of spaces'));
-    foreach ($content as $id) {
+    foreach ($memberships as $id) {
       $batch_builder->addOperation([__CLASS__, 'batchProcess'], [$id]);
     }
     batch_set($batch_builder->toArray());
@@ -113,9 +111,9 @@ class LivingSpacesGroupUpdateMembershipsForm extends FormBase {
    *   Batch context.
    */
   public static function batchProcess($id, array &$context) {
-    /** @var \Drupal\group\Entity\GroupContentInterface $content */
-    if ($content = \Drupal::entityTypeManager()->getStorage('group_content')->load($id)) {
-      $content->save();
+    /** @var \Drupal\group\Entity\GroupRelationshipInterface $relationship */
+    if ($relationship = \Drupal::entityTypeManager()->getStorage('group_relationship')->load($id)) {
+      $relationship->save();
     }
   }
 

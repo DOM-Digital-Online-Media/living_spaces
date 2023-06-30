@@ -12,13 +12,13 @@ mode: default
 content:
   created:
     type: datetime_timestamp
-    weight: 10
+    weight: 1
     region: content
     settings: {  }
     third_party_settings: {  }
   field_group_content:
     type: entity_reference_autocomplete
-    weight: 11
+    weight: 2
     region: content
     settings:
       match_operator: CONTAINS
@@ -26,10 +26,9 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    field_name: field_group_content
   field_related_space:
     type: entity_reference_autocomplete
-    weight: 12
+    weight: 3
     region: content
     settings:
       match_operator: CONTAINS
@@ -39,7 +38,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 5
+    weight: 0
     region: content
     settings:
       match_operator: CONTAINS

@@ -114,12 +114,8 @@ class LivingSpacesGroupChangeRoleForm extends FormBase {
     if ($group = $this->entityTypeManager->getStorage('group')->load($temp['group'])) {
       /** @var \Drupal\user\Entity\User $user */
       foreach ($temp['users'] as $user) {
-        $content = $group->getContent('group_membership', ['entity_id' => $user->id()]);
-        /** @var \Drupal\group\Entity\GroupContent $item */
-        foreach ($content as $item) {
-          $item->set('group_roles', $roles);
-          $item->save();
-        }
+        $relationship = $group->getMember($user)->getGroupRelationship();
+        $relationship->set('group_roles', $roles)->save();
       }
     }
   }

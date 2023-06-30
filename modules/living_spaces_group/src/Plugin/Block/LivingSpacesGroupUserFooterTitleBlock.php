@@ -28,7 +28,7 @@ class LivingSpacesGroupUserFooterTitleBlock extends BlockBase {
       '#type' => 'html_tag',
       '#tag' => 'h2',
       '#value' => $this->t('@user is a member here', [
-        '@user' => $user->getDisplayName()
+        '@user' => $user->getDisplayName(),
       ]),
     ];
     return $build;

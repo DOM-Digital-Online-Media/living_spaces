@@ -13,8 +13,8 @@ dependencies:
     - bootstrap_barrio
 third_party_settings:
   layout_builder:
-    allow_custom: false
     enabled: true
+    allow_custom: false
     sections:
       -
         layout_id: barrio_col2-equal
@@ -22,45 +22,45 @@ third_party_settings:
           label: ''
           context_mapping: {  }
         components:
-          65b6031f-058b-4d99-8f07-a632e4298e50:
-            uuid: 65b6031f-058b-4d99-8f07-a632e4298e50
+          98b46f26-43d5-4e42-9102-ba69a8f53b28:
+            uuid: 98b46f26-43d5-4e42-9102-ba69a8f53b28
             region: first
             configuration:
               id: 'views_block:recent_discussions-posts'
               label: ''
-              provider: views
               label_display: visible
+              provider: views
+              context_mapping: {  }
               views_label: ''
               items_per_page: none
-              context_mapping: {  }
-            additional: {  }
             weight: 0
-          fc6ccff8-f488-40e5-9510-b9603256df59:
-            uuid: fc6ccff8-f488-40e5-9510-b9603256df59
-            region: second
-            configuration:
-              id: 'views_block:group_content-events'
-              label: ''
-              provider: views
-              label_display: visible
-              views_label: ''
-              items_per_page: none
-              context_mapping: {  }
             additional: {  }
-            weight: 0
-          5bf57016-faa4-4f7b-959b-ce90522c9387:
-            uuid: 5bf57016-faa4-4f7b-959b-ce90522c9387
+          01e16816-b2ad-4e27-a6f8-fbc24bef407e:
+            uuid: 01e16816-b2ad-4e27-a6f8-fbc24bef407e
             region: first
             configuration:
               id: 'views_block:message-space_activity'
               label: ''
-              provider: views
               label_display: visible
+              provider: views
+              context_mapping: {  }
               views_label: ''
               items_per_page: none
-              context_mapping: {  }
-            additional: {  }
             weight: 1
+            additional: {  }
+          4e71b5f8-e19b-4de9-8b3e-fafdcdd6a732:
+            uuid: 4e71b5f8-e19b-4de9-8b3e-fafdcdd6a732
+            region: second
+            configuration:
+              id: 'views_block:group_content-events'
+              label: ''
+              label_display: visible
+              provider: views
+              context_mapping: {  }
+              views_label: ''
+              items_per_page: none
+            weight: 0
+            additional: {  }
         third_party_settings: {  }
 id: group.living_space.default
 targetEntityType: group
@@ -68,15 +68,16 @@ bundle: living_space
 mode: default
 content:
   label:
-    label: hidden
     type: string
-    weight: -5
-    region: content
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: -5
+    region: content
 hidden:
   changed: true
   created: true
   langcode: true
+  search_api_excerpt: true
   uid: true

@@ -10,22 +10,23 @@ targetEntityType: group
 bundle: department
 mode: default
 content:
-  field_space_denomination:
-    weight: 3
-    settings: {  }
-    third_party_settings: {  }
-    type: options_select
+  allow_admins_to_edit_members:
+    type: boolean_checkbox
+    weight: 1
     region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   field_space_functions:
+    type: entity_reference_autocomplete
     weight: 4
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   label:
     type: string_textfield
     weight: 0
@@ -36,13 +37,13 @@ content:
     third_party_settings: {  }
   living_space_privacy:
     type: options_buttons
-    weight: 2
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }
   parent:
     type: entity_reference_autocomplete
-    weight: 1
+    weight: 2
     region: content
     settings:
       match_operator: CONTAINS
@@ -50,8 +51,16 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  protected:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
 hidden:
   content_sections: true
+  field_space_denomination: true
   is_default: true
   langcode: true
   path: true

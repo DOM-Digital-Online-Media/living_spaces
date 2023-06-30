@@ -4,9 +4,7 @@ namespace Drupal\living_spaces_group\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
-use Drupal\group\Entity\GroupContent;
 use Drupal\group\Entity\GroupInterface;
-use Drupal\living_spaces_intranet\LivingSpacesBansManagerInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -56,7 +54,7 @@ class LivingSpacesGroupController extends ControllerBase {
    */
   public function removeMember(GroupInterface $group, UserInterface $user) {
     if ($membership = $group->getMember($user)) {
-      $membership->getGroupContent()->delete();
+      $membership->getGroupRelationship()->delete();
     }
 
     return new RedirectResponse(
@@ -131,9 +129,9 @@ class LivingSpacesGroupController extends ControllerBase {
     $admin_role = $admin_roles ? key($admin_roles) : NULL;
     if ($admin_role) {
       $membership = $group->getMember($user);
-      $content = $membership->getGroupContent();
-      $content->get('group_roles')->appendItem($admin_role);
-      $content->save();
+      $relationship = $membership->getGroupRelationship();
+      $relationship->get('group_roles')->appendItem($admin_role);
+      $relationship->save();
     }
     return new RedirectResponse(
       Url::fromRoute('page_manager.page_view_living_space_members_living_space_members-layout_builder-0', [
@@ -160,15 +158,15 @@ class LivingSpacesGroupController extends ControllerBase {
       'group_type' => $group->getGroupType()->id(),
       'is_space_admin' => TRUE,
     ]);
-    $content = $group->getMember($user)->getGroupContent();
-    $role_ids = $content->get('group_roles')->getValue();
+    $relationship = $group->getMember($user)->getGroupRelationship();
+    $role_ids = $relationship->get('group_roles')->getValue();
     foreach ($role_ids as $key => $id) {
       if (in_array($id['target_id'], array_keys($admin_roles))) {
         unset($role_ids[$key]);
       }
     }
-    $content->set('group_roles', array_values($role_ids));
-    $content->save();
+    $relationship->set('group_roles', array_values($role_ids));
+    $relationship->save();
 
     return new RedirectResponse(
       Url::fromRoute('page_manager.page_view_living_space_members_living_space_members-layout_builder-0', [
@@ -181,7 +179,8 @@ class LivingSpacesGroupController extends ControllerBase {
    * Returns response for the preferred spaces redirect.
    */
   public function spaceRedirect($type) {
-    $account = $this->entityTypeManager()->getStorage('user')->load($this->currentUser()->id());
+    $account = $this->entityTypeManager()->getStorage('user')
+      ->load($this->currentUser()->id());
 
     if (!$account->get('preferred_spaces')->isEmpty()) {
       $gids = [];
@@ -204,16 +203,10 @@ class LivingSpacesGroupController extends ControllerBase {
    * Returns response for the join space route.
    */
   public function join(GroupInterface $group) {
-    /** @var \Drupal\group\Plugin\GroupContentEnablerInterface $plugin */
-    $plugin = $group->getGroupType()->getContentPlugin('group_membership');
-
-    $group_content = GroupContent::create([
-      'type' => $plugin->getContentTypeConfigId(),
-      'gid' => $group->id(),
-      'entity_id' => $this->currentUser()->id(),
-    ]);
-
-    $group_content->save();
+    /** @var \Drupal\user\UserInterface $user */
+    $user = $this->entityTypeManager->getStorage('user')
+      ->load($this->currentUser()->id());
+    $group->addMember($user);
 
     $this->messenger()->addStatus($this->t('You have joined the group.'));
     $query = $this->requestStack->getCurrentRequest()->query;

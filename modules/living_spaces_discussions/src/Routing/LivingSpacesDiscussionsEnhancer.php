@@ -52,6 +52,7 @@ class LivingSpacesDiscussionsEnhancer implements EnhancerInterface {
     /** @var \Drupal\node\NodeInterface $node */
     $node = $defaults['node'];
 
+    // @todo Refactor this to apply to all related space entities.
     if ('discussion_post' == $node->bundle()) {
       if ($group = $node->get('space')->entity) {
         $gid = $group->id();

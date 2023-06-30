@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.living_space
+    - node.type.discussion_post
+  module:
+    - gnode
+    - node
+id: living_space-3c116df195fcf5a1b49
+label: 'Standard: Group node (Discussion post)'
+description: 'Adds <em class="placeholder">Discussion post</em> content to groups both publicly and privately.'
+group_type: living_space
+content_plugin: 'group_node:discussion_post'
+plugin_config:
+  group_cardinality: 0
+  entity_cardinality: 1
+  use_creation_wizard: false

@@ -62,7 +62,10 @@ class LivingSpacesGroupBreadcrumbs implements BreadcrumbBuilderInterface {
 
     $home = $this->config->get('easy_breadcrumb.settings')->get('home_segment_title');
     $breadcrumb->addLink(Link::createFromRoute(!empty($home) ? $home : $this->t('Start'), '<front>'));
-    $this->moduleHandler->invokeAll('living_spaces_breadcrumbs_info', [$route_match, $breadcrumb]);
+    $this->moduleHandler->invokeAll('living_spaces_breadcrumbs_info', [
+      $route_match,
+      $breadcrumb,
+    ]);
     $this->moduleHandler->alter('living_spaces_breadcrumbs_info', $route_match, $breadcrumb);
 
     return $breadcrumb;

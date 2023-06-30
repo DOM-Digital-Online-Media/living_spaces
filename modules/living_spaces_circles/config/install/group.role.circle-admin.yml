@@ -5,15 +5,14 @@ dependencies:
     - group.type.circle
 id: circle-admin
 label: 'Circle Administrator'
-weight: 102
-internal: false
-audience: member
+weight: -99
+admin: false
+scope: individual
+global_role: null
 group_type: circle
-permissions_ui: true
 permissions:
   - 'access content overview'
   - 'access group_node overview'
-  - 'administer group'
   - 'administer members'
   - 'create page entities'
   - 'delete group'
@@ -24,13 +23,13 @@ permissions:
   - 'leave group'
   - 'manage space members'
   - 'revert group revisions'
-  - 'update own group_membership content'
+  - 'update own group_membership relationship'
   - 'view any unpublished group'
   - 'view discussions section of a living space'
   - 'view events section of a living space'
   - 'view group'
   - 'view group revisions'
-  - 'view group_membership content'
+  - 'view group_membership relationship'
   - 'view latest group version'
   - 'view own unpublished group'
   - 'view published pages'

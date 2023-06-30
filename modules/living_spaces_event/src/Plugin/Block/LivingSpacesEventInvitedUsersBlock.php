@@ -178,7 +178,7 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
 
               $suffix .= Link::createFromRoute($this->t('Accept'), 'living_spaces_event.event_status', [
                 'living_spaces_event_invite' => $invite->id(),
-                'status' => $statuses[LIVING_SPACES_EVENT_ACCEPTED_STATUS] ? $statuses[LIVING_SPACES_EVENT_ACCEPTED_STATUS] : '',
+                'status' => $statuses[LIVING_SPACES_EVENT_ACCEPTED_STATUS] ?: '',
               ], $options)->toString();
             }
 
@@ -194,7 +194,7 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
 
               $suffix .= Link::createFromRoute($this->t('Decline'), 'living_spaces_event.event_status', [
                 'living_spaces_event_invite' => $invite->id(),
-                'status' => $statuses[LIVING_SPACES_EVENT_DECLINED_STATUS] ? $statuses[LIVING_SPACES_EVENT_DECLINED_STATUS] : '',
+                'status' => $statuses[LIVING_SPACES_EVENT_DECLINED_STATUS] ?: '',
               ], $options)->toString();
             }
           }

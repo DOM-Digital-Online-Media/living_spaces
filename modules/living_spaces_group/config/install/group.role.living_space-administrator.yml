@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.living_space
+    - user.role.client_admin
+id: living_space-administrator
+label: Administrator
+weight: -98
+admin: false
+scope: outsider
+global_role: client_admin
+group_type: living_space
+permissions:
+  - 'administer members'
+is_space_admin: false

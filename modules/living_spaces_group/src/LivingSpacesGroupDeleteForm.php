@@ -56,14 +56,12 @@ class LivingSpacesGroupDeleteForm extends ContentEntityDeleteForm {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $object = $form_state->getFormObject();
-
     /** @var \Drupal\group\Entity\GroupInterface $group */
-    $group = $object->getEntity();
+    $group = $form_state->getFormObject()->getEntity();
 
     $items = [];
-    foreach ($group->getContent() as $group_content) {
-      $items['group_content'][] = $group_content->id();
+    foreach ($group->getRelationships() as $relationship) {
+      $items['group_relationship'][] = $relationship->id();
     }
 
     $items['group'][] = $group->id();

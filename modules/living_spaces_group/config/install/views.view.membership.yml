@@ -5,7 +5,6 @@ dependencies:
     - group
     - living_spaces_group_privacy
     - living_spaces_subgroup
-    - living_spaces_users
     - user
 id: membership
 label: Membership
@@ -20,672 +19,6 @@ display:
     display_title: Default
     display_plugin: default
     position: 0
-    display_options:
-      title: Groups
-      fields:
-        label:
-          id: label
-          table: groups_field_data
-          field: label
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: null
-          entity_field: label
-          plugin_id: field
-          label: Title
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: true
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-        living_spaces_subgroup_parent_field:
-          id: living_spaces_subgroup_parent_field
-          table: groups_field_data
-          field: living_spaces_subgroup_parent_field
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: group
-          plugin_id: living_spaces_subgroup_parent_field
-          label: Hierarchy
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          all: 1
-        type:
-          id: type
-          table: groups_field_data
-          field: type
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: group
-          entity_field: type
-          plugin_id: field
-          label: Type
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: target_id
-          type: entity_reference_label
-          settings:
-            link: false
-          group_column: target_id
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-        uid:
-          id: uid
-          table: groups_field_data
-          field: uid
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: group
-          entity_field: uid
-          plugin_id: field
-          label: Manager
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: target_id
-          type: entity_reference_label
-          settings:
-            link: true
-          group_column: target_id
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-        living_spaces_group_privacy_field:
-          id: living_spaces_group_privacy_field
-          table: groups_field_data
-          field: living_spaces_group_privacy_field
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: group
-          plugin_id: living_spaces_group_privacy_field
-          label: Access
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-        operations:
-          id: operations
-          table: groups
-          field: operations
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: group
-          plugin_id: entity_operations
-          label: Actions
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          destination: false
-      pager:
-        type: full
-        options:
-          offset: 0
-          items_per_page: 25
-          total_pages: null
-          id: 0
-          tags:
-            next: ››
-            previous: ‹‹
-            first: '« First'
-            last: 'Last »'
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
-          quantity: 9
-      exposed_form:
-        type: basic
-        options:
-          submit_button: Apply
-          reset_button: true
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
-          expose_sort_order: true
-          sort_asc_label: Asc
-          sort_desc_label: Desc
-      access:
-        type: perm
-        options:
-          perm: 'manage living spaces'
-      cache:
-        type: tag
-        options: {  }
-      empty: {  }
-      sorts: {  }
-      arguments: {  }
-      filters:
-        type:
-          id: type
-          table: groups_field_data
-          field: type
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: group
-          entity_field: type
-          plugin_id: bundle
-          operator: in
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: type_op
-            label: Type
-            description: ''
-            use_operator: false
-            operator: type_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: type
-            required: false
-            remember: false
-            multiple: true
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-        label:
-          id: label
-          table: groups_field_data
-          field: label
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: group
-          entity_field: label
-          plugin_id: string
-          operator: word
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: label_op
-            label: Title
-            description: ''
-            use_operator: false
-            operator: label_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: label
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-            placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-        living_spaces_group_is_living:
-          id: living_spaces_group_is_living
-          table: groups_field_data
-          field: living_spaces_group_is_living
-          relationship: none
-          group_type: group
-          admin_label: 'Living space'
-          entity_type: group
-          plugin_id: living_spaces_group_is_living
-          operator: in
-          value: {  }
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-        living_space_privacy:
-          id: living_space_privacy
-          table: groups_field_data
-          field: living_space_privacy
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: group
-          entity_field: living_space_privacy
-          plugin_id: string
-          operator: '='
-          value: private
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-        living_spaces_is_current_user_in_field:
-          id: living_spaces_is_current_user_in_field
-          table: views
-          field: living_spaces_is_current_user_in_field
-          plugin_id: living_spaces_is_current_user_in_field
-          expose:
-            operator_limit_selection: false
-            operator_list: {  }
-      filter_groups:
-        operator: AND
-        groups:
-          1: AND
-      style:
-        type: table
-        options:
-          grouping: {  }
-          row_class: ''
-          default_row_class: true
-          columns:
-            label: label
-            living_spaces_subgroup_parent_field: living_spaces_subgroup_parent_field
-            type: type
-            uid: uid
-            living_spaces_group_privacy_field: living_spaces_group_privacy_field
-            operations: operations
-          default: label
-          info:
-            label:
-              sortable: true
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            living_spaces_subgroup_parent_field:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            type:
-              sortable: true
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            uid:
-              sortable: true
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            living_spaces_group_privacy_field:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            operations:
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-          override: true
-          sticky: false
-          summary: ''
-          empty_table: false
-          caption: ''
-          description: ''
-      row:
-        type: fields
-      query:
-        type: views_query
-        options:
-          query_comment: ''
-          disable_sql_rewrite: false
-          distinct: false
-          replica: false
-          query_tags: {  }
-      relationships:
-        group_content_id:
-          id: group_content_id
-          table: groups_field_data
-          field: group_content_id
-          entity_type: group
-          plugin_id: group_to_group_content
-      header: {  }
-      footer: {  }
-      display_extenders: {  }
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - url
-        - url.query_args
-        - user.permissions
-      tags: {  }
-  member_of_circles:
-    id: member_of_circles
-    display_title: 'I am Member of Circles'
-    display_plugin: page
-    position: 1
     display_options:
       title: Circles
       fields:
@@ -804,10 +137,46 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 25
+          total_pages: null
+          id: 0
+          tags:
+            next: ››
+            previous: ‹‹
+            first: '« First'
+            last: 'Last »'
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          quantity: 9
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
       access:
         type: perm
         options:
           perm: 'access living spaces overview'
+      cache:
+        type: tag
+        options: {  }
+      empty: {  }
+      sorts: {  }
       arguments:
         uid:
           id: uid
@@ -863,8 +232,8 @@ display:
           exposed: false
           expose:
             operator_id: type_op
-            label: Type
-            description: ''
+            label: 'Group type'
+            description: null
             use_operator: false
             operator: type_op
             operator_limit_selection: false
@@ -872,11 +241,114 @@ display:
             identifier: type
             required: false
             remember: false
-            multiple: true
+            multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      style:
+        type: table
+      row:
+        type: fields
+      query:
+        type: views_query
+        options:
+          query_comment: ''
+          disable_sql_rewrite: false
+          distinct: false
+          replica: false
+          query_tags: {  }
+          contextual_filters_or: false
+      relationships:
+        group_relationship_id:
+          id: group_relationship_id
+          table: groups_field_data
+          field: group_relationship_id
+          relationship: none
+          group_type: group
+          admin_label: 'Group relationship'
+          entity_type: group
+          plugin_id: group_to_group_relationship
+          required: false
+          group_relation_plugins:
+            group_membership: group_membership
+            'group_node:agenda': '0'
+            'group_node:changelog': '0'
+            'group_node:discussion_post': '0'
+            'group_node:page': '0'
+            'group_node:protocol': '0'
+        gc__user:
+          id: gc__user
+          table: group_relationship_field_data
+          field: gc__user
+          relationship: group_relationship_id
+          group_type: group
+          admin_label: 'Group relationship User'
+          entity_type: group_relationship
+          plugin_id: group_relationship_to_entity
+          required: false
+          group_relation_plugins:
+            group_membership: group_membership
+      header: {  }
+      footer: {  }
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user
+        - user.permissions
+      tags: {  }
+  member_of_circles:
+    id: member_of_circles
+    display_title: 'I am Member of Circles'
+    display_plugin: page
+    position: 1
+    display_options:
+      filters:
+        type:
+          id: type
+          table: groups_field_data
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: group
+          entity_field: type
+          plugin_id: bundle
+          operator: in
+          value:
+            circle: circle
+          group: 1
+          exposed: false
+          expose:
+            operator_id: type_op
+            label: 'Group type'
+            description: null
+            use_operator: false
+            operator: type_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: type
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
             reduce: false
           is_grouped: false
           group_info:
@@ -895,40 +367,8 @@ display:
         groups:
           1: AND
       defaults:
-        access: false
-        title: false
-        group_by: false
-        relationships: false
-        fields: false
-        arguments: false
         filters: false
         filter_groups: false
-      relationships:
-        group_content_id:
-          id: group_content_id
-          table: groups_field_data
-          field: group_content_id
-          relationship: none
-          group_type: group
-          admin_label: 'Group content'
-          entity_type: group
-          plugin_id: group_to_group_content
-          required: false
-          group_content_plugins:
-            group_membership: group_membership
-        gc__user:
-          id: gc__user
-          table: group_content_field_data
-          field: gc__user
-          relationship: group_content_id
-          group_type: group
-          admin_label: 'Group content User'
-          entity_type: group_content
-          plugin_id: group_content_to_entity
-          required: false
-          group_content_plugins:
-            group_membership: group_membership
-      group_by: false
       display_description: ''
       display_extenders: {  }
       path: membership/circles
@@ -955,7 +395,7 @@ display:
     id: member_of_spaces
     display_title: 'I am a member of Spaces'
     display_plugin: page
-    position: 1
+    position: 2
     display_options:
       title: Spaces
       fields:
@@ -1289,10 +729,6 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: false
-      access:
-        type: perm
-        options:
-          perm: 'access living spaces overview'
       arguments: {  }
       filters:
         type:
@@ -1325,6 +761,13 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
+              client_admin: '0'
+              full_time_employee: '0'
+              volunteer: '0'
+              external_employee: '0'
+              former_employee: '0'
+              office_manager: '0'
+              assistant_to_the_office_manager: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -1378,8 +821,8 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        living_space_privacy:
-          id: living_space_privacy
+        living_space_privacy_1:
+          id: living_space_privacy_1
           table: groups_field_data
           field: living_space_privacy
           relationship: none
@@ -1419,8 +862,8 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        living_spaces_group_user_joined_spaces:
-          id: living_spaces_group_user_joined_spaces
+        living_spaces_group_user_joined_spaces_1:
+          id: living_spaces_group_user_joined_spaces_1
           table: groups_field_data
           field: living_spaces_group_user_joined_spaces
           relationship: none
@@ -1435,26 +878,18 @@ display:
           exposed: false
           expose:
             operator_id: ''
-            label: 'I am a member of the space'
+            label: ''
             description: ''
             use_operator: false
-            operator: living_spaces_group_user_joined_spaces_op
+            operator: ''
             operator_limit_selection: false
             operator_list: {  }
-            identifier: living_spaces_group_user_joined_spaces
+            identifier: ''
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
-              administrator: '0'
-              client_admin: '0'
-              office_manager: '0'
-              full_time_employee: '0'
-              former_employee: '0'
-              counselee: '0'
-              anonymous: '0'
-            reduce: false
           is_grouped: false
           group_info:
             label: ''
@@ -1467,9 +902,9 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          group_in_user_joined_spaces: 'yes'
-        living_spaces_group_user_joined_spaces_1:
-          id: living_spaces_group_user_joined_spaces_1
+          group_in_user_joined_spaces: ''
+        living_spaces_group_user_joined_spaces:
+          id: living_spaces_group_user_joined_spaces
           table: groups_field_data
           field: living_spaces_group_user_joined_spaces
           relationship: none
@@ -1487,7 +922,7 @@ display:
             label: 'Membership status'
             description: ''
             use_operator: false
-            operator: living_spaces_group_user_joined_spaces_1_op
+            operator: living_spaces_group_user_joined_spaces_op
             operator_limit_selection: false
             operator_list: {  }
             identifier: living_spaces_group_user_joined_spaces_1
@@ -1496,13 +931,15 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
+              anonymous: '0'
               administrator: '0'
               client_admin: '0'
-              office_manager: '0'
               full_time_employee: '0'
+              volunteer: '0'
+              external_employee: '0'
               former_employee: '0'
-              counselee: '0'
-              anonymous: '0'
+              office_manager: '0'
+              assistant_to_the_office_manager: '0'
           is_grouped: false
           group_info:
             label: ''
@@ -1516,8 +953,8 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           group_in_user_joined_spaces: ''
-        living_space_privacy_1:
-          id: living_space_privacy_1
+        living_space_privacy:
+          id: living_space_privacy
           table: groups_field_data
           field: living_space_privacy
           relationship: none
@@ -1527,31 +964,24 @@ display:
           entity_field: living_space_privacy
           plugin_id: string
           operator: '='
-          value: private
+          value: ''
           group: 1
           exposed: true
           expose:
-            operator_id: living_space_privacy_1_op
+            operator_id: living_space_privacy_op
             label: Privacy
-            description: ''
+            description: null
             use_operator: false
-            operator: living_space_privacy_1_op
+            operator: living_space_privacy_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: space_privacy
+            identifier: living_space_privacy
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
-              administrator: '0'
-              client_admin: '0'
-              office_manager: '0'
-              full_time_employee: '0'
-              former_employee: '0'
-              counselee: '0'
-              anonymous: '0'
-            placeholder: ''
+            placeholder: null
           is_grouped: true
           group_info:
             label: Privacy
@@ -1578,49 +1008,12 @@ display:
           1: AND
           2: OR
       defaults:
-        access: false
         title: false
         group_by: false
-        relationships: false
         fields: false
         arguments: false
         filters: false
         filter_groups: false
-      relationships:
-        group_content_id:
-          id: group_content_id
-          table: groups_field_data
-          field: group_content_id
-          relationship: none
-          group_type: group
-          admin_label: 'Group content'
-          entity_type: group
-          plugin_id: group_to_group_content
-          required: false
-          group_content_plugins:
-            group_membership: group_membership
-            'group_node:agenda': '0'
-            'group_node:changelog': '0'
-            'group_node:discussion_post': '0'
-            'group_node:page': '0'
-            'group_node:protocol': '0'
-            'living_spaces_event:event': '0'
-            'living_spaces_event:general': '0'
-            'living_spaces_event:room_occupied': '0'
-            'living_spaces_event:supervision': '0'
-            'living_spaces_event:training': '0'
-        gc__user:
-          id: gc__user
-          table: group_content_field_data
-          field: gc__user
-          relationship: group_content_id
-          group_type: group
-          admin_label: 'Group content User'
-          entity_type: group_content
-          plugin_id: group_content_to_entity
-          required: false
-          group_content_plugins:
-            group_membership: group_membership
       group_by: true
       display_description: ''
       display_extenders: {  }
@@ -1631,7 +1024,7 @@ display:
         description: 'I am a member of Spaces'
         weight: -10
         expanded: false
-        menu_name: account
+        menu_name: main
         parent: ''
         context: '0'
       tab_options:

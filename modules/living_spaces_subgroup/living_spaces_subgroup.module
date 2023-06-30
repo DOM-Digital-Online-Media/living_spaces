@@ -112,10 +112,11 @@ function living_spaces_subgroup_group_confirm_form_submit($form, FormStateInterf
 
   $items = [];
   foreach ($values['subgroups'] as $subgroup_id => $subgroup) {
+    /** @var \Drupal\group\Entity\GroupInterface $child */
     $child = \Drupal::entityTypeManager()->getStorage('group')->load($subgroup_id);
     if ($subgroup) {
-      foreach ($child->getContent() as $group_content) {
-        $items['group_content'][] = $group_content->id();
+      foreach ($child->getRelationships() as $group_relationship) {
+        $items['group_relationship'][] = $group_relationship->id();
       }
 
       $items['group'][] = $subgroup_id;

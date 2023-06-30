@@ -6,7 +6,6 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
-use Drupal\group\Entity\GroupInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -98,7 +97,7 @@ class LivingSpacesGroupMembershipBlock extends BlockBase implements ContainerFac
     /** @var \Drupal\group\Entity\GroupInterface $group */
     $group = $this->getContextValue('group');
 
-    if ($group->getGroupType()->hasContentPlugin('group_membership')) {
+    if ($group->getGroupType()->hasPlugin('group_membership')) {
       return $this->formBuilder->getForm('Drupal\living_spaces_group\Form\LivingSpacesGroupMembershipForm', $group);
     }
 
@@ -109,14 +108,16 @@ class LivingSpacesGroupMembershipBlock extends BlockBase implements ContainerFac
    * {@inheritdoc}
    */
   public function blockAccess(AccountInterface $account) {
-    /** @var \Drupal\group\Entity\GroupInterface $group */
-    $group = $this->getContextValue('group');
-    $access = $group->hasPermission('administer members', $account);
+    /** @var \Drupal\group\Entity\GroupInterface $context_group */
+    $context_group = $this->getContextValue('group');
+    $access = $context_group->hasPermission('administer members', $account);
 
     if (!$access && $account->hasPermission('add members to administered space')) {
       $gid = $this->currentRouteMatch->getRawParameter('group');
 
+      /** @var \Drupal\group\Entity\GroupInterface $group */
       if ($gid && $group = $this->entityTypeManager->getStorage('group')->load($gid)) {
+        /** @var \Drupal\group\Entity\Storage\GroupRoleStorageInterface $role_storage */
         $role_storage = $this->entityTypeManager->getStorage('group_role');
         $roles = $role_storage->loadByUserAndGroup($account, $group);
 

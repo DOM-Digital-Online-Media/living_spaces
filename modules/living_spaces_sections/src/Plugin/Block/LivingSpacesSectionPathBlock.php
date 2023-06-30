@@ -99,13 +99,13 @@ class LivingSpacesSectionPathBlock extends BlockBase implements ContainerFactory
       '#options' => $options,
       '#empty_option' => $this->t(' - Select a value - '),
       '#empty_value' => '',
-      '#default_value' => isset($config['bundle']) ? $config['bundle'] : '',
+      '#default_value' => $config['bundle'] ?? '',
     ];
 
     $form['title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Label'),
-      '#default_value' => isset($config['title']) ? $config['title'] : '',
+      '#default_value' => $config['title'] ?? '',
     ];
 
     return $form;

@@ -10,7 +10,7 @@ use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\group\Entity\GroupContentInterface;
+use Drupal\group\Entity\GroupRelationshipInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use \Drupal\comment\CommentInterface;
@@ -27,10 +27,10 @@ function living_spaces_discussions_entity_bundle_info_alter(&$bundles) {
 /**
  * Implements hook_living_spaces_sections_content_alter().
  */
-function living_spaces_discussions_living_spaces_sections_content_alter(GroupContentInterface $content, &$section) {
-  if ($content->getEntity() instanceof NodeInterface &&
-    'discussion_post' == $content->getEntity()->bundle() &&
-    $data = \Drupal::service('living_spaces_sections.manager')->getSectionFromGroupByType($content->getGroup(), 'discussions')
+function living_spaces_discussions_living_spaces_sections_content_alter(GroupRelationshipInterface $relationship, &$section) {
+  if ($relationship->getEntity() instanceof NodeInterface &&
+    'discussion_post' == $relationship->getEntity()->bundle() &&
+    $data = \Drupal::service('living_spaces_sections.manager')->getSectionFromGroupByType($relationship->getGroup(), 'discussions')
   ) {
     $section = $data;
   }

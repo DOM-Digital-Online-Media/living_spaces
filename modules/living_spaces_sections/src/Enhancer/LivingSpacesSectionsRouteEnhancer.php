@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
- * Enhances several routes which use section path and group to fetch section entity.
+ * Enhances routes which use section path and group to fetch section entity.
  */
 class LivingSpacesSectionsRouteEnhancer implements EnhancerInterface {
 
@@ -92,7 +92,7 @@ class LivingSpacesSectionsRouteEnhancer implements EnhancerInterface {
       LivingSpacesSectionsHtmlRouteProvider::SUB_SECTION_ROUTE,
 
       // Sub-sections settings route use parent section path.
-      'living_spaces_sections.sub_sections_form'
+      'living_spaces_sections.sub_sections_form',
     ]);
   }
 

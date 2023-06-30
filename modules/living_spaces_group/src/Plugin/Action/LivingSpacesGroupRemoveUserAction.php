@@ -84,13 +84,12 @@ class LivingSpacesGroupRemoveUserAction extends ActionBase implements ContainerF
    */
   public function executeMultiple(array $entities) {
     $gid = $this->route->getRawParameter('group');
+    /** @var \Drupal\group\Entity\Group $group */
     if ($gid && $group = $this->entityTypeManager->getStorage('group')->load($gid)) {
       /** @var \Drupal\user\Entity\User $user */
       foreach ($entities as $user) {
-        $content = $group->getContent('group_membership', ['entity_id' => $user->id()]);
-        /** @var \Drupal\group\Entity\GroupContent $item */
-        foreach ($content as $item) {
-          $item->delete();
+        if ($membership = $group->getMember($user)) {
+          $membership->getGroupRelationship()->delete();
         }
       }
     }
@@ -107,7 +106,7 @@ class LivingSpacesGroupRemoveUserAction extends ActionBase implements ContainerF
    * {@inheritdoc}
    */
   public function access($object, AccountInterface $account = NULL, $return_as_object = FALSE) {
-    $user = $account ? $account : $this->currentUser;
+    $user = $account ?: $this->currentUser;
     return $user->hasPermission('manage living spaces');
   }
 

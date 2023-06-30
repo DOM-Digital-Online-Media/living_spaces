@@ -14,18 +14,18 @@ variant_settings:
   id: block_display
   label: null
   weight: 0
-  uuid: 3f8105a5-3be8-4779-bea1-c652fa7ca20c
+  uuid: f9c37e91-97c5-4628-8647-d5d9a3c89cae
   blocks:
-    44804150-7643-45a5-a9fa-bd5cf0f43c4c:
+    aa84489c-3b58-43aa-a105-f372ded9ccca:
       id: living_spaces_group_overview_block
       label: 'Space overview'
       label_display: '0'
       provider: living_spaces_group
       context_mapping: {  }
       region: top
-      weight: -9
-      uuid: 44804150-7643-45a5-a9fa-bd5cf0f43c4c
-    b12e2d5b-e9cc-4e53-ada0-4f8a2a2853a0:
+      weight: 0
+      uuid: aa84489c-3b58-43aa-a105-f372ded9ccca
+    de5911a2-a0f7-4d4f-9c06-403ec69820eb:
       id: 'views_block:members-people'
       label: Members
       label_display: '0'
@@ -34,8 +34,8 @@ variant_settings:
       views_label: Members
       items_per_page: none
       region: top
-      weight: -8
-      uuid: b12e2d5b-e9cc-4e53-ada0-4f8a2a2853a0
+      weight: 0
+      uuid: de5911a2-a0f7-4d4f-9c06-403ec69820eb
   page_title: 'Members & Roles'
 page: members_roles
 selection_criteria: {  }

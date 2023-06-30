@@ -5,14 +5,13 @@ dependencies:
     - group.type.living_space
 id: living_space-admin
 label: 'Space Administrator'
-weight: 100
-internal: false
-audience: member
+weight: -99
+admin: false
+scope: individual
+global_role: null
 group_type: living_space
-permissions_ui: true
 permissions:
   - 'access content overview'
-  - 'administer group'
   - 'administer living spaces sections settings'
   - 'administer members'
   - 'delete group'
@@ -20,7 +19,7 @@ permissions:
   - 'leave group'
   - 'manage living spaces sections settings'
   - 'manage space members'
-  - 'update own group_membership content'
+  - 'update own group_membership relationship'
   - 'view group'
-  - 'view group_membership content'
+  - 'view group_membership relationship'
 is_space_admin: true

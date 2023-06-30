@@ -19,11 +19,11 @@ class LivingSpacesSectionsSectionStorage extends FieldItemList {
    * {@inheritdoc}
    */
   protected function computeValue() {
-    /** @var \Drupal\group\Entity\GroupContentInterface $group_content */
-    $group_content = $this->getEntity();
+    /** @var \Drupal\group\Entity\GroupRelationshipInterface $group_relationship */
+    $group_relationship = $this->getEntity();
 
     $section = NULL;
-    \Drupal::moduleHandler()->alter('living_spaces_sections_content', $group_content, $section);
+    \Drupal::moduleHandler()->alter('living_spaces_sections_content', $group_relationship, $section);
     if ($section instanceof LivingSpacesSectionInterface) {
       $this->list[0] = $this->createItem(0, $section->id());
     }

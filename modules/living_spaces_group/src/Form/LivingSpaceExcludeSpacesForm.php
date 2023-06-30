@@ -87,7 +87,7 @@ class LivingSpaceExcludeSpacesForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     if ($spaces = $form_state->getValue('spaces')) {
       foreach ($spaces as $key => $value) {
-        if (empty($spaces[$key])) {
+        if (empty($value)) {
           unset($spaces[$key]);
         }
       }

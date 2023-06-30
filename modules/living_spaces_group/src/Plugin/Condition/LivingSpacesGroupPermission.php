@@ -2,9 +2,7 @@
 
 namespace Drupal\living_spaces_group\Plugin\Condition;
 
-use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Condition\ConditionPluginBase;
-use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -94,8 +92,8 @@ class LivingSpacesGroupPermission extends ConditionPluginBase implements Contain
    */
   public function defaultConfiguration() {
     return [
-      'group_permission' => ''
-      ] + parent::defaultConfiguration();
+      'group_permission' => '',
+    ] + parent::defaultConfiguration();
   }
 
   /**
@@ -143,10 +141,11 @@ class LivingSpacesGroupPermission extends ConditionPluginBase implements Contain
   public function evaluate() {
     $access = TRUE;
 
-    $group = $this->getContextValue('group');
-    $user = $this->getContextValue('user');
-    if (!empty($this->configuration['group_permission'])
-  && $group instanceof GroupInterface && $user instanceof UserInterface) {
+    $group = $this->getContextValue('group') instanceof GroupInterface
+      ? $this->getContextValue('group') : NULL;
+    $user = $this->getContextValue('user') instanceof UserInterface
+      ? $this->getContextValue('user') : NULL;
+    if (!empty($this->configuration['group_permission']) && $group && $user) {
       $access = $this->permissionChecker
         ->hasPermissionInGroup($this->configuration['group_permission'], $user, $group);
     }

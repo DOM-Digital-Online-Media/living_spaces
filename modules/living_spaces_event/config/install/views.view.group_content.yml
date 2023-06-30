@@ -12,7 +12,7 @@ label: 'Group content'
 module: views
 description: ''
 tag: ''
-base_table: group_content_field_data
+base_table: group_relationship_field_data
 base_field: id
 display:
   default:
@@ -220,11 +220,12 @@ display:
         type: none
         options:
           offset: 0
+          items_per_page: null
       exposed_form:
         type: basic
         options:
           submit_button: Apply
-          reset_button: true
+          reset_button: false
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
           expose_sort_order: true
@@ -244,18 +245,24 @@ display:
           table: living_spaces_event__field_start_date
           field: field_start_date_value
           relationship: gc__living_spaces_event
+          group_type: group
+          admin_label: ''
           plugin_id: datetime
+          order: ASC
           expose:
+            label: 'Start date (field_start_date)'
             field_identifier: field_start_date_value
+          exposed: false
+          granularity: second
       arguments:
         gid:
           id: gid
-          table: group_content_field_data
+          table: group_relationship_field_data
           field: gid
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: group_content
+          entity_type: group_relationship
           entity_field: gid
           plugin_id: group_id
           default_action: default
@@ -370,24 +377,12 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-      filter_groups:
-        operator: AND
-        groups:
-          1: AND
       style:
         type: living_spaces_event_week
         options:
           class: ''
       row:
         type: fields
-        options:
-          default_field_elements: true
-          inline:
-            field_start_date: field_start_date
-            field_end_date: field_end_date
-            label: label
-          separator: ''
-          hide_empty: false
       query:
         type: views_query
         options:
@@ -396,19 +391,24 @@ display:
           distinct: false
           replica: false
           query_tags: {  }
+          contextual_filters_or: false
       relationships:
         gc__living_spaces_event:
           id: gc__living_spaces_event
-          table: group_content_field_data
+          table: group_relationship_field_data
           field: gc__living_spaces_event
           relationship: none
           group_type: group
-          admin_label: 'Group content Space event'
-          entity_type: group_content
-          plugin_id: group_content_to_entity
+          admin_label: 'Group relationship Space event'
+          entity_type: group_relationship
+          plugin_id: group_relationship_to_entity
           required: false
-          group_content_plugins:
-            'living_spaces_event:test': '0'
+          group_relation_plugins:
+            'living_spaces_event:event': '0'
+            'living_spaces_event:general': '0'
+            'living_spaces_event:room_occupied': '0'
+            'living_spaces_event:supervision': '0'
+            'living_spaces_event:training': '0'
       header: {  }
       footer:
         section_path:
@@ -419,7 +419,6 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: section_path
-          label: ''
           empty: true
           bundle: events
           title: 'All events'
@@ -440,7 +439,7 @@ display:
     id: events
     display_title: Events
     display_plugin: block
-    position: 2
+    position: 1
     display_options:
       display_description: ''
       display_extenders: {  }

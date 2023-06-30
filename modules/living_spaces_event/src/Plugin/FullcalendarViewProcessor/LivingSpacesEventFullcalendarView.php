@@ -7,7 +7,6 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\dip_chat_counseling\Entity\DipChatAppointmentInterface;
 use Drupal\fullcalendar_view\Plugin\FullcalendarViewProcessorInterface;
 use Drupal\living_spaces_event\Entity\LivingSpaceEventInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;

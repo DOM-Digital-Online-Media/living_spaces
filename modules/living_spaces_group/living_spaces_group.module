@@ -15,8 +15,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\group\Entity\GroupInterface;
+use Drupal\group\Entity\GroupRelationshipInterface;
 use Drupal\group\Entity\GroupRoleInterface;
-use Drupal\group\Entity\GroupContentInterface;
 use Drupal\group\Entity\GroupTypeInterface;
 use Drupal\user\UserInterface;
 use Drupal\user\Entity\Role;
@@ -133,13 +133,12 @@ function living_spaces_group_entity_type_alter(&$entity_types) {
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function living_spaces_group_group_content_delete(GroupContentInterface $content) {
-  if ('group_membership' != $content->getContentPlugin()->getPluginId()
-&& $entity = $content->getEntity()) {
+function living_spaces_group_group_relationship_delete(GroupRelationshipInterface $relationship) {
+  if (('group_membership' != $relationship->getPluginId()) && $entity = $relationship->getEntity()) {
     $entity->delete();
   }
-  if ($content->getEntity() instanceof UserInterface) {
-    living_spaces_group_update_joined_spaces($content->getEntity());
+  if ($relationship->getEntity() instanceof UserInterface) {
+    living_spaces_group_update_joined_spaces($relationship->getEntity());
   }
 }
 
@@ -185,15 +184,14 @@ function living_spaces_group_group_role_presave(GroupRoleInterface $entity) {
 /**
  * Implements hook_ENTITY_TYPE_presave().
  */
-function living_spaces_group_group_content_presave(EntityInterface $entity) {
-  /** @var \Drupal\group\Entity\GroupContentInterface $entity */
-  $entity->set('is_space_admin', FALSE);
-  if ($entity->getContentPlugin()->getBaseId() === 'group_membership') {
-    $roles = $entity->get('group_roles')->referencedEntities();
+function living_spaces_group_group_relationship_presave(GroupRelationshipInterface $relationship) {
+  $relationship->set('is_space_admin', FALSE);
+  if ($relationship->getPluginId() === 'group_membership') {
+    $roles = $relationship->get('group_roles')->referencedEntities();
     /** @var \Drupal\group\Entity\GroupRoleInterface $role */
     foreach ($roles as $role) {
       if ($role->get('is_space_admin')) {
-        $entity->set('is_space_admin', TRUE);
+        $relationship->set('is_space_admin', TRUE);
         break;
       }
     }
@@ -229,7 +227,7 @@ function living_spaces_group_entity_base_field_info(EntityTypeInterface $entity_
       ->setDisplayConfigurable('form', TRUE);
   }
 
-  if (in_array($entity_type->id(), ['group_role', 'group_content'])) {
+  if (in_array($entity_type->id(), ['group_role', 'group_relationship'])) {
     $description = $entity_type->id() === 'group_role'
       ? t('Mark group role as admin role for space type.')
       : t('Mark group membership content as admin.');
@@ -621,16 +619,16 @@ function living_spaces_group_entity_operation_alter(array &$operations, EntityIn
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function living_spaces_group_group_content_insert(GroupContentInterface $group_content_entity) {
-  $entity = $group_content_entity->getEntity();
+function living_spaces_group_group_relationship_insert(GroupRelationshipInterface $relationship) {
+  $entity = $relationship->getEntity();
 
   if ($entity && $entity->hasField('space') && $entity->get('space')->isEmpty()) {
-    $entity->set('space', $group_content_entity->getGroup()->id());
+    $entity->set('space', $relationship->getGroup()->id());
     $entity->save();
   }
 
-  if ($group_content_entity->getEntity() instanceof UserInterface) {
-    living_spaces_group_update_joined_spaces($group_content_entity->getEntity());
+  if ($relationship->getEntity() instanceof UserInterface) {
+    living_spaces_group_update_joined_spaces($relationship->getEntity());
   }
 }
 
@@ -753,7 +751,7 @@ function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface 
     }
   }
 
-  if ('entity.group_content.collection' == $route_match->getRouteName()) {
+  if ('entity.group_relationship.collection' == $route_match->getRouteName()) {
     $applies = TRUE;
 
     if (!empty($breadcrumb)) {
@@ -769,7 +767,7 @@ function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface 
     }
   }
 
-  if ('entity.group_content.add_page' == $route_match->getRouteName()) {
+  if ('entity.group_relationship.add_page' == $route_match->getRouteName()) {
     $applies = TRUE;
 
     if (!empty($breadcrumb)) {
@@ -785,7 +783,7 @@ function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface 
     }
   }
 
-  if ('entity.group_content.add_form' == $route_match->getRouteName()) {
+  if ('entity.group_relationship.add_form' == $route_match->getRouteName()) {
     $applies = TRUE;
 
     if (!empty($breadcrumb)) {
@@ -793,19 +791,16 @@ function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface 
 
       /** @var \Drupal\group\Entity\GroupInterface $group */
       $group = $parameters['group'];
-      $plugin_id = $parameters['plugin_id'];
-
-      /** @var \Drupal\group\Plugin\GroupContentEnablerInterface $plugin */
-      $plugin = $group->getGroupType()->getContentPlugin($plugin_id);
+      $plugin = $group->getGroupType()->getPlugin($parameters['plugin_id']);
 
       $breadcrumb->addLink($group->toLink($group->label()));
       $breadcrumb->addCacheableDependency($group);
 
-      $breadcrumb->addLink(Link::createFromRoute(t('Add @plugin', ['@plugin' => $plugin->getLabel()]), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute(t('Add @plugin', ['@plugin' => $plugin->getRelationType()->getLabel()]), '<none>'));
     }
   }
 
-  if ('entity.group_content.create_page' == $route_match->getRouteName()) {
+  if ('entity.group_relationship.create_page' == $route_match->getRouteName()) {
     $applies = TRUE;
 
     if (!empty($breadcrumb)) {
@@ -821,7 +816,7 @@ function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface 
     }
   }
 
-  if ('entity.group_content.create_form' == $route_match->getRouteName()) {
+  if ('entity.group_relationship.create_form' == $route_match->getRouteName()) {
     $applies = TRUE;
 
     if (!empty($breadcrumb)) {
@@ -829,15 +824,12 @@ function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface 
 
       /** @var \Drupal\group\Entity\GroupInterface $group */
       $group = $parameters['group'];
-      $plugin_id = $parameters['plugin_id'];
-
-      /** @var \Drupal\group\Plugin\GroupContentEnablerInterface $plugin */
-      $plugin = $group->getGroupType()->getContentPlugin($plugin_id);
+      $plugin = $group->getGroupType()->getPlugin($parameters['plugin_id']);
 
       $breadcrumb->addLink($group->toLink($group->label()));
       $breadcrumb->addCacheableDependency($group);
 
-      $breadcrumb->addLink(Link::createFromRoute(t('Add new @plugin', ['@plugin' => $plugin->getLabel()]), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute(t('Add new @plugin', ['@plugin' => $plugin->getRelationType()->getLabel()]), '<none>'));
     }
   }
 
@@ -909,6 +901,7 @@ function living_spaces_group_group_update(GroupInterface $group) {
 
   $removed = array_diff($original_ids, $circle_ids);
   foreach ($removed as $id) {
+    /** @var \Drupal\group\Entity\GroupInterface $circle */
     $circle = \Drupal::entityTypeManager()->getStorage('group')->load($id);
     /** @var \Drupal\group\GroupMembershipLoaderInterface $membership_loader */
     $membership_loader = \Drupal::service('group.membership_loader');
@@ -928,6 +921,7 @@ function living_spaces_group_group_update(GroupInterface $group) {
 
   $added = array_diff($circle_ids, $original_ids);
   foreach ($added as $id) {
+    /** @var \Drupal\group\Entity\GroupInterface $circle */
     $circle = \Drupal::entityTypeManager()->getStorage('group')->load($id);
     /** @var \Drupal\group\GroupMembershipLoaderInterface $membership_loader */
     $membership_loader = \Drupal::service('group.membership_loader');

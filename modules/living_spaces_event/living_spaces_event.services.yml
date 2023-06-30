@@ -4,3 +4,13 @@ services:
     arguments: ['@entity_type.manager']
     tags:
       - { name: route_enhancer, priority: 100 }
+
+  # Group relation handlers.
+  group.relation_handler.permission_provider.living_spaces_event:
+    class: Drupal\living_spaces_event\LivingSpacesEventPermissionProvider
+    arguments: ['@group.relation_handler.permission_provider']
+    shared: false
+  group.relation_handler.operation_provider.living_spaces_event:
+    class: Drupal\living_spaces_event\LivingSpacesEventOperationProvider
+    arguments: ['@group.relation_handler.operation_provider', '@entity_type.manager', '@current_user', '@string_translation']
+    shared: false

@@ -82,13 +82,13 @@ class LivingSpacesGroupPrivacyManager extends DefaultPluginManager implements Li
    */
   public function getRelatedGroups(NodeInterface $node) {
     $entity_manager = $this->entityTypeManager;
-    $content_manager = $entity_manager->getStorage('group_content');
+    /** @var \Drupal\group\Entity\Storage\GroupRelationshipStorageInterface $relationship_storage */
+    $relationship_storage = $entity_manager->getStorage('group_relationship');
     $group_manager = $entity_manager->getStorage('group');
 
     $groups = [];
-    foreach ($content_manager->loadByEntity($node) as $content) {
-      $group_id = $content->get('gid')->getString();
-      $groups[] = $group_manager->load($group_id);
+    foreach ($relationship_storage->loadByEntity($node) as $relationship) {
+      $groups[] = $relationship->getGroup();
     }
 
     if ($this->moduleHandler->moduleExists('living_spaces_page')) {

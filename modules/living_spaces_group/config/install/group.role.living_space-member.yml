@@ -3,14 +3,15 @@ status: true
 dependencies:
   config:
     - group.type.living_space
+    - user.role.authenticated
 id: living_space-member
 label: Member
 weight: -100
-internal: true
-audience: member
+admin: false
+scope: insider
+global_role: authenticated
 group_type: living_space
-permissions_ui: true
 permissions:
   - 'view group'
-  - 'view group_membership content'
+  - 'view group_membership relationship'
 is_space_admin: false

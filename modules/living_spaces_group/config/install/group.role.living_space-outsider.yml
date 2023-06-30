@@ -3,12 +3,13 @@ status: true
 dependencies:
   config:
     - group.type.living_space
+    - user.role.authenticated
 id: living_space-outsider
 label: Outsider
 weight: -101
-internal: true
-audience: outsider
+admin: false
+scope: outsider
+global_role: authenticated
 group_type: living_space
-permissions_ui: true
 permissions: {  }
 is_space_admin: false

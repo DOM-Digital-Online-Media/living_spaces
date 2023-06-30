@@ -21,18 +21,31 @@ class LivingSpacesCirclesMembershipLoader implements GroupMembershipLoaderInterf
   protected $originalService;
 
   /**
-   * Returns the entity_type.manager service.
+   * The entity type manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
   /**
-   * Decorator constructor.
+   * The current user's account object.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
    */
-  public function __construct(GroupMembershipLoaderInterface $original, EntityTypeManagerInterface $entity_type_manager) {
-    $this->originalService = $original;
+  protected $currentUser;
+
+  /**
+   * Constructs a new GroupTypeController.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   The current user.
+   */
+  public function __construct(GroupMembershipLoaderInterface $originan, EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user) {
+    $this->originalService = $originan;
     $this->entityTypeManager = $entity_type_manager;
+    $this->currentUser = $current_user;
   }
 
   /**
@@ -40,6 +53,8 @@ class LivingSpacesCirclesMembershipLoader implements GroupMembershipLoaderInterf
    */
   public function load(GroupInterface $group, AccountInterface $account) {
     $membership = $this->originalService->load($group, $account);
+    $user = $this->entityTypeManager->getStorage('user')
+      ->load($account->id());
 
     if (!$membership && !$group->get('circles')->isEmpty()) {
       $circles = [];
@@ -49,22 +64,18 @@ class LivingSpacesCirclesMembershipLoader implements GroupMembershipLoaderInterf
         }
       }
 
-      $group_content_mamanger = $this->entityTypeManager->getStorage('group_content');
-      $query = $group_content_mamanger->getQuery();
+      /** @var \Drupal\group\Entity\Storage\GroupRelationshipStorageInterface $relationship_storage */
+      $relationship_storage = $this->entityTypeManager->getStorage('group_relationship');
+      $query = $relationship_storage->getQuery();
       $query->condition('gid', $circles, 'IN');
       $query->condition('entity_id', $account->id());
       $query->condition('gid.entity.type', 'circle');
-      $query->condition('type', 'circle-group_membership');
+      $query->condition('plugin_id', 'group_membership');
       $query->accessCheck(FALSE);
 
       if ($query->execute()) {
         // Add fake membership.
-        $group_membership = $group_content_mamanger->create([
-          'type' => "{$group->bundle()}-group_membership",
-          'gid' => $group->id(),
-          'entity_id' => $account->id(),
-        ]);
-
+        $group_membership = $relationship_storage->createForEntityInGroup($user, $group, 'group_membership');
         $membership = new GroupMembership($group_membership);
       }
     }
@@ -87,25 +98,22 @@ class LivingSpacesCirclesMembershipLoader implements GroupMembershipLoaderInterf
         }
       }
 
-      $group_content_mamanger = $this->entityTypeManager->getStorage('group_content');
-      $query = $group_content_mamanger->getQuery();
+      /** @var \Drupal\group\Entity\Storage\GroupRelationshipStorageInterface $relationship_storage */
+      $relationship_storage = $this->entityTypeManager->getStorage('group_relationship');
+      $query = $relationship_storage->getQuery();
       $query->condition('gid', $circles, 'IN');
       $query->condition('gid.entity.type', 'circle');
-      $query->condition('type', 'circle-group_membership');
+      $query->condition('plugin_id', 'group_membership');
       $query->accessCheck(FALSE);
       if ($roles) {
         $query->condition('group_roles', $roles);
       }
 
-      if ($content = $query->execute()) {
+      if ($relationships = $query->execute()) {
         // Add fake memberships.
-        foreach ($group_content_mamanger->loadMultiple($content) as $item) {
-          $group_membership = $group_content_mamanger->create([
-            'type' => "{$group->bundle()}-group_membership",
-            'gid' => $group->id(),
-            'entity_id' => $item->getEntity()->id(),
-          ]);
-
+        foreach ($relationship_storage->loadMultiple($relationships) as $item) {
+          /** @var \Drupal\group\Entity\GroupRelationshipInterface $item */
+          $group_membership = $relationship_storage->createForEntityInGroup($item->getEntity(), $group, 'group_membership');
           $memberships[] = new GroupMembership($group_membership);
         }
       }
@@ -120,40 +128,40 @@ class LivingSpacesCirclesMembershipLoader implements GroupMembershipLoaderInterf
   public function loadByUser(AccountInterface $account = NULL, $roles = NULL) {
     $memberships = $this->originalService->loadByUser($account, $roles);
 
-    if ($account) {
-      $group_content_mamanger = $this->entityTypeManager->getStorage('group_content');
-      $group_manager = $this->entityTypeManager->getStorage('group');
+    /** @var \Drupal\group\Entity\Storage\GroupRelationshipStorageInterface $relationship_storage */
+    $relationship_storage = $this->entityTypeManager->getStorage('group_relationship');
+    $group_storage = $this->entityTypeManager->getStorage('group');
+    $user = $this->entityTypeManager->getStorage('user')
+      ->load($account ? $account->id() : $this->currentUser->id());
 
-      // Check if a user is a member of circle group type.
-      $query = $group_content_mamanger->getQuery();
-      $query->condition('entity_id', $account->id());
-      $query->condition('gid.entity.type', 'circle');
-      $query->condition('type', 'circle-group_membership');
-      $query->accessCheck(FALSE);
-      if ($roles) {
-        $query->condition('group_roles', $roles, 'IN');
+    // Check if a user is a member of circle group type.
+    $query = $relationship_storage->getQuery();
+    $query->condition('entity_id', $account->id());
+    $query->condition('gid.entity.type', 'circle');
+    $query->condition('plugin_id', 'group_membership');
+    $query->accessCheck(FALSE);
+    if ($roles) {
+      $query->condition('group_roles', $roles, 'IN');
+    }
+
+    if ($content = $query->execute()) {
+      $circles = [];
+
+      /** @var \Drupal\group\Entity\GroupRelationshipInterface $item */
+      foreach ($relationship_storage->loadMultiple($content) as $item) {
+        $circles[] = $item->getGroupId();
       }
 
-      if ($content = $query->execute()) {
-        foreach ($group_content_mamanger->loadMultiple($content) as $item) {
-          $circle = $item->getGroup();
+      $query = $group_storage->getQuery();
+      $query->condition('circles', $circles, 'IN');
+      $query->accessCheck(FALSE);
 
-          $query = $group_manager->getQuery();
-          $query->condition('circles', $circle->id());
-          $query->accessCheck(FALSE);
-
-          if ($groups = $query->execute()) {
-            // Add fake memberships.
-            foreach ($group_manager->loadMultiple($groups) as $group) {
-              $group_membership = $group_content_mamanger->create([
-                'type' => "{$group->bundle()}-group_membership",
-                'gid' => $group->id(),
-                'entity_id' => $account->id(),
-              ]);
-
-              $memberships[] = new GroupMembership($group_membership);
-            }
-          }
+      if ($groups = $query->execute()) {
+        // Add fake memberships.
+        foreach ($group_storage->loadMultiple($groups) as $group) {
+          /** @var \Drupal\group\Entity\GroupInterface $group */
+          $group_membership = $relationship_storage->createForEntityInGroup($user, $group, 'group_membership');
+          $memberships[] = new GroupMembership($group_membership);
         }
       }
     }

@@ -3,7 +3,7 @@ status: true
 dependencies:
   config:
     - field.storage.message.field_group_content
-    - group.content_type.living_space-group_membership
+    - group.relationship_type.living_space-group_membership
     - message.template.group_member_added
 id: message.group_member_added.field_group_content
 field_name: field_group_content
@@ -16,7 +16,7 @@ translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:group_content'
+  handler: 'default:group_relationship'
   handler_settings:
     target_bundles:
       living_space-group_membership: living_space-group_membership

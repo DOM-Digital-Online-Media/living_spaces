@@ -18,7 +18,8 @@ interface LivingSpacesGroupPrivacyManagerInterface extends PluginManagerInterfac
    *   Group object.
    *
    * @return \Drupal\living_spaces_group_privacy\Plugin\LivingSpacesGroupPrivacyInterface[]
-   *   An array of plugin instances or a plugin instance for provided group.
+   *   An array of plugin instances or a plugin instance for provided group or
+   *   single item if group is provided.
    */
   public function getPrivacyPlugins(GroupInterface $group = NULL);
 

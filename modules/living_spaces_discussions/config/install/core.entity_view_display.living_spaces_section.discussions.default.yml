@@ -11,8 +11,8 @@ dependencies:
     - views
 third_party_settings:
   layout_builder:
-    allow_custom: false
     enabled: true
+    allow_custom: false
     sections:
       -
         layout_id: layout_onecol
@@ -20,46 +20,52 @@ third_party_settings:
           label: ''
           context_mapping: {  }
         components:
-          7a1823ae-9969-471c-a387-df376a442fe4:
-            uuid: 7a1823ae-9969-471c-a387-df376a442fe4
-            region: content
-            configuration:
-              id: 'views_block:discussions-discussions'
-              label: ''
-              provider: views
-              label_display: '0'
-              views_label: ''
-              items_per_page: none
-              context_mapping: {  }
-            additional: {  }
-            weight: 2
-          c83dcb95-6603-40e5-a27f-25f32f7c6b8b:
-            uuid: c83dcb95-6603-40e5-a27f-25f32f7c6b8b
-            region: content
-            configuration:
-              id: living_spaces_section_actions_block
-              label: 'Living Spaces section actions'
-              provider: living_spaces_sections
-              label_display: '0'
-              context_mapping:
-                section: layout_builder.entity
-            additional: {  }
-            weight: 1
-          104261ab-c37a-45b5-8c87-24533f010b6d:
-            uuid: 104261ab-c37a-45b5-8c87-24533f010b6d
+          499bcc67-932a-45b9-af5e-27e9dd0d43b6:
+            uuid: 499bcc67-932a-45b9-af5e-27e9dd0d43b6
             region: content
             configuration:
               id: living_spaces_page_title_block
               label: 'Page Title'
-              provider: living_spaces
               label_display: '0'
+              provider: living_spaces
               context_mapping: {  }
-            additional: {  }
+              lead:
+                -
+                  lead_text: ''
+                  lead_path: ''
+              include_hr: 1
             weight: 0
+            additional: {  }
+          3e7499ab-c50b-4a9e-a0a8-b229449bd304:
+            uuid: 3e7499ab-c50b-4a9e-a0a8-b229449bd304
+            region: content
+            configuration:
+              id: living_spaces_section_actions_block
+              label: 'Living Spaces section actions'
+              label_display: '0'
+              provider: living_spaces_sections
+              context_mapping:
+                section: layout_builder.entity
+            weight: 1
+            additional: {  }
+          d04f68e3-d513-4110-a197-6fdcaab29115:
+            uuid: d04f68e3-d513-4110-a197-6fdcaab29115
+            region: content
+            configuration:
+              id: 'views_block:discussions-discussions'
+              label: ''
+              label_display: '0'
+              provider: views
+              context_mapping: {  }
+              views_label: ''
+              items_per_page: none
+            weight: 2
+            additional: {  }
         third_party_settings: {  }
 id: living_spaces_section.discussions.default
 targetEntityType: living_spaces_section
 bundle: discussions
 mode: default
 content: {  }
-hidden: {  }
+hidden:
+  search_api_excerpt: true

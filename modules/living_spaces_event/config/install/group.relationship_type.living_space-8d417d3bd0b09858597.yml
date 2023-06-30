@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.living_space
+    - living_spaces_event.living_spaces_event_type.room_occupied
+id: living_space-8d417d3bd0b09858597
+label: 'Standard: Space event (Room occupied)'
+description: 'Adds <em class="placeholder">Room occupied</em> space event to groups both publicly and privately.'
+group_type: living_space
+content_plugin: 'living_spaces_event:room_occupied'
+plugin_config:
+  group_cardinality: 0
+  entity_cardinality: 1
+  use_creation_wizard: false
