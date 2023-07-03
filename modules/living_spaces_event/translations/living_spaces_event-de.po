@@ -37,9 +37,3 @@ msgstr "Bitte antworten Sie auf die Einladung zu diesem Termin:"
 
 msgid "You have accepted the invitation to this event."
 msgstr "Sie haben sich zu diesem Termin angemeldet."
-
-msgid "Event deleted"
-msgstr "Event gelöscht"
-
-msgid "Note: Please do not reply to this system message. A reply to this automatically sent e-mail does not reach the desired person, nor is it read or answered.<br />Hello @user, the following event has been deleted:<br />@event<br /><br />Best regards<br />Your @site team"
-msgstr "Hinweis: Bitte antworte nicht auf diese System-Nachricht. Eine Antwort auf diese automatisch versendete E-Mail erreicht weder die gewünschte Person, noch wird sie gelesen oder beantwortet.<br />Hallo @user, das folgende Event wurde gelöscht:<br />@event<br /><br />Viele Grüße<br />Das Team vom @site"
