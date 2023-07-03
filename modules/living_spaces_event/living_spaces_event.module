@@ -392,8 +392,26 @@ function living_spaces_event_living_spaces_event_delete(LivingSpaceEventInterfac
   $query->condition('event', $event->id());
 
   if ($invites = $query->execute()) {
+    /** @var \Drupal\Core\Mail\MailManager $mail_manager */
+    $mail_manager = \Drupal::service('plugin.manager.mail');
+
     /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInvite $invite */
     foreach ($entity_manager->loadMultiple($invites) as $invite) {
+      $account = $invite->getOwner();
+
+      if ($account && $email = $account->getEmail()) {
+        $params = [
+          'subject' => t('Event deleted'),
+          'body' => t('Note: Please do not reply to this system message. A reply to this automatically sent e-mail does not reach the desired person, nor is it read or answered.<br />Hello @user, the following event has been deleted:<br />@event<br /><br />Best regards<br />Your @site team', [
+            '@user' => $account->getDisplayName(),
+            '@event' => $event->label(),
+            '@site' => \Drupal::config('system.site')->get('name'),
+          ]),
+        ];
+
+        $mail_manager->mail('dip_chat_counseling', 'living_spaces_event_delete_event', $email, $account->getPreferredLangcode(), $params);
+      }
+
       $invite->delete();
     }
   }
@@ -937,6 +955,14 @@ function living_spaces_event_user_settings_form_submit($form, FormStateInterface
  * Implements hook_mail().
  */
 function living_spaces_event_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'living_spaces_event_delete_event':
+      $message['subject'] = $message['params']['subject'];
+      $message['body'][] = $message['params']['body'];
+      break;
+
+  }
+
   $token_service = \Drupal::token();
   $language_manager = \Drupal::languageManager();
   $langcode = $message['langcode'];
