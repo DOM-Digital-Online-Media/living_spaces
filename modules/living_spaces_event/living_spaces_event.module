@@ -926,113 +926,49 @@ function living_spaces_event_form_user_admin_settings_alter(&$form, FormStateInt
   $config_settings = $config->getEditable('user.settings');
   $config_mail = $config->getEditable('user.mail');
 
-  $form['email_new_event'] = [
-    '#type' => 'details',
-    '#title' => t('Event was created'),
-    '#group' => 'email',
+  $types = [
+    'email_new_event' => t('Event was created'),
+    'email_update_event' => t('Event was updated'),
+    'email_delete_event' => t('Event was deleted'),
   ];
 
-  $form['email_new_event']['email_new_event_notify'] = [
-    '#type' => 'checkbox',
-    '#title' => t('Notify user'),
-    '#default_value' => $config_settings->get('notify.email_new_event'),
-  ];
+  foreach ($types as $type => $label) {
+    $form[$type] = [
+      '#type' => 'details',
+      '#title' => $label,
+      '#group' => 'email',
+    ];
 
-  $form['email_new_event']['email_new_event_subject'] = [
-    '#type' => 'textfield',
-    '#title' => t('Subject'),
-    '#default_value' => $config_mail->get('email_new_event.subject'),
-    '#maxlength' => 180,
-    '#states' => [
-      'invisible' => [
-        'input[name="email_new_event_notify"]' => ['checked' => FALSE],
+    $form[$type]["{$type}_notify"] = [
+      '#type' => 'checkbox',
+      '#title' => t('Notify user'),
+      '#default_value' => $config_settings->get("notify.{$type}"),
+    ];
+
+    $form[$type]["{$type}_subject"] = [
+      '#type' => 'textfield',
+      '#title' => t('Subject'),
+      '#default_value' => $config_mail->get("{$type}.subject"),
+      '#maxlength' => 180,
+      '#states' => [
+        'invisible' => [
+          "input[name='{$type}_notify']" => ['checked' => FALSE],
+        ],
       ],
-    ],
-  ];
+    ];
 
-  $form['email_new_event']['email_new_event_body'] = [
-    '#type' => 'textarea',
-    '#title' => t('Body'),
-    '#default_value' => $config_mail->get('email_new_event.body'),
-    '#rows' => 15,
-    '#states' => [
-      'invisible' => [
-        'input[name="email_new_event_notify"]' => ['checked' => FALSE],
+    $form[$type]["{$type}_body"] = [
+      '#type' => 'textarea',
+      '#title' => t('Body'),
+      '#default_value' => $config_mail->get("{$type}.body"),
+      '#rows' => 15,
+      '#states' => [
+        'invisible' => [
+          "input[name='{$type}_notify']" => ['checked' => FALSE],
+        ],
       ],
-    ],
-  ];
-
-  $form['email_update_event'] = [
-    '#type' => 'details',
-    '#title' => t('Event was updated'),
-    '#group' => 'email',
-  ];
-
-  $form['email_update_event']['email_update_event_notify'] = [
-    '#type' => 'checkbox',
-    '#title' => t('Notify user'),
-    '#default_value' => $config_settings->get('notify.email_update_event'),
-  ];
-
-  $form['email_update_event']['email_update_event_subject'] = [
-    '#type' => 'textfield',
-    '#title' => t('Subject'),
-    '#default_value' => $config_mail->get('email_update_event.subject'),
-    '#maxlength' => 180,
-    '#states' => [
-      'invisible' => [
-        'input[name="email_update_event_notify"]' => ['checked' => FALSE],
-      ],
-    ],
-  ];
-
-  $form['email_update_event']['email_update_event_body'] = [
-    '#type' => 'textarea',
-    '#title' => t('Body'),
-    '#default_value' => $config_mail->get('email_update_event.body'),
-    '#rows' => 15,
-    '#states' => [
-      'invisible' => [
-        'input[name="email_update_event_notify"]' => ['checked' => FALSE],
-      ],
-    ],
-  ];
-
-  $form['email_delete_event'] = [
-    '#type' => 'details',
-    '#title' => t('Event was deleted'),
-    '#group' => 'email',
-  ];
-
-  $form['email_delete_event']['email_delete_event_notify'] = [
-    '#type' => 'checkbox',
-    '#title' => t('Notify user'),
-    '#default_value' => $config_settings->get('notify.email_delete_event'),
-  ];
-
-  $form['email_delete_event']['email_delete_event_subject'] = [
-    '#type' => 'textfield',
-    '#title' => t('Subject'),
-    '#default_value' => $config_mail->get('email_delete_event.subject'),
-    '#maxlength' => 180,
-    '#states' => [
-      'invisible' => [
-        'input[name="email_delete_event_notify"]' => ['checked' => FALSE],
-      ],
-    ],
-  ];
-
-  $form['email_delete_event']['email_delete_event_body'] = [
-    '#type' => 'textarea',
-    '#title' => t('Body'),
-    '#default_value' => $config_mail->get('email_delete_event.body'),
-    '#rows' => 15,
-    '#states' => [
-      'invisible' => [
-        'input[name="email_delete_event_notify"]' => ['checked' => FALSE],
-      ],
-    ],
-  ];
+    ];
+  }
 
   $form['actions']['submit']['#submit'][] = 'living_spaces_event_user_settings_form_submit';
 }
