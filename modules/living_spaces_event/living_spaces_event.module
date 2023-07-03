@@ -419,8 +419,8 @@ function living_spaces_event_living_spaces_event_update(LivingSpaceEventInterfac
         $account = $invite->getOwner();
 
         if ($account && $account->isActive() && $email = $account->getEmail()) {
-          $params = ['event' => $event];
-          $mail_manager->mail('dip_chat_counseling', 'email_update_event', $email, $account->getPreferredLangcode(), $params);
+          $params = ['event' => $event, 'user' => $account];
+          $mail_manager->mail('living_spaces_event', 'email_update_event', $email, $account->getPreferredLangcode(), $params);
         }
       }
     }
@@ -445,9 +445,8 @@ function living_spaces_event_living_spaces_event_delete(LivingSpaceEventInterfac
         $account = $invite->getOwner();
 
         if ($account && $account->isActive() && $email = $account->getEmail()) {
-          $params = ['event_title' => $event->label()];
-
-          $mail_manager->mail('dip_chat_counseling', 'email_delete_event', $email, $account->getPreferredLangcode(), $params);
+          $params = ['event_title' => $event->label(), 'user' => $account];
+          $mail_manager->mail('living_spaces_event', 'email_delete_event', $email, $account->getPreferredLangcode(), $params);
         }
       }
 
@@ -1075,7 +1074,14 @@ function living_spaces_event_mail($key, &$message, $params) {
   $token_service = \Drupal::token();
   $language_manager = \Drupal::languageManager();
   $langcode = $message['langcode'];
-  $variables = ['event' => $params['event']];
+
+  $variables = [];
+  $items = ['event', 'user', 'event_title'];
+  foreach ($items as $item) {
+    if (isset($params[$item])) {
+      $variables[$item] = $params[$item];
+    }
+  }
 
   $language = $language_manager->getLanguage($langcode);
   $original_language = $language_manager->getConfigOverrideLanguage();

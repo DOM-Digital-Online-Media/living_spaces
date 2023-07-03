@@ -3,7 +3,7 @@ email_invited_user_to_the_event:
   body: "You have been invited to the event [event:title]. Please click here [event:url] to RSVP.\r\n\r\n--  [site:name] team"
 email_update_event:
   subject: 'Event modified'
-  body: "Note: Please do not reply to this system message. A reply to this automatically sent e-mail does not reach the desired person, nor is it read or answered.\r\nHello [user:display-name], the following event has been changed:\r\n[event:title]\r\nTo see the changes, please click on the following link: <a href=\"[event:url]\">here</a>\r\n\r\nBest regards\r\nYour [site:name] team\r\n"
+  body: "Note: Please do not reply to this system message. A reply to this automatically sent e-mail does not reach the desired person, nor is it read or answered.\r\nHello [user:display-name], the following event has been changed:\r\n[event:title]\r\nTo see the changes, please click on the following link: [event:url]\r\n\r\nBest regards\r\nYour [site:name] team\r\n"
 email_delete_event:
   subject: 'Event deleted'
   body: "Note: Please do not reply to this system message. A reply to this automatically sent e-mail does not reach the desired person, nor is it read or answered.\r\nHello [user:display-name], the following event has been deleted:\r\n[event_title]\r\n\r\nBest regards\r\nYour [site:name] team\r\n"
