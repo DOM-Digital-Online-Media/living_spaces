@@ -213,6 +213,7 @@ class LivingSpacesPageTitleBlock extends BlockBase implements ContainerFactoryPl
 
       foreach ($this->configuration['lead'] as $item) {
         if ($this->pathMatcher->matchPath($path, $item['lead_path'])) {
+          // phpcs:ignore
           $lead = $this->t($item['lead_text']);
         }
       }
