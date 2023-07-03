@@ -52,15 +52,15 @@ function living_spaces_event_module_implements_alter(&$implementations, $hook) {
 function living_spaces_event_config_schema_info_alter(&$definitions) {
   $definitions['user.mail']['mapping']['email_new_event'] = [
     'type' => 'mail',
-    'label' => 'An event was created',
+    'label' => 'Event was created',
   ];
   $definitions['user.mail']['mapping']['email_update_event'] = [
     'type' => 'mail',
-    'label' => 'An event was updated',
+    'label' => 'Event was updated',
   ];
   $definitions['user.mail']['mapping']['email_delete_event'] = [
     'type' => 'mail',
-    'label' => 'An event was deleted',
+    'label' => 'Event was deleted',
   ];
 }
 
@@ -929,7 +929,7 @@ function living_spaces_event_form_user_admin_settings_alter(&$form, FormStateInt
 
   $form['email_new_event'] = [
     '#type' => 'details',
-    '#title' => t('An event was created'),
+    '#title' => t('Event was created'),
     '#group' => 'email',
   ];
 
@@ -965,7 +965,7 @@ function living_spaces_event_form_user_admin_settings_alter(&$form, FormStateInt
 
   $form['email_update_event'] = [
     '#type' => 'details',
-    '#title' => t('An event was updated'),
+    '#title' => t('Event was updated'),
     '#group' => 'email',
   ];
 
@@ -1001,7 +1001,7 @@ function living_spaces_event_form_user_admin_settings_alter(&$form, FormStateInt
 
   $form['email_delete_event'] = [
     '#type' => 'details',
-    '#title' => t('An event was deleted'),
+    '#title' => t('Event was deleted'),
     '#group' => 'email',
   ];
 
