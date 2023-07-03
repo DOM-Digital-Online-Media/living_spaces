@@ -266,6 +266,7 @@ class LivingSpacesSection extends ContentEntityBase implements LivingSpacesSecti
     $value = $this->get('tab')->getString();
     $label = empty($value) ? $this->label() : $value;
     // Used t() to enable translation.
+    // phpcs:ignore
     return $this->t($label);
   }
 
