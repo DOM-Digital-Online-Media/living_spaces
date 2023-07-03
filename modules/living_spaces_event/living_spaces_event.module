@@ -50,9 +50,9 @@ function living_spaces_event_module_implements_alter(&$implementations, $hook) {
  * Implements hook_config_schema_info_alter().
  */
 function living_spaces_event_config_schema_info_alter(&$definitions) {
-  $definitions['user.mail']['mapping']['email_invited_user_to_the_event'] = [
+  $definitions['user.mail']['mapping']['email_new_event'] = [
     'type' => 'mail',
-    'label' => 'A user was invited to an event',
+    'label' => 'An event was created',
   ];
   $definitions['user.mail']['mapping']['email_update_event'] = [
     'type' => 'mail',
@@ -374,8 +374,7 @@ function living_spaces_event_living_spaces_event_presave(LivingSpaceEventInterfa
  * Implements hook_ENTITY_TYPE_insert().
  */
 function living_spaces_event_living_spaces_event_invite_insert(LivingSpaceEventInviteInterface $invite) {
-  if (
-    ($event = $invite->get('event')->entity) &&
+  if (($event = $invite->get('event')->entity) &&
     ($account = $invite->get('uid')->entity)
   ) {
     $message = \Drupal::entityTypeManager()->getStorage('message')->create([
@@ -385,18 +384,9 @@ function living_spaces_event_living_spaces_event_invite_insert(LivingSpaceEventI
     ]);
     $message->save();
 
-    if (\Drupal::config('user.settings')->get('notify.email_invited_user_to_the_event')) {
-      if ($account->isActive() && $account->getEmail()) {
-        $params['event'] = $event;
-
-        \Drupal::service('plugin.manager.mail')->mail(
-          'living_spaces_event',
-          'email_invited_user_to_the_event',
-          $account->getEmail(),
-          $account->getPreferredLangcode(),
-          $params
-        );
-      }
+    if (\Drupal::config('user.settings')->get('notify.email_new_event') && $account->isActive() && $account->getEmail()) {
+      $params = ['event' => $event, 'user' => $account];
+      \Drupal::service('plugin.manager.mail')->mail('living_spaces_event', 'email_new_event', $account->getEmail(), $account->getPreferredLangcode(), $params);
     }
   }
 }
@@ -936,38 +926,38 @@ function living_spaces_event_form_user_admin_settings_alter(&$form, FormStateInt
   $config_settings = $config->getEditable('user.settings');
   $config_mail = $config->getEditable('user.mail');
 
-  $form['email_invited_user_to_the_event'] = [
+  $form['email_new_event'] = [
     '#type' => 'details',
-    '#title' => t('A user was invited to an event'),
+    '#title' => t('An event was created'),
     '#group' => 'email',
   ];
 
-  $form['email_invited_user_to_the_event']['email_invited_user_to_the_event_notify'] = [
+  $form['email_new_event']['email_new_event_notify'] = [
     '#type' => 'checkbox',
     '#title' => t('Notify user'),
-    '#default_value' => $config_settings->get('notify.email_invited_user_to_the_event'),
+    '#default_value' => $config_settings->get('notify.email_new_event'),
   ];
 
-  $form['email_invited_user_to_the_event']['email_invited_user_to_the_event_subject'] = [
+  $form['email_new_event']['email_new_event_subject'] = [
     '#type' => 'textfield',
     '#title' => t('Subject'),
-    '#default_value' => $config_mail->get('email_invited_user_to_the_event.subject'),
+    '#default_value' => $config_mail->get('email_new_event.subject'),
     '#maxlength' => 180,
     '#states' => [
       'invisible' => [
-        'input[name="email_invited_user_to_the_event_notify"]' => ['checked' => FALSE],
+        'input[name="email_new_event_notify"]' => ['checked' => FALSE],
       ],
     ],
   ];
 
-  $form['email_invited_user_to_the_event']['email_invited_user_to_the_event_body'] = [
+  $form['email_new_event']['email_new_event_body'] = [
     '#type' => 'textarea',
     '#title' => t('Body'),
-    '#default_value' => $config_mail->get('email_invited_user_to_the_event.body'),
+    '#default_value' => $config_mail->get('email_new_event.body'),
     '#rows' => 15,
     '#states' => [
       'invisible' => [
-        'input[name="email_invited_user_to_the_event_notify"]' => ['checked' => FALSE],
+        'input[name="email_new_event_notify"]' => ['checked' => FALSE],
       ],
     ],
   ];
@@ -1052,8 +1042,8 @@ function living_spaces_event_form_user_admin_settings_alter(&$form, FormStateInt
  */
 function living_spaces_event_user_settings_form_submit($form, FormStateInterface $form_state) {
   \Drupal::configFactory()->getEditable('user.mail')
-    ->set('email_invited_user_to_the_event.subject', $form_state->getValue('email_invited_user_to_the_event_subject'))
-    ->set('email_invited_user_to_the_event.body', $form_state->getValue('email_invited_user_to_the_event_body'))
+    ->set('email_new_event.subject', $form_state->getValue('email_new_event_subject'))
+    ->set('email_new_event.body', $form_state->getValue('email_new_event_body'))
     ->set('email_update_event.subject', $form_state->getValue('email_update_event_subject'))
     ->set('email_update_event.body', $form_state->getValue('email_update_event_body'))
     ->set('email_delete_event.subject', $form_state->getValue('email_delete_event_subject'))
@@ -1061,7 +1051,7 @@ function living_spaces_event_user_settings_form_submit($form, FormStateInterface
     ->save();
 
   \Drupal::configFactory()->getEditable('user.settings')
-    ->set('notify.email_invited_user_to_the_event', $form_state->getValue('email_invited_user_to_the_event_notify'))
+    ->set('notify.email_new_event', $form_state->getValue('email_new_event_notify'))
     ->set('notify.email_update_event', $form_state->getValue('email_update_event_notify'))
     ->set('notify.email_delete_event', $form_state->getValue('email_delete_event_notify'))
     ->save();
