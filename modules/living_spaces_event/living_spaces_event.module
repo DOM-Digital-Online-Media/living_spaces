@@ -385,9 +385,9 @@ function living_spaces_event_living_spaces_event_invite_insert(LivingSpaceEventI
     ]);
     $message->save();
 
-    if (\Drupal::config('user.settings')->get('notify.email_new_event') && $account->isActive() && $account->getEmail()) {
+    if (\Drupal::config('user.settings')->get('notify.email_new_event') && $account->isActive() && $mail = $account->getEmail()) {
       $params = ['event' => $event, 'user' => $account];
-      \Drupal::service('plugin.manager.mail')->mail('living_spaces_event', 'email_new_event', $account->getEmail(), $account->getPreferredLangcode(), $params);
+      \Drupal::service('plugin.manager.mail')->mail('living_spaces_event', 'email_new_event', $mail, $account->getPreferredLangcode(), $params);
     }
   }
 }
@@ -409,9 +409,9 @@ function living_spaces_event_living_spaces_event_update(LivingSpaceEventInterfac
       foreach ($entity_manager->loadMultiple($invites) as $invite) {
         $account = $invite->getOwner();
 
-        if ($account && $account->isActive() && $email = $account->getEmail()) {
+        if ($account && $account->isActive() && $mail = $account->getEmail()) {
           $params = ['event' => $event, 'user' => $account];
-          $mail_manager->mail('living_spaces_event', 'email_update_event', $email, $account->getPreferredLangcode(), $params);
+          $mail_manager->mail('living_spaces_event', 'email_update_event', $mail, $account->getPreferredLangcode(), $params);
         }
       }
     }
@@ -435,9 +435,9 @@ function living_spaces_event_living_spaces_event_delete(LivingSpaceEventInterfac
       if (\Drupal::config('user.settings')->get('notify.email_delete_event')) {
         $account = $invite->getOwner();
 
-        if ($account && $account->isActive() && $email = $account->getEmail()) {
+        if ($account && $account->isActive() && $mail = $account->getEmail()) {
           $params = ['event_title' => $event->label(), 'user' => $account];
-          $mail_manager->mail('living_spaces_event', 'email_delete_event', $email, $account->getPreferredLangcode(), $params);
+          $mail_manager->mail('living_spaces_event', 'email_delete_event', $mail, $account->getPreferredLangcode(), $params);
         }
       }
 
