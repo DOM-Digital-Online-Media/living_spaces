@@ -3,7 +3,7 @@ status: true
 dependencies: {  }
 id: former_employee
 label: 'Former employee'
-weight: 7
+weight: -6
 is_admin: false
 permissions:
   - 'access living spaces overview'

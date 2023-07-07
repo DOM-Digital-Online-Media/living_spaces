@@ -15,6 +15,13 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
+  chat_enabled:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   label:
     type: string_textfield
     weight: 0

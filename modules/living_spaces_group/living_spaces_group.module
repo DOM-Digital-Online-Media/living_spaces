@@ -367,7 +367,6 @@ function living_spaces_group_entity_base_field_info(EntityTypeInterface $entity_
       ->setDefaultValue(FALSE)
       ->setDisplayOptions('form', [
         'settings' => ['display_label' => TRUE],
-        'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE);
   }

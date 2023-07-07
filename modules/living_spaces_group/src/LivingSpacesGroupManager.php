@@ -58,7 +58,8 @@ class LivingSpacesGroupManager implements LivingSpacesGroupManagerInterface {
         ->getStorage('group_relationship_type')
         ->loadByProperties(['group_type' => $type]);
       foreach ($relationship_types as $relationship_type) {
-        $entity_types[$relationship_type->getEntityTypeId()] = $relationship_type->getEntityTypeId();
+        $type = $relationship_type->getPlugin()->getRelationType()->getEntityTypeId();
+        $entity_types[$type] = $type;
       }
     }
     return $entity_types;
