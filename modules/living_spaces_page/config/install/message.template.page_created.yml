@@ -8,7 +8,7 @@ label: 'Page has been created'
 description: ''
 text:
   -
-    value: "<h3><img src=\"[message:author:user_picture:thumbnail]\" /> <a href=\"[message:author:url]\">[message:author:display-name]</a> created <a href=\"[message:field_page:entity:url]\"><strong>[message:field_page_label]</strong></a></h3>\r\n"
+    value: "<h3>[message:user_picture:thumbnail] <a href=\"[message:author:url]\">[message:author:display-name]</a> created <a href=\"[message:field_page:entity:url]\"><strong>[message:field_page_label]</strong></a></h3>\r\n"
     format: full_html
 settings:
   'token options':
