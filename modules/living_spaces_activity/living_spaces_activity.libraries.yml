@@ -6,3 +6,9 @@ activity:
     js/living_spaces_activity.js: {}
   dependencies:
     - nodejs/init
+activity_load:
+  js:
+    js/living_spaces_activity_load.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupal.ajax
