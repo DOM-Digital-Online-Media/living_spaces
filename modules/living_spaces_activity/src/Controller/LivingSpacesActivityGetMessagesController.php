@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\dip_chat_counseling\Controller;
+namespace Drupal\living_spaces_activity\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\RendererInterface;
@@ -42,7 +42,10 @@ class LivingSpacesActivityGetMessagesController extends ControllerBase {
    * Callback for 'get persistent messages' route.
    */
   public function getPersistent($user) {
-    if ($user != $this->currentUser()->id()) {
+    $name = 'message';
+    $display = 'persistent';
+
+    if ($user != $this->currentUser()->id() || !views_get_view_result($name, $display, $user)) {
       return new JsonResponse([
         'success' => FALSE,
         'message' => $this->t('The incorrect user has been found.'),
@@ -51,8 +54,8 @@ class LivingSpacesActivityGetMessagesController extends ControllerBase {
 
     $view = [
       '#type' => 'view',
-      '#name' => 'message',
-      '#display_id' => 'persistent',
+      '#name' => $name,
+      '#display_id' => $display,
       '#arguments' => [$user],
     ];
 
