@@ -318,3 +318,12 @@ function living_spaces_activity_living_spaces_users_notification_menu_item_info(
     ],
   ];
 }
+
+/**
+ * Implements hook_page_attachments().
+ */
+function living_spaces_activity_page_attachments(array &$attachments) {
+  if (\Drupal::currentUser()->isAuthenticated()) {
+    $attachments['#attached']['library'][] = 'living_spaces_activity/activity_load';
+  }
+}
