@@ -14,3 +14,11 @@ living_spaces_activity.mark_persistent_messages:
   requirements:
     _access: 'TRUE'
     _user_is_logged_in: 'TRUE'
+living_spaces_activity.get_persistent_messages:
+  path: '/living-spaces-activity/get-persistent-messages/{user}'
+  defaults:
+    _title: 'Get all persistent messages'
+    _controller: '\Drupal\living_spaces_activity\Controller\LivingSpacesActivityGetMessagesController::getPersistent'
+  requirements:
+    _access: 'TRUE'
+    _user_is_logged_in: 'TRUE'
