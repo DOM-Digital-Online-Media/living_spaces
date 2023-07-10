@@ -5,6 +5,7 @@
  * Hooks and various functions for living spaces group bundle.
  */
 
+use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Database\Query\SelectInterface;
@@ -51,6 +52,136 @@ function living_spaces_group_group_create_access(AccountInterface $account, arra
   }
 
   return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_config_schema_info_alter().
+ */
+function living_spaces_group_config_schema_info_alter(&$definitions) {
+  $definitions['user.mail']['mapping']['email_new_space_member'] = [
+    'type' => 'mail',
+    'label' => 'Space member was added',
+  ];
+  $definitions['user.mail']['mapping']['email_delete_space_member'] = [
+    'type' => 'mail',
+    'label' => 'Space member was deleted',
+  ];
+}
+
+/**
+ * Implements hook_mail().
+ */
+function living_spaces_group_mail($key, &$message, $params) {
+  $token_service = \Drupal::token();
+  $language_manager = \Drupal::languageManager();
+  $langcode = $message['langcode'];
+
+  $variables = [];
+  $items = ['group', 'user', 'group_title'];
+  foreach ($items as $item) {
+    if (isset($params[$item])) {
+      $variables[$item] = $params[$item];
+    }
+  }
+
+  $language = $language_manager->getLanguage($langcode);
+  $original_language = $language_manager->getConfigOverrideLanguage();
+  $language_manager->setConfigOverrideLanguage($language);
+  $mail_config = \Drupal::config('user.mail');
+
+  $token_options = [
+    'langcode' => $langcode,
+    'callback' => 'living_spaces_group_mail_tokens',
+    'clear' => TRUE,
+  ];
+  $message['subject'] .= PlainTextOutput::renderFromHtml($token_service->replace($mail_config->get($key . '.subject'), $variables, $token_options));
+  $message['body'][] = $token_service->replace($mail_config->get($key . '.body'), $variables, $token_options);
+
+  $language_manager->setConfigOverrideLanguage($original_language);
+}
+
+/**
+ * Token callback to add unsafe tokens for user mails.
+ */
+function living_spaces_group_mail_tokens(&$replacements, $data, $options) {
+  if (isset($data['group'])) {
+    $replacements['[group:title]'] = $data['group']->label();
+    $replacements['[group:url]'] = $data['group']->toUrl('canonical', ['absolute' => TRUE])->toString();
+  }
+  if (isset($data['group_title'])) {
+    $replacements['[group_title]'] = $data['group_title'];
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_group_form_user_admin_settings_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $config = \Drupal::configFactory();
+  $config_settings = $config->getEditable('user.settings');
+  $config_mail = $config->getEditable('user.mail');
+
+  $types = [
+    'email_new_space_member' => t('Space member was added'),
+    'email_delete_space_member' => t('Space member was deleted'),
+  ];
+
+  foreach ($types as $type => $label) {
+    $form[$type] = [
+      '#type' => 'details',
+      '#title' => $label,
+      '#group' => 'email',
+    ];
+
+    $form[$type]["{$type}_notify"] = [
+      '#type' => 'checkbox',
+      '#title' => t('Notify user'),
+      '#default_value' => $config_settings->get("notify.{$type}"),
+    ];
+
+    $form[$type]["{$type}_subject"] = [
+      '#type' => 'textfield',
+      '#title' => t('Subject'),
+      '#default_value' => $config_mail->get("{$type}.subject"),
+      '#maxlength' => 180,
+      '#states' => [
+        'invisible' => [
+          "input[name='{$type}_notify']" => ['checked' => FALSE],
+        ],
+      ],
+    ];
+
+    $form[$type]["{$type}_body"] = [
+      '#type' => 'textarea',
+      '#title' => t('Body'),
+      '#default_value' => $config_mail->get("{$type}.body"),
+      '#rows' => 15,
+      '#states' => [
+        'invisible' => [
+          "input[name='{$type}_notify']" => ['checked' => FALSE],
+        ],
+      ],
+    ];
+  }
+
+  $form['actions']['submit']['#submit'][] = 'living_spaces_group_user_settings_form_submit';
+}
+
+/**
+ * Provides submit callback for user admin settings form.
+ */
+function living_spaces_group_user_settings_form_submit($form, FormStateInterface $form_state) {
+  \Drupal::configFactory()->getEditable('user.mail')
+    ->set('email_new_space_member.subject', $form_state->getValue('email_new_space_member_subject'))
+    ->set('email_new_space_member.body', $form_state->getValue('email_new_space_member_body'))
+    ->set('email_delete_space_member.subject', $form_state->getValue('email_delete_space_member_subject'))
+    ->set('email_delete_space_member.body', $form_state->getValue('email_delete_space_member_body'))
+    ->save();
+
+  \Drupal::configFactory()->getEditable('user.settings')
+    ->set('notify.email_new_space_member', $form_state->getValue('email_new_space_member_notify'))
+    ->set('notify.email_delete_space_member', $form_state->getValue('email_delete_space_member_notify'))
+    ->save();
 }
 
 /**
@@ -134,12 +265,27 @@ function living_spaces_group_entity_type_alter(&$entity_types) {
  * Implements hook_ENTITY_TYPE_delete().
  */
 function living_spaces_group_group_content_delete(GroupContentInterface $content) {
-  if ('group_membership' != $content->getContentPlugin()->getPluginId()
-&& $entity = $content->getEntity()) {
+  if ('group_membership' != $content->getContentPlugin()->getPluginId() &&
+    $entity = $content->getEntity()
+  ) {
     $entity->delete();
   }
+
   if ($content->getEntity() instanceof UserInterface) {
     living_spaces_group_update_joined_spaces($content->getEntity());
+  }
+
+  if ('group_membership' == $content->getContentPlugin()->getPluginId() &&
+    \Drupal::config('user.settings')->get('notify.email_delete_space_member') &&
+    $account = $content->getEntity()
+  ) {
+    /** @var \Drupal\Core\Mail\MailManager $mail_manager */
+    $mail_manager = \Drupal::service('plugin.manager.mail');
+
+    if ($account->isActive() && $mail = $account->getEmail()) {
+      $params = ['group_title' => $content->getGroup()->label(), 'user' => $account];
+      $mail_manager->mail('living_spaces_group', 'email_delete_space_member', $mail, $account->getPreferredLangcode(), $params);
+    }
   }
 }
 
@@ -621,16 +767,29 @@ function living_spaces_group_entity_operation_alter(array &$operations, EntityIn
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function living_spaces_group_group_content_insert(GroupContentInterface $group_content_entity) {
-  $entity = $group_content_entity->getEntity();
+function living_spaces_group_group_content_insert(GroupContentInterface $content) {
+  $entity = $content->getEntity();
 
   if ($entity && $entity->hasField('space') && $entity->get('space')->isEmpty()) {
-    $entity->set('space', $group_content_entity->getGroup()->id());
+    $entity->set('space', $content->getGroup()->id());
     $entity->save();
   }
 
-  if ($group_content_entity->getEntity() instanceof UserInterface) {
-    living_spaces_group_update_joined_spaces($group_content_entity->getEntity());
+  if ($content->getEntity() instanceof UserInterface) {
+    living_spaces_group_update_joined_spaces($content->getEntity());
+  }
+
+  if ('group_membership' == $content->getContentPlugin()->getPluginId() &&
+    \Drupal::config('user.settings')->get('notify.email_new_space_member') &&
+    $account = $content->getEntity()
+  ) {
+    /** @var \Drupal\Core\Mail\MailManager $mail_manager */
+    $mail_manager = \Drupal::service('plugin.manager.mail');
+
+    if ($account->isActive() && $mail = $account->getEmail()) {
+      $params = ['group' => $content->getGroup(), 'user' => $account];
+      $mail_manager->mail('living_spaces_group', 'email_new_space_member', $mail, $account->getPreferredLangcode(), $params);
+    }
   }
 }
 

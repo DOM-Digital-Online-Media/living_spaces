@@ -1,2 +1,4 @@
 notify:
-  email_invited_user_to_the_event: 1
+  email_update_event: 1
+  email_delete_event: 1
+  email_new_event: 1
