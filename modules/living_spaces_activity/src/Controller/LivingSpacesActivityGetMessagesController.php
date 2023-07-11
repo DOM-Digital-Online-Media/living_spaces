@@ -52,17 +52,18 @@ class LivingSpacesActivityGetMessagesController extends ControllerBase {
       ]);
     }
 
-    $view = [
-      '#type' => 'view',
-      '#name' => $name,
-      '#display_id' => $display,
-      '#arguments' => [$user],
-    ];
+    if ($block = $this->entityTypeManager()->getStorage('block')->load('views_block__message_persistent')) {
+      $render = $this->entityTypeManager()->getViewBuilder('block')->view($block);
 
+      return new JsonResponse([
+        'success' => TRUE,
+        'message' => $this->renderer->render($render),
+      ]);
+    }
 
     return new JsonResponse([
-      'success' => TRUE,
-      'message' => $this->renderer->render($view),
+      'success' => FALSE,
+      'message' => $this->t('The incorrect user has been found.'),
     ]);
   }
 
