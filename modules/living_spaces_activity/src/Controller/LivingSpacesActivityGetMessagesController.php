@@ -42,13 +42,9 @@ class LivingSpacesActivityGetMessagesController extends ControllerBase {
    * Callback for 'get persistent messages' route.
    */
   public function getPersistent($user) {
-    $name = 'message';
-    $display = 'persistent';
-
-    if ($user != $this->currentUser()->id() || !views_get_view_result($name, $display, $user)) {
+    if ($user != $this->currentUser()->id() || !views_get_view_result('message', 'persistent', $user)) {
       return new JsonResponse([
         'success' => FALSE,
-        'message' => $this->t('The incorrect user has been found.'),
       ]);
     }
 
@@ -63,7 +59,6 @@ class LivingSpacesActivityGetMessagesController extends ControllerBase {
 
     return new JsonResponse([
       'success' => FALSE,
-      'message' => $this->t('The incorrect user has been found.'),
     ]);
   }
 
