@@ -3,9 +3,10 @@
 namespace Drupal\living_spaces_intranet\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\living_spaces_intranet\LivingSpacesIntranetManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * LivingSpacesIntranetSendMessage class.
@@ -43,11 +44,10 @@ class LivingSpacesIntranetSendMessage extends ControllerBase {
    */
   public function send($message) {
     $this->websocketManager->sendMessage($message);
+    $this->messenger()->addStatus('The message has been sent.');
 
-    return new JsonResponse([
-      'success' => TRUE,
-      'message' => $this->t('The message has been sent.'),
-    ]);
+    $url = Url::fromRoute('<front>');
+    return new RedirectResponse($url->toString());
   }
 
 }
