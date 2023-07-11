@@ -24,6 +24,8 @@
               else {
                 $('div.highlighted').append(value.message);
               }
+
+              Drupal.attachBehaviors();
             }
           }
         });
