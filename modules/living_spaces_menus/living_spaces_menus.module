@@ -26,7 +26,7 @@ function living_spaces_menus_user_update(UserInterface $user) {
  */
 function living_spaces_menus_collapsible_menu_alter(&$build) {
   $spaces_menu_key = 'menu_link_content:436e7a5e-7eb0-4ba7-928c-b9064865f174';
-
+  $have_favorites = FALSE;
   $connection = \Drupal::database();
 
   $result = $connection->query("SELECT groups_field_data.langcode AS groups_field_data_langcode, groups_field_data.id AS id, groups_field_data.label, user__field_favorite_spaces.entity_id
@@ -45,6 +45,18 @@ function living_spaces_menus_collapsible_menu_alter(&$build) {
     $build['#items'][$spaces_menu_key]['below'] = [];
 
     foreach($result as $key => $item) {
+      if ($item->entity_id) {
+        $have_favorites = TRUE;
+      }
+
+      if (!$item->entity_id && $have_favorites) {
+        $have_favorites = FALSE;
+
+        $build['#items'][$spaces_menu_key]['below']['living_spaces_menus.items_delimiter'] = [
+          'put_delimiter' => TRUE,
+        ];
+      }
+
       $build['#items'][$spaces_menu_key]['below']['living_spaces_menus.space:' . $item->id] = [
         'is_expanded' => FALSE,
         'is_collapsed' => FALSE,
@@ -53,6 +65,12 @@ function living_spaces_menus_collapsible_menu_alter(&$build) {
         'title' => $item->label,
         'url' => Url::fromRoute('entity.group.canonical', ['group' => $item->id]),
         'below' => [],
+      ];
+    }
+
+    if ($have_favorites) {
+      $build['#items'][$spaces_menu_key]['below']['living_spaces_menus.items_delimiter'] = [
+        'put_delimiter' => TRUE,
       ];
     }
 
