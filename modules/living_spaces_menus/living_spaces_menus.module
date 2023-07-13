@@ -40,9 +40,7 @@ function living_spaces_menus_collapsible_menu_alter(&$build) {
         LIMIT 8 OFFSET 0", [':current_user' => \Drupal::currentUser()->id()])->fetchAll();
 
   if ($result) {
-    $total_link = end($build['#items'][$spaces_menu_key]['below']);
-
-    $build['#items'][$spaces_menu_key]['below'] = [];
+    $links = [];
 
     foreach($result as $key => $item) {
       if ($item->entity_id) {
@@ -52,12 +50,12 @@ function living_spaces_menus_collapsible_menu_alter(&$build) {
       if (!$item->entity_id && $have_favorites) {
         $have_favorites = FALSE;
 
-        $build['#items'][$spaces_menu_key]['below']['living_spaces_menus.items_delimiter'] = [
+        $links['living_spaces_menus.items_delimiter'] = [
           'put_delimiter' => TRUE,
         ];
       }
 
-      $build['#items'][$spaces_menu_key]['below']['living_spaces_menus.space:' . $item->id] = [
+      $links['living_spaces_menus.space:' . $item->id] = [
         'is_expanded' => FALSE,
         'is_collapsed' => FALSE,
         'in_active_trail' => FALSE,
@@ -69,11 +67,13 @@ function living_spaces_menus_collapsible_menu_alter(&$build) {
     }
 
     if ($have_favorites) {
-      $build['#items'][$spaces_menu_key]['below']['living_spaces_menus.items_delimiter'] = [
+      $links['living_spaces_menus.items_delimiter'] = [
         'put_delimiter' => TRUE,
       ];
     }
 
-    array_push($build['#items'][$spaces_menu_key]['below'], $total_link);
+    array_push($links, end($build['#items'][$spaces_menu_key]['below']));
+
+    $build['#items'][$spaces_menu_key]['below'] = $links;
   }
 }
