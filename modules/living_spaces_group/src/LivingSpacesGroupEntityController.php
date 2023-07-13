@@ -18,7 +18,7 @@ class LivingSpacesGroupEntityController extends EntityController {
     /** @var \Symfony\Component\HttpFoundation\ParameterBag $parameters */
     $parameters = $route_match->getRawParameters();
 
-    /** \Drupal\group\Entity\GroupContentInterface $content */
+    /** @var \Drupal\group\Entity\GroupContentInterface $content */
     if ($parameters->get('group_content', NULL) &&
       $content = $this->entityTypeManager->getStorage('group_content')->load($parameters->get('group_content'))
     ) {
