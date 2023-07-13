@@ -15,7 +15,7 @@ class LivingSpacesGroupRouteSubscriber extends RouteSubscriberBase {
    */
   protected function alterRoutes(RouteCollection $collection) {
     if ($route = $collection->get('entity.group_content.delete_form')) {
-      $route->addDefaults(['_title_callback' => '\Drupal\living_spaces_group\LivingSpacesGroupEntityController::deleteTitle']);
+      $route->addDefaults(['_title_callback' => '\Drupal\living_spaces_group\Controller\LivingSpacesGroupEntityController::deleteTitle']);
     }
   }
 

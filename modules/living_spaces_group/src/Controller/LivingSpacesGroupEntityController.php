@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\living_spaces_group;
+namespace Drupal\living_spaces_group\Controller;
 
 use Drupal\Core\Entity\Controller\EntityController;
 use Drupal\Core\Entity\EntityInterface;
