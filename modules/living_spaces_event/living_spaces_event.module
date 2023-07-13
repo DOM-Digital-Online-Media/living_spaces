@@ -201,10 +201,24 @@ function living_spaces_event_comment_access(CommentInterface $comment, $operatio
 
   $entity = $comment->getCommentedEntity();
   if ('living_spaces_event' == $entity->getEntityTypeId() &&
-    in_array($operation, ['update', 'delete']) &&
-    $comment->getOwnerId() == $account->id()
+    in_array($operation, ['update', 'delete'])
   ) {
-    $result = AccessResult::allowed();
+    if ($comment->getOwnerId() == $account->id()) {
+      $result = AccessResult::allowed();
+    }
+    elseif (!$entity->get('space')->isEmpty()) {
+      /** @var \Drupal\group\Entity\GroupInterface $space */
+      $space = $entity->get('space')->entity;
+
+      if ($member = $space->getMember($account)) {
+        foreach ($member->getRoles() as $role) {
+          if ($role->get('is_space_admin')) {
+            $result = AccessResult::allowed();
+            break;
+          }
+        }
+      }
+    }
   }
 
   return $result;
