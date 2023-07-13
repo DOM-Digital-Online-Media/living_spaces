@@ -57,20 +57,19 @@ function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
   $have_favorites = FALSE;
   $connection = \Drupal::database();
 
-  $result = $connection->query("SELECT groups_field_data.langcode AS groups_field_data_langcode, groups_field_data.id AS id, groups_field_data.label, user__field_favorite_spaces.entity_id
-        FROM groups_field_data AS groups_field_data
-        LEFT JOIN user__joined_spaces AS user__joined_spaces ON (user__joined_spaces.joined_spaces_target_id = groups_field_data.id)
-        LEFT JOIN user__field_favorite_spaces AS user__field_favorite_spaces ON (user__field_favorite_spaces.field_favorite_spaces_target_id = groups_field_data.id AND user__field_favorite_spaces.entity_id = user__joined_spaces.entity_id)
-        WHERE (groups_field_data.status = '1') AND user__joined_spaces.entity_id=:current_user
-            AND ((groups_field_data.is_default IS NULL) OR (groups_field_data.is_default = '0'))
-            AND (groups_field_data.type NOT IN ('mail_counseling', 'on_site_counseling', 'telephone_counseling'))
-        ORDER BY entity_id DESC, label ASC
-        LIMIT 8 OFFSET 0", [':current_user' => \Drupal::currentUser()->id()])->fetchAll();
+  $query = $connection->select('groups_field_data', 'groups_field_data');
+  $query->addTag('living_spaces_menus_user_spaces');
+  $query->fields('groups_field_data', ['id', 'label']);
+  $query->condition('groups_field_data.status', 1, '=')
+    ->orderBy('groups_field_data.label', 'ASC')
+    ->range(0, 8);
+
+  $result = $query->execute()->fetchAll();
 
   if ($result) {
     $links = [];
 
-    foreach($result as $key => $item) {
+    foreach ($result as $key => $item) {
       if ($item->entity_id) {
         $have_favorites = TRUE;
       }
