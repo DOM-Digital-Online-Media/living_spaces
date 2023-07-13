@@ -52,7 +52,7 @@ function living_spaces_menus_user_update(UserInterface $user) {
 /**
  * Implements hook_collapsible_menu_alter().
  */
-function living_spaces_menus_collapsible_menu_alter(&$build) {
+function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
   $spaces_menu_key = 'menu_link_content:436e7a5e-7eb0-4ba7-928c-b9064865f174';
   $have_favorites = FALSE;
   $connection = \Drupal::database();
