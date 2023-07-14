@@ -1,9 +1,9 @@
 email_new_event:
   subject: 'New event'
-  body: "<b>Note</b>: Please do not reply to this system message. A reply to this automatically sent e-mail does not reach the desired person, nor is it read or answered.\r\nHello [user:display-name], a new event has been created.\r\nTo see the event, please click on the following link: [event:url]\r\n\r\nBest regards\r\nYour [site:name] team"
+  body: "Hello [user:display-name], a new event has been created.\r\nTo see the event, please click on the following link: [event:url]\r\n\r\nBest regards\r\nYour [site:name] team"
 email_update_event:
   subject: 'Event modified'
-  body: "<b>Note</b>: Please do not reply to this system message. A reply to this automatically sent e-mail does not reach the desired person, nor is it read or answered.\r\nHello [user:display-name], the following event has been changed:\r\n[event:title]\r\nTo see the changes, please click on the following link: [event:url]\r\n\r\nBest regards\r\nYour [site:name] team\r\n"
+  body: "Hello [user:display-name], the following event has been changed:\r\n[event:title]\r\nTo see the changes, please click on the following link: [event:url]\r\n\r\nBest regards\r\nYour [site:name] team\r\n"
 email_delete_event:
   subject: 'Event deleted'
-  body: "<b>Note</b>: Please do not reply to this system message. A reply to this automatically sent e-mail does not reach the desired person, nor is it read or answered.\r\nHello [user:display-name], the following event has been deleted:\r\n[event_title]\r\n\r\nBest regards\r\nYour [site:name] team\r\n"
+  body: "Hello [user:display-name], the following event has been deleted:\r\n[event_title]\r\n\r\nBest regards\r\nYour [site:name] team\r\n"
