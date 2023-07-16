@@ -32,5 +32,4 @@ function living_spaces_mail_alter(&$message) {
     $message['body'],
     t('<b>Note</b>: Please do not reply to this system message. A reply to this automatically sent e-mail does not reach the desired person, nor is it read or answered.')
   );
-  $z = 0;
 }
