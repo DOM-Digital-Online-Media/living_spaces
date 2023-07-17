@@ -23,3 +23,13 @@ function living_spaces_dip_translations_default_options_alter(&$options, $path) 
     $options[] = $path;
   }
 }
+
+/**
+ * Implements hook_mail_alter().
+ */
+function living_spaces_mail_alter(&$message) {
+  array_unshift(
+    $message['body'],
+    t('<b>Note</b>: Please do not reply to this system message. A reply to this automatically sent e-mail does not reach the desired person, nor is it read or answered.')
+  );
+}
