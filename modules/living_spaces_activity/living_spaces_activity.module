@@ -8,12 +8,12 @@
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\field\FieldConfigInterface;
 use Drupal\group\Entity\GroupContentInterface;
 use Drupal\group\Entity\GroupInterface;
 use Drupal\message\Entity\Message;
 use Drupal\user\UserInterface;
 use Drupal\views\ViewExecutable;
+use Drupal\views\Views;
 
 const LIVING_SPACES_ACTIVITY_PERSONAL = '5538078f-4a95-4e4c-9924-85d05b924894';
 const LIVING_SPACES_ACTIVITY_GENERAL = 'd42f2dc9-7d97-44c4-90a0-f93abf903ae0';
@@ -200,6 +200,11 @@ function living_spaces_activity_group_content_delete(GroupContentInterface $cont
 function living_spaces_activity_message_insert(Message $message) {
   if (LIVING_SPACES_ACTIVITY_PERSONAL == $message->getTemplate()->get('category')) {
     living_spaces_activity_update_counter($message->getOwner());
+    if ('persistent' == $message->getTemplate()->getTemplate()) {
+      $owner = $message->getOwner();
+      nodejs_send_content_channel_token("living_spaces_activity_persistent_message:{$owner->id()}");
+      living_spaces_activity_show_persistent_messages($owner);
+    }
   }
 }
 
@@ -212,6 +217,28 @@ function living_spaces_activity_update_counter(UserInterface $user) {
       'channel' => "living_spaces_activity:{$user->id()}",
       'uid' => $user->id(),
       'count' => $count,
+      'callback' => 'livingSpacesActivity',
+    ];
+    nodejs_send_content_channel_message($nodejs_message);
+  }
+}
+
+/**
+ * Helper to update un-read counter for the user.
+ */
+function living_spaces_activity_show_persistent_messages(UserInterface $user) {
+  $view_name = 'message';
+  $view_display = 'persistent';
+  if (views_get_view_result($view_name, $view_display, $user->id())) {
+    $user_id = $user->id();
+    $view = Views::getView($view_name);
+    $view->setArguments([$user_id]);
+    $render = $view->render($view_display);
+
+    $nodejs_message = (object) [
+      'channel' => "living_spaces_activity_persistent_message:{$user_id}",
+      'uid' => $user_id,
+      'persistent' => Drupal::service('renderer')->render($render),
       'callback' => 'livingSpacesActivity',
     ];
     nodejs_send_content_channel_message($nodejs_message);
@@ -317,13 +344,4 @@ function living_spaces_activity_living_spaces_users_notification_menu_item_info(
       'weight' => 0,
     ],
   ];
-}
-
-/**
- * Implements hook_page_attachments().
- */
-function living_spaces_activity_page_attachments(array &$attachments) {
-  if (\Drupal::currentUser()->isAuthenticated()) {
-    $attachments['#attached']['library'][] = 'living_spaces_activity/activity_load';
-  }
 }
