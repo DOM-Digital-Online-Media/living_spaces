@@ -15,14 +15,13 @@ class LivingSpacesGroupEntityController extends EntityController {
    * {@inheritdoc}
    */
   public function deleteTitle(RouteMatchInterface $route_match, EntityInterface $_entity = NULL) {
-    /** @var \Symfony\Component\HttpFoundation\ParameterBag $parameters */
     $parameters = $route_match->getRawParameters();
 
-    /** @var \Drupal\group\Entity\GroupContentInterface $content */
-    if ($parameters->get('group_content', NULL) &&
-      $content = $this->entityTypeManager->getStorage('group_content')->load($parameters->get('group_content'))
+    /** @var \Drupal\group\Entity\GroupRelationshipInterface $relationship */
+    if ($parameters->get('group_relationship', NULL) &&
+      $relationship = $this->entityTypeManager->getStorage('group_relationship')->load($parameters->get('group_relationship'))
     ) {
-      return $this->t('Delete %label', ['%label' => $content->getEntity()->label()]);
+      return $this->t('Delete %label', ['%label' => $relationship->getEntity()->label()]);
     }
 
     return parent::deleteTitle($route_match, $_entity);
