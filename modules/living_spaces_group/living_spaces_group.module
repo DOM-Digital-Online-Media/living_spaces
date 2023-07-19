@@ -17,6 +17,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\group\Entity\GroupInterface;
 use Drupal\group\Entity\GroupRelationshipInterface;
+use Drupal\group\Entity\GroupRelationshipTypeInterface;
 use Drupal\group\Entity\GroupRoleInterface;
 use Drupal\group\Entity\GroupTypeInterface;
 use Drupal\user\UserInterface;
@@ -452,6 +453,50 @@ function living_spaces_group_entity_base_field_info(EntityTypeInterface $entity_
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_group_group_relationship_type_insert(GroupRelationshipTypeInterface $entity) {
+  /* @var \Drupal\living_spaces_group\LivingSpacesGroupManagerInterface $space_manager */
+  $space_manager = \Drupal::service('living_spaces_group.manager');
+  $group_type = $entity->getGroupType()->id();
+  $entity_type = $entity->getEntityTypeId();
+
+  // Make sure we create storage for the space field when new entity
+  // types are added to space group types as available content.
+  if ($space_manager->isLivingSpace($group_type) && $entity_type !== 'user') {
+    $field_definition = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Space'))
+      ->setSetting('target_type', 'group')
+      ->setTranslatable(FALSE);
+
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition('space', $entity_type, 'living_spaces_group', $field_definition);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function living_spaces_group_group_relationship_type_delete(GroupRelationshipTypeInterface $entity) {
+  /* @var \Drupal\living_spaces_group\LivingSpacesGroupManagerInterface $space_manager */
+  $space_manager = \Drupal::service('living_spaces_group.manager');
+  $group_type = $entity->getGroupType()->id();
+  $entity_type = $entity->getEntityTypeId();
+
+  // Make sure we delete storage for the space field when entity
+  // types are removed from space group types as available content.
+  if ($space_manager->isLivingSpace($group_type) && $entity_type !== 'user') {
+    $entity_update_manager = \Drupal::entityDefinitionUpdateManager();
+    $storage_definition = $entity_update_manager
+      ->getFieldStorageDefinition('space', $entity_type);
+    if ($storage_definition) {
+      $entity_update_manager
+        ->uninstallFieldStorageDefinition($storage_definition);
+    }
+  }
+}
+
+/**
  * Implements hook_views_query_alter().
  */
 function living_spaces_group_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
@@ -803,8 +848,12 @@ function living_spaces_group_group_relationship_insert(GroupRelationshipInterfac
     \Drupal::config('user.settings')->get('notify.email_new_space_member')) {
     /** @var \Drupal\Core\Mail\MailManager $mail_manager */
     $mail_manager = \Drupal::service('plugin.manager.mail');
+    $mail_validator = \Drupal::service('email.validator');
 
-    if ($entity->isActive() && $mail = $entity->getEmail()) {
+    // We need to make sure email is valid as we have membership created during
+    // profile install process and user 1 does not have email at this point.
+    if ($entity->isActive() && ($mail = $entity->getEmail())
+  && $mail_validator->isValid($mail)) {
       $params = ['group' => $relationship->getGroup(), 'user' => $entity];
       $mail_manager->mail('living_spaces_group', 'email_new_space_member', $mail, $entity->getPreferredLangcode(), $params);
     }
