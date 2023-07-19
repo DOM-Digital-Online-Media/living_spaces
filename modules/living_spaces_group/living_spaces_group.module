@@ -837,17 +837,6 @@ function living_spaces_group_group_relationship_insert(GroupRelationshipInterfac
     \Drupal::config('user.settings')->get('notify.email_new_space_member')) {
     /** @var \Drupal\Core\Mail\MailManager $mail_manager */
     $mail_manager = \Drupal::service('plugin.manager.mail');
-
-    if ($entity->isActive() && $mail = $entity->getEmail()) {
-      $params = ['group' => $relationship->getGroup(), 'user' => $entity];
-      $mail_manager->mail('living_spaces_group', 'email_new_space_member', $mail, $entity->getPreferredLangcode(), $params);
-    }
-  }
-
-  if ('group_membership' == $relationship->getPluginId() && $entity &&
-    \Drupal::config('user.settings')->get('notify.email_new_space_member')) {
-    /** @var \Drupal\Core\Mail\MailManager $mail_manager */
-    $mail_manager = \Drupal::service('plugin.manager.mail');
     $mail_validator = \Drupal::service('email.validator');
 
     // We need to make sure email is valid as we have membership created during
