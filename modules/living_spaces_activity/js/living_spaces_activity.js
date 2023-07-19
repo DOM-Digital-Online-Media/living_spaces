@@ -15,6 +15,14 @@
         $('#space-activity-notifications .dropdown-toggle.show').dropdown('toggle');
         $('.notification-counter').text(message.count);
       }
+      if ('living_spaces_activity_persistent_message:' + drupalSettings.user.uid === message.channel) {
+        if ($('div[id^=block-views-block-message-persistent]').length) {
+          $('div[id^=block-views-block-message-persistent]').replaceWith(message.persistent);
+        }
+        else {
+          $('div.highlighted').append(message.persistent);
+        }
+      }
     }
   };
 
