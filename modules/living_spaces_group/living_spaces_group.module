@@ -458,8 +458,8 @@ function living_spaces_group_entity_base_field_info(EntityTypeInterface $entity_
 function living_spaces_group_group_relationship_type_insert(GroupRelationshipTypeInterface $entity) {
   /* @var \Drupal\living_spaces_group\LivingSpacesGroupManagerInterface $space_manager */
   $space_manager = \Drupal::service('living_spaces_group.manager');
-  $group_type = $entity->getGroupType()->id();
-  $entity_type = $entity->getEntityTypeId();
+  $group_type = $entity->getGroupTypeId();
+  $entity_type = $entity->getPlugin()->getRelationType()->getEntityTypeId();
 
   // Make sure we create storage for the space field when new entity
   // types are added to space group types as available content.
@@ -480,8 +480,8 @@ function living_spaces_group_group_relationship_type_insert(GroupRelationshipTyp
 function living_spaces_group_group_relationship_type_delete(GroupRelationshipTypeInterface $entity) {
   /* @var \Drupal\living_spaces_group\LivingSpacesGroupManagerInterface $space_manager */
   $space_manager = \Drupal::service('living_spaces_group.manager');
-  $group_type = $entity->getGroupType()->id();
-  $entity_type = $entity->getEntityTypeId();
+  $group_type = $entity->getGroupTypeId();
+  $entity_type = $entity->getPlugin()->getRelationType()->getEntityTypeId();
 
   // Make sure we delete storage for the space field when entity
   // types are removed from space group types as available content.
