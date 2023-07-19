@@ -5,49 +5,8 @@
  * Contains functions and hooks for living_spaces_menus.module.
  */
 
-use Drupal\user\UserInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
-
-/**
- * Implements hook_ENTITY_TYPE_update().
- */
-function living_spaces_menus_user_update(UserInterface $user) {
-  $field_joined = 'joined_spaces';
-  $field_favorite = 'field_favorite_spaces';
-  $cache_keys = [];
-  $need_clear_cache = FALSE;
-
-  if ($user->hasField($field_joined)) {
-    if (!$user->get($field_joined)->equals($user->original->get($field_joined))) {
-      \Drupal::service('plugin.manager.menu.link')->rebuild();
-
-      $need_clear_cache = TRUE;
-    }
-  }
-
-  if ($user->hasField($field_favorite) && !$user->get($field_favorite)->equals($user->original->get($field_favorite))) {
-    $need_clear_cache = TRUE;
-  }
-
-  if ($need_clear_cache) {
-    $connection = \Drupal::database();
-
-    $result = $connection->query("SELECT cid FROM cache_render WHERE cid LIKE '%living_spaces_barrio_ap_collapsible_menu%'")
-      ->fetchAllAssoc('cid', \PDO::FETCH_ASSOC);
-
-    if ($result) {
-      $cache_keys = array_keys($result);
-    }
-
-    if ($cache_keys) {
-      \Drupal::service('cache.render')->invalidateMultiple($cache_keys);
-    }
-    else {
-      \Drupal::service('cache.render')->invalidateAll();
-    }
-  }
-}
 
 /**
  * Implements hook_collapsible_menu_alter().
@@ -102,6 +61,7 @@ function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
     array_push($links, end($build['#items'][$spaces_menu_key]['below']));
 
     $build['#items'][$spaces_menu_key]['below'] = $links;
+    $build['#cache']['tags'] = ['user:' . \Drupal::currentUser()->id()];
   }
 }
 
