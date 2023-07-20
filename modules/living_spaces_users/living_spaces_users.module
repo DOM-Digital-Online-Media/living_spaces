@@ -8,7 +8,6 @@
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
@@ -85,8 +84,17 @@ function living_spaces_users_form_user_form_alter(&$form, FormStateInterface $fo
  * Implements hook_form_FORM_ID_alter().
  */
 function living_spaces_users_form_user_cancel_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  \Drupal::request()->query->remove('destination');
-  $form['actions']['submit']['#submit'][] = 'living_spaces_user_cancel_form_submit';
+  if ($destination = \Drupal::request()->query->get('destination', FALSE)) {
+    try {
+      $url = Url::fromUserInput($destination);
+      if (!$url->access(Drupal::currentUser())) {
+        \Drupal::request()->query->remove('destination');
+        $form['actions']['submit']['#submit'][] = 'living_spaces_user_cancel_form_submit';
+      }
+    }
+    catch (\InvalidArgumentException $e) {
+    }
+  }
 }
 
 /**
