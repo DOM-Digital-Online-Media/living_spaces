@@ -99,6 +99,7 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
 
     if ($invite_ids = living_spaces_event_check_user_status($event->id(), $this->currentUser->id())) {
       $invite_id = reset($invite_ids);
+      $title = $this->t('Would you like to accept the invitation for this event?');
 
       /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInviteInterface $invite */
       $invite = $this->entityTypeManager->getStorage('living_spaces_event_invite')->load($invite_id);
@@ -133,11 +134,13 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
         $build['accept'] = [
           '#type' => 'link',
           '#title' => $this->t('Accept'),
-          '#attributes' => ['class' => [
-            'btn',
-            'btn-primary',
-            'accept',
-          ]],
+          '#attributes' => [
+            'class' => [
+              'btn',
+              'btn-primary',
+              'accept',
+            ],
+          ],
           '#url' => Url::fromRoute('living_spaces_event.event_status', [
             'living_spaces_event_invite' => $invite->id(),
             'status' => $terms ? reset($terms)->id() : '',
@@ -160,11 +163,13 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
         $build['decline'] = [
           '#type' => 'link',
           '#title' => $this->t('Decline'),
-          '#attributes' => ['class' => [
-            'btn',
-            'btn-primary',
-            'decline',
-          ]],
+          '#attributes' => [
+            'class' => [
+              'btn',
+              'btn-primary',
+              'decline',
+            ],
+          ],
           '#url' => Url::fromRoute('living_spaces_event.event_status', [
             'living_spaces_event_invite' => $invite->id(),
             'status' => $terms ? reset($terms)->id() : '',
@@ -181,7 +186,7 @@ class LivingSpacesEventStatusBlock extends BlockBase implements ContainerFactory
     }
 
     if (!empty($build)) {
-      $build['#prefix'] = "<div class='title'>{$this->t('Would you like to accept the invitation for this event?')}</div>";
+      $build['#prefix'] = "<div class='title'>{$title}</div>";
     }
 
     return $build;

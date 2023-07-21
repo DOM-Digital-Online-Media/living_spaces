@@ -85,7 +85,6 @@
                 "Support removing nested elements in Twig 'without' filter": "https://www.drupal.org/files/issues/2020-08-18/3029189-14.patch"
             },
             "drupal/message_ui": {
-                "Deleted and replaced configuration entity error": "https://www.drupal.org/files/issues/2018-12-21/issue-3021923-deleted-replaced-config-error-1.patch",
                 "Fatal error Drupal 9": "https://git.drupalcode.org/project/message_ui/-/merge_requests/2.patch"
             },
             "drupal/empty_fields": {

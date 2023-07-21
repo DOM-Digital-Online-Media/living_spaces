@@ -1,3 +1,9 @@
-email_invited_user_to_the_event:
-  subject: 'You have been invited to the event [event:title].'
-  body: "You have been invited to the event [event:title]. Please click here [event:url] to RSVP.\r\n\r\n--  [site:name] team"
+email_new_event:
+  subject: 'New event'
+  body: "Hello [user:display-name], a new event has been created.\r\nTo see the event, please click on the following link: [event:url]\r\n\r\nBest regards\r\nYour [site:name] team"
+email_update_event:
+  subject: 'Event modified'
+  body: "Hello [user:display-name], the following event has been changed:\r\n[event:title]\r\nTo see the changes, please click on the following link: [event:url]\r\n\r\nBest regards\r\nYour [site:name] team\r\n"
+email_delete_event:
+  subject: 'Event deleted'
+  body: "Hello [user:display-name], the following event has been deleted:\r\n[event_title]\r\n\r\nBest regards\r\nYour [site:name] team\r\n"

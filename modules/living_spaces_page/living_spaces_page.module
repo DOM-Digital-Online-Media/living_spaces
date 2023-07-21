@@ -66,6 +66,26 @@ function living_spaces_page_form_alter(&$form, FormStateInterface $form_state, $
           $form[$field]['#access'] = FALSE;
         }
       }
+
+      if (!\Drupal::currentUser()->hasPermission('access frontend setting')) {
+        $fields = ['field_path', 'field_page_category', 'field_exposed_to_frontend'];
+        foreach ($fields as $field) {
+          if (isset($form[$field])) {
+            $form[$field]['#attributes']['class'][] = 'visually-hidden';
+          }
+        }
+      }
+
+      $fields = ['field_path', 'field_page_category'];
+      foreach ($fields as $field) {
+        if (isset($form[$field])) {
+          $form[$field]['#states'] = [
+            'visible' => [
+              ":input[name='field_exposed_to_frontend[value]']" => ['checked' => TRUE],
+            ],
+          ];
+        }
+      }
       break;
 
   }

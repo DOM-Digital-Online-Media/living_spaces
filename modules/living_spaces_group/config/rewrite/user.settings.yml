@@ -1,0 +1,3 @@
+notify:
+  email_new_space_member: 1
+  email_delete_space_member: 1

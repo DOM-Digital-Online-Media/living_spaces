@@ -3,7 +3,7 @@ status: true
 dependencies: {  }
 id: office_manager
 label: 'Office Manager'
-weight: 10
+weight: -8
 is_admin: false
 permissions:
   - 'access living spaces overview'

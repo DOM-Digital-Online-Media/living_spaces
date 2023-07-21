@@ -98,14 +98,17 @@ function living_spaces_simple_permissions_form_alter(&$form, FormStateInterface 
       // Change permission name.
       if (isset($names[$name])) {
         $title = $data['description']['#context']['title'];
+        // phpcs:ignore
         $data['description']['#context']['title'] = t($names[$name]['title']);
 
         if (!$mode) {
+          // phpcs:ignore
           $data['description']['#context']['description'] = t($names[$name]['description']);
         }
 
         foreach ($roles as $role) {
           if (isset($data[$role])) {
+            // phpcs:ignore
             $data[$role]['#title'] = str_replace($title->render(), t($names[$name]['title'])->render(), $data[$role]['#title']);
           }
         }

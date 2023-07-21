@@ -97,6 +97,7 @@ class LivingSpaceEventInviteUsersForm extends FormBase {
               '@user' => $member->getDisplayName(),
               '@event' => $event->toLink($event->label())->toString(),
             ]);
+            // phpcs:ignore
             $this->logger('Space event')->notice($message);
             $this->messenger()->addWarning($message);
           }

@@ -564,7 +564,7 @@ display:
           allowEventOverlap: 1
           updateAllowed: 0
           updateConfirm: 0
-          defaultLanguage: en
+          defaultLanguage: current_lang
           languageSelector: 0
           dialogWindow: 0
           openEntityInNewTab: 1

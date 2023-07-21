@@ -14,27 +14,6 @@ function living_spaces_install() {
   // First, do everything in standard profile.
   include_once DRUPAL_ROOT . '/core/profiles/standard/standard.install';
   standard_install();
-
-  if (\Drupal::hasService('living_spaces_group.manager')) {
-    /** @var \Drupal\living_spaces_group\LivingSpacesGroupManagerInterface $living_space_manager */
-    $living_space_manager = \Drupal::service('living_spaces_group.manager');
-    $entity_types = $living_space_manager->getEntityTypesOfLivingSpaceGroupTypes();
-
-    foreach ($entity_types as $entity_type) {
-      if ($entity_type !== 'user') {
-        $field_definition = BaseFieldDefinition::create('entity_reference')
-          ->setLabel(t('Space'))
-          ->setSetting('target_type', 'group')
-          ->setTranslatable(FALSE);
-
-        // Add the field after enabling all required modules.
-        \Drupal::entityDefinitionUpdateManager()
-          ->installFieldStorageDefinition('space', $entity_type, 'living_spaces_group', $field_definition);
-      }
-    }
-  }
-
-  // Can add code in here to make nodes, terms, etc.
 }
 
 /**
