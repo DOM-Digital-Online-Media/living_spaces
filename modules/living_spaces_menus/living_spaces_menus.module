@@ -14,26 +14,43 @@ use Drupal\Core\Url;
 function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
   $spaces_menu_key = 'menu_link_content:436e7a5e-7eb0-4ba7-928c-b9064865f174';
   $have_favorites = FALSE;
-  $connection = \Drupal::database();
 
-  $query = $connection->select('groups_field_data', 'groups_field_data');
+  $query = \Drupal::entityTypeManager()->getStorage('group')->getQuery();
   $query->addTag('living_spaces_menus_user_spaces');
-  $query->fields('groups_field_data', ['id', 'label']);
-  $query->condition('groups_field_data.status', 1, '=')
-    ->orderBy('groups_field_data.label', 'ASC')
+  $query->condition('status', 1, '=')
+    ->sort('label', 'ASC')
     ->range(0, 8);
 
-  $result = $query->execute()->fetchAll();
+  $result = $query->execute();
 
   if ($result) {
+    $groups = \Drupal::entityTypeManager()->getStorage('group')->loadMultiple($result);
+  }
+
+  if ($groups) {
     $links = [];
 
-    foreach ($result as $key => $item) {
-      if ($item->entity_id) {
-        $have_favorites = TRUE;
-      }
+    $user = \Drupal::entityTypeManager()->getStorage('user')->load(\Drupal::currentUser()->id());
 
-      if (!$item->entity_id && $have_favorites) {
+    $favorites_list = [];
+
+    foreach ($user->field_favorite_spaces->getValue() as $favorite) {
+      $favorites_list[] = $favorite['target_id'];
+    }
+
+    $groups_keys = array_keys($groups);
+    $favorites_list = array_flip($favorites_list);
+
+    usort($groups_keys, function($a, $b) use($favorites_list) {
+      return (isset($favorites_list[$a]) && isset($favorites_list[$b]) ? $favorites_list[$a] - $favorites_list[$b] : -1);
+    });
+
+    if ($favorites_list) {
+      $have_favorites = TRUE;
+    }
+
+    foreach ($groups_keys as $key) {
+      if (!array_key_exists($groups[$key]->id(), $favorites_list) && $have_favorites) {
         $have_favorites = FALSE;
 
         $links['living_spaces_menus.items_delimiter'] = [
@@ -41,13 +58,13 @@ function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
         ];
       }
 
-      $links['living_spaces_menus.space:' . $item->id] = [
+      $links['living_spaces_menus.space:' . $groups[$key]->id()] = [
         'is_expanded' => FALSE,
         'is_collapsed' => FALSE,
         'in_active_trail' => FALSE,
         'attributes' => new Attribute(),
-        'title' => $item->label,
-        'url' => Url::fromRoute('entity.group.canonical', ['group' => $item->id]),
+        'title' => $groups[$key]->label(),
+        'url' => Url::fromRoute('entity.group.canonical', ['group' => $groups[$key]->id()]),
         'below' => [],
       ];
     }

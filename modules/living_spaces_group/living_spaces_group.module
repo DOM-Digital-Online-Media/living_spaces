@@ -1110,14 +1110,6 @@ function living_spaces_group_group_update(GroupInterface $group) {
  * Implements hook_query_TAG_alter().
  */
 function living_spaces_group_query_living_spaces_menus_user_spaces_alter(Drupal\Core\Database\Query\AlterableInterface $query) {
-  if ($spaces = \Drupal::config('living_spaces_group.exclude_spaces')->get('spaces')) {
-    $excluded = array_intersect($spaces, ['mail_counseling', 'on_site_counseling', 'telephone_counseling', 'chat_counseling']);
-
-    if ($excluded) {
-      $query->condition('groups_field_data.type', array_values($excluded), 'NOT IN');
-    }
-  }
-
   $query->leftJoin('user__joined_spaces', 'user__joined_spaces', 'user__joined_spaces.joined_spaces_target_id = groups_field_data.id');
   $query->condition('user__joined_spaces.entity_id', \Drupal::currentUser()->id(), '=');
 
