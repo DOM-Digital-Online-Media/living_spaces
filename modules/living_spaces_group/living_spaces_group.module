@@ -615,12 +615,14 @@ function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE
     ? 'living_spaces_group.remove_admin'
     : 'living_spaces_group.assign_admin';
 
-  $current_is_admin = \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($current_user, $space);
+  $current_is_admin = \Drupal::service('living_spaces_group.manager')->isUserSpaceAdmin($current_user, $space)
+    || $space->hasPermission('manage space members', $current_user)
+    || $space->hasPermission('administer members', $current_user);
 
   if (
-    $space->getOwnerId() !== $user->id()
+    $current_is_admin
+    && $space->getOwnerId() !== $user->id()
     && $current_user->id() != $user->id()
-    && ($current_is_admin || $space->hasPermission('manage space members', $current_user))
   ) {
     $links['remove_from_space'] = [
       '#type' => 'link',
