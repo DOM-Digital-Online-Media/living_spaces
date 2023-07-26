@@ -103,7 +103,7 @@ class LivingSpacesGroupCreateContentController extends ControllerBase {
     $access = $this->currentUser()->hasPermission('manage living spaces');
 
     if (!$access) {
-      $access = $group->hasPermission('manage living spaces', $this->currentUser());
+      $access = $group->hasPermission('administer group', $this->currentUser());
     }
 
     return $access ? AccessResult::allowed() : AccessResult::forbidden();

@@ -614,7 +614,7 @@ function living_spaces_event_living_spaces_event_action_info(LivingSpaceEventInt
 
   if ($space &&
     (\Drupal::currentUser()->hasPermission('manage living spaces') ||
-    $space->hasPermission('manage living spaces', \Drupal::currentUser()))
+    $space->hasPermission('administer group', \Drupal::currentUser()))
   ) {
     $items['create_event'] = [
       '#type' => 'link',
