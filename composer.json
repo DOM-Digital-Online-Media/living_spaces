@@ -80,6 +80,9 @@
     },
     "extra": {
         "patches": {
+            "drupal/bootstrap_barrio": {
+                "Undefined index type": "https://www.drupal.org/files/issues/2023-07-25/bootstrap_barrio_undefiend_type_3136067.patch"
+            },
             "drupal/core": {
                 "Invalid config structures can result in exceptions when saving a config entity": "https://www.drupal.org/files/issues/2021-11-29/2925890-29.patch",
                 "Support removing nested elements in Twig 'without' filter": "https://www.drupal.org/files/issues/2020-08-18/3029189-14.patch"
