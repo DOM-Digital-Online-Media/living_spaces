@@ -12,31 +12,31 @@ living_spaces_group.remove_member:
   defaults:
     _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupController::removeMember'
   requirements:
-    _group_permission: 'manage living spaces'
+    _group_permission: 'administer members'
 living_spaces_group.block_user:
   path: '/group/{group}/living-spaces-admin/block-user/{user}'
   defaults:
     _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupController::blockUser'
   requirements:
-    _group_permission: 'manage living spaces'
+    _group_permission: 'administer members'
 living_spaces_group.unblock_user:
   path: '/group/{group}/living-spaces-admin/unblock-user/{user}'
   defaults:
     _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupController::unblockUser'
   requirements:
-    _group_permission: 'manage living spaces'
+    _group_permission: 'administer members'
 living_spaces_group.assign_admin:
   path: '/group/{group}/living-spaces-admin/assign-admin/{user}'
   defaults:
     _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupController::assignAdmin'
   requirements:
-    _group_permission: 'manage living spaces'
+    _group_permission: 'administer members'
 living_spaces_group.remove_admin:
   path: '/group/{group}/living-spaces-admin/remove-admin/{user}'
   defaults:
     _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupController::removeAdmin'
   requirements:
-    _group_permission: 'manage living spaces'
+    _group_permission: 'administer members'
 living_spaces_group.update_memberships:
   path: '/admin/config/development/update-memberships'
   defaults:
