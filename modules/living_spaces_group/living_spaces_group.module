@@ -649,6 +649,7 @@ function living_spaces_group_menu_local_tasks_alter(&$data, $route_name, Refinab
       }
     }
   }
+
   $tab_routes = [
     'view.groups.circles',
     'entity.group.collection',
