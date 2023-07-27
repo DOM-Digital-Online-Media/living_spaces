@@ -631,7 +631,12 @@ function living_spaces_group_menu_local_tasks_alter(&$data, $route_name, Refinab
     unset($data['tabs'][0]['group.edit_form']);
   }
 
-  if ($route_name === 'entity.group.canonical') {
+  $tab_routes = [
+    'entity.group.canonical',
+    'living_spaces_sections.sections_form',
+    'page_manager.page_view_living_space_members_living_space_members-layout_builder-0',
+  ];
+  if (in_array($route_name, $tab_routes, TRUE)) {
     $hide_tabs = [
       'group.delete_form',
       'group.content',
@@ -644,7 +649,11 @@ function living_spaces_group_menu_local_tasks_alter(&$data, $route_name, Refinab
       }
     }
   }
-  if ($route_name === 'view.groups.circles' || $route_name === 'entity.group.collection') {
+  $tab_routes = [
+    'view.groups.circles',
+    'entity.group.collection',
+  ];
+  if (in_array($route_name, $tab_routes, TRUE)) {
     $hide_tabs = [
       'group.settings',
       'living_spaces_group_privacy.privacy_form',
