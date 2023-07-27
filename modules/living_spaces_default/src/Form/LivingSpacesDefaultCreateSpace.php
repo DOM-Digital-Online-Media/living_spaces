@@ -116,6 +116,13 @@ class LivingSpacesDefaultCreateSpace extends FormBase {
       $template_options = $query->execute()->fetchAllKeyed();
     }
 
+    // We have only few groups used as template, and we translate only their
+    // titles instead of enabling translation for all groups.
+    foreach ($template_options as &$template_option) {
+      // phpcs:ignore
+      $template_option = $this->t($template_option);
+    }
+
     $form['template'] = [
       '#type' => 'select',
       '#title' => $this->t('Template'),
