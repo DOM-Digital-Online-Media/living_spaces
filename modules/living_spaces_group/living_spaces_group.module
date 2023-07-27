@@ -630,6 +630,32 @@ function living_spaces_group_menu_local_tasks_alter(&$data, $route_name, Refinab
   if (!empty($data['tabs'][0]['group.edit_form'])) {
     unset($data['tabs'][0]['group.edit_form']);
   }
+
+  if ($route_name === 'entity.group.canonical') {
+    $hide_tabs = [
+      'group.delete_form',
+      'group.content',
+      'views_view:view.group_nodes.page_1',
+      'devel.entities:group.devel_tab',
+    ];
+    foreach ($hide_tabs as $hide_tab) {
+      if (isset($data['tabs'][0][$hide_tab])) {
+        unset($data['tabs'][0][$hide_tab]);
+      }
+    }
+  }
+  if ($route_name === 'view.groups.circles' || $route_name === 'entity.group.collection') {
+    $hide_tabs = [
+      'group.settings',
+      'living_spaces_group_privacy.privacy_form',
+      'group.types',
+    ];
+    foreach ($hide_tabs as $hide_tab) {
+      if (isset($data['tabs'][0][$hide_tab])) {
+        unset($data['tabs'][0][$hide_tab]);
+      }
+    }
+  }
 }
 
 /**
