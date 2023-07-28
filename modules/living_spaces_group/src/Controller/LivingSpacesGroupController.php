@@ -204,7 +204,7 @@ class LivingSpacesGroupController extends ControllerBase {
    */
   public function join(GroupInterface $group) {
     /** @var \Drupal\user\UserInterface $user */
-    $user = $this->entityTypeManager->getStorage('user')
+    $user = $this->entityTypeManager()->getStorage('user')
       ->load($this->currentUser()->id());
     $group->addMember($user);
 
