@@ -38,19 +38,12 @@ function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
       $favorites_list[] = $favorite['target_id'];
     }
 
-    $groups_keys = array_keys($groups);
-    $favorites_list = array_flip($favorites_list);
-
-    usort($groups_keys, function($a, $b) use($favorites_list) {
-      return (isset($favorites_list[$a]) && isset($favorites_list[$b]) ? $favorites_list[$a] - $favorites_list[$b] : -1);
-    });
-
     if ($favorites_list) {
       $have_favorites = TRUE;
     }
 
-    foreach ($groups_keys as $key) {
-      if (!array_key_exists($groups[$key]->id(), $favorites_list) && $have_favorites) {
+    foreach ($groups as $key => $item) {
+      if (!in_array($item->id(), $favorites_list) && $have_favorites) {
         $have_favorites = FALSE;
 
         $links['living_spaces_menus.items_delimiter'] = [
@@ -58,13 +51,13 @@ function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
         ];
       }
 
-      $links['living_spaces_menus.space:' . $groups[$key]->id()] = [
+      $links['living_spaces_menus.space:' . $item->id()] = [
         'is_expanded' => FALSE,
         'is_collapsed' => FALSE,
         'in_active_trail' => FALSE,
         'attributes' => new Attribute(),
-        'title' => $groups[$key]->label(),
-        'url' => Url::fromRoute('entity.group.canonical', ['group' => $groups[$key]->id()]),
+        'title' => $item->label(),
+        'url' => Url::fromRoute('entity.group.canonical', ['group' => $item->id()]),
         'below' => [],
       ];
     }
