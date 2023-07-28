@@ -110,25 +110,9 @@ class LivingSpacesGroupMembershipBlock extends BlockBase implements ContainerFac
   public function blockAccess(AccountInterface $account) {
     /** @var \Drupal\group\Entity\GroupInterface $context_group */
     $context_group = $this->getContextValue('group');
-    $access = $context_group->hasPermission('administer members', $account);
-
-    if (!$access && $account->hasPermission('add members to administered space')) {
-      $gid = $this->currentRouteMatch->getRawParameter('group');
-
-      /** @var \Drupal\group\Entity\GroupInterface $group */
-      if ($gid && $group = $this->entityTypeManager->getStorage('group')->load($gid)) {
-        /** @var \Drupal\group\Entity\Storage\GroupRoleStorageInterface $role_storage */
-        $role_storage = $this->entityTypeManager->getStorage('group_role');
-        $roles = $role_storage->loadByUserAndGroup($account, $group);
-
-        foreach ($roles as $role) {
-          if ($role->get('is_space_admin')) {
-            $access = TRUE;
-            break;
-          }
-        }
-      }
-    }
+    $access = $context_group->hasPermission('administer members', $account)
+      || $account->hasPermission('add members to any space')
+      || $account->hasPermission('add members to administered space');
 
     return $access ? AccessResult::allowed() : AccessResult::forbidden();
   }
