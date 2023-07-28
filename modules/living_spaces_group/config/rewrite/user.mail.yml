@@ -1,6 +1,6 @@
 email_new_space_member:
   subject: 'You have been added to a new space'
-  body: "<b>Note</b>: Please do not reply to this system message. A reply to this automatically sent e-mail does not reach the desired person, nor is it read or answered.\r\nHello [user:display-name], we would like to inform you that you have been added to a new room.\r\n\r\nBest regards\r\nYour [site:name] team"
+  body: "Hello [user:display-name], we would like to inform you that you have been added to a new room.\r\n\r\nBest regards\r\nYour [site:name] team"
 email_delete_space_member:
   subject: 'You were removed from the space'
-  body: "<b>Note</b>: Please do not reply to this system message. A reply to this automatically sent e-mail does not reach the desired person, nor is it read or answered.\r\nHello [user:display-name], We regret to inform you that you have been removed from a room.\r\n\r\nBest regards\r\nYour [site:name] team"
+  body: "Hello [user:display-name], We regret to inform you that you have been removed from a room.\r\n\r\nBest regards\r\nYour [site:name] team"

@@ -13,3 +13,7 @@ services:
     arguments: ['@module_handler', '@config.factory']
     tags:
       - { name: breadcrumb_builder, priority: 1100 }
+  living_spaces_group.route_subscriber:
+    class: Drupal\living_spaces_group\Routing\LivingSpacesGroupRouteSubscriber
+    tags:
+      - { name: event_subscriber, priority: 100 }

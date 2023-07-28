@@ -27,3 +27,11 @@ living_spaces_intranet.unban:
     parameters:
       user:
         type: entity:user
+living_spaces_intranet.send_message:
+  path: '/send-websocket-message/{message}'
+  defaults:
+    _title: 'Send messages'
+    _controller: '\Drupal\living_spaces_intranet\Controller\LivingSpacesIntranetSendMessage::send'
+  requirements:
+    _access: 'TRUE'
+    _user_is_logged_in: 'TRUE'
