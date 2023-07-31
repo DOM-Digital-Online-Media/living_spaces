@@ -630,6 +630,23 @@ function living_spaces_group_menu_local_tasks_alter(&$data, $route_name, Refinab
   if (!empty($data['tabs'][0]['group.edit_form'])) {
     unset($data['tabs'][0]['group.edit_form']);
   }
+
+  $hide_tabs = [
+    // Group or circle view.
+    'group.delete_form',
+    'group.content',
+    'views_view:view.group_nodes.page_1',
+    'devel.entities:group.devel_tab',
+    // Groups and circles list.
+    'group.settings',
+    'living_spaces_group_privacy.privacy_form',
+    'group.types',
+  ];
+  foreach ($hide_tabs as $hide_tab) {
+    if (isset($data['tabs'][0][$hide_tab])) {
+      unset($data['tabs'][0][$hide_tab]);
+    }
+  }
 }
 
 /**
