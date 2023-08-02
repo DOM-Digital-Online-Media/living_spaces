@@ -151,14 +151,3 @@ function living_spaces_default_living_spaces_default_create(GroupInterface $spac
     $space->set('label', $label);
   }
 }
-
-/**
- * Implements hook_query_TAG_alter().
- */
-function living_spaces_default_query_living_spaces_menus_user_spaces_alter(Drupal\Core\Database\Query\AlterableInterface $query) {
-  $conditionGroup = $query->orConditionGroup()
-    ->condition('groups_field_data.is_default', '', 'IS NULL')
-    ->condition('groups_field_data.is_default', '0', '=');
-
-  $query->condition($conditionGroup);
-}
