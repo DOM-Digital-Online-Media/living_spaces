@@ -5,16 +5,72 @@
  * Contains functions and hooks for living_spaces_menus.module.
  */
 
-use Drupal\user\UserInterface;
+use Drupal\Core\Template\Attribute;
+use Drupal\Core\Url;
 
 /**
- * Implements hook_ENTITY_TYPE_update().
+ * Implements hook_collapsible_menu_alter().
  */
-function living_spaces_menus_user_update(UserInterface $user) {
-  $field = 'joined_spaces';
-  if ($user->hasField($field)) {
-    if (!$user->get($field)->equals($user->original->get($field))) {
-      \Drupal::service('plugin.manager.menu.link')->rebuild();
+function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
+  $spaces_menu_key = 'menu_link_content:436e7a5e-7eb0-4ba7-928c-b9064865f174';
+  $have_favorites = FALSE;
+
+  $query = \Drupal::entityTypeManager()->getStorage('group')->getQuery();
+  $query->addTag('living_spaces_menus_user_spaces');
+  $query->condition('status', 1, '=')
+    ->sort('label', 'ASC')
+    ->range(0, 8);
+
+  $result = $query->execute();
+
+  if ($result) {
+    $groups = \Drupal::entityTypeManager()->getStorage('group')->loadMultiple($result);
+  }
+
+  if ($groups) {
+    $links = [];
+
+    $user = \Drupal::entityTypeManager()->getStorage('user')->load(\Drupal::currentUser()->id());
+
+    $favorites_list = [];
+
+    foreach ($user->field_favorite_spaces->getValue() as $favorite) {
+      $favorites_list[] = $favorite['target_id'];
     }
+
+    if ($favorites_list) {
+      $have_favorites = TRUE;
+    }
+
+    foreach ($groups as $key => $item) {
+      if (!in_array($item->id(), $favorites_list) && $have_favorites) {
+        $have_favorites = FALSE;
+
+        $links['living_spaces_menus.items_delimiter'] = [
+          'put_delimiter' => TRUE,
+        ];
+      }
+
+      $links['living_spaces_menus.space:' . $item->id()] = [
+        'is_expanded' => FALSE,
+        'is_collapsed' => FALSE,
+        'in_active_trail' => FALSE,
+        'attributes' => new Attribute(),
+        'title' => $item->label(),
+        'url' => Url::fromRoute('entity.group.canonical', ['group' => $item->id()]),
+        'below' => [],
+      ];
+    }
+
+    if ($have_favorites) {
+      $links['living_spaces_menus.items_delimiter'] = [
+        'put_delimiter' => TRUE,
+      ];
+    }
+
+    array_push($links, end($build['#items'][$spaces_menu_key]['below']));
+
+    $build['#items'][$spaces_menu_key]['below'] = $links;
+    $build['#cache']['tags'] = ['user:' . \Drupal::currentUser()->id()];
   }
 }
