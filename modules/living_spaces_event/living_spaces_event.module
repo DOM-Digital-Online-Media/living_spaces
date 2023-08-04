@@ -1046,7 +1046,7 @@ function living_spaces_event_mail($key, &$message, $params) {
 function living_spaces_event_mail_tokens(&$replacements, $data, $options) {
   if (isset($data['event'])) {
     $replacements['[event:title]'] = $data['event']->label();
-    $replacements['[event:url]'] = $data['event']->toUrl('canonical', ['absolute' => TRUE])->toString();
+    $replacements['[event:url]'] = $data['event']->toUrl('canonical', ['absolute' => TRUE, 'https' => TRUE])->toString();
   }
   if (isset($data['event_title'])) {
     $replacements['[event_title]'] = $data['event_title'];

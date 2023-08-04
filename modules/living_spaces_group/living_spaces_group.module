@@ -107,7 +107,7 @@ function living_spaces_group_mail($key, &$message, $params) {
 function living_spaces_group_mail_tokens(&$replacements, $data, $options) {
   if (isset($data['group'])) {
     $replacements['[group:title]'] = $data['group']->label();
-    $replacements['[group:url]'] = $data['group']->toUrl('canonical', ['absolute' => TRUE])->toString();
+    $replacements['[group:url]'] = $data['group']->toUrl('canonical', ['absolute' => TRUE, 'https' => TRUE])->toString();
   }
   if (isset($data['group_title'])) {
     $replacements['[group_title]'] = $data['group_title'];
