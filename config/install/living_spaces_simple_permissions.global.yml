@@ -8,7 +8,6 @@ modules:
   content_translation: content_translation
   contextual: contextual
   devel: devel
-  entity_clone: entity_clone
   field_ui: field_ui
   file: file
   filter: filter
