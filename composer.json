@@ -101,6 +101,12 @@
             "drupal/fullcalendar_view": {
                 "Loading items as needed by AJAX": "https://www.drupal.org/files/issues/2023-01-10/2960335-61.patch",
                 "Integration with Search API": "https://www.drupal.org/files/issues/2023-05-04/solr_autoloading-3089238-27.patch"
+            },
+            "drupal/field_ipaddress": {
+                "Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2022-07-18/field_ipaddress.2.0.x-dev.rector.patch"
+            },
+            "drupal/nodejs": {
+                "Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2023-08-07/nodejs_drupal_10_3329387.patch"
             }
         },
          "enable-patching": true
