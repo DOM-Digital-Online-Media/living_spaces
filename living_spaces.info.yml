@@ -1,7 +1,7 @@
 name: Living Spaces
 type: profile
 description: 'Distribution for user spaces (groups) that designed for extranet/intranet workflow.'
-core_version_requirement: ^9
+core_version_requirement: ^9.0 || ^10
 
 distribution:
   name: Living Spaces

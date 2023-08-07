@@ -1,7 +1,7 @@
 name: 'Space Users'
 type: module
 description: 'Provides user fields and functionality for users in spaces.'
-core_version_requirement: ^9.0
+core_version_requirement: ^9.0 || ^10
 package: 'Living Spaces'
 dependencies:
   - address

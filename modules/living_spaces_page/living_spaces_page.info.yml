@@ -1,7 +1,7 @@
 name: 'Space Page'
 type: module
 description: 'Provides page content type for Living Spaces profile'
-core_version_requirement: ^9.0
+core_version_requirement: ^9.0 || ^10
 package: 'Living Spaces'
 interface translation project: living_spaces_page
 interface translation server pattern: profiles/contrib/living_spaces/modules/living_spaces_page/translations/%language.po

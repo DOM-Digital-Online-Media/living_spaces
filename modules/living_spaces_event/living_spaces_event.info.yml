@@ -1,7 +1,7 @@
 name: 'Space Event'
 type: module
 description: 'Provides event functionality for living spaces.'
-core_version_requirement: ^9.0
+core_version_requirement: ^9.0 || ^10
 package: 'Living Spaces'
 dependencies:
   - default_content

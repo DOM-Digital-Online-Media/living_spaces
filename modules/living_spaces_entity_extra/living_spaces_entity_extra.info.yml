@@ -1,5 +1,5 @@
 name: 'Space Entity Extra'
 type: module
 description: 'Provides extra functionality for entities, i.e. supplying entity form with default values from GET'
-core_version_requirement: ^9.0
+core_version_requirement: ^9.0 || ^10
 package: 'Living Spaces'

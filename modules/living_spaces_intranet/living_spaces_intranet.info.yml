@@ -1,7 +1,7 @@
 name: 'Space Intranet'
 type: module
 description: 'Provides intranet functionality for living spaces.'
-core_version_requirement: ^9.0
+core_version_requirement: ^9.0 || ^10
 package: 'Living Spaces'
 dependencies:
   - config_rewrite

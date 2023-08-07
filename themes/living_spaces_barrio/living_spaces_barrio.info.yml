@@ -1,7 +1,7 @@
 name: Living Spaces Barrio
 type: theme
 description: 'Living Spaces Barrio theme.'
-core_version_requirement: ^9.0
+core_version_requirement: ^9.0 || ^10
 base theme: bootstrap_barrio
 
 dependencies:
