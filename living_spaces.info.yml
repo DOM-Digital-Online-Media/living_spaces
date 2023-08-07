@@ -21,7 +21,6 @@ install:
   - menu_link_content
   - datetime
   - block_content
-  - quickedit
   - editor
   - help
   - image
@@ -97,4 +96,3 @@ install:
 
 themes:
   - living_spaces_barrio
-  - seven

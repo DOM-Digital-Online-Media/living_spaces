@@ -21,7 +21,6 @@ modules:
   page_manager: page_manager
   path: path
   profile: profile
-  quickedit: quickedit
   search: search
   shortcut: shortcut
   living_spaces_default: living_spaces_default
