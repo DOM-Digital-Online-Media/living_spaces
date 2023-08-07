@@ -54,7 +54,6 @@ install:
   - redirect
   - views_contextual_filters_or
   - views_bulk_operations
-  - better_exposed_filters
   - universal_device_detection
   - role_delegation
   - easy_breadcrumb
