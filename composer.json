@@ -26,7 +26,7 @@
     "require": {
         "cweagans/composer-patches": "^1.6.5",
         "dom-digital-online-media/dom_bootstrap": "^1.1",
-        "dom-digital-online-media/dom_faq": "^1.4",
+        "dom-digital-online-media/dom_faq": "^1.5",
         "dom-digital-online-media/dom_field_extra": "^1.0",
         "dom-digital-online-media/dom_paragraphs_extra": "^1.1",
         "drupal/admin_toolbar": "^3.4",
