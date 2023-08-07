@@ -2,7 +2,6 @@ weight: -9
 permissions:
   - 'access circles overview'
   - 'access content'
-  - 'access flood unblock'
   - 'access living spaces overview'
   - 'access simple permissions'
   - 'access user profiles'
