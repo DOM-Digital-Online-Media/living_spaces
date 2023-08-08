@@ -76,6 +76,7 @@ class LivingSpaceEventTypeForm extends BundleEntityFormBase {
     }
 
     $form_state->setRedirectUrl($event_type->toUrl('collection'));
+    return $status;
   }
 
 }
