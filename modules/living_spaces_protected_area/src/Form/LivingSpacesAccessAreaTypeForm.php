@@ -76,6 +76,7 @@ class LivingSpacesAccessAreaTypeForm extends BundleEntityFormBase {
     }
 
     $form_state->setRedirectUrl($access_area_type->toUrl('collection'));
+    return $status;
   }
 
 }

@@ -23,7 +23,42 @@ class LivingSpacesGroupPrivacyBase extends PluginBase implements LivingSpacesGro
   use StringTranslationTrait;
 
   /**
-   * Group membership loader service.
+   * Returns the plugin.manager.living_spaces_group_privacy service.
+   *
+   * @var \Drupal\living_spaces_group_privacy\Plugin\LivingSpacesGroupPrivacyManagerInterface
+   */
+  protected $channelManager;
+
+  /**
+   * Returns the database service.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
+   * Returns the entity_type.manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * Returns the cache_tags.invalidator service.
+   *
+   * @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface
+   */
+  protected $invalidator;
+
+  /**
+   * Returns the module_handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * Returns the group.membership_loader service.
    *
    * @var \Drupal\group\GroupMembershipLoaderInterface
    */

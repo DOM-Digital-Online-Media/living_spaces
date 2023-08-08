@@ -105,6 +105,7 @@ class LivingSpacesBanListBuilder extends EntityListBuilder {
   protected function getEntityIds() {
     $query = $this->getStorage()->getQuery();
     $header = $this->buildHeader();
+    $query->accessCheck();
     $query->tableSort($header);
 
     if ($this->limit) {

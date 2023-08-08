@@ -14,7 +14,7 @@ class LivingSpacesAccessAreaForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    parent::save($form, $form_state);
+    $status = parent::save($form, $form_state);
 
     /** @var \Drupal\living_spaces_protected_area\Entity\LivingSpacesProtectedAreaAccessArea $entity */
     $entity = $this->entity;
@@ -29,6 +29,7 @@ class LivingSpacesAccessAreaForm extends ContentEntityForm {
     );
 
     $form_state->setRedirect('view.access_area.access_area');
+    return $status;
   }
 
 }
