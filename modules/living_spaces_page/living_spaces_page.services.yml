@@ -1,7 +1,7 @@
 services:
   living_spaces_page.access_checker:
     class: Drupal\living_spaces_page\Access\LivingSpacesPageAccessCheck
-    arguments: ['@entity_type.manager']
+    arguments: ['@entity_type.manager', '@request_stack']
     tags:
       - { name: access_check, applies_to: _living_spaces_page_access_check }
   living_spaces_page.route_subscriber:

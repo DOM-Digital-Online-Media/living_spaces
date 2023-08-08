@@ -17,12 +17,14 @@ function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
 
   $query = \Drupal::entityTypeManager()->getStorage('group')->getQuery();
   $query->addTag('living_spaces_menus_user_spaces');
+  $query->accessCheck();
   $query->condition('status', 1, '=')
     ->sort('label', 'ASC')
     ->range(0, 8);
 
   $result = $query->execute();
 
+  $groups = [];
   if ($result) {
     $groups = \Drupal::entityTypeManager()->getStorage('group')->loadMultiple($result);
   }
