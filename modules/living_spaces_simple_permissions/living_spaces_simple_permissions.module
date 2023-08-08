@@ -12,6 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
  */
 function living_spaces_simple_permissions_user_role_load(&$entities) {
   $count_query = \Drupal::entityTypeManager()->getStorage('user_role')->getQuery();
+  $count_query->accessCheck();
   $count_query->count();
   $count = $count_query->execute();
 

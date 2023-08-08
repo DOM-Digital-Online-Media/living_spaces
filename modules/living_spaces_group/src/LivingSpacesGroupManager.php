@@ -41,6 +41,7 @@ class LivingSpacesGroupManager implements LivingSpacesGroupManagerInterface {
    */
   public function getLivingSpaceGroupTypes() {
     $query = $this->entityTypeManager->getStorage('group_type')->getQuery();
+    $query->accessCheck();
     $query->condition('is_living_space', TRUE);
     $types = $query->execute();
     return is_array($types) ? $types : [];

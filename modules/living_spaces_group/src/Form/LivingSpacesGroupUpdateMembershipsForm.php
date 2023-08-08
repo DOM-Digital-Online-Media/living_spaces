@@ -90,6 +90,7 @@ class LivingSpacesGroupUpdateMembershipsForm extends FormBase {
       ->getQuery()
       ->condition('type', 'group_membership')
       ->condition('group_type', $types, 'IN')
+      ->accessCheck()
       ->execute();
 
     $batch_builder = (new BatchBuilder())

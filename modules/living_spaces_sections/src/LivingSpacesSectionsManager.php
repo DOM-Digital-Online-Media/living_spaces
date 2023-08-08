@@ -89,6 +89,7 @@ class LivingSpacesSectionsManager implements LivingSpacesSectionsManagerInterfac
         $result = $storage->getQuery()
           ->condition('id', $sections, 'IN')
           ->condition('type', $type)
+          ->accessCheck()
           ->execute();
 
         if (!empty($result)) {

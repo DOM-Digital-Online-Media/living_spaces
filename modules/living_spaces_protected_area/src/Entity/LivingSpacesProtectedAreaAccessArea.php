@@ -160,6 +160,7 @@ class LivingSpacesProtectedAreaAccessArea extends ContentEntityBase implements L
       $query = $access_grant_manager->getQuery();
       $query->condition('uid', $user->id());
       $query->condition('access_area', $area->id());
+      $query->accessCheck();
 
       if ($user->id() && $ids = $query->execute()) {
         $id = reset($ids);

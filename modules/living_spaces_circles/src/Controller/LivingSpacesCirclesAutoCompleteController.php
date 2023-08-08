@@ -29,6 +29,7 @@ class LivingSpacesCirclesAutoCompleteController extends ControllerBase {
     $query->condition('type', 'circle');
     $query->condition('label', '%' . Xss::filter($input) . '%', 'LIKE');
     $query->condition('status', TRUE);
+    $query->accessCheck();
     $query->range(0, 10);
 
     if ($groups = $query->execute()) {
