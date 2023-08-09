@@ -9,6 +9,7 @@ use Drupal\group\Entity\GroupInterface;
 use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
+use Drupal\Core\Plugin\ContextAwarePluginInterface;
 
 /**
  * Provides a space members block.
@@ -53,6 +54,20 @@ class LivingSpacesGroupMembersBlock extends BlockBase implements ContainerFactor
   protected $entityTypeManager;
 
   /**
+   * Returns the context.repository service.
+   *
+   * @var \Drupal\Core\Plugin\Context\LazyContextRepository
+   */
+  protected $contextRepository;
+
+  /**
+   * Returns the context.handler service.
+   *
+   * @var \Drupal\Core\Plugin\Context\ContextHandler
+   */
+  protected $contextHandler;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
@@ -61,6 +76,8 @@ class LivingSpacesGroupMembersBlock extends BlockBase implements ContainerFactor
     $instance->moduleHandler = $container->get('module_handler');
     $instance->blockManager = $container->get('plugin.manager.block');
     $instance->entityTypeManager = $container->get('entity_type.manager');
+    $instance->contextRepository = $container->get('context.repository');
+    $instance->contextHandler = $container->get('context.handler');
     return $instance;
   }
 
@@ -400,10 +417,15 @@ class LivingSpacesGroupMembersBlock extends BlockBase implements ContainerFactor
   protected function getGroupTreeRender(GroupInterface $group) {
     $plugin_block = $this->blockManager->createInstance('living_spaces_group_tree_block', [
       'id' => 'living_spaces_group_tree_block',
-      'context' => [
-        'group' => $group,
+      'context_mapping' => [
+        'group' => '@group.group_route_context:group',
       ],
     ]);
+
+    if ($plugin_block instanceof ContextAwarePluginInterface) {
+      $contexts = $this->contextRepository->getRuntimeContexts($plugin_block->getContextMapping());
+      $this->contextHandler->applyContextMapping($plugin_block, $contexts);
+    }
 
     return $plugin_block->build();
   }
@@ -420,10 +442,15 @@ class LivingSpacesGroupMembersBlock extends BlockBase implements ContainerFactor
   protected function getCircleFormRender(GroupInterface $group) {
     $plugin_block = $this->blockManager->createInstance('living_spaces_circles_add_people_block', [
       'id' => 'living_spaces_circles_add_people_block',
-      'context' => [
-        'group' => $group,
+      'context_mapping' => [
+        'group' => '@group.group_route_context:group',
       ],
     ]);
+
+    if ($plugin_block instanceof ContextAwarePluginInterface) {
+      $contexts = $this->contextRepository->getRuntimeContexts($plugin_block->getContextMapping());
+      $this->contextHandler->applyContextMapping($plugin_block, $contexts);
+    }
 
     return $plugin_block->build();
   }
