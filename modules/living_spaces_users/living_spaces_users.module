@@ -82,6 +82,30 @@ function living_spaces_users_form_user_form_alter(&$form, FormStateInterface $fo
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_users_form_user_cancel_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($destination = \Drupal::request()->query->get('destination', FALSE)) {
+    try {
+      $url = Url::fromUserInput($destination);
+      if (!$url->access(Drupal::currentUser())) {
+        \Drupal::request()->query->remove('destination');
+        $form['actions']['submit']['#submit'][] = 'living_spaces_user_cancel_form_submit';
+      }
+    }
+    catch (\InvalidArgumentException $e) {
+    }
+  }
+}
+
+/**
+ * Provides submit callback for user cancel form.
+ */
+function living_spaces_user_cancel_form_submit(&$form, FormStateInterface $form_state) {
+  $form_state->setRedirect('<front>');
+}
+
+/**
  * Helper to get user role weights.
  */
 function living_spaces_users_get_role_weights() {
