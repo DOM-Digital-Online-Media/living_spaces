@@ -3,7 +3,7 @@
 namespace Drupal\living_spaces_page\Access;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Routing\Access\AccessInterface as CoreAccessInterface;
+use Drupal\Core\Routing\Access\AccessInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * LivingSpacesPageAccessCheck class.
  */
-class LivingSpacesPageAccessCheck implements CoreAccessInterface {
+class LivingSpacesPageAccessCheck implements AccessInterface {
 
   /**
    * Returns the entity_type.manager service.
@@ -58,7 +58,7 @@ class LivingSpacesPageAccessCheck implements CoreAccessInterface {
       }
     }
 
-    return AccessResult::neutral();
+    return $this->entityTypeManager->getAccessControlHandler('node')->createAccess($route_match->getRawParameter('node_type'), $account, [], TRUE);
   }
 
 }
