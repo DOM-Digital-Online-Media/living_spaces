@@ -10,7 +10,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\fullcalendar_view\Plugin\FullcalendarViewProcessorInterface;
 use Drupal\living_spaces_event\Entity\LivingSpaceEventInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Http\RequestStack;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Base class for Fullcalendar view processor plugins.
@@ -39,7 +39,7 @@ class LivingSpacesEventFullcalendarView extends PluginBase implements Fullcalend
   /**
    * Returns the request_stack service.
    *
-   * @var \Drupal\Core\Http\RequestStack
+   * @var \Symfony\Component\HttpFoundation\RequestStack
    */
   protected $request;
 
@@ -56,7 +56,7 @@ class LivingSpacesEventFullcalendarView extends PluginBase implements Fullcalend
    *   Defines the configuration object factory.
    * @param \Drupal\Core\Database\Connection $database
    *   Base Database API class.
-   * @param \Drupal\Core\Http\RequestStack $request
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request
    *   Forward-compatibility shim for Symfony's RequestStack.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactory $config, Connection $database, RequestStack $request) {
