@@ -14,8 +14,9 @@ use Drupal\Core\Url;
 function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
   $spaces_menu_key = 'menu_link_content:436e7a5e-7eb0-4ba7-928c-b9064865f174';
   $have_favorites = FALSE;
+  $groups = [];
 
-  $query = \Drupal::entityTypeManager()->getStorage('group')->getQuery();
+  $query = \Drupal::entityTypeManager()->getStorage('group')->getQuery()->accessCheck(FALSE);
   $query->addTag('living_spaces_menus_user_spaces');
   $query->condition('status', 1, '=')
     ->sort('label', 'ASC')
