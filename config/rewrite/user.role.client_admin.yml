@@ -38,6 +38,7 @@ permissions:
   - 'manage circle spaces'
   - 'manage employee profiles'
   - 'manage living spaces'
+  - 'manage living spaces sections settings'
   - 'select account cancellation method'
   - 'update paragraph content agenda_item'
   - 'view own profile'

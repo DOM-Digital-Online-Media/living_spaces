@@ -15,7 +15,6 @@ permissions:
   - 'delete any core profile'
   - 'delete own contact_data profile'
   - 'delete own core profile'
-  - 'manage living spaces sections settings'
   - 'update any contact_data profile'
   - 'update any core profile'
   - 'update own contact_data profile'
