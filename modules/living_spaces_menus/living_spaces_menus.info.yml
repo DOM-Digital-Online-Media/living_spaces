@@ -1,7 +1,7 @@
 name: Space Menus
 type: module
 description: 'Provides default menus and their adjustments for the profile.'
-core_version_requirement: ^9.0
+core_version_requirement: ^9.0 || ^10
 package: 'Living Spaces'
 dependencies:
   - default_content

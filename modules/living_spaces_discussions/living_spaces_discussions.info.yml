@@ -1,7 +1,7 @@
 name: 'Space Discussions'
 type: module
 description: 'Provides discussions functionality for living spaces.'
-core_version_requirement: ^9.0
+core_version_requirement: ^9.0 || ^10
 package: 'Living Spaces'
 dependencies:
   - config_rewrite

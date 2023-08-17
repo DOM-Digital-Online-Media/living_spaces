@@ -28,6 +28,13 @@ class LivingSpacesUsersEmployeeExportAction extends ActionBase implements Contai
   protected $messenger;
 
   /**
+   * Returns the current_user service.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentUser;
+
+  /**
    * Constructs a LivingSpacesUsersEmployeeExportAction object.
    *
    * @param array $configuration
@@ -38,11 +45,14 @@ class LivingSpacesUsersEmployeeExportAction extends ActionBase implements Contai
    *   The plugin implementation definition.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   Stores runtime messages sent out to individual users on the page.
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   Defines an account interface which represents the current user.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, MessengerInterface $messenger) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, MessengerInterface $messenger, AccountInterface $current_user) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->messenger = $messenger;
+    $this->currentUser = $current_user;
   }
 
   /**
@@ -53,7 +63,8 @@ class LivingSpacesUsersEmployeeExportAction extends ActionBase implements Contai
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('messenger')
+      $container->get('messenger'),
+      $container->get('current_user')
     );
   }
 

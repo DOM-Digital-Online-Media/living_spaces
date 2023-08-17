@@ -103,6 +103,7 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
 
     $query = $taxonomy_manager->getQuery();
     $query->condition('vid', 'event_status');
+    $query->accessCheck();
 
     $statuses = [];
     if ($tids = $query->execute()) {
@@ -116,6 +117,7 @@ class LivingSpacesEventInvitedUsersBlock extends BlockBase implements ContainerF
 
     $query = $event_invite_manager->getQuery();
     $query->condition('event', $event->id());
+    $query->accessCheck();
 
     $rows = [];
     if ($ids = $query->execute()) {

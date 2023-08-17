@@ -184,6 +184,7 @@ class LivingSpacesSection extends ContentEntityBase implements LivingSpacesSecti
         ->getStorage('living_spaces_section');
       $query = $entity_storage->getQuery()
         ->condition(LIVING_SPACES_SECTIONS_FIELD, $this->id())
+        ->accessCheck()
         ->execute();
 
       return !empty($query)

@@ -3,7 +3,7 @@
 namespace Drupal\living_spaces_activity\Plugin\views\style;
 
 use Drupal\views\Plugin\views\style\StylePluginBase;
-use Drupal\core\form\FormStateInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Style plugin to render a list of notifications.

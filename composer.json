@@ -26,7 +26,7 @@
     "require": {
         "cweagans/composer-patches": "^1.6.5",
         "dom-digital-online-media/dom_bootstrap": "^1.1",
-        "dom-digital-online-media/dom_faq": "^1.5",
+        "dom-digital-online-media/dom_faq": "^1.6",
         "dom-digital-online-media/dom_field_extra": "^1.0",
         "dom-digital-online-media/dom_paragraphs_extra": "^1.1",
         "drupal/admin_toolbar": "^3.4",
@@ -34,11 +34,12 @@
         "drupal/autocomplete_deluxe": "^2.0.0",
         "drupal/bootstrap_barrio": "^5.5@beta",
         "drupal/config_rewrite": "^1.4",
+        "drupal/csv_serialization": "^3.0",
         "drupal/default_content": "^2.0",
-        "drupal/devel": "^4.0",
+        "drupal/devel": "^5.1",
         "drupal/easy_breadcrumb": "^2.0",
         "drupal/empty_fields": "^1.0@beta",
-        "drupal/entity_clone": "^1.0@beta",
+        "drupal/entity_clone": "^2.0@beta",
         "drupal/field_ipaddress": "^2.0",
         "drupal/flood_control": "^2.2.2",
         "drupal/fullcalendar_view": "5.1.8",
@@ -49,14 +50,15 @@
         "drupal/masquerade": "2.x-dev",
         "drupal/message": "^1.2",
         "drupal/message_ui": "^1.0",
-        "drupal/migrate_plus": "^5.1",
-        "drupal/migrate_tools": "^5.0",
+        "drupal/migrate_plus": "^6.0",
+        "drupal/migrate_tools": "^6.0",
         "drupal/nodejs": "dev-1.x",
         "drupal/page_manager": "^4.0@beta",
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "^1.8",
         "drupal/profile": "^1.3",
         "drupal/redirect": "^1.6",
+        "drupal/rdf": "^2.1",
         "drupal/simple_oauth": "^5.0",
         "drupal/search_api": "^1.21",
         "drupal/search_api_autocomplete": "^1.5",
@@ -71,7 +73,7 @@
         "drupal/views_accordion": "^2.0",
         "drupal/views_block_area": "^1.0",
         "drupal/views_contextual_filters_or": "^1.3",
-        "drupal/views_data_export": "^1.0",
+        "drupal/views_data_export": "^1.3",
         "drupal/views_field_view": "^1.0",
         "fullcalendar/fullcalendar": "4.4.0",
         "drupal/role_delegation": "^1.2",
@@ -100,6 +102,18 @@
             "drupal/fullcalendar_view": {
                 "Loading items as needed by AJAX": "https://www.drupal.org/files/issues/2023-01-10/2960335-61.patch",
                 "Integration with Search API": "https://www.drupal.org/files/issues/2023-05-04/solr_autoloading-3089238-27.patch"
+            },
+            "drupal/field_ipaddress": {
+                "Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2022-07-18/field_ipaddress.2.0.x-dev.rector.patch"
+            },
+            "drupal/nodejs": {
+                "Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2023-08-07/nodejs_drupal_10_3329387.patch"
+            },
+            "drupal/search_api_date_popup": {
+                "Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2022-07-18/search_api_date_popup.1.x-dev.rector.patch"
+            },
+            "drupal/universal_device_detection": {
+                "Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2022-12-24/universal_device_detection.2.x-dev.rector.patch"
             }
         },
          "enable-patching": true

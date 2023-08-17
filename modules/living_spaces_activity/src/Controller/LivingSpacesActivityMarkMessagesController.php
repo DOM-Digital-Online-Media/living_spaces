@@ -56,12 +56,14 @@ class LivingSpacesActivityMarkMessagesController extends ControllerBase {
 
     $query = $entity_manager->getStorage('message_template')->getQuery();
     $query->condition('category', LIVING_SPACES_ACTIVITY_PERSONAL);
+    $query->accessCheck();
 
     if ($templates = $query->execute()) {
       $query = $entity_manager->getStorage('message')->getQuery();
       $query->condition('template', $templates, 'IN');
       $query->condition('uid', $user);
       $query->condition('is_read', FALSE);
+      $query->accessCheck();
 
       if ($messages = $query->execute()) {
         /** @var \Drupal\message\MessageInterface $message */
@@ -119,6 +121,7 @@ class LivingSpacesActivityMarkMessagesController extends ControllerBase {
     $query->condition('template', 'persistent');
     $query->condition('uid', $user);
     $query->condition('is_read', FALSE);
+    $query->accessCheck();
 
     if ($messages = $query->execute()) {
       /** @var \Drupal\message\MessageInterface $message */

@@ -1,7 +1,7 @@
 name: 'Space Activity'
 type: module
 description: 'Provides activity functionality for living spaces.'
-core_version_requirement: ^9.0
+core_version_requirement: ^9.0 || ^10
 package: 'Living Spaces'
 dependencies:
   - config_rewrite

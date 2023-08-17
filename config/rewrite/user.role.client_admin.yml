@@ -2,7 +2,6 @@ weight: -9
 permissions:
   - 'access circles overview'
   - 'access content'
-  - 'access flood unblock'
   - 'access living spaces overview'
   - 'access simple permissions'
   - 'access user profiles'
@@ -39,6 +38,7 @@ permissions:
   - 'manage circle spaces'
   - 'manage employee profiles'
   - 'manage living spaces'
+  - 'manage living spaces sections settings'
   - 'select account cancellation method'
   - 'update paragraph content agenda_item'
   - 'view own profile'

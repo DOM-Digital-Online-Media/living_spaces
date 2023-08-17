@@ -48,10 +48,11 @@ class LivingSpacesSectionForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    parent::save($form, $form_state);
+    $status = parent::save($form, $form_state);
     $form_state->setRedirect('entity.living_spaces_section.canonical', [
       'living_spaces_section' => $this->entity->id(),
     ]);
+    return $status;
   }
 
 }
