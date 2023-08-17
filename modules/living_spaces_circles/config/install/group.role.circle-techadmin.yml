@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.circle
+    - user.role.administrator
+id: circle-techadmin
+label: 'Technical Administrator Outsider'
+weight: 125
+admin: true
+scope: outsider
+global_role: administrator
+group_type: circle
+permissions: {  }
+is_space_admin: false
