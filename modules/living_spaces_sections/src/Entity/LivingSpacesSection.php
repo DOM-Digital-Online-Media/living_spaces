@@ -21,6 +21,7 @@ use Drupal\group\Entity\GroupInterface;
  *   label = @Translation("Living space section"),
  *   bundle_label = @Translation("Living space section type"),
  *   handlers = {
+ *     "views_data" = "Drupal\views\EntityViewsData",
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "form" = {
  *       "default" = "Drupal\living_spaces_sections\Form\LivingSpacesSectionForm",
