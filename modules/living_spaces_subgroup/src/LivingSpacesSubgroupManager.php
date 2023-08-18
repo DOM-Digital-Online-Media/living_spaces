@@ -71,6 +71,7 @@ class LivingSpacesSubgroupManager implements LivingSpacesSubgroupManagerInterfac
       $children = $group_storage
         ->getQuery()
         ->condition('parent', $parents, 'IN')
+        ->accessCheck()
         ->execute();
 
       $parents = $children;

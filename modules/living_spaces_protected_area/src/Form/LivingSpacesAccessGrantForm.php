@@ -14,8 +14,9 @@ class LivingSpacesAccessGrantForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    parent::save($form, $form_state);
+    $status = parent::save($form, $form_state);
     $form_state->setRedirect('view.access_grant.access_grant');
+    return $status;
   }
 
 }

@@ -1,3 +1,4 @@
 permissions:
+  - 'manage living spaces sections settings'
   - 'view discussions section of a living space'
   - 'view events section of a living space'

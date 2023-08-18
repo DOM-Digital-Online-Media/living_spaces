@@ -27,7 +27,7 @@
         });
       }
 
-      $('*[data-view-name][data-view-display]').once('livingSpacesBarrioAddInnerView').on('show.bs.dropdown', function () {
+      $('*[data-view-name][data-view-display]').on('show.bs.dropdown', function () {
         var $element = $(this);
         if (!$('.js-view-dom-id-' + $element.attr('data-view-name') + '-' + $element.attr('data-view-display')).length) {
           var base = $(this).attr('id');

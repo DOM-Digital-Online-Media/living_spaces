@@ -5,7 +5,7 @@ namespace Drupal\living_spaces_protected_area\Form;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Http\RequestStack;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\universal_device_detection\Detector\DefaultDetector;
@@ -25,7 +25,7 @@ class LivingSpacesProtectedAreaForm extends FormBase {
   /**
    * Returns the request_stack service.
    *
-   * @var \Drupal\Core\Http\RequestStack
+   * @var \Symfony\Component\HttpFoundation\RequestStack
    */
   protected $request;
 
@@ -48,7 +48,7 @@ class LivingSpacesProtectedAreaForm extends FormBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Provides an interface for entity type managers.
-   * @param \Drupal\Core\Http\RequestStack $request
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request
    *   Forward-compatibility shim for Symfony's RequestStack.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_format
    *   Provides an interface defining a date formatter.

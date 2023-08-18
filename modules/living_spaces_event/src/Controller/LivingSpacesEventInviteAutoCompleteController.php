@@ -28,6 +28,7 @@ class LivingSpacesEventInviteAutoCompleteController extends ControllerBase {
     $query = $user_manager->getQuery();
     $query->condition('name', '%' . Xss::filter($input) . '%', 'LIKE');
     $query->condition('status', TRUE);
+    $query->accessCheck();
     $query->range(0, 5);
 
     if ($users = $query->execute()) {
@@ -46,6 +47,7 @@ class LivingSpacesEventInviteAutoCompleteController extends ControllerBase {
     $query = $group_manager->getQuery();
     $query->condition('label', '%' . Xss::filter($input) . '%', 'LIKE');
     $query->condition('status', TRUE);
+    $query->accessCheck();
     $query->range(0, 5);
 
     if ($groups = $query->execute()) {

@@ -1,7 +1,7 @@
 name: 'Space Group Default Content'
 type: module
 description: 'Provides default content for Living Spaces profile'
-core_version_requirement: ^9.0
+core_version_requirement: ^9.0 || ^10
 package: 'Living Spaces'
 dependencies:
   - default_content

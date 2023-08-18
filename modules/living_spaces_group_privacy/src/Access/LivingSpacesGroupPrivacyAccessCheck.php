@@ -2,16 +2,17 @@
 
 namespace Drupal\living_spaces_group_privacy\Access;
 
-use Drupal\Core\Routing\Access\AccessInterface;
+use Drupal\Core\Routing\Access\AccessInterface as CoreAccessInterface;
 use Drupal\living_spaces_group_privacy\Plugin\LivingSpacesGroupPrivacyManager;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
+use Symfony\Component\Routing\Route;
 
 /**
  * LivingSpacesGroupPrivacyAccessCheck class.
  */
-class LivingSpacesGroupPrivacyAccessCheck implements AccessInterface {
+class LivingSpacesGroupPrivacyAccessCheck implements CoreAccessInterface {
 
   /**
    * Returns the plugin.manager.living_spaces_group_privacy service.
@@ -33,8 +34,8 @@ class LivingSpacesGroupPrivacyAccessCheck implements AccessInterface {
   /**
    * Check access for default content.
    */
-  public function access(RouteMatchInterface $route, AccountInterface $account) {
-    $group = $route->getParameter('group');
+  public function access(Route $route, RouteMatchInterface $route_match, AccountInterface $account) {
+    $group = $route_match->getParameter('group');
     if ($group && $instance = $this->privacyManager->getPrivacyPlugins($group)) {
       if ($account->hasPermission('manage living spaces')) {
         return AccessResult::allowed();

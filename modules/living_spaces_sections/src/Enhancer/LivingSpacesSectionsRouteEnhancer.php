@@ -7,7 +7,7 @@ use Drupal\Core\Routing\EnhancerInterface;
 use Drupal\living_spaces_sections\LivingSpacesSectionsHtmlRouteProvider;
 use Drupal\living_spaces_sections\LivingSpacesSectionsManagerInterface;
 use Drupal\group\Entity\GroupInterface;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Drupal\Core\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 

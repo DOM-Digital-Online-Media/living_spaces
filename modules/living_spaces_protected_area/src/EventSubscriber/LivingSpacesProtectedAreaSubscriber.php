@@ -5,7 +5,7 @@ namespace Drupal\living_spaces_protected_area\EventSubscriber;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\living_spaces_protected_area\Entity\LivingSpacesProtectedAreaAccessArea;
 use Drupal\Core\Url;
@@ -46,7 +46,7 @@ class LivingSpacesProtectedAreaSubscriber implements EventSubscriberInterface {
   /**
    * This method is called whenever the KernelEvents::REQUEST event is dispatched.
    */
-  public function checkForRedirection(GetResponseEvent $event) {
+  public function checkForRedirection(RequestEvent $event) {
     if ($this->currentUser->hasPermission('access protected area')) {
       return;
     }

@@ -1,7 +1,7 @@
 name: Living Spaces
 type: profile
 description: 'Distribution for user spaces (groups) that designed for extranet/intranet workflow.'
-core_version_requirement: ^9
+core_version_requirement: ^9.0 || ^10
 
 distribution:
   name: Living Spaces
@@ -13,7 +13,7 @@ install:
   - history
   - block
   - breakpoint
-  - ckeditor
+  - ckeditor5
   - config
   - comment
   - contextual
@@ -21,7 +21,6 @@ install:
   - menu_link_content
   - datetime
   - block_content
-  - quickedit
   - editor
   - help
   - image
@@ -54,7 +53,6 @@ install:
   - redirect
   - views_contextual_filters_or
   - views_bulk_operations
-  - better_exposed_filters
   - universal_device_detection
   - role_delegation
   - easy_breadcrumb
@@ -98,4 +96,3 @@ install:
 
 themes:
   - living_spaces_barrio
-  - seven
