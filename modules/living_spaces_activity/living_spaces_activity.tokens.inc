@@ -42,17 +42,16 @@ function living_spaces_activity_tokens($type, $tokens, array $data, array $optio
 
     foreach ($tokens as $name => $original) {
       if ('greeting' == $name) {
-        if ($message->getOwnerId() !== \Drupal::currentUser()->id()) {
-          /** @var \Drupal\user\UserInterface $user */
-          $replacements[$original] = $message->getOwner()->getAccountName() . ' ' . t('was');
+        if ($message->getOwnerId() && $message->getOwnerId() !== \Drupal::currentUser()->id()) {
+          $replacements[$original] = $message->getOwner()->getDisplayName() . ' ' . t('was');
         }
         else {
           $replacements[$original] = t('You were');
         }
       }
       $parts = explode(':', $name);
-      if ('user_picture' == $parts[0]) {
-        $user = $message->getOwner();
+      /** @var \Drupal\user\UserInterface $user */
+      if ('user_picture' == $parts[0] && $user = $message->getOwner()) {
         if ($user->hasField('user_picture') && !$user->get('user_picture')->isEmpty()) {
           $style_name = $parts[1] ? $parts[1] : 'thumbnail';
           $image_uri = $user->user_picture->entity->getFileUri();
