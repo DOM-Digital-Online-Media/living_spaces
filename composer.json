@@ -114,6 +114,9 @@
             },
             "drupal/universal_device_detection": {
                 "Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2022-12-24/universal_device_detection.2.x-dev.rector.patch"
+            },
+            "drupal/profile": {
+                "Fatal error on account creation": "https://www.drupal.org/files/issues/2023-07-24/handle-user-is-anonymous-hardening-3371850-8.patch"
             }
         },
          "enable-patching": true
