@@ -250,6 +250,7 @@ function living_spaces_activity_show_persistent_messages(UserInterface $user) {
  */
 function living_spaces_activity_get_message_counter($uid) {
   $query = \Drupal::entityTypeManager()->getStorage('message_template')->getQuery();
+  $query->accessCheck();
   $query->condition('category', LIVING_SPACES_ACTIVITY_PERSONAL);
 
   if ($templates = $query->execute()) {
@@ -278,6 +279,7 @@ function living_spaces_activity_living_spaces_group_remove_group_content_alter(G
 
   if ($ids) {
     $query = \Drupal::entityTypeManager()->getStorage('message')->getQuery();
+    $query->accessCheck();
     $query->condition('field_group_content', $ids, 'IN');
 
     if ($mids = $query->execute()) {

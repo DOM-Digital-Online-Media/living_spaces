@@ -1,7 +1,7 @@
 name: 'Space Changelog'
 type: module
 description: 'Provides chat functionality for living changelog.'
-core_version_requirement: ^9.0
+core_version_requirement: ^9.0 || ^10
 package: 'Living Spaces'
 dependencies:
   - config_rewrite

@@ -1,7 +1,7 @@
 name: 'Space Circles'
 type: module
 description: 'Provides circle functionality for living spaces.'
-core_version_requirement: ^9.0
+core_version_requirement: ^9.0 || ^10
 package: 'Living Spaces'
 dependencies:
   - autocomplete_deluxe

@@ -1,7 +1,7 @@
 name: 'Space Group'
 type: module
 description: 'Provides group type for living spaces and functionality related to it'
-core_version_requirement: ^9.0
+core_version_requirement: ^9.0 || ^10
 package: 'Living Spaces'
 interface translation project: living_spaces_group
 interface translation server pattern: profiles/contrib/living_spaces/modules/living_spaces_group/translations/%language.po

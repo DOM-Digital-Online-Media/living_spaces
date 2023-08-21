@@ -93,20 +93,6 @@ function living_spaces_default_group_operations_alter(array &$operations, GroupI
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
- */
-function living_spaces_default_form_entity_clone_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
-  $entity = $form_state->getFormObject()->getEntity();
-  if ($entity instanceof Group && \Drupal::currentUser()->hasPermission('manage living spaces default content')) {
-    $form['is_default'] = [
-      '#type' => 'checkbox',
-      '#title' => t('Default'),
-      '#default_value' => $entity->get('is_default')->getString(),
-    ];
-  }
-}
-
-/**
  * Implements hook_ENTITY_TYPE_prepare_form().
  */
 function living_spaces_default_group_prepare_form(GroupInterface $group, $operation, FormStateInterface $form_state) {

@@ -36,7 +36,7 @@ class LivingSpaceEventForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    parent::save($form, $form_state);
+    $status = parent::save($form, $form_state);
 
     /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEvent $entity */
     $entity = $this->entity;
@@ -50,7 +50,8 @@ class LivingSpaceEventForm extends ContentEntityForm {
       : $this->t('@type <b>%title</b> has been created.', $args)
     );
 
-    $form_state->setRedirect('entity.living_spaces_event.canonical', ['living_spaces_event' => $this->entity->id()]);
+    $form_state->setRedirect('entity.living_spaces_event.canonical', ['living_spaces_event' => $entity->id()]);
+    return $status;
   }
 
 }

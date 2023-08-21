@@ -1,7 +1,7 @@
 name: 'Space Protected Area'
 type: module
 description: 'Provides protected area functionality for living spaces.'
-core_version_requirement: ^9.0
+core_version_requirement: ^9.0 || ^10
 package: 'Living Spaces'
 dependencies:
   - living_spaces_menus

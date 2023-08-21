@@ -414,6 +414,7 @@ function living_spaces_event_living_spaces_event_update(LivingSpaceEventInterfac
     $entity_manager = \Drupal::entityTypeManager()->getStorage('living_spaces_event_invite');
     $query = $entity_manager->getQuery();
     $query->condition('event', $event->id());
+    $query->accessCheck();
 
     if ($invites = $query->execute()) {
       /** @var \Drupal\Core\Mail\MailManager $mail_manager */
@@ -439,6 +440,7 @@ function living_spaces_event_living_spaces_event_delete(LivingSpaceEventInterfac
   $entity_manager = \Drupal::entityTypeManager()->getStorage('living_spaces_event_invite');
   $query = $entity_manager->getQuery();
   $query->condition('event', $event->id());
+  $query->accessCheck();
 
   if ($invites = $query->execute()) {
     /** @var \Drupal\Core\Mail\MailManager $mail_manager */
@@ -465,6 +467,7 @@ function living_spaces_event_living_spaces_event_delete(LivingSpaceEventInterfac
  */
 function living_spaces_event_check_user_status($eid, $uid) {
   $query = \Drupal::entityTypeManager()->getStorage('living_spaces_event_invite')->getQuery();
+  $query->accessCheck();
   $query->condition('event', $eid);
   $query->condition('uid', $uid);
 
@@ -478,6 +481,7 @@ function living_spaces_event_user_delete(UserInterface $user) {
   $entity_manager = \Drupal::entityTypeManager()->getStorage('living_spaces_event_invite');
   $query = $entity_manager->getQuery();
   $query->condition('uid', $user->id());
+  $query->accessCheck();
 
   if ($invites = $query->execute()) {
     /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInvite $invite */

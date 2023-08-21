@@ -96,6 +96,7 @@ class LivingSpacesSectionsPathConstraintValidator extends ConstraintValidator im
             ->getQuery()
             ->condition('id', $group_sections, 'IN')
             ->condition('path', $value)
+            ->accessCheck()
             ->count()
             ->execute();
 

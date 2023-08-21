@@ -69,6 +69,7 @@ class LivingSpacesSectionTypeForm extends EntityForm {
         ]));
     }
     $form_state->setRedirectUrl($section_type->toUrl('collection'));
+    return $status;
   }
 
   /**

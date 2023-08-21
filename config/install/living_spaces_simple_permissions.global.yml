@@ -8,7 +8,6 @@ modules:
   content_translation: content_translation
   contextual: contextual
   devel: devel
-  entity_clone: entity_clone
   field_ui: field_ui
   file: file
   filter: filter
@@ -22,7 +21,6 @@ modules:
   page_manager: page_manager
   path: path
   profile: profile
-  quickedit: quickedit
   search: search
   shortcut: shortcut
   living_spaces_default: living_spaces_default
