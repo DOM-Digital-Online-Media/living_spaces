@@ -113,6 +113,9 @@
             "drupal/search_api_date_popup": {
                 "Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2022-07-18/search_api_date_popup.1.x-dev.rector.patch"
             },
+            "drupal/site_settings": {
+                "Token types do not have any tokens defined": "https://www.drupal.org/files/issues/2023-08-22/site_settings_fix_tokens_3382571.patch"
+            },
             "drupal/universal_device_detection": {
                 "Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2022-12-24/universal_device_detection.2.x-dev.rector.patch"
             },
