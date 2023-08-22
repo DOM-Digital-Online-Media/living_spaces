@@ -92,6 +92,9 @@
             "drupal/message_ui": {
                 "Fatal error Drupal 9": "https://git.drupalcode.org/project/message_ui/-/merge_requests/2.patch"
             },
+            "drupal/languagefield": {
+                "Token types do not have any tokens defined": "https://www.drupal.org/files/issues/2023-08-22/languagefield_fix_tokens_3382579.patch"
+            },
             "drupal/empty_fields": {
                 "Empty field for Drupal core Layout builder": "https://www.drupal.org/files/issues/2020-09-15/3055574-empty_fields_layout_builder-with-weights-19.patch"
             },
