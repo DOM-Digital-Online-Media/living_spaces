@@ -5,6 +5,7 @@ namespace Drupal\living_spaces_group;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\group\Entity\Controller\GroupTypeListBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -50,19 +51,14 @@ class LivingSpacesGroupTypeListBuilder extends GroupTypeListBuilder {
   /**
    * {@inheritdoc}
    */
-  public function render() {
-    $this->limit = 0;
-    $build = parent::render();
+  protected function getEntityListQuery(): QueryInterface {
+    $query = parent::getEntityListQuery();
 
-    if (!empty($build['table']['#rows']) && $spaces = $this->config->get('living_spaces_group.exclude_spaces')->get('spaces')) {
-      foreach ($build['table']['#rows'] as $bundle => $row) {
-        if (in_array($bundle, $spaces)) {
-          unset($build['table']['#rows'][$bundle]);
-        }
-      }
+    if ($spaces = $this->config->get('living_spaces_group.exclude_spaces')->get('spaces')) {
+      $query->condition('id', $spaces, 'NOT IN');
     }
 
-    return $build;
+    return $query;
   }
 
 }
