@@ -51,6 +51,7 @@ class LivingSpacesGroupTypeListBuilder extends GroupTypeListBuilder {
    * {@inheritdoc}
    */
   public function render() {
+    $this->limit = 0;
     $build = parent::render();
 
     if (!empty($build['table']['#rows']) && $spaces = $this->config->get('living_spaces_group.exclude_spaces')->get('spaces')) {
