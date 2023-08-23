@@ -42,11 +42,14 @@ function living_spaces_activity_tokens($type, $tokens, array $data, array $optio
 
     foreach ($tokens as $name => $original) {
       if ('greeting' == $name) {
+        if ($message->getOwnerId() && $message->getOwnerId() == \Drupal::currentUser()->id()) {
+          $replacements[$original] = t('You were');
+        }
         if ($message->getOwnerId() !== \Drupal::currentUser()->id() && $user = $message->getOwner()) {
           $replacements[$original] = $user->getDisplayName() . ' ' . t('was');
         }
         else {
-          $replacements[$original] = t('You were');
+          $replacements[$original] = t('Deleted employee') . ' ' . t('was');
         }
       }
       $parts = explode(':', $name);
