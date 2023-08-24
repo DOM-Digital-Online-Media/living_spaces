@@ -1175,52 +1175,6 @@ display:
           break_phrase: true
           not: false
       filters:
-        status:
-          id: status
-          table: search_api_index_space_users
-          field: status
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_boolean
-          operator: '='
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: ''
-            label: 'User status'
-            description: null
-            use_operator: false
-            operator: status_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: status
-            required: true
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-          is_grouped: true
-          group_info:
-            label: Status
-            description: ''
-            identifier: status
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items:
-              -
-                title: Active
-                operator: '='
-                value: '1'
-              -
-                title: Blocked
-                operator: '='
-                value: '0'
         ngram_label:
           id: ngram_label
           table: search_api_index_space_users
