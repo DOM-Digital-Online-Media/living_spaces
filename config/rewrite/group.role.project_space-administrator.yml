@@ -1,7 +1,4 @@
 permissions:
-  - 'manage living spaces sections settings'
-  - 'view discussions section of a living space'
-  - 'view events section of a living space'
   - 'create living_spaces_event:event entity'
   - 'create living_spaces_event:event relationship'
   - 'create living_spaces_event:general entity'
