@@ -92,6 +92,9 @@
             "drupal/message_ui": {
                 "Fatal error Drupal 9": "https://git.drupalcode.org/project/message_ui/-/merge_requests/2.patch"
             },
+            "drupal/languagefield": {
+                "Token types do not have any tokens defined": "https://www.drupal.org/files/issues/2023-08-22/languagefield_fix_tokens_3382579_3.patch"
+            },
             "drupal/empty_fields": {
                 "Empty field for Drupal core Layout builder": "https://www.drupal.org/files/issues/2020-09-15/3055574-empty_fields_layout_builder-with-weights-19.patch"
             },
@@ -107,13 +110,20 @@
                 "Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2022-07-18/field_ipaddress.2.0.x-dev.rector.patch"
             },
             "drupal/nodejs": {
-                "Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2023-08-07/nodejs_drupal_10_3329387.patch"
+                "Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2023-08-07/nodejs_drupal_10_3329387.patch",
+                "Primary key not defined": "https://www.drupal.org/files/issues/2023-08-21/nodejs_primary_key_3382300.patch"
             },
             "drupal/search_api_date_popup": {
                 "Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2022-07-18/search_api_date_popup.1.x-dev.rector.patch"
             },
+            "drupal/site_settings": {
+                "Token types do not have any tokens defined": "https://www.drupal.org/files/issues/2023-08-22/site_settings_fix_tokens_3382571.patch"
+            },
             "drupal/universal_device_detection": {
                 "Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2022-12-24/universal_device_detection.2.x-dev.rector.patch"
+            },
+            "drupal/profile": {
+                "Fatal error on account creation": "https://www.drupal.org/files/issues/2023-07-24/handle-user-is-anonymous-hardening-3371850-8.patch"
             }
         },
          "enable-patching": true
