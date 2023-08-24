@@ -45,7 +45,7 @@ function living_spaces_activity_tokens($type, $tokens, array $data, array $optio
         if ($message->getOwnerId() && $message->getOwnerId() == \Drupal::currentUser()->id()) {
           $replacements[$original] = t('You were');
         }
-        if ($message->getOwnerId() !== \Drupal::currentUser()->id() && $user = $message->getOwner()) {
+        elseif ($message->getOwnerId() !== \Drupal::currentUser()->id() && $user = $message->getOwner()) {
           $replacements[$original] = $user->getDisplayName() . ' ' . t('was');
         }
         else {
