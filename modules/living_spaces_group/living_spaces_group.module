@@ -260,6 +260,10 @@ function living_spaces_group_entity_type_alter(&$entity_types) {
     $handlers['form']['delete'] = 'Drupal\living_spaces_group\LivingSpacesGroupDeleteForm';
     $entity_types['group']->setHandlerClass('form', $handlers['form']);
   }
+
+  if (isset($entity_types['group_type'])) {
+    $entity_types['group_type']->setListBuilderClass('Drupal\living_spaces_group\LivingSpacesGroupTypeListBuilder');
+  }
 }
 
 /**
