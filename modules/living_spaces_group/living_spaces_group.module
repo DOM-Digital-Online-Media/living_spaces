@@ -56,6 +56,19 @@ function living_spaces_group_group_create_access(AccountInterface $account, arra
 }
 
 /**
+ * Implements hook_menu_links_discovered_alter().
+ */
+function living_spaces_group_menu_links_discovered_alter(&$links) {
+  if ($spaces = \Drupal::config('living_spaces_group.exclude_spaces')->get('spaces')) {
+    foreach ($spaces as $space) {
+      if (isset($links["admin_toolbar_tools.extra_links:entity.group_type.edit_form.{$space}"])) {
+        $links["admin_toolbar_tools.extra_links:entity.group_type.edit_form.{$space}"]['options']['attributes']['class'][] = 'visually-hidden';
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_config_schema_info_alter().
  */
 function living_spaces_group_config_schema_info_alter(&$definitions) {
