@@ -62,7 +62,7 @@ function living_spaces_group_menu_links_discovered_alter(&$links) {
   if ($spaces = \Drupal::config('living_spaces_group.exclude_spaces')->get('spaces')) {
     foreach ($spaces as $space) {
       if (isset($links["admin_toolbar_tools.extra_links:entity.group_type.edit_form.{$space}"])) {
-        $links["admin_toolbar_tools.extra_links:entity.group_type.edit_form.{$space}"]['options']['attributes']['class'][] = 'visually-hidden';
+        unset($links["admin_toolbar_tools.extra_links:entity.group_type.edit_form.{$space}"]);
       }
     }
   }
