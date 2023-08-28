@@ -1142,9 +1142,7 @@ function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface 
 
     if (!empty($breadcrumb) && $term) {
       $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
-      $breadcrumb->addLink(Link::createFromRoute($term->vid->entity->label(), 'entity.taxonomy_vocabulary.overview_form', [
-        'taxonomy_vocabulary' => $term->vid->entity->id(),
-      ]));
+      $breadcrumb->addLink(Link::createFromRoute($term->vid->entity->label(), '<none>'));
 
       $prefix = $route_match->getRouteName() == 'entity.taxonomy_term.edit_form' ? t('Edit') . ' ' : '';
       $breadcrumb->addLink(Link::createFromRoute($prefix . $term->label(), '<none>'));
