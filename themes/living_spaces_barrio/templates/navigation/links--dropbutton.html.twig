@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Theme override for a dropbutton.
+ *
+ * Available variables:
+ * - links: Links to be output.
+ *   Each link will have the following elements:
+ *   - link: The link to be output.
+ * - attributes: HTML attributes for the split toogle button.
+ *
+ * @see living_spaces_barrio_preprocess_links__dropbutton()
+ */
+#}
+{% if links %}
+  {% set first = links|first %}
+  {% if links|length == 1 %}
+    {{ first.link }}
+  {% else %}
+    <div class="btn-group lsb-dropdown">
+      {{ first.link }}
+      <button {{ attributes }}>
+        <span class="visually-hidden">{{ "Toggle Dropdown"|t }}</span>
+      </button>
+      <ul class="dropdown-menu">
+        {% for item in links[1:] %}
+          <li>{{ item.link }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+{% endif %}
