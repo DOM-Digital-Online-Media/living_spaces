@@ -1109,10 +1109,12 @@ function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface 
   if ('entity.taxonomy_vocabulary.overview_form' == $route_match->getRouteName()) {
     $applies = TRUE;
 
-    /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
-    $vocabulary = $route_match->getParameter('taxonomy_vocabulary');
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
 
-    if (!empty($breadcrumb) && $vocabulary) {
+      /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
+      $vocabulary = $parameters['taxonomy_vocabulary'];
+
       $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
       $breadcrumb->addLink(Link::createFromRoute($vocabulary->label(), '<none>'));
     }
@@ -1121,10 +1123,12 @@ function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface 
   if ('entity.taxonomy_term.add_form' == $route_match->getRouteName()) {
     $applies = TRUE;
 
-    /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
-    $vocabulary = $route_match->getParameter('taxonomy_vocabulary');
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
 
-    if (!empty($breadcrumb) && $vocabulary) {
+      /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
+      $vocabulary = $parameters['taxonomy_vocabulary'];
+
       $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
       $breadcrumb->addLink(Link::createFromRoute($vocabulary->label(), 'entity.taxonomy_vocabulary.overview_form', [
         'taxonomy_vocabulary' => $vocabulary->id(),
@@ -1135,12 +1139,13 @@ function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface 
 
   if (in_array($route_match->getRouteName(), ['entity.taxonomy_term.canonical', 'entity.taxonomy_term.edit_form', 'entity.taxonomy_term.delete_form'])) {
     $applies = TRUE;
-    $parameters = $route_match->getParameters()->all();
 
-    /** @var \Drupal\taxonomy\TermInterface $term */
-    $term = $parameters['taxonomy_term'];
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
 
-    if (!empty($breadcrumb) && $term) {
+      /** @var \Drupal\taxonomy\TermInterface $term */
+      $term = $parameters['taxonomy_term'];
+
       $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
       $breadcrumb->addLink(Link::createFromRoute($term->vid->entity->label(), '<none>'));
 
