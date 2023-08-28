@@ -143,7 +143,7 @@ function living_spaces_simple_permissions_living_spaces_breadcrumbs_info(RouteMa
   $applies = FALSE;
 
   $query = \Drupal::request()->query->all();
-  if ('user.admin_permissions' == $route_match->getRouteName() && isset($query['filter_roles']) && $query['filter_roles']) {
+  if ('user.admin_permissions' == $route_match->getRouteName() && !empty($query['filter_roles'])) {
     $applies = TRUE;
 
     if (!empty($breadcrumb)) {
