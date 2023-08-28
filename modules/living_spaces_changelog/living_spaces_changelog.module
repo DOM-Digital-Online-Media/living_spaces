@@ -59,12 +59,29 @@ function living_spaces_changelog_node_access(NodeInterface $entity, $operation, 
  */
 function living_spaces_changelog_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
   $applies = FALSE;
+
   if ('view.content.admin_changelog' == $route_match->getRouteName()) {
     $applies = TRUE;
 
     if (!empty($breadcrumb)) {
       $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
       $breadcrumb->addLink(Link::createFromRoute(t('Changelog'), '<none>'));
+    }
+  }
+
+  if (in_array($route_match->getRouteName(), ['entity.node.canonical', 'entity.node.edit_form', 'entity.node.delete_form'])) {
+    $parameters = $route_match->getParameters()->all();
+
+    /** @var \Drupal\node\NodeInterface $node */
+    $node = $parameters['node'];
+
+    if ('changelog' == $node->bundle()) {
+      $applies = TRUE;
+
+      if (!empty($breadcrumb)) {
+        $prefix = $route_match->getRouteName() == 'entity.node.edit_form' ? t('Edit') . ' ' : '';
+        $breadcrumb->addLink(Link::createFromRoute($prefix . $node->label(), '<none>'));
+      }
     }
   }
 
