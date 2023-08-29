@@ -1119,14 +1119,51 @@ function living_spaces_group_living_spaces_breadcrumbs_info(RouteMatchInterface 
     }
   }
 
-  if ('entity.taxonomy_vocabulary.overview_form' == $route_match->getRouteName() &&
-    'chat_subjects' == $route_match->getParameter('taxonomy_vocabulary')->id()
-  ) {
+  if ('entity.taxonomy_vocabulary.overview_form' == $route_match->getRouteName()) {
     $applies = TRUE;
 
     if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
+
+      /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
+      $vocabulary = $parameters['taxonomy_vocabulary'];
+
       $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
-      $breadcrumb->addLink(Link::createFromRoute(t('Chat Subjects'), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute($vocabulary->label(), '<none>'));
+    }
+  }
+
+  if ('entity.taxonomy_term.add_form' == $route_match->getRouteName()) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
+
+      /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
+      $vocabulary = $parameters['taxonomy_vocabulary'];
+
+      $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute($vocabulary->label(), 'entity.taxonomy_vocabulary.overview_form', [
+        'taxonomy_vocabulary' => $vocabulary->id(),
+      ]));
+      $breadcrumb->addLink(Link::createFromRoute(t('Add term'), '<none>'));
+    }
+  }
+
+  if (in_array($route_match->getRouteName(), ['entity.taxonomy_term.canonical', 'entity.taxonomy_term.edit_form', 'entity.taxonomy_term.delete_form'])) {
+    $applies = TRUE;
+
+    if (!empty($breadcrumb)) {
+      $parameters = $route_match->getParameters()->all();
+
+      /** @var \Drupal\taxonomy\TermInterface $term */
+      $term = $parameters['taxonomy_term'];
+
+      $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute($term->vid->entity->label(), '<none>'));
+
+      $prefix = $route_match->getRouteName() == 'entity.taxonomy_term.edit_form' ? t('Edit') . ' ' : '';
+      $breadcrumb->addLink(Link::createFromRoute($prefix . $term->label(), '<none>'));
     }
   }
 
