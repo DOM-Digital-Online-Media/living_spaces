@@ -5,6 +5,8 @@
  * Functions to support theming in the Living Spaces Barrio subtheme.
  */
 
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\Dropbutton;
 use Drupal\Core\Render\Element\Operations;
 use Drupal\living_spaces_barrio\LivingSpacesBarrioTrustedCallbacks;
@@ -73,6 +75,33 @@ function living_spaces_barrio_element_info_alter(array &$info) {
         }
       }
       $info[$element]['#pre_render'][] = [LivingSpacesBarrioTrustedCallbacks::class, 'preRenderDropbutton'];
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_barrio_form_view_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (!empty($form['displays']['settings']['settings_content']['tab_content']['details']['columns'])) {
+    $columns = &$form['displays']['settings']['settings_content']['tab_content']['details']['columns'];
+    foreach (Element::children($columns) as $col_key) {
+      foreach (Element::children($columns[$col_key]) as $el_key) {
+        if (!empty($columns[$col_key][$el_key]['#actions']['#links'])) {
+          foreach ($columns[$col_key][$el_key]['#actions']['#links'] as &$link) {
+
+            // Fix for views ui dropdowns on view edit screen. Remove classes
+            // that break default bootstrap dropdown styles.
+            // @see \Drupal\views_ui\ViewEditForm::getFormBucket()
+            foreach ($link['attributes']['class'] ?? [] as $i => $class) {
+              $link['attributes']['class'][$i] = str_replace('icon compact ', '', $class);
+            }
+          }
+
+          // Apply small bootstrap dropdown styling instead.
+          $columns[$col_key][$el_key]['#actions']['#dropbutton_type'] = 'small';
+        }
+      }
     }
   }
 }
