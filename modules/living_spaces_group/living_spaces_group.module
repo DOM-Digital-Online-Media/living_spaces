@@ -654,6 +654,9 @@ function living_spaces_group_menu_local_tasks_alter(&$data, $route_name, Refinab
     'group.content',
     'views_view:view.group_nodes.page_1',
     'devel.entities:group.devel_tab',
+    // Groups and circles revisions.
+    'group.version_history',
+    'entity.version_history:group.version_history',
     // Groups and circles list.
     'group.settings',
     'living_spaces_group_privacy.privacy_form',
