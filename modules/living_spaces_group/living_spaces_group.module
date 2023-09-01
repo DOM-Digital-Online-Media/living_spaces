@@ -69,6 +69,18 @@ function living_spaces_group_menu_links_discovered_alter(&$links) {
 }
 
 /**
+ * Implements hook_entity_presave().
+ */
+function living_spaces_group_entity_presave(EntityInterface $entity) {
+  /** @var \Drupal\Core\Entity\ContentEntityTypeInterface $definition */
+  $definition = \Drupal::entityTypeManager()->getDefinition($entity->getEntityTypeId());
+
+  if ($definition->getRevisionDataTable()) {
+    $entity->setNewRevision(FALSE);
+  }
+}
+
+/**
  * Implements hook_config_schema_info_alter().
  */
 function living_spaces_group_config_schema_info_alter(&$definitions) {
