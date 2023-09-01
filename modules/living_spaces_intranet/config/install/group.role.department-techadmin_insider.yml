@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department
+    - user.role.administrator
+id: department-techadmin_insider
+label: 'Technical Administrator Insider'
+weight: 116
+admin: true
+scope: insider
+global_role: administrator
+group_type: department
+permissions: {  }
+is_space_admin: false

@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.project_space
+    - user.role.administrator
+id: project_space-techadmin_insider
+label: 'Technical Administrator Insider'
+weight: 112
+admin: true
+scope: insider
+global_role: administrator
+group_type: project_space
+permissions: {  }
+is_space_admin: false

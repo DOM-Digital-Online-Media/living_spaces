@@ -4,16 +4,12 @@ dependencies:
   config:
     - group.type.department
     - user.role.administrator
-id: department-technical_administrat
-label: 'Technical Administrator'
-weight: -97
-admin: false
+id: department-techadmin
+label: 'Technical Administrator Outsider'
+weight: 115
+admin: true
 scope: outsider
 global_role: administrator
 group_type: department
-permissions:
-  - 'delete group'
-  - 'edit group'
-  - 'view any unpublished group'
-  - 'view group'
+permissions: {  }
 is_space_admin: false

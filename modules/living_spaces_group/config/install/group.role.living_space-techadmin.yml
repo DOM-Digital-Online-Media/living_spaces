@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.living_space
+    - user.role.administrator
+id: living_space-techadmin
+label: 'Technical Administrator Outsider'
+weight: 121
+admin: true
+scope: outsider
+global_role: administrator
+group_type: living_space
+permissions: {  }
+is_space_admin: false
