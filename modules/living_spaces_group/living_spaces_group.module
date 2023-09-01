@@ -75,7 +75,7 @@ function living_spaces_group_entity_presave(EntityInterface $entity) {
   /** @var \Drupal\Core\Entity\ContentEntityTypeInterface $definition */
   $definition = \Drupal::entityTypeManager()->getDefinition($entity->getEntityTypeId());
 
-  if ($definition->getRevisionDataTable()) {
+  if ($definition->getRevisionTable()) {
     $entity->setNewRevision(FALSE);
   }
 }
