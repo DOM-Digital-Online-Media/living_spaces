@@ -10,19 +10,6 @@ use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 
 /**
- * Implements hook_ENTITY_TYPE_update().
- */
-function living_spaces_menus_user_update(UserInterface $user) {
-  $field_joined = 'joined_spaces';
-  $field_favorite = 'field_favorite_spaces';
-
-  if (($user->hasField($field_joined) && !$user->get($field_joined)->equals($user->original->get($field_joined)))
-    || $user->hasField($field_favorite) && !$user->get($field_favorite)->equals($user->original->get($field_favorite))) {
-    \Drupal::service('plugin.manager.menu.link')->rebuild();
-  }
-}
-
-/**
  * Implements hook_collapsible_menu_alter().
  */
 function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
