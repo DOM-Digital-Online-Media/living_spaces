@@ -1,6 +1,7 @@
 permissions:
   - 'create living_spaces_event:event entity'
   - 'create living_spaces_event:event relationship'
+  - 'create living_spaces_event:general entity'
   - 'create living_spaces_event:general relationship'
   - 'create living_spaces_event:room_occupied entity'
   - 'create living_spaces_event:room_occupied relationship'
