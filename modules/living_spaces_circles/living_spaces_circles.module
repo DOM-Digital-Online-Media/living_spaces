@@ -99,12 +99,30 @@ function living_spaces_circles_entity_operation_alter(array &$operations, Entity
  */
 function living_spaces_circles_living_spaces_breadcrumbs_info(RouteMatchInterface $route_match, Breadcrumb $breadcrumb = NULL) {
   $applies = FALSE;
+
   if ('view.groups.circles' == $route_match->getRouteName()) {
     $applies = TRUE;
 
     if (!empty($breadcrumb)) {
       $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
       $breadcrumb->addLink(Link::createFromRoute(t('Circles'), '<none>'));
+    }
+  }
+
+  if ('entity.group.add_form' == $route_match->getRouteName()) {
+    $parameters = $route_match->getParameters()->all();
+
+    /** @var \Drupal\group\Entity\GroupTypeInterface $group_type */
+    $group_type = $parameters['group_type'];
+
+    if ('circle' == $group_type->bundle()) {
+      $applies = TRUE;
+
+      if (!empty($breadcrumb)) {
+        $breadcrumb->addLink(Link::createFromRoute(t('Management'), '<none>'));
+        $breadcrumb->addLink(Link::createFromRoute(t('Circles'), '<none>'));
+        $breadcrumb->addLink(Link::createFromRoute(t('Add Circle'), '<none>'));
+      }
     }
   }
 
