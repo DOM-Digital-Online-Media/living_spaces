@@ -69,6 +69,21 @@ function living_spaces_changelog_living_spaces_breadcrumbs_info(RouteMatchInterf
     }
   }
 
+  if ('node.add' == $route_match->getRouteName()) {
+    $parameters = $route_match->getParameters()->all();
+
+    /** @var \Drupal\node\NodeTypeInterface $type */
+    $type = $parameters['node_type'];
+
+    if ('changelog' == $type->id()) {
+      $applies = TRUE;
+
+      if (!empty($breadcrumb)) {
+        $breadcrumb->addLink(Link::createFromRoute(t('Create Changelog'), '<none>'));
+      }
+    }
+  }
+
   if (in_array($route_match->getRouteName(), ['entity.node.canonical', 'entity.node.edit_form', 'entity.node.delete_form'])) {
     $parameters = $route_match->getParameters()->all();
 
