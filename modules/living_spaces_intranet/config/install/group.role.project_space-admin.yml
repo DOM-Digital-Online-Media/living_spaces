@@ -13,7 +13,6 @@ group_type: project_space
 permissions:
   - 'access content overview'
   - 'access group_node overview'
-  - 'administer living spaces sections settings'
   - 'administer members'
   - 'create group_node:agenda entity'
   - 'create group_node:agenda relationship'

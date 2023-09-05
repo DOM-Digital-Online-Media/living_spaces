@@ -12,8 +12,6 @@ scope: insider
 global_role: authenticated
 group_type: living_space
 permissions:
-  - 'view group'
-  - 'view group_membership relationship'
   - 'create group_node:discussion_post entity'
   - 'delete own group_node:agenda entity'
   - 'delete own group_node:agenda relationship'
@@ -35,6 +33,4 @@ permissions:
   - 'view private group'
   - 'view public group'
   - 'view published pages'
-  - 'view discussions section of a living space'
-  - 'view events section of a living space'
 is_space_admin: false
