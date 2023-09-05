@@ -69,6 +69,7 @@ install:
   - entity_reference_revisions
   - paragraphs
   - paragraphs_type_permissions
+  - rabbit_hole
   - site_settings
   - site_settings_type_permissions
   - dom_paragraphs_extra
