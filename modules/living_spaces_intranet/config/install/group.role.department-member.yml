@@ -37,6 +37,4 @@ permissions:
   - 'view own unpublished group_node:protocol entity'
   - 'view private group'
   - 'view public group'
-  - 'view discussions section of a living space'
-  - 'view events section of a living space'
 is_space_admin: false
