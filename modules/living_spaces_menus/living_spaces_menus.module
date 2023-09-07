@@ -13,46 +13,73 @@ use Drupal\Core\Url;
  */
 function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
   $spaces_menu_key = 'menu_link_content:436e7a5e-7eb0-4ba7-928c-b9064865f174';
-  $have_favorites = FALSE;
 
-  $query = \Drupal::entityTypeManager()->getStorage('group')->getQuery();
-  $query->addTag('living_spaces_menus_user_spaces');
-  $query->accessCheck();
-  $query->condition('status', 1, '=')
-    ->sort('label', 'ASC')
-    ->range(0, 8);
+  $user = \Drupal::entityTypeManager()
+    ->getStorage('user')
+    ->load(\Drupal::currentUser()->id());
 
-  $result = $query->execute();
+  $user_favorite_spaces = [];
+  $user_preferred_spaces = [];
+  $user_joined_spaces = [];
+  $max_total = 8;
 
-  $groups = [];
-  if ($result) {
-    $groups = \Drupal::entityTypeManager()->getStorage('group')->loadMultiple($result);
+  foreach ($user->get('field_favorite_spaces')->getValue() as $item) {
+    $user_favorite_spaces[] = $item['target_id'];
   }
 
-  if ($groups) {
-    $links = [];
-
-    $user = \Drupal::entityTypeManager()->getStorage('user')->load(\Drupal::currentUser()->id());
-
-    $favorites_list = [];
-
-    foreach ($user->field_favorite_spaces->getValue() as $favorite) {
-      $favorites_list[] = $favorite['target_id'];
+  foreach ($user->get('preferred_spaces')->getValue() as $item) {
+    if (!in_array($item['target_id'], $user_favorite_spaces)) {
+      $user_preferred_spaces[] = $item['target_id'];
     }
+  }
 
-    if ($favorites_list) {
-      $have_favorites = TRUE;
-    }
+  foreach ($user->get('joined_spaces')->getValue() as $item) {
+    if (!in_array($item['target_id'], $user_favorite_spaces) && !in_array($item['target_id'], $user_preferred_spaces))
+      $user_joined_spaces[] = $item['target_id'];
+  }
 
-    foreach ($groups as $key => $item) {
-      if (!in_array($item->id(), $favorites_list) && $have_favorites) {
-        $have_favorites = FALSE;
+  $links = [];
+  $top_items = array_merge($user_favorite_spaces, $user_preferred_spaces);
 
-        $links['living_spaces_menus.items_delimiter'] = [
-          'put_delimiter' => TRUE,
+  if ($top_items) {
+    $groups_favorite = \Drupal::entityTypeManager()
+      ->getStorage('group')
+      ->loadMultiple($top_items);
+
+    if ($groups_favorite) {
+      foreach ($groups_favorite as $item) {
+        $links['living_spaces_menus.space:' . $item->id()] = [
+          'is_expanded' => FALSE,
+          'is_collapsed' => FALSE,
+          'in_active_trail' => FALSE,
+          'attributes' => new Attribute(),
+          'title' => $item->label(),
+          'url' => Url::fromRoute('entity.group.canonical', ['group' => $item->id()]),
+          'below' => [],
         ];
       }
 
+      $links['living_spaces_menus.items_delimiter'] = [
+        'put_delimiter' => TRUE,
+      ];
+    }
+  }
+
+  $group_ids = \Drupal::entityTypeManager()
+    ->getStorage('group')
+    ->getQuery()
+    ->accessCheck()
+    ->condition('id', $user_joined_spaces, 'IN')
+    ->sort('label', 'ASC')
+    ->range(0, ($max_total - count($top_items)))
+    ->execute();
+
+  if ($group_ids) {
+    $groups = \Drupal::entityTypeManager()
+      ->getStorage('group')
+      ->loadMultiple($group_ids);
+
+    foreach ($groups as $item) {
       $links['living_spaces_menus.space:' . $item->id()] = [
         'is_expanded' => FALSE,
         'is_collapsed' => FALSE,
@@ -63,13 +90,9 @@ function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
         'below' => [],
       ];
     }
+  }
 
-    if ($have_favorites) {
-      $links['living_spaces_menus.items_delimiter'] = [
-        'put_delimiter' => TRUE,
-      ];
-    }
-
+  if ($links) {
     array_push($links, end($build['#items'][$spaces_menu_key]['below']));
 
     $build['#items'][$spaces_menu_key]['below'] = $links;
