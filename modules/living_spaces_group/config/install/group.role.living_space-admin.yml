@@ -63,8 +63,4 @@ permissions:
   - 'view published pages'
   - 'view unpublished group_node:agenda entity'
   - 'view unpublished group_node:discussion_post entity'
-  - 'create page entities'
-  - 'view published pages'
-  - 'view discussions section of a living space'
-  - 'view events section of a living space'
 is_space_admin: true
