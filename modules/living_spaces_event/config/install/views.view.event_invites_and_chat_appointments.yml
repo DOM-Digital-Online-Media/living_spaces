@@ -12,7 +12,7 @@ dependencies:
     - living_spaces_users
     - search_api
 id: event_invites_and_chat_appointments
-label: 'Event invites and Chat Appointments'
+label: 'Event invites'
 module: views
 description: ''
 tag: ''
@@ -492,7 +492,7 @@ display:
         - 'config:search_api.index.event_invites_and_chat_appointments'
   my_event_invites_and_chat_appointments_block:
     id: my_event_invites_and_chat_appointments_block
-    display_title: 'Event invites and Chat Appointments Block'
+    display_title: 'Event invites Block'
     display_plugin: block
     position: 1
     display_options:
