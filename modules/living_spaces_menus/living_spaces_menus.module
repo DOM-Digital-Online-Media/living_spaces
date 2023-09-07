@@ -23,19 +23,25 @@ function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
   $user_joined_spaces = [];
   $max_total = 8;
 
-  foreach ($user->get('field_favorite_spaces')->getValue() as $item) {
-    $user_favorite_spaces[] = $item['target_id'];
-  }
-
-  foreach ($user->get('preferred_spaces')->getValue() as $item) {
-    if (!in_array($item['target_id'], $user_favorite_spaces)) {
-      $user_preferred_spaces[] = $item['target_id'];
+  if ($user->hasField('field_favorite_spaces')) {
+    foreach ($user->get('field_favorite_spaces')->getValue() as $item) {
+      $user_favorite_spaces[] = $item['target_id'];
     }
   }
 
-  foreach ($user->get('joined_spaces')->getValue() as $item) {
-    if (!in_array($item['target_id'], $user_favorite_spaces) && !in_array($item['target_id'], $user_preferred_spaces))
-      $user_joined_spaces[] = $item['target_id'];
+  if ($user->hasField('preferred_spaces')) {
+    foreach ($user->get('preferred_spaces')->getValue() as $item) {
+      if (!in_array($item['target_id'], $user_favorite_spaces)) {
+        $user_preferred_spaces[] = $item['target_id'];
+      }
+    }
+  }
+
+  if ($user->hasField('joined_spaces')) {
+    foreach ($user->get('joined_spaces')->getValue() as $item) {
+      if (!in_array($item['target_id'], $user_favorite_spaces) && !in_array($item['target_id'], $user_preferred_spaces))
+        $user_joined_spaces[] = $item['target_id'];
+    }
   }
 
   $links = [];
