@@ -53,7 +53,7 @@ third_party_settings:
       limit_to_content_language: false
       include_language_independent: true
 id: event_invites_and_chat_appointments
-name: 'Event invites and Chat appointments'
+name: 'Event invites'
 description: ''
 read_only: false
 field_settings:
