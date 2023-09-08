@@ -13,6 +13,7 @@ class LivingSpacesBarrioTrustedCallbacks implements TrustedCallbackInterface {
    * Pre-render callback for dropbutton and operations elements.
    */
   public static function preRenderDropbutton($element) {
+    $element['#attached']['library'][] = 'living_spaces_barrio/dropdown';
 
     // Prepare size and type classes for button.
     $button_size_class = '';

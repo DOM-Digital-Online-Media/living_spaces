@@ -18,3 +18,11 @@ inner_view:
     - core/drupal.ajax
     - core/views.ajax
     - living_spaces_barrio/global-styling
+
+dropdown:
+  version: 1.0.0
+  js:
+    js/living_spaces_barrio_dropdown.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
