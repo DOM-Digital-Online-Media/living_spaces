@@ -4,6 +4,8 @@ namespace Drupal\living_spaces_event\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 
@@ -29,6 +31,13 @@ class LivingSpacesEventBaseInfoBlock extends BlockBase implements ContainerFacto
   protected $dateFormat;
 
   /**
+   * Returns the current_user service.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentUser;
+
+  /**
    * Constructs a LivingSpacesEventBaseInfoBlock block.
    *
    * @param array $configuration
@@ -39,11 +48,14 @@ class LivingSpacesEventBaseInfoBlock extends BlockBase implements ContainerFacto
    *   The plugin implementation definition.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_format
    *   Provides an interface defining a date formatter.
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   Defines an account interface which represents the current user.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, DateFormatterInterface $date_format) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, DateFormatterInterface $date_format, AccountInterface $current_user) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->dateFormat = $date_format;
+    $this->currentUser = $current_user;
   }
 
   /**
@@ -54,7 +66,8 @@ class LivingSpacesEventBaseInfoBlock extends BlockBase implements ContainerFacto
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('date.formatter')
+      $container->get('date.formatter'),
+      $container->get('current_user')
     );
   }
 
@@ -73,13 +86,17 @@ class LivingSpacesEventBaseInfoBlock extends BlockBase implements ContainerFacto
 
     $date = '';
     if ($event->hasField('field_start_date') && !$event->get('field_start_date')->isEmpty()) {
-      $start = strtotime($event->get('field_start_date')->getValue()[0]['value']);
-      $date = $this->dateFormat->format($start, 'custom', 'D, d.m.Y - H:i');
+      $start = new DrupalDateTime($event->get('field_start_date')->getValue()[0]['value'], new \DateTimeZone('UTC'));
+      $date = $start->format('D, d.m.Y - H:i', [
+        'timezone' => $this->currentUser->getTimeZone(),
+      ]);
     }
 
     if ($event->hasField('field_end_date') && !$event->get('field_end_date')->isEmpty()) {
-      $end = strtotime($event->get('field_end_date')->getValue()[0]['value']);
-      $date .= ' - ' . $this->dateFormat->format($end, 'custom', 'D, d.m.Y - H:i');
+      $end = new DrupalDateTime($event->get('field_end_date')->getValue()[0]['value'], new \DateTimeZone('UTC'));
+      $date .= ' ' . $end->format('D, d.m.Y - H:i', [
+        'timezone' => $this->currentUser->getTimeZone(),
+      ]);
     }
 
     if ($date) {
