@@ -47,6 +47,10 @@ function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
   $links = [];
   $top_items = array_merge($user_favorite_spaces, $user_preferred_spaces);
 
+  if (count($top_items) > $max_total) {
+    $top_items = array_slice($top_items, 0, $max_total);
+  }
+
   if ($top_items) {
     $groups_favorite = \Drupal::entityTypeManager()
       ->getStorage('group')
@@ -71,30 +75,32 @@ function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
     }
   }
 
-  $group_ids = \Drupal::entityTypeManager()
-    ->getStorage('group')
-    ->getQuery()
-    ->accessCheck()
-    ->condition('id', $user_joined_spaces, 'IN')
-    ->sort('label', 'ASC')
-    ->range(0, ($max_total - count($top_items)))
-    ->execute();
-
-  if ($group_ids) {
-    $groups = \Drupal::entityTypeManager()
+  if ($max_total - count($top_items) > 0) {
+    $group_ids = \Drupal::entityTypeManager()
       ->getStorage('group')
-      ->loadMultiple($group_ids);
+      ->getQuery()
+      ->accessCheck()
+      ->condition('id', $user_joined_spaces, 'IN')
+      ->sort('label', 'ASC')
+      ->range(0, ($max_total - count($top_items)))
+      ->execute();
 
-    foreach ($groups as $item) {
-      $links['living_spaces_menus.space:' . $item->id()] = [
-        'is_expanded' => FALSE,
-        'is_collapsed' => FALSE,
-        'in_active_trail' => FALSE,
-        'attributes' => new Attribute(),
-        'title' => $item->label(),
-        'url' => Url::fromRoute('entity.group.canonical', ['group' => $item->id()]),
-        'below' => [],
-      ];
+    if ($group_ids) {
+      $groups = \Drupal::entityTypeManager()
+        ->getStorage('group')
+        ->loadMultiple($group_ids);
+
+      foreach ($groups as $item) {
+        $links['living_spaces_menus.space:' . $item->id()] = [
+          'is_expanded' => FALSE,
+          'is_collapsed' => FALSE,
+          'in_active_trail' => FALSE,
+          'attributes' => new Attribute(),
+          'title' => $item->label(),
+          'url' => Url::fromRoute('entity.group.canonical', ['group' => $item->id()]),
+          'below' => [],
+        ];
+      }
     }
   }
 
