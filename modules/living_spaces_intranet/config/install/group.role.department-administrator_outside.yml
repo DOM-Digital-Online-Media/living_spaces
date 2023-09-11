@@ -2,15 +2,15 @@ langcode: en
 status: true
 dependencies:
   config:
-    - group.type.project_space
+    - group.type.department
     - user.role.client_admin
-id: project_space-administrator
-label: Administrator
-weight: -95
+id: department-administrator_outside
+label: 'Administrator Outsider'
+weight: 128
 admin: false
 scope: outsider
 global_role: client_admin
-group_type: project_space
+group_type: department
 permissions:
   - 'access content overview'
   - 'access group_node overview'

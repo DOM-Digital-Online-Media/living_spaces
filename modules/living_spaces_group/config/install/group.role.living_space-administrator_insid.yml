@@ -2,15 +2,15 @@ langcode: en
 status: true
 dependencies:
   config:
-    - group.type.department
+    - group.type.living_space
     - user.role.client_admin
-id: department-administrator
-label: Administrator
-weight: -96
+id: living_space-administrator_insid
+label: 'Administrator Insider'
+weight: 132
 admin: false
-scope: outsider
+scope: insider
 global_role: client_admin
-group_type: department
+group_type: living_space
 permissions:
   - 'access content overview'
   - 'access group_node overview'
