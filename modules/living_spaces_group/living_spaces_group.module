@@ -83,8 +83,12 @@ function living_spaces_group_field_widget_single_element_form_alter(&$element, F
  * After build callback for textarea fields.
  */
 function _living_spaces_group_remove_textarea_help($form_element, FormStateInterface $form_state) {
-  if (isset($form_element['format'])) {
-    unset($form_element['format']['help']);
+  $items = ['help', 'guidelines'];
+
+  foreach ($items as $item) {
+    if (isset($form_element['format'][$item])) {
+      unset($form_element['format'][$item]);
+    }
   }
 
   return $form_element;
