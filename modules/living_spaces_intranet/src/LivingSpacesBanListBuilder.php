@@ -83,7 +83,7 @@ class LivingSpacesBanListBuilder extends EntityListBuilder {
     /** @var \Drupal\living_spaces_intranet\Entity\LivingSpacesBan $entity */
     $row['id'] = $entity->id();
     $row['name']['data'] = $entity->toLink()->toRenderable();
-    $row['uid'] = $entity->getOwner()->getDisplayName();
+    $row['uid'] = $entity->getOwner() ? $entity->getOwner()->getDisplayName() : t('Deleted employee');
     $row['changed'] = $this->dateFormatter->format($entity->getChangedTime(), 'short');
 
     return $row + parent::buildRow($entity);
