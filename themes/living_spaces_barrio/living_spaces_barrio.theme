@@ -80,11 +80,13 @@ function living_spaces_barrio_element_info_alter(array &$info) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_views_ui_display_tab_alter().
  */
-function living_spaces_barrio_form_view_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if (!empty($form['displays']['settings']['settings_content']['tab_content']['details']['columns'])) {
-    $columns = &$form['displays']['settings']['settings_content']['tab_content']['details']['columns'];
+function living_spaces_barrio_views_ui_display_tab_alter(&$build, \Drupal\views_ui\ViewUI $view, $display_id) {
+  // @todo Move this to view_edit_form form alter when
+  // https://www.drupal.org/project/drupal/issues/3087455 is resolved.
+  if (!empty($build['details']['columns'])) {
+    $columns = &$build['details']['columns'];
     foreach (Element::children($columns) as $col_key) {
       foreach (Element::children($columns[$col_key]) as $el_key) {
         if (!empty($columns[$col_key][$el_key]['#actions']['#links'])) {
