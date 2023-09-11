@@ -4,6 +4,7 @@ namespace Drupal\living_spaces_event\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Datetime\DrupalDateTime;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 
@@ -73,13 +74,17 @@ class LivingSpacesEventBaseInfoBlock extends BlockBase implements ContainerFacto
 
     $date = '';
     if ($event->hasField('field_start_date') && !$event->get('field_start_date')->isEmpty()) {
-      $start = strtotime($event->get('field_start_date')->getValue()[0]['value']);
-      $date = $this->dateFormat->format($start, 'custom', 'D, d.m.Y - H:i');
+      $start = new DrupalDateTime($event->get('field_start_date')->getValue()[0]['value'], new \DateTimeZone('UTC'));
+      $date = $start->format('D, d.m.Y - H:i', [
+        'timezone' => date_default_timezone_get(),
+      ]);
     }
 
     if ($event->hasField('field_end_date') && !$event->get('field_end_date')->isEmpty()) {
-      $end = strtotime($event->get('field_end_date')->getValue()[0]['value']);
-      $date .= ' - ' . $this->dateFormat->format($end, 'custom', 'D, d.m.Y - H:i');
+      $end = new DrupalDateTime($event->get('field_end_date')->getValue()[0]['value'], new \DateTimeZone('UTC'));
+      $date .= ' ' . $end->format('D, d.m.Y - H:i', [
+        'timezone' => date_default_timezone_get(),
+      ]);
     }
 
     if ($date) {
