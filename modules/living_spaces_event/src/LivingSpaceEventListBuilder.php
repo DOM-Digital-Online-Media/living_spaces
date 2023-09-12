@@ -52,7 +52,7 @@ class LivingSpaceEventListBuilder extends EntityListBuilder {
     $row['name']['data'] = $entity->toLink()->toRenderable();
     $row['bundle'] = $entity->getEventType()->label();
     $row['status'] = $entity->isPublished() ? $this->t('Published') : $this->t('Unpublished');
-    $row['uid'] = $entity->getOwner()->label();
+    $row['uid'] = $entity->getOwner() ? $entity->getOwner()->getDisplayName() : t('Deleted employee');
 
     return $row + parent::buildRow($entity);
   }
