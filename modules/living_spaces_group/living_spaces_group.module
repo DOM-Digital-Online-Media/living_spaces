@@ -28,6 +28,8 @@ use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Link;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ViewExecutable;
+use Drupal\text\Plugin\Field\FieldWidget\TextfieldWidget;
+use Drupal\text\Plugin\Field\FieldWidget\TextareaWidget;
 
 /**
  * Implements hook_ENTITY_TYPE_access().
@@ -66,6 +68,30 @@ function living_spaces_group_menu_links_discovered_alter(&$links) {
       }
     }
   }
+}
+
+/**
+ * Implements hook_field_widget_single_element_form_alter().
+ */
+function living_spaces_group_field_widget_single_element_form_alter(&$element, FormStateInterface $form_state, $context) {
+  if ($context['widget'] instanceof TextfieldWidget || $context['widget'] instanceof TextareaWidget) {
+    $element['#after_build'][] = '_living_spaces_group_remove_textarea_help';
+  }
+}
+
+/**
+ * After build callback for textarea fields.
+ */
+function _living_spaces_group_remove_textarea_help($form_element, FormStateInterface $form_state) {
+  $items = ['help', 'guidelines'];
+
+  foreach ($items as $item) {
+    if (isset($form_element['format'][$item])) {
+      unset($form_element['format'][$item]);
+    }
+  }
+
+  return $form_element;
 }
 
 /**
