@@ -73,32 +73,38 @@ class LivingSpacesGroupOverviewBlock extends BlockBase implements ContainerFacto
   public function build() {
     /** @var \Drupal\group\Entity\GroupInterface $group */
     if ($group = $this->route->getParameter('group')) {
-      $memberships = $group->getRelationships('group_membership');
+      $memberships = $this->entityTypeManager
+        ->getStorage('group_relationship')
+        ->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('gid', $group->id())
+        ->condition('plugin_id', 'group_membership')
+        ->count()
+        ->execute();
 
-      $content = 0;
+      $content = $this->entityTypeManager
+        ->getStorage('group_relationship')
+        ->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('gid', $group->id())
+        ->condition('plugin_id', 'group_membership', '<>')
+        ->count()
+        ->execute();
       if ($group->hasField('content_sections') && !$group->get('content_sections')->isEmpty()) {
-        $content = $group->get('content_sections')->count();
-      }
-
-      $content_types = $this->entityTypeManager->getStorage('node_type')->loadMultiple();
-      foreach ($content_types as $type) {
-        if ($group->getGroupType()->hasPlugin("group_node:{$type->id()}")) {
-          $content += count($group->getRelationships("group_node:{$type->id()}"));
-        }
+        $content += $group->get('content_sections')->count();
       }
 
       return [
         '#theme' => 'item_list',
         '#items' => [
           $this->t('Group manager: @name', ['@name' => $group->getOwner()->label()]),
-          $this->t('Total members: @total', ['@total' => count($memberships)]),
+          $this->t('Total members: @total', ['@total' => $memberships]),
           $this->t('Total content numbers: @total', ['@total' => $content]),
         ],
         '#cache' => [
           'contexts' => Cache::mergeContexts($group->getCacheContexts(), ['url']),
           'tags' => Cache::mergeTags($group->getCacheTags(), [
-            'group_relationship_list',
-            'user_list',
+            'group_relationship_list:group:' . $group->id(),
           ]),
         ],
       ];
