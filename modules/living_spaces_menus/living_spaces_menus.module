@@ -75,7 +75,7 @@ function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
     }
   }
 
-  if ($max_total - count($top_items) > 0) {
+  if ($max_total - count($top_items) > 0 && $user_joined_spaces) {
     $group_ids = \Drupal::entityTypeManager()
       ->getStorage('group')
       ->getQuery()
