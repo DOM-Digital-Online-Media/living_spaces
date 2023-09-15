@@ -168,6 +168,7 @@ function living_spaces_intranet_query_entity_reference_alter(AlterableInterface 
 
   if ($query instanceof SelectInterface && 'user' == $query->getMetaData('entity_type')) {
     $living = \Drupal::service('living_spaces_group.manager')->getLivingSpaceGroupTypes();
+    /** @var \Drupal\group\GroupMembershipLoaderInterface $membership_loader */
     $membership_loader = \Drupal::service('group.membership_loader');
 
     $member = FALSE;
@@ -187,8 +188,10 @@ function living_spaces_intranet_query_entity_reference_alter(AlterableInterface 
     }
 
     $uids = [];
+    /** @var \Drupal\group\Entity\GroupInterface $group */
     foreach ($groups as $group) {
-      foreach ($group->getContent('group_membership') as $content) {
+      /** @var \Drupal\group\GroupMembership $content */
+      foreach ($group->getRelationships('group_membership') as $content) {
         $id = $content->entity_id->entity->id();
         $uids[$id] = $id;
       }
