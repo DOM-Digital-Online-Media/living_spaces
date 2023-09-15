@@ -15,6 +15,7 @@ dependencies:
   - nodejs
   - token
   - views_contextual_filters_or
+  - rabbit_hole
   - taxonomy
   - message
   - field

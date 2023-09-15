@@ -17,6 +17,7 @@ dependencies:
   - search_api_solr
   - time_field
   - user_permission_condition
+  - rabbit_hole
   - field
   - group
   - language

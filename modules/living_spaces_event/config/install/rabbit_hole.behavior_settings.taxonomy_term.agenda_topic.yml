@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.agenda_topic
+id: taxonomy_term.agenda_topic
+targetEntityType: taxonomy_term
+bundle: agenda_topic
+action: page_not_found
+no_bypass: true
+bypass_message: false
+configuration: {  }

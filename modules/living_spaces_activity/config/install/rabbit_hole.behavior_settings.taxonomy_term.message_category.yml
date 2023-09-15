@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.message_category
+id: taxonomy_term.message_category
+targetEntityType: taxonomy_term
+bundle: message_category
+action: page_not_found
+no_bypass: true
+bypass_message: false
+configuration: {  }

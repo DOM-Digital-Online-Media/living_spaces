@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.event_status
+id: taxonomy_term.event_status
+targetEntityType: taxonomy_term
+bundle: event_status
+action: page_not_found
+no_bypass: true
+bypass_message: false
+configuration: {  }
