@@ -299,7 +299,7 @@ function living_spaces_intranet_form_alter(&$form, FormStateInterface $form_stat
         $form['account']['roles']['#required'] = TRUE;
       }
       if (isset($form['account']['status'])) {
-        // Default status of new user sets in \Drupal\user\AccountForm::form,
+        // Default status of new user sets in \Drupal\user\AccountForm::form
         // as 'Blocked' if the current user is not an administrator and
         // the registration mode is 'admin_only'.
         if (($account = $form_state->getFormObject()->getEntity()) && $account->isNew()) {
