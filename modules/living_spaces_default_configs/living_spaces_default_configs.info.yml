@@ -11,3 +11,4 @@ dependencies:
   - user
   - filter
   - rdf
+  - rabbit_hole
