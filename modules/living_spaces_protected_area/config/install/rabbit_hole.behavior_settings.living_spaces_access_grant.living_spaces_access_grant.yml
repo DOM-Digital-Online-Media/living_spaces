@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - living_spaces_protected_area
+id: living_spaces_access_grant.living_spaces_access_grant
+targetEntityType: living_spaces_access_grant
+bundle: living_spaces_access_grant
+action: page_not_found
+no_bypass: true
+bypass_message: false
+configuration: {  }

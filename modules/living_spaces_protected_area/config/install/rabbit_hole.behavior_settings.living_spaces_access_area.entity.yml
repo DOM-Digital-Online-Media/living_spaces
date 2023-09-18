@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - living_spaces_protected_area.living_spaces_access_area_type.entity
+id: living_spaces_access_area.entity
+targetEntityType: living_spaces_access_area
+bundle: entity
+action: page_not_found
+no_bypass: true
+bypass_message: false
+configuration: {  }
