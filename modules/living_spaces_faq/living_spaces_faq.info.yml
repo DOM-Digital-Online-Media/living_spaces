@@ -11,6 +11,7 @@ dependencies:
   - page_manager
   - views
   - config_rewrite
+  - rabbit_hole
 
 default_content:
   menu_link_content:

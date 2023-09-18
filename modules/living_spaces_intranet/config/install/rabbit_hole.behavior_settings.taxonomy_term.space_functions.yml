@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.space_functions
+id: taxonomy_term.space_functions
+targetEntityType: taxonomy_term
+bundle: space_functions
+action: page_not_found
+no_bypass: true
+bypass_message: false
+configuration: {  }

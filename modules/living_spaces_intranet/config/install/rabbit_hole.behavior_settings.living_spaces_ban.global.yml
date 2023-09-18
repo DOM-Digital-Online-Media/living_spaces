@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - living_spaces_intranet.living_spaces_ban_type.global
+id: living_spaces_ban.global
+targetEntityType: living_spaces_ban
+bundle: global
+action: page_not_found
+no_bypass: true
+bypass_message: false
+configuration: {  }

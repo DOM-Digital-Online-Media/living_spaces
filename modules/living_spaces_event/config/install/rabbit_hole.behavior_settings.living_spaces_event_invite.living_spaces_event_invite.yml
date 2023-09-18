@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: living_spaces_event_invite.living_spaces_event_invite
+targetEntityType: living_spaces_event_invite
+bundle: living_spaces_event_invite
+action: page_not_found
+no_bypass: true
+bypass_message: false
+configuration: {  }

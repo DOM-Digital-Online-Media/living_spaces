@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.faq_category
+id: taxonomy_term.faq_category
+targetEntityType: taxonomy_term
+bundle: faq_category
+action: page_not_found
+no_bypass: true
+bypass_message: false
+configuration: {  }
