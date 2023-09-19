@@ -57,6 +57,19 @@ function living_spaces_intranet_user_login_validate(&$form, FormStateInterface $
 }
 
 /**
+ * Implements hook_openid_connect_pre_authorize().
+ */
+function living_spaces_intranet_openid_connect_pre_authorize($account, array $context) {
+  // In case login happens through sso, we show the ban message here as well.
+  $ban_manager = \Drupal::service('living_spaces_bans.manager');
+  if ($account && $ban_manager->getUserBans($account, ['global'])) {
+    \Drupal::messenger()->addError(t('This account has been temporarily suspended.'));
+    return FALSE;
+  }
+  return TRUE;
+}
+
+/**
  * Implements hook_ENTITY_TYPE_insert().
  */
 function living_spaces_intranet_living_spaces_ban_insert(LivingSpacesBanInterface $entity) {
@@ -209,6 +222,7 @@ function living_spaces_intranet_query_entity_reference_alter(AlterableInterface 
 function living_spaces_intranet_entity_type_build(array &$entity_types) {
   if (isset($entity_types['user'])) {
     $entity_types['user']->setFormClass('employee', 'Drupal\user\RegisterForm');
+    $entity_types['user']->addConstraint('LivingSpacesIntranetBannedUserStatus');
   }
 }
 
