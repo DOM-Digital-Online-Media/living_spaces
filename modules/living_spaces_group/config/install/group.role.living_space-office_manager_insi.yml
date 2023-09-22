@@ -14,4 +14,6 @@ group_type: living_space
 permissions:
   - 'leave group'
   - 'view group'
+  - 'view private group'
+  - 'view public group'
 is_space_admin: false
