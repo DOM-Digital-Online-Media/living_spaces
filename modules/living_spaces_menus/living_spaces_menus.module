@@ -14,44 +14,40 @@ use Drupal\Core\Url;
 function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
   $spaces_menu_key = 'menu_link_content:436e7a5e-7eb0-4ba7-928c-b9064865f174';
 
+  /** @var \Drupal\user\UserInterface $user */
   $user = \Drupal::entityTypeManager()
     ->getStorage('user')
     ->load(\Drupal::currentUser()->id());
 
-  $user_favorite_spaces = [];
-  $user_preferred_spaces = [];
-  $user_joined_spaces = [];
+  $top_items = $joined_spaces = [];
   $max_total = 8;
 
-  if ($user->hasField('field_favorite_spaces')) {
+  if ($user->hasField('field_favorite_spaces') && !$user->get('field_favorite_spaces')->isEmpty()) {
     foreach ($user->get('field_favorite_spaces')->getValue() as $item) {
-      $user_favorite_spaces[] = $item['target_id'];
+      $top_items[$item['target_id']] = $item['target_id'];
     }
   }
 
-  if ($user->hasField('preferred_spaces')) {
+  if ($user->hasField('preferred_spaces') && !$user->get('preferred_spaces')->isEmpty()) {
     foreach ($user->get('preferred_spaces')->getValue() as $item) {
-      if (!in_array($item['target_id'], $user_favorite_spaces)) {
-        $user_preferred_spaces[] = $item['target_id'];
+      $top_items[$item['target_id']] = $item['target_id'];
+    }
+  }
+
+  if ($user->hasField('joined_spaces') && !$user->get('joined_spaces')->isEmpty()) {
+    foreach ($user->get('joined_spaces')->getValue() as $item) {
+      if (!in_array($item['target_id'], $top_items)) {
+        $joined_spaces[$item['target_id']] = $item['target_id'];
       }
     }
   }
 
-  if ($user->hasField('joined_spaces')) {
-    foreach ($user->get('joined_spaces')->getValue() as $item) {
-      if (!in_array($item['target_id'], $user_favorite_spaces) && !in_array($item['target_id'], $user_preferred_spaces))
-        $user_joined_spaces[] = $item['target_id'];
-    }
-  }
-
   $links = [];
-  $top_items = array_merge($user_favorite_spaces, $user_preferred_spaces);
-
-  if (count($top_items) > $max_total) {
-    $top_items = array_slice($top_items, 0, $max_total);
-  }
-
   if ($top_items) {
+    if (count($top_items) > $max_total) {
+      $top_items = array_slice($top_items, 0, $max_total);
+    }
+
     $groups_favorite = \Drupal::entityTypeManager()
       ->getStorage('group')
       ->loadMultiple($top_items);
@@ -75,12 +71,12 @@ function living_spaces_menus_dom_bootstrap_collapsible_menu_alter(&$build) {
     }
   }
 
-  if ($max_total - count($top_items) > 0 && $user_joined_spaces) {
+  if ($joined_spaces && $max_total - count($top_items) > 0) {
     $group_ids = \Drupal::entityTypeManager()
       ->getStorage('group')
       ->getQuery()
       ->accessCheck()
-      ->condition('id', $user_joined_spaces, 'IN')
+      ->condition('id', $joined_spaces, 'IN')
       ->sort('label', 'ASC')
       ->range(0, ($max_total - count($top_items)))
       ->execute();
