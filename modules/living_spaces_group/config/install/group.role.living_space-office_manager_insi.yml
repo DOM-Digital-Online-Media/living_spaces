@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.living_space
+    - user.role.office_manager
+id: living_space-office_manager_insi
+label: 'Office Manager Insider'
+weight: 142
+admin: false
+scope: insider
+global_role: office_manager
+group_type: living_space
+permissions:
+  - 'leave group'
+  - 'view group'
+  - 'view private group'
+  - 'view public group'
+is_space_admin: false

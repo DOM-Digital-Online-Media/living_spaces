@@ -1,0 +1,8 @@
+permissions:
+  - 'create group_node:discussion_post entity'
+  - 'delete own group_node:discussion_post entity'
+  - 'delete own group_node:discussion_post relationship'
+  - 'update own group_node:discussion_post entity'
+  - 'update own group_node:discussion_post relationship'
+  - 'view group_node:discussion_post entity'
+  - 'view own unpublished group_node:discussion_post entity'
