@@ -2,10 +2,8 @@
 
 namespace Drupal\living_spaces_default\Plugin\Field\FieldFormatter;
 
-use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceLabelFormatter;
-use Drupal\Core\TypedData\TranslatableInterface;
 use Drupal\group\Entity\GroupInterface;
 
 /**
@@ -26,34 +24,15 @@ class LivingSpacesDefaultEntityLabelFormatter extends EntityReferenceLabelFormat
    * {@inheritdoc}
    */
   protected function getEntitiesToView(EntityReferenceFieldItemListInterface $items, $langcode) {
-    $entities = [];
+    $entities = parent::getEntitiesToView($items, $langcode);
 
-    foreach ($items as $delta => $item) {
-      // Ignore items where no entity could be loaded in prepareView().
-      if (!empty($item->_loaded)) {
-        $entity = $item->entity;
-
-        // Set the entity in the correct language for display.
-        if ($entity instanceof TranslatableInterface) {
-          $entity = \Drupal::service('entity.repository')->getTranslationFromContext($entity, $langcode);
-        }
-
-        if ($entity instanceof GroupInterface && $entity->get('is_default')->getString()) {
-          continue;
-        }
-
-        $access = $this->checkAccess($entity);
-        // Add the access result's cacheability, ::view() needs it.
-        $item->_accessCacheability = CacheableMetadata::createFromObject($access);
-        if ($access->isAllowed()) {
-          // Add the referring item, in case the formatter needs it.
-          $entity->_referringItem = $items[$delta];
-          $entities[$delta] = $entity;
-        }
+    foreach ($entities as $delta => $entity) {
+      if ($entity instanceof GroupInterface && $entity->get('is_default')->getString()) {
+        unset($entities[$delta]);
       }
     }
 
-    return $entities;
+    return array_values($entities);
   }
 
 }
