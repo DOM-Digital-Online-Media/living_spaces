@@ -13,7 +13,7 @@ use Drupal\group\Entity\GroupInterface;
  *
  * @FieldFormatter(
  *   id = "living_spaces_default_entity_label",
- *   label = @Translation("Label (exclude default spces)"),
+ *   label = @Translation("Label (exclude default spaces)"),
  *   description = @Translation("Display the label of the referenced entities with exculding default spaces."),
  *   field_types = {
  *     "entity_reference"
