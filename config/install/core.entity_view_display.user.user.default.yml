@@ -11,6 +11,7 @@ dependencies:
     - layout_builder
     - living_spaces
     - living_spaces_group
+    - living_spaces_default
     - user
     - views
   theme:
@@ -194,7 +195,7 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: entity_reference_label
+                type: living_spaces_default_entity_label
                 label: hidden
                 settings:
                   link: true
