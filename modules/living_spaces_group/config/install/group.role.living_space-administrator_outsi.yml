@@ -79,7 +79,7 @@ permissions:
   - 'update private group'
   - 'update public group'
   - 'view any unpublished group'
-  - 'view dip_chat_appointment:chat_appointment entity'
+  - 'view any dip_chat_appointment:chat_appointment entity'
   - 'view dip_chat_appointment:chat_appointment relationship'
   - 'view discussions section of a living space'
   - 'view events section of a living space'
