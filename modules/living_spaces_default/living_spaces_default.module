@@ -11,7 +11,6 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\group\Entity\Group;
 use Drupal\group\Entity\GroupInterface;
 
 /**
@@ -46,11 +45,11 @@ function living_spaces_default_entity_base_field_info(EntityTypeInterface $entit
  * Implements hook_ENTITY_TYPE_access().
  */
 function living_spaces_default_group_access(GroupInterface $group, $operation, AccountInterface $account) {
-  if (in_array($operation, ['edit', 'delete']) && $group->get('is_default')->getString()) {
+  if (in_array($operation, ['update', 'delete']) && $group->get('is_default')->getString()) {
     return $account->hasPermission('manage living spaces default content') ? AccessResult::allowed() : AccessResult::forbidden();
   }
 
-  return AccessResult::allowed();
+  return AccessResult::neutral();
 }
 
 /**
