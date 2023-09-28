@@ -8,15 +8,9 @@ _meta:
     a677f43b-8ac5-4cf5-82ca-9fbd611929d4: living_spaces_section
     8b58b1a7-6672-4e2c-8066-6f4c81e9ed2f: living_spaces_section
 default:
-  revision_user:
-    -
-      target_id: 1
   status:
     -
       value: true
-  uid:
-    -
-      target_id: 1
   label:
     -
       value: 'Standard Space'
