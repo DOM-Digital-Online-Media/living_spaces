@@ -9,7 +9,6 @@ use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\group\Entity\Group;
 use Drupal\group\Entity\GroupInterface;
 
 /**
@@ -45,6 +44,22 @@ function living_spaces_default_entity_base_field_info(EntityTypeInterface $entit
  */
 function living_spaces_default_form_group_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   $form['is_default']['#access'] = \Drupal::currentUser()->hasPermission('manage living spaces default content');
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_default_form_living_spaces_group_membership_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  $info = $form_state->getBuildInfo();
+
+  if (!empty($info['args'][0]) && $info['args'][0] instanceof GroupInterface) {
+    /** @var \Drupal\group\Entity\GroupInterface $group */
+    $group = $info['args'][0];
+
+    if ($group->get('is_default')->getString()) {
+      $form['#access'] = FALSE;
+    }
+  }
 }
 
 /**
@@ -85,8 +100,7 @@ function living_spaces_default_query_views_entity_query_alter(SelectInterface $q
  */
 function living_spaces_default_group_operations_alter(array &$operations, GroupInterface $group) {
   if (array_key_exists('group-join', $operations) &&
-    $group->get('is_default')->getString() &&
-    !\Drupal::currentUser()->hasPermission('manage living spaces default content')
+    $group->get('is_default')->getString()
   ) {
     unset($operations['group-join']);
   }

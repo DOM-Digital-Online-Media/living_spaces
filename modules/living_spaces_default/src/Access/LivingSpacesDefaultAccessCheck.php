@@ -20,7 +20,7 @@ class LivingSpacesDefaultAccessCheck implements CoreAccessInterface {
     $group = $route_match->getParameter('group');
 
     if ($group && $group->get('is_default')->getString()) {
-      return $account->hasPermission('manage living spaces default content') ? AccessResult::allowed() : AccessResult::forbidden();
+      return AccessResult::forbidden();
     }
 
     return AccessResult::allowed();
