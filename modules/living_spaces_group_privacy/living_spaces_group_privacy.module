@@ -160,7 +160,7 @@ function living_spaces_group_privacy_group_access(GroupInterface $group, $operat
     return $instance->groupAccess($group, $operation, $account);
   }
 
-  return AccessResult::allowed();
+  return AccessResult::neutral();
 }
 
 /**
