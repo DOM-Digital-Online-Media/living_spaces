@@ -26,3 +26,8 @@ dropdown:
   dependencies:
     - core/jquery
     - core/jquery.once
+
+view_buttons:
+  css:
+    theme:
+      css/view_buttons.css: {}
