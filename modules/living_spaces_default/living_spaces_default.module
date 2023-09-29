@@ -58,7 +58,7 @@ function living_spaces_default_form_living_spaces_group_membership_form_alter(ar
     $group = $info['args'][0];
 
     if ($group->get('is_default')->getString()) {
-      $form['#access'] = FALSE;
+    //  $form['#access'] = FALSE;
     }
   }
 }
@@ -108,12 +108,10 @@ function living_spaces_default_group_operations_alter(array &$operations, GroupI
 }
 
 /**
- * Implements hook_ENTITY_TYPE_insert().
+ * Implements hook_living_spaces_group_default_spaces().
  */
-function living_spaces_default_group_relationship_insert(GroupRelationshipInterface $relationship) {
-  if ('c84c2661-b8e4-4759-a479-4b8c91a25dd8' == $relationship->getGroup()->uuid()) {
-    drupal_register_shutdown_function('living_spaces_group_relationship_post_delete', $relationship);
-  }
+function living_spaces_default_living_spaces_group_default_spaces() {
+  return ['c84c2661-b8e4-4759-a479-4b8c91a25dd8'];
 }
 
 /**

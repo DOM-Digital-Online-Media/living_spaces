@@ -452,3 +452,10 @@ function living_spaces_intranet_group_relationship_insert(GroupRelationshipInter
     drupal_register_shutdown_function('living_spaces_group_relationship_post_delete', $relationship);
   }
 }
+
+/**
+ * Implements hook_living_spaces_group_default_spaces().
+ */
+function living_spaces_intranet_living_spaces_group_default_spaces() {
+  return ['5ab99cc1-45b7-45ec-a9b4-865e7958e553', 'c7ecd1bf-9377-49cc-b0fd-a06bb246847a'];
+}

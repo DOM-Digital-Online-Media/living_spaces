@@ -17,3 +17,8 @@ services:
     class: Drupal\living_spaces_group\Routing\LivingSpacesGroupRouteSubscriber
     tags:
       - { name: event_subscriber, priority: 100 }
+  living_spaces_group.event_subscriber:
+    class: Drupal\living_spaces_group\EventSubscriber\LivingSpacesGroupEventSubScriber
+    arguments: ['@module_handler']
+    tags:
+      - { name: event_subscriber, priority: 1000 }
