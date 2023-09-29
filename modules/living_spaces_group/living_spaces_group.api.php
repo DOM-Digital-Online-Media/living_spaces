@@ -202,5 +202,19 @@ function hook_living_spaces_group_exclude_permissions() {
 }
 
 /**
+ * Provide a list of space UUIDs to remove their memberships.
+ *
+ * @return array
+ *   An array of space UUIDs.
+ */
+function hook_living_spaces_group_default_spaces() {
+  $uuids = [];
+
+  $uuids[] = '12345678-abcd-abcd-abcd-12345678abcd';
+
+  return $uuids;
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

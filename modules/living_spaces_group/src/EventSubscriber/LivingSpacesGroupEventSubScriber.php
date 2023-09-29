@@ -7,6 +7,7 @@ use Drupal\group\Entity\GroupInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\default_content\Event\DefaultContentEvents;
 use Drupal\default_content\Event\ImportEvent;
+use Drupal\Core\Entity\EntityStorageException;
 
 /**
  * Class LivingSpacesGroupEventSubScriber.
@@ -58,7 +59,10 @@ class LivingSpacesGroupEventSubScriber implements EventSubscriberInterface {
           $memberships = $entity->getRelationships('group_membership');
 
           foreach ($memberships as $membership) {
-            $membership->delete();
+            try {
+              $membership->delete();
+            }
+            catch (EntityStorageException $e) {}
           }
         }
       }
