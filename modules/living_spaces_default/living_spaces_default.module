@@ -58,7 +58,7 @@ function living_spaces_default_form_living_spaces_group_membership_form_alter(ar
     $group = $info['args'][0];
 
     if ($group->get('is_default')->getString()) {
-    //  $form['#access'] = FALSE;
+      $form['#access'] = FALSE;
     }
   }
 }
