@@ -318,7 +318,7 @@
       tmp.style.width = el.clientWidth;
       tmp.innerHTML = des;
       document.body.appendChild(tmp);
-      let assumedHeight = tmp.getElementsByClassName('dropbutton')[0].clientHeight;
+      let assumedHeight = tmp.getElementsByClassName('dropbutton-wrapper')[0].clientHeight;
       tmp.remove();
 
       // Dialog options.
