@@ -39,7 +39,6 @@ function living_spaces_default_entity_base_field_info(EntityTypeInterface $entit
   return $fields;
 }
 
-
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
