@@ -114,6 +114,15 @@ function living_spaces_default_relationship_post_delete(GroupRelationshipInterfa
 }
 
 /**
+ * Implements hook_entity_type_build().
+ */
+function living_spaces_default_entity_type_build(array &$entity_types) {
+  if (isset($entity_types['user'])) {
+    $entity_types['group_relationship']->addConstraint('LivingSpacesDefaultCreateAccess');
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_prepare_form().
  */
 function living_spaces_default_group_prepare_form(GroupInterface $group, $operation, FormStateInterface $form_state) {
