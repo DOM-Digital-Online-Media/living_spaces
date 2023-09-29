@@ -19,6 +19,6 @@ class LivingSpacesDefaultCreateAccessConstraint extends Constraint {
    *
    * @var string
    */
-  public string $message = 'You cannot add relations to default spaces.';
+  public string $message = 'You cannot add relationships to default spaces.';
 
 }
