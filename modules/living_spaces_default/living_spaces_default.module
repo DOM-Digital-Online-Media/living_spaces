@@ -10,6 +10,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\group\Entity\GroupInterface;
+use Drupal\group\Entity\GroupRelationshipInterface;
 
 /**
  * Implements hook_entity_base_field_info().
@@ -103,6 +104,15 @@ function living_spaces_default_group_operations_alter(array &$operations, GroupI
     $group->get('is_default')->getString()
   ) {
     unset($operations['group-join']);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_default_group_relationship_insert(GroupRelationshipInterface $relationship) {
+  if ('c84c2661-b8e4-4759-a479-4b8c91a25dd8' == $relationship->getGroup()->uuid()) {
+    drupal_register_shutdown_function('living_spaces_group_relationship_post_delete', $relationship);
   }
 }
 

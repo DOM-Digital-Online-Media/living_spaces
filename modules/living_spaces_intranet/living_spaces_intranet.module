@@ -14,6 +14,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\group\Entity\GroupRelationshipInterface;
 use Drupal\user\Entity\User;
 use Drupal\living_spaces_intranet\Entity\LivingSpacesBanInterface;
 
@@ -441,4 +442,13 @@ function living_spaces_intranet_living_spaces_breadcrumbs_info(RouteMatchInterfa
   }
 
   return $applies;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_intranet_group_relationship_insert(GroupRelationshipInterface $relationship) {
+  if (in_array($relationship->getGroup()->uuid(), ['5ab99cc1-45b7-45ec-a9b4-865e7958e553', 'c7ecd1bf-9377-49cc-b0fd-a06bb246847a'])) {
+    drupal_register_shutdown_function('living_spaces_group_relationship_post_delete', $relationship);
+  }
 }

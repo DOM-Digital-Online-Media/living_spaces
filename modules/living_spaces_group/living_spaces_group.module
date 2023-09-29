@@ -1257,5 +1257,11 @@ function living_spaces_group_group_update(GroupInterface $group) {
       }
     }
   }
+}
 
+/**
+ * Provides shutdown callback to remove relationship.
+ */
+function living_spaces_group_relationship_post_delete(GroupRelationshipInterface $relationship) {
+  $relationship->delete();
 }
