@@ -33,9 +33,6 @@ class LivingSpacesGroupEventSubScriber implements EventSubscriberInterface {
 
   /**
    * {@inheritdoc}
-   *
-   * @return array
-   *   The event names to listen for, and the methods that should be executed.
    */
   public static function getSubscribedEvents() {
     $events = [];
@@ -48,13 +45,15 @@ class LivingSpacesGroupEventSubScriber implements EventSubscriberInterface {
    * React to default content import event.
    *
    * @param \Drupal\default_content\Event\ImportEvent $event
-   *   Import Event
+   *   Import event.
    */
   public function import(ImportEvent $event) {
     $entities = $event->getImportedEntities();
+
     foreach ($entities as $entity) {
       if ($entity instanceof GroupInterface) {
         $uuids = $this->moduleHandler->invokeAll('living_spaces_group_default_spaces');
+
         if ($uuids && in_array($entity->uuid(), $uuids)) {
           $memberships = $entity->getRelationships('group_membership');
 
