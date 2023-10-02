@@ -46,6 +46,7 @@ install:
   - admin_toolbar
   - admin_toolbar_tools
   - devel
+  - ckeditor_bs_grid
   - editor_advanced_link
   - config_rewrite
   - pathauto
@@ -57,6 +58,7 @@ install:
   - universal_device_detection
   - role_delegation
   - easy_breadcrumb
+  - material_icons
   - message
   - message_ui
   - nodejs
