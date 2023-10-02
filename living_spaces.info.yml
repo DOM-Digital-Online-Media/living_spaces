@@ -46,6 +46,7 @@ install:
   - admin_toolbar
   - admin_toolbar_tools
   - devel
+  - editor_advanced_link
   - config_rewrite
   - pathauto
   - subpathauto
@@ -60,6 +61,7 @@ install:
   - message_ui
   - nodejs
   - language
+  - linkit
   - locale
   - content_translation
   - config_translation
