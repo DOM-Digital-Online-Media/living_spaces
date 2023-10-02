@@ -49,6 +49,7 @@ install:
   - ckeditor_bs_grid
   - ckeditor_abbreviation
   - ckeditor_accordion
+  - ckeditor5_mentions
   - editor_advanced_link
   - config_rewrite
   - pathauto

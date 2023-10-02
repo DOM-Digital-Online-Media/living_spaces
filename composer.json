@@ -37,6 +37,7 @@
         "drupal/ckeditor_bs_grid": "^2.0",
         "drupal/ckeditor_abbreviation": "^4.0@alpha",
         "drupal/ckeditor_accordion": "^2.0",
+        "drupal/ckeditor5_mentions": "^1.1",
         "drupal/csv_serialization": "^3.0",
         "drupal/default_content": "^2.0",
         "drupal/devel": "^5.1",
@@ -95,6 +96,9 @@
             "drupal/core": {
                 "Invalid config structures can result in exceptions when saving a config entity": "https://www.drupal.org/files/issues/2021-11-29/2925890-29.patch",
                 "Support removing nested elements in Twig 'without' filter": "https://www.drupal.org/files/issues/2020-08-18/3029189-14.patch"
+            },
+            "drupal/ckeditor5_mentions": {
+                "Unable to save text format": "https://git.drupalcode.org/project/ckeditor5_mentions/-/merge_requests/1.diff"
             },
             "drupal/message_ui": {
                 "Fatal error Drupal 9": "https://git.drupalcode.org/project/message_ui/-/merge_requests/2.patch"

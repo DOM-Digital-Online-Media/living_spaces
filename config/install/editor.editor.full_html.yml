@@ -92,6 +92,13 @@ settings:
     ckeditor5_list:
       reversed: true
       startIndex: true
+    ckeditor5_mentions_mention:
+      dropdown_limit: 5
+      commit_keys:
+        - 13
+        - 32
+      mention_feeds_enabled:
+        mention: mention
     ckeditor5_sourceEditing:
       allowed_tags: {  }
     ckeditor_bs_grid_grid:
