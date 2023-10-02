@@ -1,2 +1,9 @@
 families:
   - baseline
+  - outlined
+  - round
+  - sharp
+  - two-tone
+  - symbols__outlined
+  - symbols__rounded
+  - symbols__sharp

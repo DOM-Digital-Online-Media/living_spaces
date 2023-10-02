@@ -47,6 +47,8 @@ install:
   - admin_toolbar_tools
   - devel
   - ckeditor_bs_grid
+  - ckeditor_abbreviation
+  - ckeditor_accordion
   - editor_advanced_link
   - config_rewrite
   - pathauto

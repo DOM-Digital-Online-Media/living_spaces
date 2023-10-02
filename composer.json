@@ -35,6 +35,8 @@
         "drupal/bootstrap_barrio": "^5.5@beta",
         "drupal/config_rewrite": "^1.4",
         "drupal/ckeditor_bs_grid": "^2.0",
+        "drupal/ckeditor_abbreviation": "^4.0@alpha",
+        "drupal/ckeditor_accordion": "^2.0",
         "drupal/csv_serialization": "^3.0",
         "drupal/default_content": "^2.0",
         "drupal/devel": "^5.1",

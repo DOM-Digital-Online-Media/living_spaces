@@ -29,6 +29,8 @@ settings:
       - bootstrapGrid
       - horizontalLine
       - '|'
+      - abbreviation
+      - Accordion
       - heading
       - codeBlock
       - '|'
