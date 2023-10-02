@@ -4,6 +4,11 @@ services:
     arguments: ['@current_route_match', '@current_user']
     tags:
       - { name: access_check, applies_to: _living_spaces_default_access_check }
+  living_spaces_default.create_access:
+    class: Drupal\living_spaces_default\Access\LivingSpacesDefaultCreateAccess
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: access_check, applies_to: _living_spaces_default_create_access }
   living_spaces_default.route_subscriber:
     class: Drupal\living_spaces_default\Routing\LivingSpacesDefaultRouteSubscriber
     tags:

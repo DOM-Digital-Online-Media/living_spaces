@@ -114,11 +114,23 @@ function living_spaces_default_relationship_post_delete(GroupRelationshipInterfa
 }
 
 /**
- * Implements hook_entity_type_build().
+ * Implements hook_form_FORM_ID_alter().
  */
-function living_spaces_default_entity_type_build(array &$entity_types) {
-  if (isset($entity_types['group_relationship'])) {
-    $entity_types['group_relationship']->addConstraint('LivingSpacesDefaultCreateAccess');
+function living_spaces_default_form_living_spaces_group_membership_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['#validate'][] = 'living_spaces_default_membership_form_validate';
+}
+
+/**
+ * Provides validate callback for membership form.
+ */
+function living_spaces_default_membership_form_validate(&$form, FormStateInterface $form_state) {
+  $info = $form_state->getBuildInfo();
+
+  /** @var \Drupal\group\Entity\GroupInterface $group */
+  $group = $info['args'][0];
+
+  if ($group->get('is_default')->getString()) {
+    $form_state->setErrorByName('user', t('You cannot add members to the default space.'));
   }
 }
 
