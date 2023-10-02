@@ -4,11 +4,15 @@ services:
     arguments: ['@current_route_match', '@current_user']
     tags:
       - { name: access_check, applies_to: _living_spaces_default_access_check }
-  living_spaces_default.create_access:
-    class: Drupal\living_spaces_default\Access\LivingSpacesDefaultCreateAccess
+  living_spaces_default.create_form_access:
+    class: Drupal\living_spaces_default\Access\LivingSpacesDefaultCreateFormAccess
     arguments: ['@entity_type.manager']
     tags:
-      - { name: access_check, applies_to: _living_spaces_default_create_access }
+      - { name: access_check, applies_to: _living_spaces_default_create_form_access }
+  living_spaces_default.create_page_access:
+    class: Drupal\living_spaces_default\Access\LivingSpacesDefaultCreatePageAccess
+    tags:
+      - { name: access_check, applies_to: _living_spaces_default_create_page_access }
   living_spaces_default.route_subscriber:
     class: Drupal\living_spaces_default\Routing\LivingSpacesDefaultRouteSubscriber
     tags:

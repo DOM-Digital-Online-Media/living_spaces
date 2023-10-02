@@ -5,10 +5,12 @@
  * Contains functions and hooks for living_spaces_default.module.
  */
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\group\Entity\GroupInterface;
 use Drupal\group\Entity\GroupRelationshipInterface;
 use Drupal\Core\Entity\EntityStorageException;
@@ -111,6 +113,20 @@ function living_spaces_default_relationship_post_delete(GroupRelationshipInterfa
     $relationship->delete();
   }
   catch (EntityStorageException $e) {}
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_create_access().
+ */
+function living_spaces_default_group_relationship_create_access(AccountInterface $account, array $context, $entity_bundle) {
+  if (isset($context['group']) &&
+    $context['group'] instanceof GroupInterface &&
+    $context['group']->get('is_default')->getString()
+  ) {
+    return AccessResult::forbidden();
+  }
+
+  return AccessResult::neutral();
 }
 
 /**

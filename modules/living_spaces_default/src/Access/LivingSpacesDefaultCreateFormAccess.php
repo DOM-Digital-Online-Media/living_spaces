@@ -2,7 +2,6 @@
 
 namespace Drupal\living_spaces_default\Access;
 
-
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\group\Entity\GroupInterface;
@@ -10,9 +9,9 @@ use Symfony\Component\Routing\Route;
 use Drupal\group\Access\GroupRelationshipCreateAnyAccessCheck;
 
 /**
- * LivingSpacesDefaultCreateAccess class.
+ * LivingSpacesDefaultCreateFormAccess class.
  */
-class LivingSpacesDefaultCreateAccess extends GroupRelationshipCreateAnyAccessCheck {
+class LivingSpacesDefaultCreateFormAccess extends GroupRelationshipCreateAnyAccessCheck {
 
   /**
    * Check access for default content.
@@ -22,7 +21,7 @@ class LivingSpacesDefaultCreateAccess extends GroupRelationshipCreateAnyAccessCh
       return AccessResult::forbidden();
     }
 
-    $route->setRequirement('_group_relationship_create_any_access', 'TRUE');
+    $route->setRequirement('_group_relationship_create_entity_access', 'TRUE');
     return parent::access($route, $account, $group);
   }
 
