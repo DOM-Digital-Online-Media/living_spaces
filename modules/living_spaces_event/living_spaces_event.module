@@ -761,10 +761,20 @@ function living_spaces_event_node_insert(NodeInterface $entity) {
  * Implements hook_living_spaces_sections_content_alter().
  */
 function living_spaces_event_living_spaces_sections_content_alter(GroupRelationshipInterface $relationship, &$section) {
-  if ($relationship->getEntity() instanceof NodeInterface &&
-    in_array($relationship->getEntity()->bundle(), ['agenda', 'protocol']) &&
-    $data = \Drupal::service('living_spaces_sections.manager')->getSectionFromGroupByType($relationship->getGroup(), 'events')
-  ) {
+  $entity = $relationship->getEntity();
+  $section_manager = \Drupal::service('living_spaces_sections.manager');
+
+  $event_content = FALSE;
+  if ($entity instanceof NodeInterface
+&& in_array($entity->bundle(), ['agenda', 'protocol'])) {
+    $event_content = TRUE;
+  }
+  elseif ($entity instanceof LivingSpaceEventInterface) {
+    $event_content = TRUE;
+  }
+
+  if ($event_content
+&& ($data = $section_manager->getSectionFromGroupByType($relationship->getGroup(), 'events'))) {
     $section = $data;
   }
 }
