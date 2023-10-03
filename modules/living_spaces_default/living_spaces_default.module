@@ -5,11 +5,15 @@
  * Contains functions and hooks for living_spaces_default.module.
  */
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\group\Entity\GroupInterface;
+use Drupal\group\Entity\GroupRelationshipInterface;
+use Drupal\Core\Entity\EntityStorageException;
 
 /**
  * Implements hook_entity_base_field_info().
@@ -86,10 +90,64 @@ function living_spaces_default_query_views_entity_query_alter(SelectInterface $q
  */
 function living_spaces_default_group_operations_alter(array &$operations, GroupInterface $group) {
   if (array_key_exists('group-join', $operations) &&
-    $group->get('is_default')->getString() &&
-    !\Drupal::currentUser()->hasPermission('manage living spaces default content')
+    $group->get('is_default')->getString()
   ) {
     unset($operations['group-join']);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function living_spaces_default_group_relationship_insert(GroupRelationshipInterface $relationship) {
+  if ($relationship->getGroup()->get('is_default')->getString()) {
+    drupal_register_shutdown_function('living_spaces_default_relationship_post_delete', $relationship);
+  }
+}
+
+/**
+ * Provides shutdown callback to remove relationship.
+ */
+function living_spaces_default_relationship_post_delete(GroupRelationshipInterface $relationship) {
+  try {
+    // Force delete all relationships from default spaces.
+    $relationship->delete();
+  }
+  catch (EntityStorageException $e) {}
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_create_access().
+ */
+function living_spaces_default_group_relationship_create_access(AccountInterface $account, array $context, $entity_bundle) {
+  if (isset($context['group']) &&
+    $context['group'] instanceof GroupInterface &&
+    $context['group']->get('is_default')->getString()
+  ) {
+    return AccessResult::forbidden();
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_default_form_living_spaces_group_membership_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['#validate'][] = 'living_spaces_default_membership_form_validate';
+}
+
+/**
+ * Provides validate callback for membership form.
+ */
+function living_spaces_default_membership_form_validate(&$form, FormStateInterface $form_state) {
+  $info = $form_state->getBuildInfo();
+
+  /** @var \Drupal\group\Entity\GroupInterface $group */
+  $group = $info['args'][0];
+
+  if ($group->get('is_default')->getString()) {
+    $form_state->setErrorByName('user', t('You cannot add members to the default space.'));
   }
 }
 
