@@ -79,6 +79,7 @@ install:
   - rabbit_hole
   - site_settings
   - site_settings_type_permissions
+  - ultimate_cron
   - dom_paragraphs_extra
   - dom_faq
   - dom_field_extra

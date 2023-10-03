@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - living_spaces_intranet
+title: 'Default cron handler'
+id: living_spaces_intranet_cron
+weight: 0
+module: living_spaces_intranet
+callback: living_spaces_intranet_cron
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database
