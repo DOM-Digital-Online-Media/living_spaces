@@ -646,7 +646,10 @@ function living_spaces_group_form_group_form_alter(&$form, FormStateInterface $f
  * Implements hook_ENTITY_TYPE_access().
  */
 function living_spaces_group_group_access(GroupInterface $group, $operation, AccountInterface $account) {
-  if ('delete' == $operation && $group->get('protected')->getString() && !$account->hasPermission('manage protected spaces')) {
+  if (in_array($operation, ['view', 'update', 'delete']) &&
+    $group->get('protected')->getString() &&
+    !$account->hasPermission("{$operation} access protected spaces")
+  ) {
     return AccessResult::forbidden();
   }
 

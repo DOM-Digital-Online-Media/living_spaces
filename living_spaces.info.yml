@@ -46,6 +46,11 @@ install:
   - admin_toolbar
   - admin_toolbar_tools
   - devel
+  - ckeditor_bs_grid
+  - ckeditor_abbreviation
+  - ckeditor_accordion
+  - ckeditor5_mentions
+  - editor_advanced_link
   - config_rewrite
   - pathauto
   - subpathauto
@@ -56,10 +61,12 @@ install:
   - universal_device_detection
   - role_delegation
   - easy_breadcrumb
+  - material_icons
   - message
   - message_ui
   - nodejs
   - language
+  - linkit
   - locale
   - content_translation
   - config_translation
@@ -72,6 +79,7 @@ install:
   - rabbit_hole
   - site_settings
   - site_settings_type_permissions
+  - ultimate_cron
   - dom_paragraphs_extra
   - dom_faq
   - dom_field_extra
