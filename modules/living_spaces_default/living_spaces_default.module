@@ -9,7 +9,6 @@ use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\group\Entity\Group;
 use Drupal\group\Entity\GroupInterface;
 
 /**
@@ -72,7 +71,9 @@ function living_spaces_default_query_entity_query_alter(SelectInterface $query) 
  */
 function living_spaces_default_query_views_entity_query_alter(SelectInterface $query) {
   $access_check = $query->hasTag('group_access');
-  if ($query->getMetaData('entity_type') === 'group' && $access_check) {
+  $default_tag = $query->hasTag('default_spaces');
+
+  if ($query->getMetaData('entity_type') === 'group' && $access_check && !$default_tag) {
     $group = $query->orConditionGroup();
     $group->isNull('groups_field_data.is_default');
     $group->condition('groups_field_data.is_default', 0);

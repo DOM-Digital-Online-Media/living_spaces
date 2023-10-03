@@ -1,0 +1,4 @@
+living_spaces_default.default_spaces:
+  title: 'Default spaces'
+  route_name: view.default_spaces.spaces
+  parent: living_spaces.settings_overview
