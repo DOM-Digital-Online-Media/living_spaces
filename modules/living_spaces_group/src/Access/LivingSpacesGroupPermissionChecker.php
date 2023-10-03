@@ -2,11 +2,11 @@
 
 namespace Drupal\living_spaces_group\Access;
 
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\group\Access\GroupPermissionCheckerInterface;
 use Drupal\group\Entity\GroupInterface;
 use Drupal\living_spaces_group\LivingSpacesGroupManagerInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Decorates default group permissions service.
@@ -48,15 +48,20 @@ class LivingSpacesGroupPermissionChecker implements GroupPermissionCheckerInterf
    */
   public function hasPermissionInGroup($permission, AccountInterface $account, GroupInterface $group) {
     if ($this->livingSpacesMananger->isLivingSpace($group->bundle())) {
-      $permissions = $this->moduleHandler->invokeAll('living_spaces_group_exclude_permissions');
-      $exclude = empty($permissions) || !in_array($permission, $permissions);
+      $permissions = $this->moduleHandler
+        ->invokeAll('living_spaces_group_exclude_permissions');
+      $excluded = !empty($permissions) && in_array($permission, $permissions);
 
-      if (in_array('office_manager', $account->getRoles()) && $exclude) {
+      if ($group->getMember($account) &&
+        in_array('office_manager', $account->getRoles()) &&
+        !$excluded
+      ) {
         return TRUE;
       }
     }
 
-    return $this->originalService->hasPermissionInGroup($permission, $account, $group);
+    return $this->originalService
+      ->hasPermissionInGroup($permission, $account, $group);
   }
 
 }
