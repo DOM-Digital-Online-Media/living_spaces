@@ -54,6 +54,7 @@ install:
   - views_contextual_filters_or
   - views_bulk_operations
   - universal_device_detection
+  - masquerade
   - role_delegation
   - easy_breadcrumb
   - message
