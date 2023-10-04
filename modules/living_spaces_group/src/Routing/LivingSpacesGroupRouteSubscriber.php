@@ -23,6 +23,9 @@ class LivingSpacesGroupRouteSubscriber extends RouteSubscriberBase {
     if ($route = $collection->get('filter.tips_all')) {
       $route->setRequirement('_access', 'FALSE');
     }
+    if ($route = $collection->get('dblog.overview')) {
+      $route->setDefault('_controller', '\Drupal\living_spaces_group\Controller\LivingSpacesGroupLogController::overview');
+    }
   }
 
 }
