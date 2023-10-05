@@ -1,0 +1,54 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: 107c49b5-c345-48d4-abd1-7cfca82b6eba
+  bundle: menu_link_content
+  default_langcode: en
+default:
+  enabled:
+    -
+      value: true
+  title:
+    -
+      value: Unmasquerade
+  menu_name:
+    -
+      value: footer-menu
+  link:
+    -
+      uri: 'internal:/unmasquerade'
+      title: ''
+      options: {  }
+  external:
+    -
+      value: false
+  rediscover:
+    -
+      value: true
+  weight:
+    -
+      value: 100
+  expanded:
+    -
+      value: false
+  revision_translation_affected:
+    -
+      value: true
+  menu_item_override_children:
+    -
+      value: false
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 1
+  content_translation_status:
+    -
+      value: true
+  content_translation_created:
+    -
+      value: 1696511723
