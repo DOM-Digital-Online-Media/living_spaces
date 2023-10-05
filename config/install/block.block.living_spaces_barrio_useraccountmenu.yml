@@ -1,0 +1,25 @@
+uuid: 6066cf1b-b730-4582-aecf-5350c7053182
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.account
+  module:
+    - system
+  theme:
+    - living_spaces_barrio
+id: living_spaces_barrio_useraccountmenu
+theme: living_spaces_barrio
+region: footer_left
+weight: -7
+provider: null
+plugin: 'system_menu_block:account'
+settings:
+  id: 'system_menu_block:account'
+  label: 'User account menu'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 1
+  expand_all_items: false
+visibility: {  }
