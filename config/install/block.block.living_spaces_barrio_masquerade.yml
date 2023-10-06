@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - masquerade
+  theme:
+    - living_spaces_barrio
+id: living_spaces_barrio_masquerade
+theme: living_spaces_barrio
+region: highlighted
+weight: -4
+provider: null
+plugin: masquerade
+settings:
+  id: masquerade
+  label: Masquerade
+  label_display: visible
+  provider: masquerade
+visibility: {  }

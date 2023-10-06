@@ -1,6 +1,15 @@
 manage protected spaces:
   title: 'Manage protected spaces'
   description: 'Allow access to manage protected spaces'
+view access protected spaces:
+  title: 'View protected spaces'
+  description: 'Allow access to view protected spaces'
+update access protected spaces:
+  title: 'Update protected spaces'
+  description: 'Allow access to update protected spaces'
+delete access protected spaces:
+  title: 'Delete protected spaces'
+  description: 'Allow access to delete protected spaces'
 add members to any space:
   title: 'Add members to any space'
   description: 'Allow access to add members to any space'
@@ -12,4 +21,4 @@ manage access of admins to edit accounts in mutual space:
   description: 'Allow access to the checkbox "Allow space admins to edit member accounts" in the group setting.'
 manage exclude spaces:
   title: 'Manage exclude spaces'
-  description: 'Allow access to manage protected spaces'
+  description: 'Allow access to manage exclude spaces'

@@ -23,15 +23,63 @@ settings:
       - numberedList
       - '|'
       - blockQuote
+      - materialIcons
       - drupalInsertImage
       - insertTable
+      - bootstrapGrid
       - horizontalLine
       - '|'
+      - abbreviation
+      - Accordion
       - heading
       - codeBlock
       - '|'
       - sourceEditing
   plugins:
+    ckeditor5_codeBlock:
+      languages:
+        -
+          label: 'Plain text'
+          language: plaintext
+        -
+          label: C
+          language: c
+        -
+          label: 'C#'
+          language: cs
+        -
+          label: C++
+          language: cpp
+        -
+          label: CSS
+          language: css
+        -
+          label: Diff
+          language: diff
+        -
+          label: HTML
+          language: html
+        -
+          label: Java
+          language: java
+        -
+          label: JavaScript
+          language: javascript
+        -
+          label: PHP
+          language: php
+        -
+          label: Python
+          language: python
+        -
+          label: Ruby
+          language: ruby
+        -
+          label: TypeScript
+          language: typescript
+        -
+          label: XML
+          language: xml
     ckeditor5_heading:
       enabled_headings:
         - heading2
@@ -39,13 +87,54 @@ settings:
         - heading4
         - heading5
         - heading6
-    ckeditor5_sourceEditing:
-      allowed_tags: {  }
+    ckeditor5_imageResize:
+      allow_resize: true
     ckeditor5_list:
       reversed: true
       startIndex: true
-    ckeditor5_imageResize:
-      allow_resize: true
+    ckeditor5_mentions_mention:
+      dropdown_limit: 5
+      commit_keys:
+        - 13
+        - 32
+      mention_feeds_enabled:
+        mention: mention
+    ckeditor5_sourceEditing:
+      allowed_tags: {  }
+    ckeditor_bs_grid_grid:
+      use_cdn: true
+      cdn_url: 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css'
+      available_columns:
+        - '1'
+        - '2'
+        - '3'
+        - '4'
+        - '5'
+        - '6'
+        - '7'
+        - '8'
+        - '9'
+        - '10'
+        - '11'
+        - '12'
+      available_breakpoints:
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - xxl
+    editor_advanced_link_link:
+      enabled_attributes:
+        - aria-label
+        - class
+        - id
+        - rel
+        - target
+        - title
+    linkit_extension:
+      linkit_enabled: true
+      linkit_profile: default
 image_upload:
   status: true
   scheme: public

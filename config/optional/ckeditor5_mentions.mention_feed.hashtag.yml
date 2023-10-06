@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+id: hashtag
+label: Hashtag
+description: '#hashtag mention feed'
+marker: '#'
+minimum_characters: 0
+entity_type: taxonomy_term
+entity_bundle: tags
+feed_callable: ''
+feed_items:
+  - ''

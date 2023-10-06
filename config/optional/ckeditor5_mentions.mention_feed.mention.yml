@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+id: mention
+label: Mention
+description: '@mention mention feed'
+marker: '@'
+minimum_characters: 0
+entity_type: user
+entity_bundle: user
+feed_callable: ''
+feed_items:
+  - ''

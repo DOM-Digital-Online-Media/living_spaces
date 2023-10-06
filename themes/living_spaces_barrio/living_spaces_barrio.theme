@@ -5,11 +5,21 @@
  * Functions to support theming in the Living Spaces Barrio subtheme.
  */
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\Dropbutton;
 use Drupal\Core\Render\Element\Operations;
 use Drupal\living_spaces_barrio\LivingSpacesBarrioTrustedCallbacks;
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function living_spaces_barrio_page_attachments_alter(array &$attachments) {
+  $route_name = \Drupal::service('current_route_match')->getRouteName();
+
+  if ('entity.view.edit_form' == $route_name) {
+    $attachments['#attached']['library'][] = 'living_spaces_barrio/view_buttons';
+  }
+}
 
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
@@ -17,6 +27,10 @@ use Drupal\living_spaces_barrio\LivingSpacesBarrioTrustedCallbacks;
 function living_spaces_barrio_theme_suggestions_form_element_alter(array &$suggestions, array $variables, $hook) {
   if (isset($variables['element']['#type'])) {
     $suggestions[] = $hook . '__' . $variables['element']['#type'];
+  }
+
+  if (isset($variables['element']['#attributes']['data-bs-grid-option'])) {
+    $suggestions[] = $hook . '__bs_grid_option';
   }
 }
 
