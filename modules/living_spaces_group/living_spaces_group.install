@@ -16,6 +16,7 @@ function living_spaces_group_uninstall() {
   $link = $link_storage
     ->loadByProperties(['uuid' => [
       '21f299cd-b60c-4983-b863-879297d3bcd3',
+      '107c49b5-c345-48d4-abd1-7cfca82b6eba',
     ]]);
   if (!empty($link)) {
     $link_storage->delete($link);
@@ -136,4 +137,20 @@ function living_spaces_group_update_9104(&$sandbox) {
   if (!empty($link)) {
     $link_storage->delete($link);
   }
+}
+
+/**
+ * Delete menu link content and update it from yml.
+ */
+function living_spaces_group_update_9105() {
+  if (function_exists('living_spaces_group_uninstall')) {
+    living_spaces_group_uninstall();
+  }
+
+  try {
+    \Drupal::service('default_content.importer')
+      ->importContent('living_spaces_group');
+  }
+  catch (Exception $e) {}
+  \Drupal::service('plugin.manager.menu.link')->rebuild();
 }
