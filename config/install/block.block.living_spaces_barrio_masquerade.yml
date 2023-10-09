@@ -16,4 +16,5 @@ settings:
   label: Masquerade
   label_display: visible
   provider: masquerade
+  show_unmasquerade_link: true
 visibility: {  }

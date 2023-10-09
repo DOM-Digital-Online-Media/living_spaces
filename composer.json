@@ -53,7 +53,7 @@
         "drupal/languagefield": "^1.6",
         "drupal/linkit": "^6.1",
         "drupal/menu_item_role_access": "^2.0",
-        "drupal/masquerade": "2.x-dev",
+        "drupal/masquerade": "^2.0@RC",
         "drupal/material_icons": "^2.0",
         "drupal/message": "^1.2",
         "drupal/message_ui": "^1.0",
