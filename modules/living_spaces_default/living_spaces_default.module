@@ -12,7 +12,6 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\group\Entity\GroupInterface;
-use Drupal\group\Entity\GroupRelationshipInterface;
 use Drupal\Core\Entity\EntityStorageException;
 
 /**
@@ -107,6 +106,7 @@ function living_spaces_default_cron() {
   $query->distinct();
   $query->join('groups_field_data', 'g', 'g.id = gr.gid');
   $query->condition('g.is_default', 1);
+  $query->range(0, 100);
 
   if ($results = $query->execute()->fetchCol()) {
     $storage = \Drupal::entityTypeManager()->getStorage('group_relationship');
@@ -116,26 +116,6 @@ function living_spaces_default_cron() {
     }
     catch (EntityStorageException $e) {}
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function living_spaces_default_group_relationship_insert(GroupRelationshipInterface $relationship) {
-  if ($relationship->getGroup()->get('is_default')->getString()) {
-    drupal_register_shutdown_function('living_spaces_default_relationship_post_delete', $relationship);
-  }
-}
-
-/**
- * Provides shutdown callback to remove relationship.
- */
-function living_spaces_default_relationship_post_delete(GroupRelationshipInterface $relationship) {
-  try {
-    // Force delete all relationships from default spaces.
-    $relationship->delete();
-  }
-  catch (EntityStorageException $e) {}
 }
 
 /**
