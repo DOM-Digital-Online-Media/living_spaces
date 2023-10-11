@@ -119,6 +119,15 @@ function living_spaces_default_cron() {
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function living_spaces_default_group_presave(GroupInterface $group) {
+  if ($group->get('is_default')->getString()) {
+    $group->set('protected', TRUE);
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_create_access().
  */
 function living_spaces_default_group_relationship_create_access(AccountInterface $account, array $context, $entity_bundle) {

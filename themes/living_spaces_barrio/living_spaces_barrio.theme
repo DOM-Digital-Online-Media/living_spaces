@@ -16,7 +16,7 @@ use Drupal\living_spaces_barrio\LivingSpacesBarrioTrustedCallbacks;
 function living_spaces_barrio_page_attachments_alter(array &$attachments) {
   $route_name = \Drupal::service('current_route_match')->getRouteName();
 
-  if ('entity.view.edit_form' == $route_name) {
+  if (in_array($route_name, ['entity.view.edit_form', 'entity.view.edit_display_form'])) {
     $attachments['#attached']['library'][] = 'living_spaces_barrio/view_buttons';
   }
 }

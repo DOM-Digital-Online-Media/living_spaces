@@ -16,6 +16,10 @@ libraries-override:
       component:
         css/components/sidebar.css: false
         css/components/table.css: false
+  ckeditor_bs_grid/dialog:
+    css:
+      component:
+        css/grid.css: false
 
 regions:
   top_header: 'Top header'
