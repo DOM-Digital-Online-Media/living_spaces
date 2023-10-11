@@ -9,7 +9,6 @@ dependencies:
   - living_spaces_event
   - living_spaces_group
   - living_spaces_sections
-  - ultimate_cron
 default_content:
   living_spaces_section:
     - a677f43b-8ac5-4cf5-82ca-9fbd611929d4

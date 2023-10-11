@@ -12,7 +12,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\group\Entity\GroupInterface;
-use Drupal\Core\Entity\EntityStorageException;
+use Drupal\group\Entity\GroupRelationshipInterface;
 
 /**
  * Implements hook_entity_base_field_info().
@@ -23,6 +23,7 @@ function living_spaces_default_entity_base_field_info(EntityTypeInterface $entit
   if ('group' == $entity_type->id()) {
     $fields['is_default'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Default'))
+      ->setDescription(t('Warning: all group relationships will be removed.'))
       ->setRevisionable(TRUE)
       ->setTranslatable(FALSE)
       ->setDisplayOptions('form', [
@@ -48,6 +49,45 @@ function living_spaces_default_entity_base_field_info(EntityTypeInterface $entit
 function living_spaces_default_form_group_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   if (isset($form['is_default'])) {
     $form['is_default']['#access'] = \Drupal::currentUser()->hasPermission('manage living spaces default content');
+  }
+  $form['actions']['submit']['#submit'][] = 'living_spaces_default_group_form_submit';
+}
+
+/**
+ * Provides form submit callback for group forms.
+ */
+function living_spaces_default_group_form_submit($form, FormStateInterface $form_state) {
+  /** @var \Drupal\group\Entity\GroupInterface $group */
+  if ($group = $form_state->getFormObject()->getEntity()) {
+    if ($group->get('is_default')->getString() && $relationships = $group->getRelationships()) {
+      $operations = [];
+      foreach ($relationships as $relationship) {
+        $operations[] = [
+          'living_spaces_default_remove_relationship',
+          [$relationship],
+        ];
+      }
+
+      $batch = [
+        'operations' => $operations,
+      ];
+      batch_set($batch);
+    }
+  }
+}
+
+/**
+ * Provides batch callback to remove group relationship.
+ */
+function living_spaces_default_remove_relationship(GroupRelationshipInterface $relationship) {
+  if ('group_membership' == $relationship->getPluginId()) {
+    $relationship->delete();
+  }
+  else {
+    $entity = $relationship->getEntity();
+
+    $entity->delete();
+    $relationship->delete();
   }
 }
 
@@ -94,27 +134,6 @@ function living_spaces_default_group_operations_alter(array &$operations, GroupI
     $group->get('is_default')->getString()
   ) {
     unset($operations['group-join']);
-  }
-}
-
-/**
- * Implements hook_cron().
- */
-function living_spaces_default_cron() {
-  $query = \Drupal::database()->select('group_relationship_field_data', 'gr');
-  $query->fields('gr', ['id']);
-  $query->distinct();
-  $query->join('groups_field_data', 'g', 'g.id = gr.gid');
-  $query->condition('g.is_default', 1);
-  $query->range(0, 100);
-
-  if ($results = $query->execute()->fetchCol()) {
-    $storage = \Drupal::entityTypeManager()->getStorage('group_relationship');
-
-    try {
-      $storage->delete($storage->loadMultiple($results));
-    }
-    catch (EntityStorageException $e) {}
   }
 }
 
