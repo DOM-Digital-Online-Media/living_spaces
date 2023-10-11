@@ -575,6 +575,10 @@ function living_spaces_group_form_user_employee_form_alter(&$form, FormStateInte
  * Implements hook_ENTITY_TYPE_insert().
  */
 function living_spaces_group_group_insert(GroupInterface $group) {
+  if ($group->hasField('is_default') && $group->get('is_default')->getString()) {
+    return;
+  }
+
   $values = [];
   if ($roles = $group->getGroupType()->getRoles(FALSE)) {
     $values = ['group_roles' => array_keys($roles)];
