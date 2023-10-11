@@ -84,10 +84,11 @@ function living_spaces_default_remove_relationship(GroupRelationshipInterface $r
     $relationship->delete();
   }
   else {
+    /** @var \Drupal\Core\Entity\EntityInterface $entity */
     $entity = $relationship->getEntity();
 
-    $entity->delete();
     $relationship->delete();
+    $entity->delete();
   }
 }
 
