@@ -574,6 +574,19 @@ function living_spaces_group_form_user_employee_form_alter(&$form, FormStateInte
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
+function living_spaces_group_group_insert(GroupInterface $group) {
+  $values = [];
+  if ($roles = $group->getGroupType()->getRoles(FALSE)) {
+    $values = ['group_roles' => array_keys($roles)];
+  }
+
+  // The group creator automatically becomes a member.
+  $group->addRelationship($group->getOwner(), 'group_membership', $values);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
 function living_spaces_group_user_insert(UserInterface $user) {
   $space_ids = array_column($user->get('joined_spaces')->getValue(), 'target_id');
   $groups = \Drupal::entityTypeManager()->getStorage('group')->loadMultiple($space_ids);
