@@ -368,7 +368,10 @@ function living_spaces_group_form_group_type_form_alter(&$form, FormStateInterfa
   ];
 
   if (isset($form['creator_settings'])) {
-    $form['creator_settings']['#access'] = FALSE;
+    hide($form['creator_settings']);
+
+    $form['creator_settings']['creator_membership']['#default_value'] = FALSE;
+    $form['creator_settings']['creator_wizard']['#default_value'] = FALSE;
   }
 }
 
