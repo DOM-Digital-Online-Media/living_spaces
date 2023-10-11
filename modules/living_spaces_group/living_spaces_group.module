@@ -366,6 +366,10 @@ function living_spaces_group_form_group_type_form_alter(&$form, FormStateInterfa
     '#default_value' => $type->get('is_living_space'),
     '#access' => \Drupal::currentUser()->hasPermission('manage living spaces'),
   ];
+
+  if (isset($form['creator_settings'])) {
+    $form['creator_settings']['#access'] = FALSE;
+  }
 }
 
 /**
