@@ -16,7 +16,8 @@ class LivingSpacesDefaultRelationshipStorage extends GroupRelationshipStorage {
    */
   public function save(EntityInterface $entity) {
     if ($entity->getGroup()->get('is_default')->getString()) {
-      throw new EntityStorageException('Cannot add an entity to a default group.');
+      // We cannot add an entity to a default group.
+      return;
     }
 
     return parent::save($entity);
