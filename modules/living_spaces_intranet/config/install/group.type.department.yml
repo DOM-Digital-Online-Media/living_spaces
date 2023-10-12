@@ -5,7 +5,7 @@ id: department
 label: Department
 description: 'Group type that has all features of Standard type and provides more intranet features and user management.'
 new_revision: false
-creator_membership: false
+creator_membership: true
 creator_wizard: false
 creator_roles:
   - department-admin

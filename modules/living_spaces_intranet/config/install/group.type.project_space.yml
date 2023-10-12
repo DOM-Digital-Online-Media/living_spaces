@@ -5,7 +5,7 @@ id: project_space
 label: 'Project space'
 description: 'Group type that provides all features of Standard type with additional permissions for space administrators.'
 new_revision: false
-creator_membership: false
+creator_membership: true
 creator_wizard: false
 creator_roles:
   - project_space-admin

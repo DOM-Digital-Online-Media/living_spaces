@@ -7,7 +7,7 @@ id: living_space
 label: Standard
 description: 'Group type that provides additional functionality like sections, help pages, advanced members management and more.'
 new_revision: false
-creator_membership: false
+creator_membership: true
 creator_wizard: false
 creator_roles:
   - living_space-admin
