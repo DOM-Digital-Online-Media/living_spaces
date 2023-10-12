@@ -5,6 +5,8 @@
  * Install/update/uninstall hooks for default module.
  */
 
+use Drupal\Core\Entity\EntityStorageException;
+
 /**
  * Implements hook_uninstall().
  */
@@ -28,5 +30,25 @@ function living_spaces_default_uninstall($is_syncing) {
     ->execute();
   if (!empty($space)) {
     $group_storage->delete($group_storage->loadMultiple($space));
+  }
+}
+
+/**
+ * Remove group relationships for default spaces.
+ */
+function living_spaces_default_update_9001() {
+  $query = \Drupal::database()->select('group_relationship_field_data', 'gr');
+  $query->fields('gr', ['id']);
+  $query->distinct();
+  $query->join('groups_field_data', 'g', 'g.id = gr.gid');
+  $query->condition('g.is_default', 1);
+
+  if ($results = $query->execute()->fetchCol()) {
+    $storage = \Drupal::entityTypeManager()->getStorage('group_relationship');
+
+    try {
+      $storage->delete($storage->loadMultiple($results));
+    }
+    catch (EntityStorageException $e) {}
   }
 }
