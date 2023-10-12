@@ -9,7 +9,7 @@ use Drupal\Core\Entity\EntityInterface;
 /**
  * Defines the storage handler class for relationship entities.
  */
-class LivingSpacesDefaultGroupRelationshipStorage extends GroupRelationshipStorage {
+class LivingSpacesDefaultRelationshipStorage extends GroupRelationshipStorage {
 
   /**
    * {@inheritdoc}

@@ -48,7 +48,7 @@ function living_spaces_default_entity_base_field_info(EntityTypeInterface $entit
  */
 function living_spaces_default_entity_type_alter(&$entity_types) {
   if (isset($entity_types['group_relationship'])) {
-    $entity_types['group_relationship']->setHandlerClass('storage', 'Drupal\living_spaces_default\LivingSpacesDefaultGroupRelationshipStorage');
+    $entity_types['group_relationship']->setHandlerClass('storage', '\Drupal\living_spaces_default\LivingSpacesDefaultRelationshipStorage');
   }
 }
 
