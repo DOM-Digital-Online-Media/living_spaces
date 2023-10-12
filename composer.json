@@ -137,6 +137,9 @@
             },
             "drupal/profile": {
                 "Fatal error on account creation": "https://www.drupal.org/files/issues/2023-07-24/handle-user-is-anonymous-hardening-3371850-8.patch"
+            },
+            "drupal/group": {
+                "Form error when no group admin role is automatically created.": "https://www.drupal.org/files/issues/2023-08-02/group-form-error-3364226-12.patch"
             }
         },
          "enable-patching": true
