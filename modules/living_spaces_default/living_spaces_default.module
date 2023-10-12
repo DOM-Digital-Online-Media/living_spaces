@@ -13,7 +13,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\group\Entity\GroupInterface;
 use Drupal\group\Entity\GroupRelationshipInterface;
-use Drupal\Core\Entity\EntityStorageException;
 
 /**
  * Implements hook_entity_base_field_info().
@@ -24,6 +23,7 @@ function living_spaces_default_entity_base_field_info(EntityTypeInterface $entit
   if ('group' == $entity_type->id()) {
     $fields['is_default'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Default'))
+      ->setDescription(t('Warning: all group relationships will be removed.'))
       ->setRevisionable(TRUE)
       ->setTranslatable(FALSE)
       ->setDisplayOptions('form', [
@@ -44,10 +44,61 @@ function living_spaces_default_entity_base_field_info(EntityTypeInterface $entit
 }
 
 /**
+ * Implements hook_entity_type_alter().
+ */
+function living_spaces_default_entity_type_alter(&$entity_types) {
+  if (isset($entity_types['group_relationship'])) {
+    $entity_types['group_relationship']->setHandlerClass('storage', '\Drupal\living_spaces_default\LivingSpacesDefaultRelationshipStorage');
+  }
+}
+
+/**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function living_spaces_default_form_group_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
-  $form['is_default']['#access'] = \Drupal::currentUser()->hasPermission('manage living spaces default content');
+  if (isset($form['is_default'])) {
+    $form['is_default']['#access'] = \Drupal::currentUser()->hasPermission('manage living spaces default content');
+  }
+  $form['actions']['submit']['#submit'][] = 'living_spaces_default_group_form_submit';
+}
+
+/**
+ * Provides form submit callback for group forms.
+ */
+function living_spaces_default_group_form_submit($form, FormStateInterface $form_state) {
+  /** @var \Drupal\group\Entity\GroupInterface $group */
+  if ($group = $form_state->getFormObject()->getEntity()) {
+    if ($group->get('is_default')->getString() && $relationships = $group->getRelationships()) {
+      $operations = [];
+      foreach ($relationships as $relationship) {
+        $operations[] = [
+          'living_spaces_default_remove_relationship',
+          [$relationship],
+        ];
+      }
+
+      $batch = [
+        'operations' => $operations,
+      ];
+      batch_set($batch);
+    }
+  }
+}
+
+/**
+ * Provides batch callback to remove group relationship.
+ */
+function living_spaces_default_remove_relationship(GroupRelationshipInterface $relationship) {
+  if ('group_membership' == $relationship->getPluginId()) {
+    $relationship->delete();
+  }
+  else {
+    /** @var \Drupal\Core\Entity\EntityInterface $entity */
+    $entity = $relationship->getEntity();
+
+    $relationship->delete();
+    $entity->delete();
+  }
 }
 
 /**
@@ -94,26 +145,6 @@ function living_spaces_default_group_operations_alter(array &$operations, GroupI
   ) {
     unset($operations['group-join']);
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function living_spaces_default_group_relationship_insert(GroupRelationshipInterface $relationship) {
-  if ($relationship->getGroup()->get('is_default')->getString()) {
-    drupal_register_shutdown_function('living_spaces_default_relationship_post_delete', $relationship);
-  }
-}
-
-/**
- * Provides shutdown callback to remove relationship.
- */
-function living_spaces_default_relationship_post_delete(GroupRelationshipInterface $relationship) {
-  try {
-    // Force delete all relationships from default spaces.
-    $relationship->delete();
-  }
-  catch (EntityStorageException $e) {}
 }
 
 /**
