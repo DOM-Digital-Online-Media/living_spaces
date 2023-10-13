@@ -37,6 +37,16 @@ living_spaces_group.remove_admin:
     _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupController::removeAdmin'
   requirements:
     _group_permission: 'administer members'
+living_spaces_group.send_email:
+  path: '/group/{group}/send-email'
+  defaults:
+    _controller: '\Drupal\living_spaces_group\Controller\LivingSpacesGroupController::send'
+  requirements:
+    _group_permission: 'view group_membership relationship'
+  options:
+    parameters:
+      group:
+        type: entity:group
 living_spaces_group.update_memberships:
   path: '/admin/config/development/update-memberships'
   defaults:

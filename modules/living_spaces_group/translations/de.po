@@ -13,3 +13,6 @@ msgstr "Raum bearbeiten"
 
 msgid "Manage members"
 msgstr "Benutzer verwalten"
+
+msgid "E-mail to all members"
+msgstr "E-Mail an alle Mitglieder"

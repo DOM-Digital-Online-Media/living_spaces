@@ -788,6 +788,33 @@ function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE
 }
 
 /**
+ * Implements hook_living_spaces_group_contact_info().
+ */
+function living_spaces_group_living_spaces_group_contact_info($names_only = TRUE, GroupInterface $space = NULL, AccountInterface $account = NULL) {
+  $label = t('E-mail to all members');
+  if ($names_only) {
+    return [
+      'email_space_members' => $label,
+    ];
+  }
+
+  $results = [];
+  if ($space->hasPermission('view group_membership relationship', $account) && $space->id()) {
+    $results['email_space_members'] = [
+      '#type' => 'link',
+      '#title' => $label,
+      '#url' => Url::fromRoute('living_spaces_group.send_email', ['group' => $space->id()]),
+      '#attributes' => ['class' => ['btn', 'btn-default']],
+    ];
+
+    $cache = CacheableMetadata::createFromObject($account);
+    $cache->applyTo($results['email_space_members']);
+  }
+
+  return $results;
+}
+
+/**
  * Implements hook_living_spaces_group_exports_info().
  */
 function living_spaces_group_living_spaces_group_exports_info($names_only = TRUE, GroupInterface $space = NULL) {
