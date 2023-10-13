@@ -799,7 +799,7 @@ function living_spaces_group_living_spaces_group_contact_info($names_only = TRUE
   }
 
   $results = [];
-  if ($space->hasPermission('view group_membership relationship', $account)) {
+  if ($space->hasPermission('view group_membership relationship', $account) && $space->id()) {
     $query = \Drupal::database()->select('users_field_data', 'u');
     $query->fields('u', ['mail']);
     $query->distinct();
