@@ -5,8 +5,6 @@
  * Install, update and uninstall functions for the living_spaces install profile.
  */
 
-use Drupal\Core\Field\BaseFieldDefinition;
-
 /**
  * Implements hook_install().
  */
