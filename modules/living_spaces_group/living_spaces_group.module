@@ -799,16 +799,25 @@ function living_spaces_group_living_spaces_group_contact_info($names_only = TRUE
   }
 
   $results = [];
-  if ($space->hasPermission('view group_membership relationship', $account) && $space->id()) {
-    $results['email_space_members'] = [
-      '#type' => 'link',
-      '#title' => $label,
-      '#url' => Url::fromRoute('living_spaces_group.send_email', ['group' => $space->id()]),
-      '#attributes' => ['class' => ['btn', 'btn-default']],
-    ];
+  if ($space->hasPermission('view group_membership relationship', $account)) {
+    $query = \Drupal::database()->select('users_field_data', 'u');
+    $query->fields('u', ['mail']);
+    $query->distinct();
+    $query->join('group_relationship_field_data', 'gr', 'gr.entity_id = u.uid');
+    $query->condition('gr.gid', $space->id());
+    $query->condition('gr.plugin_id', 'group_membership');
 
-    $cache = CacheableMetadata::createFromObject($account);
-    $cache->applyTo($results['email_space_members']);
+    if ($mails = $query->execute()->fetchCol()) {
+      $results['email_space_members'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'a',
+        '#value' => $label,
+        '#attributes' => [
+          'href' => 'mailto:' . implode(',', $mails),
+          'class' => ['btn', 'btn-default'],
+        ],
+      ];
+    }
   }
 
   return $results;

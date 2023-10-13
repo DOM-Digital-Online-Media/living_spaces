@@ -218,11 +218,4 @@ class LivingSpacesGroupController extends ControllerBase {
     return new RedirectResponse($group->toUrl()->toString());
   }
 
-  /**
-   * Returns response for the send e-mail route.
-   */
-  public function send(GroupInterface $group) {
-    return new RedirectResponse($group->toUrl()->toString());
-  }
-
 }
