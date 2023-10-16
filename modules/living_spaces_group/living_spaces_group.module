@@ -803,6 +803,7 @@ function living_spaces_group_living_spaces_group_contact_info($names_only = TRUE
     $query = \Drupal::database()->select('users_field_data', 'u');
     $query->fields('u', ['mail']);
     $query->distinct();
+    $query->condition('u.status', 1);
     $query->join('group_relationship_field_data', 'gr', 'gr.entity_id = u.uid');
     $query->condition('gr.gid', $space->id());
     $query->condition('gr.plugin_id', 'group_membership');
