@@ -36,7 +36,8 @@ variant_settings:
               members: members
               admins: admins
               inherit: inherit
-            enabled_contacts: {  }
+            enabled_contacts:
+              email_space_members: email_space_members
             enabled_exports:
               export_names: export_names
               export_full: export_full

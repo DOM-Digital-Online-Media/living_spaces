@@ -108,7 +108,7 @@ class LivingSpacesGroupMembersBlock extends BlockBase implements ContainerFactor
       $form["{$tab}_label"] = [
         '#type' => 'textfield',
         '#title' => $this->t('@tab tab label', ['@tab' => $label]),
-        '#default_value' => $this->configuration["{$tab}_label"],
+        '#default_value' => $this->configuration["{$tab}_label"] ?? '',
         '#states' => [
           'visible' => [
             ":input[name='settings[enabled][{$tab}]']" => ['checked' => TRUE],

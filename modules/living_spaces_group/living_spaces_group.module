@@ -788,6 +788,43 @@ function living_spaces_group_living_spaces_group_actions_info($names_only = TRUE
 }
 
 /**
+ * Implements hook_living_spaces_group_contact_info().
+ */
+function living_spaces_group_living_spaces_group_contact_info($names_only = TRUE, GroupInterface $space = NULL, AccountInterface $account = NULL) {
+  $label = t('E-mail to all members');
+  if ($names_only) {
+    return [
+      'email_space_members' => $label,
+    ];
+  }
+
+  $results = [];
+  if ($space->hasPermission('view group_membership relationship', $account) && $space->id()) {
+    $query = \Drupal::database()->select('users_field_data', 'u');
+    $query->fields('u', ['mail']);
+    $query->distinct();
+    $query->condition('u.status', 1);
+    $query->join('group_relationship_field_data', 'gr', 'gr.entity_id = u.uid');
+    $query->condition('gr.gid', $space->id());
+    $query->condition('gr.plugin_id', 'group_membership');
+
+    if ($mails = $query->execute()->fetchCol()) {
+      $results['email_space_members'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'a',
+        '#value' => $label,
+        '#attributes' => [
+          'href' => 'mailto:' . implode(',', $mails),
+          'class' => ['btn', 'btn-default'],
+        ],
+      ];
+    }
+  }
+
+  return $results;
+}
+
+/**
  * Implements hook_living_spaces_group_exports_info().
  */
 function living_spaces_group_living_spaces_group_exports_info($names_only = TRUE, GroupInterface $space = NULL) {
