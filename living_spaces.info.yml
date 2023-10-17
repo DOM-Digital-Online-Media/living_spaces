@@ -73,6 +73,7 @@ install:
   - config_translation
   - layout_builder
   - layout_discovery
+  - views_ical
   - rest
   - entity_reference_revisions
   - paragraphs

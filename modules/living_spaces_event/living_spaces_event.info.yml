@@ -25,6 +25,7 @@ dependencies:
   - views
   - taxonomy
   - paragraphs
+  - views_ical
 default_content:
   taxonomy_term:
     - 6ac8691c-87d5-49f6-882e-46398be6d119

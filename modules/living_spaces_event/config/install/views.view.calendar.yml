@@ -585,7 +585,20 @@ display:
       relationships: {  }
       use_ajax: true
       header: {  }
-      footer: {  }
+      footer:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: "<h2>Integrate appointment(s) into your own calendar</h2>\r\n<p><a href=\"/group/{{ raw_arguments.space }}/ical-events.ics\" class=\"ical-icon btn btn-default\">Export calendar file</a></p>"
+            format: full_html
+          tokenize: true
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -598,6 +611,7 @@ display:
         - 'config:field.storage.living_spaces_event.field_end_date'
         - 'config:field.storage.living_spaces_event.field_start_date'
         - 'config:search_api.index.events'
+        - 'search_api_list:events'
   events:
     id: events
     display_title: Events
@@ -619,3 +633,4 @@ display:
         - 'config:field.storage.living_spaces_event.field_end_date'
         - 'config:field.storage.living_spaces_event.field_start_date'
         - 'config:search_api.index.events'
+        - 'search_api_list:events'
