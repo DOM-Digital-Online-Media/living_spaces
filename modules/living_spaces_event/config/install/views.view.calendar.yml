@@ -594,9 +594,9 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: text
-          empty: true
+          empty: false
           content:
-            value: "<h2>Integrate appointment(s) into your own calendar</h2>\r\n<p><a href=\"/group/{{ raw_arguments.space }}/ical-events.ics\" class=\"ical-icon btn btn-default\">Export calendar file</a></p>"
+            value: "<h2>Integrate appointment(s) into your own calendar</h2>\r\n<p><a href=\"/living-spaces-event-ical/{{ raw_arguments.space }}\" class=\"ical-icon btn btn-default\">Export calendar file</a></p>"
             format: full_html
           tokenize: true
       display_extenders: {  }

@@ -23,3 +23,14 @@ living_spaces_event.invite_autocomplete:
     _format: json
   requirements:
     _access: 'TRUE'
+living_spaces_event.ical:
+  path: '/living-spaces-event-ical/{group}'
+  defaults:
+    _controller: '\Drupal\living_spaces_event\Controller\LivingSpacesEventIcalController::download'
+  requirements:
+    _custom_access: '\Drupal\living_spaces_event\Controller\LivingSpacesEventIcalController::access'
+  options:
+    parameters:
+      group:
+        type: entity:group
+
