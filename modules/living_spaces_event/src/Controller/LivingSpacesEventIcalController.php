@@ -100,7 +100,7 @@ class LivingSpacesEventIcalController extends ControllerBase {
         $event->setDtStart(new \DateTime($result->field_start_date_value, new \DateTimeZone('UTC')));
         $event->setDtEnd(new \DateTime($result->field_end_date_value, new \DateTimeZone('UTC')));
         $event->setSummary($result->label);
-        $event->setDescriptionHTML($result->description__value);
+        $event->setDescription($result->description__value);
         $event->setLocation($result->location__value);
         $event->setUrl( "{$host}/living-spaces-event/{$result->id}");
         $calendar->addComponent($event);
