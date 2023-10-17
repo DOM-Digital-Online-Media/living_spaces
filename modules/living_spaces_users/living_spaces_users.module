@@ -106,6 +106,22 @@ function living_spaces_user_cancel_form_submit(&$form, FormStateInterface $form_
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function living_spaces_users_form_masquerade_block_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['#submit'][] = 'living_spaces_users_form_masquerade_block_form_submit';
+}
+
+/**
+ * Provides submit callback for masquerade block form.
+ */
+function living_spaces_users_form_masquerade_block_form_submit(&$form, FormStateInterface $form_state) {
+  \Drupal::messenger()->addStatus(t('You are now masquerading as <b>@user</b>.', [
+    '@user' => $form_state->getValue('masquerade_target_account')->getDisplayName(),
+  ]));
+}
+
+/**
  * Helper to get user role weights.
  */
 function living_spaces_users_get_role_weights() {
