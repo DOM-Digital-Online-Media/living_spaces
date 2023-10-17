@@ -116,9 +116,11 @@ function living_spaces_users_form_masquerade_block_form_alter(&$form, FormStateI
  * Provides submit callback for masquerade block form.
  */
 function living_spaces_users_form_masquerade_block_form_submit(&$form, FormStateInterface $form_state) {
-  \Drupal::messenger()->addStatus(t('You are now masquerading as <b>@user</b>.', [
-    '@user' => $form_state->getValue('masquerade_target_account')->getDisplayName(),
-  ]));
+  if ($account = $form_state->getValue('masquerade_target_account')) {
+    \Drupal::messenger()->addStatus(t('You are now masquerading as <b>@user</b>.', [
+      '@user' => $account->toLink($account->getDisplayName())->toString(),
+    ]));
+  }
 }
 
 /**
