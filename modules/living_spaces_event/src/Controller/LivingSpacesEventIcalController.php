@@ -3,6 +3,7 @@
 namespace Drupal\living_spaces_event\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Database\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\group\Entity\GroupInterface;
 use Drupal\Core\Access\AccessResult;
@@ -12,13 +13,19 @@ use Drupal\file\FileRepositoryInterface;
 use Eluceo\iCal\Component\Calendar;
 use Eluceo\iCal\Component\Event;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * LivingSpacesEventIcalController class.
  */
 class LivingSpacesEventIcalController extends ControllerBase {
+
+  /**
+   * Returns the database service.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
 
   /**
    * Returns the request_stack service.
@@ -44,6 +51,8 @@ class LivingSpacesEventIcalController extends ControllerBase {
   /**
    * Constructs a new LivingSpacesEventIcalController object.
    *
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database connection to be used.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
    *   Forward-compatibility shim for Symfony's RequestStack.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
@@ -51,7 +60,8 @@ class LivingSpacesEventIcalController extends ControllerBase {
    * @param \Drupal\file\FileRepositoryInterface $file_repository
    *   Performs file system operations and updates database records accordingly.
    */
-  public function __construct(RequestStack $request, FileSystemInterface $file_system, FileRepositoryInterface $file_repository) {
+  public function __construct(Connection $database, RequestStack $request, FileSystemInterface $file_system, FileRepositoryInterface $file_repository) {
+    $this->database = $database;
     $this->request = $request;
     $this->fileSystem = $file_system;
     $this->fileRepository = $file_repository;
@@ -62,6 +72,7 @@ class LivingSpacesEventIcalController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('database'),
       $container->get('request_stack'),
       $container->get('file_system'),
       $container->get('file.repository')
@@ -72,30 +83,36 @@ class LivingSpacesEventIcalController extends ControllerBase {
    * Callback for 'iCal' route.
    */
   public function download(GroupInterface $group) {
-    // Convert the date to the Timezone of the user requesting.
-    $start_date = '2023-10-18 10:00:00';
-    $end_date = '2023-10-18 11:00:00';
-
     $host = $this->request->getCurrentRequest()->getHost();
-
     $calendar = new Calendar($host);
 
-    $event = new Event();
-    $event->setDtStart(new \DateTime($start_date));
-    $event->setDtEnd(new \DateTime($end_date));
-    $event->setSummary($group->label());
-    $calendar->addComponent($event);
+    $query = $this->database->select('living_spaces_event_field_data', 'efd');
+    $query->fields('efd', ['id', 'label']);
+    $query->condition('efd.space', $group->id());
+    $query->innerJoin('living_spaces_event__field_start_date', 'efsd', 'efsd.entity_id = efd.id');
+    $query->addField('efsd', 'field_start_date_value');
+    $query->innerJoin('living_spaces_event__field_end_date', 'efed', 'efed.entity_id = efd.id');
+    $query->addField('efed', 'field_end_date_value');
 
-    $filename = "iCal-{$group->label()}.ics";
+    if ($results = $query->execute()->fetchAllAssoc('id')) {
+      foreach ($results as $result) {
+        $event = new Event();
+        $event->setDtStart(new \DateTime($result->field_start_date_value, new \DateTimeZone('UTC')));
+        $event->setDtEnd(new \DateTime($result->field_end_date_value, new \DateTimeZone('UTC')));
+        $event->setSummary($result->label);
+        $calendar->addComponent($event);
+      }
+    }
+
+    $filename = "iCal {$group->label()}.ics";
     $uri = 'public://' . $filename;
 
     $content = $calendar->render();
-    $file = $this->fileRepository->writeData($content, $uri, FileSystemInterface::EXISTS_REPLACE);
-
-    if (empty($file)) {
-      return new Response(
-        'Simple ICS Error, Please contact the System Administrator'
-      );
+    try {
+      $file = $this->fileRepository->writeData($content, $uri, FileSystemInterface::EXISTS_REPLACE);
+    }
+    catch (\Exception $e) {
+      throw new NotFoundHttpException();
     }
 
     $mimetype = 'text/calendar';
@@ -120,7 +137,7 @@ class LivingSpacesEventIcalController extends ControllerBase {
       'Accept-Ranges' => 'bytes',
     ];
 
-    return new BinaryFileResponse($uri, 200, $headers, $scheme !== 'private');
+    return new BinaryFileResponse($uri, 200, $headers);
   }
 
   /**
