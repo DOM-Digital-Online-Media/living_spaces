@@ -23,6 +23,7 @@ dependencies:
   - views
   - search_api_solr
   - pathauto
+  - masquerade
 
 default_content:
   menu_link_content:
