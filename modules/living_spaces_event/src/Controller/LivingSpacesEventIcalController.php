@@ -118,20 +118,16 @@ class LivingSpacesEventIcalController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    $mimetype = 'text/calendar';
-    $scheme = 'public';
     $parts = explode('://', $uri);
-    $file_directory = $this->fileSystem->realpath($scheme . "://");
-    $filepath = $file_directory . '/' . $parts[1];
-    $filename = $file->getFilename();
+    $filepath = $this->fileSystem->realpath('public://') . '/' . $parts[1];
 
     if (!file_exists($filepath)) {
       throw new NotFoundHttpException();
     }
 
     $headers = [
-      'Content-Type' => $mimetype,
-      'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+      'Content-Type' => 'text/calendar',
+      'Content-Disposition' => 'attachment; filename="' . $file->getFilename() . '"',
       'Content-Length' => $file->getSize(),
       'Content-Transfer-Encoding' => 'binary',
       'Pragma' => 'no-cache',
@@ -147,7 +143,9 @@ class LivingSpacesEventIcalController extends ControllerBase {
    * Access callback for 'iCal' route.
    */
   public function access(GroupInterface $group) {
-    return AccessResult::allowed();
+    $access = $this->currentUser()->hasPermission('administer living spaces event');
+
+    return $access ? AccessResult::allowed() : AccessResult::forbidden();
   }
 
 }
