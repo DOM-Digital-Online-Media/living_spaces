@@ -9,6 +9,7 @@ dependencies:
     - datetime
     - fullcalendar_view
     - search_api
+    - views_block_area
 id: calendar
 label: Calendar
 module: views
