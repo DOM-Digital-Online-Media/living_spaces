@@ -11,7 +11,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Link;
 
 /**
- * Block with 'Invite users' form.
+ * Block with 'LivingSpaceEventIcalBlock' block.
  *
  * @Block(
  *   id = "living_spaces_event_ical_block",
@@ -84,10 +84,7 @@ class LivingSpaceEventIcalBlock extends BlockBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function blockAccess(AccountInterface $account) {
-    /** @var \Drupal\living_spaces_event\Entity\LivingSpaceEventInterface $event */
-    $event = $this->getContextValue('living_spaces_event');
-
-    return $event->access('update') ? AccessResult::allowed() : AccessResult::forbidden();
+    return $account->hasPermission('administer living spaces event') ? AccessResult::allowed() : AccessResult::forbidden();
   }
 
 }
