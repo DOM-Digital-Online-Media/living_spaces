@@ -586,19 +586,16 @@ display:
       use_ajax: true
       header: {  }
       footer:
-        area:
-          id: area
+        views_block_area:
+          id: views_block_area
           table: views
-          field: area
+          field: views_block_area
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: text
+          plugin_id: views_block_area
+          block_id: living_spaces_event_ical_block
           empty: false
-          content:
-            value: "<h2>Integrate appointment(s) into your own calendar</h2>\r\n<p><a href=\"/living-spaces-event-ical/{{ raw_arguments.space }}\" class=\"ical-icon btn btn-default\">Export calendar file</a></p>"
-            format: full_html
-          tokenize: true
       display_extenders: {  }
     cache_metadata:
       max-age: -1
