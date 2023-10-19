@@ -107,14 +107,18 @@ class LivingSpacesEventIcalController extends ControllerBase {
       }
     }
 
+    $directory = 'public://ical';
+    $this->fileSystem->prepareDirectory($directory, FileSystemInterface:: CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
+
     $filename = "iCal {$group->label()}.ics";
-    $uri = 'public://' . $filename;
+    $uri = "{$directory}/{$filename}";
 
     $content = $calendar->render();
     try {
       $file = $this->fileRepository->writeData($content, $uri, FileSystemInterface::EXISTS_REPLACE);
     }
     catch (\Exception $e) {
+      $this->messenger()->addWarning($e->getMessage());
       throw new NotFoundHttpException();
     }
 
@@ -122,6 +126,10 @@ class LivingSpacesEventIcalController extends ControllerBase {
     $filepath = $this->fileSystem->realpath('public://') . '/' . $parts[1];
 
     if (!file_exists($filepath)) {
+      $this->messenger()->addWarning($this->t('Cannot find iCal file.'));
+      $this->loggerFactory->get('living_spaces_event')->error('Caanot find iCal file for @space', [
+        '@space' => $group->label(),
+      ]);
       throw new NotFoundHttpException();
     }
 
@@ -143,7 +151,8 @@ class LivingSpacesEventIcalController extends ControllerBase {
    * Access callback for 'iCal' route.
    */
   public function access(GroupInterface $group) {
-    $access = $this->currentUser()->hasPermission('administer living spaces event');
+    $access = $this->currentUser()->hasPermission('access ical event export') ||
+    $group->hasPermission('access ical event export', $this->currentUser());
 
     return $access ? AccessResult::allowed() : AccessResult::forbidden();
   }

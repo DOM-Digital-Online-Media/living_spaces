@@ -3,6 +3,7 @@
 namespace Drupal\living_spaces_event\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -29,6 +30,13 @@ class LivingSpaceEventIcalBlock extends BlockBase implements ContainerFactoryPlu
   protected $route;
 
   /**
+   * Returns the entity_type.manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Constructs a LivingSpaceEventIcalBlock block.
    *
    * @param array $configuration
@@ -39,11 +47,14 @@ class LivingSpaceEventIcalBlock extends BlockBase implements ContainerFactoryPlu
    *   The plugin implementation definition.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route
    *   Provides an interface for classes representing the result of routing.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Provides an interface for entity type managers.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->route = $route;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -54,7 +65,8 @@ class LivingSpaceEventIcalBlock extends BlockBase implements ContainerFactoryPlu
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('current_route_match')
+      $container->get('current_route_match'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -84,7 +96,15 @@ class LivingSpaceEventIcalBlock extends BlockBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function blockAccess(AccountInterface $account) {
-    return $account->hasPermission('administer living spaces event') ? AccessResult::allowed() : AccessResult::forbidden();
+    $access = $account->hasPermission('access ical event export');
+
+    if (!$access && $gid = $this->route->getRawParameter('group')) {
+      /** @var \Drupal\group\Entity\GroupInterface $group */
+      $group = $this->entityTypeManager->getStorage('group')->load($gid);
+      $access = $group->hasPermission('access ical event export', $account);
+    }
+
+    return $access ? AccessResult::allowed() : AccessResult::forbidden();
   }
 
 }
