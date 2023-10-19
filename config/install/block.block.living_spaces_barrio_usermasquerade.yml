@@ -1,20 +1,18 @@
 langcode: en
 status: true
 dependencies:
-  module:
-    - masquerade
   theme:
     - living_spaces_barrio
-id: living_spaces_barrio_masquerade
+id: living_spaces_barrio_usermasquerade
 theme: living_spaces_barrio
 region: highlighted
-weight: -4
+weight: 0
 provider: null
-plugin: masquerade
+plugin: living_spaces_users_masquerade
 settings:
-  id: masquerade
+  id: living_spaces_users_masquerade
   label: Masquerade
   label_display: visible
-  provider: masquerade
-  show_unmasquerade_link: true
+  provider: living_spaces_users
+  show_unmasquerade_link: 1
 visibility: {  }
