@@ -86,24 +86,30 @@ class LivingSpacesEventIcalController extends ControllerBase {
     $host = $this->request->getCurrentRequest()->getHost();
     $calendar = new Calendar($host);
 
-    $query = $this->database->select('living_spaces_event_field_data', 'efd');
-    $query->fields('efd', ['id', 'label', 'description__value', 'location__value']);
-    $query->condition('efd.space', $group->id());
-    $query->innerJoin('living_spaces_event__field_start_date', 'efsd', 'efsd.entity_id = efd.id');
-    $query->addField('efsd', 'field_start_date_value');
-    $query->innerJoin('living_spaces_event__field_end_date', 'efed', 'efed.entity_id = efd.id');
-    $query->addField('efed', 'field_end_date_value');
+    $entity_query = $this->entityTypeManager()->getStorage('living_spaces_event')->getQuery();
+    $entity_query->condition('space', $group->id());
+    $entity_query->accessCheck();
 
-    if ($results = $query->execute()->fetchAllAssoc('id')) {
-      foreach ($results as $result) {
-        $event = new Event();
-        $event->setDtStart(new \DateTime($result->field_start_date_value, new \DateTimeZone('UTC')));
-        $event->setDtEnd(new \DateTime($result->field_end_date_value, new \DateTimeZone('UTC')));
-        $event->setSummary($result->label);
-        $event->setDescription($result->description__value);
-        $event->setLocation($result->location__value);
-        $event->setUrl( "{$host}/living-spaces-event/{$result->id}");
-        $calendar->addComponent($event);
+    if ($event_ids = $entity_query->execute()) {
+      $query = $this->database->select('living_spaces_event_field_data', 'efd');
+      $query->fields('efd', ['id', 'label', 'description__value', 'location__value']);
+      $query->condition('efd.id', $event_ids, 'IN');
+      $query->innerJoin('living_spaces_event__field_start_date', 'efsd', 'efsd.entity_id = efd.id');
+      $query->addField('efsd', 'field_start_date_value');
+      $query->innerJoin('living_spaces_event__field_end_date', 'efed', 'efed.entity_id = efd.id');
+      $query->addField('efed', 'field_end_date_value');
+
+      if ($results = $query->execute()->fetchAllAssoc('id')) {
+        foreach ($results as $result) {
+          $event = new Event();
+          $event->setDtStart(new \DateTime($result->field_start_date_value, new \DateTimeZone('UTC')));
+          $event->setDtEnd(new \DateTime($result->field_end_date_value, new \DateTimeZone('UTC')));
+          $event->setSummary($result->label);
+          $event->setDescription($result->description__value);
+          $event->setLocation($result->location__value);
+          $event->setUrl( "{$host}/living-spaces-event/{$result->id}");
+          $calendar->addComponent($event);
+        }
       }
     }
 
