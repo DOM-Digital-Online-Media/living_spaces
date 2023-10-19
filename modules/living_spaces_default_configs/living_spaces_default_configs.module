@@ -5,6 +5,7 @@
  * Contains living_spaces_default_configs.module.
  */
 
+use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Config\ExtensionInstallStorage;
 use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Config\StorageInterface;
@@ -56,7 +57,28 @@ function living_spaces_default_configs_module_preinstall($module) {
         false,
         'living_spaces'
       );
-      $config->setData($optional_storage->read($config_name))->save(TRUE);
+      if ($data = $optional_storage->read($config_name)) {
+        // @see \Drupal\Core\Config\ConfigInstaller::createConfiguration()
+        $config->setData([
+          '_core' => [
+            'default_config_hash' => Crypt::hashBase64(serialize($data)),
+          ],
+        ] + $data);
+
+        $entity_type = \Drupal::service('config.manager')
+          ->getEntityTypeIdByName($config_name);
+        if ($entity_type) {
+          $entity = \Drupal::entityTypeManager()
+            ->getStorage($entity_type)
+            ->createFromStorageRecord($config->get());
+          if ($entity->isInstallable()) {
+            $entity->trustData()->save();
+          }
+        }
+        else {
+          $config->save(TRUE);
+        }
+      }
     }
   }
 }
