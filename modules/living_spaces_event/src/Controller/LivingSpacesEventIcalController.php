@@ -158,7 +158,7 @@ class LivingSpacesEventIcalController extends ControllerBase {
    */
   public function access(GroupInterface $group) {
     $access = $this->currentUser()->hasPermission('access ical event export') ||
-    $group->hasPermission('access ical event export', $this->currentUser());
+      $group->hasPermission('access ical event export', $this->currentUser());
 
     return $access ? AccessResult::allowed() : AccessResult::forbidden();
   }
