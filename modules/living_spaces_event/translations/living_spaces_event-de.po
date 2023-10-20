@@ -37,3 +37,9 @@ msgstr "Bitte antworten Sie auf die Einladung zu diesem Termin:"
 
 msgid "You have accepted the invitation to this event."
 msgstr "Sie haben sich zu diesem Termin angemeldet."
+
+msgid "Integrate appointment(s) into your own calendar"
+msgstr "Termin(e) in eigenen kalender einbinden"
+
+msgid "Export calendar file"
+msgstr "Kalenderdatei exportieren"

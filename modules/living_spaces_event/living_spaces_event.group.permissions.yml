@@ -1,0 +1,3 @@
+access ical event export:
+  title: 'Access iCal event export'
+  description: 'Allow access to export space events to iCal'

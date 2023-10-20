@@ -9,6 +9,7 @@ dependencies:
     - datetime
     - fullcalendar_view
     - search_api
+    - views_block_area
 id: calendar
 label: Calendar
 module: views
@@ -585,7 +586,17 @@ display:
       relationships: {  }
       use_ajax: true
       header: {  }
-      footer: {  }
+      footer:
+        views_block_area:
+          id: views_block_area
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: views_block_area
+          block_id: living_spaces_event_ical_block
+          empty: false
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -598,6 +609,7 @@ display:
         - 'config:field.storage.living_spaces_event.field_end_date'
         - 'config:field.storage.living_spaces_event.field_start_date'
         - 'config:search_api.index.events'
+        - 'search_api_list:events'
   events:
     id: events
     display_title: Events
@@ -619,3 +631,4 @@ display:
         - 'config:field.storage.living_spaces_event.field_end_date'
         - 'config:field.storage.living_spaces_event.field_start_date'
         - 'config:search_api.index.events'
+        - 'search_api_list:events'
