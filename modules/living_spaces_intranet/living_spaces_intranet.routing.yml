@@ -31,7 +31,7 @@ living_spaces_intranet.ban_user_confirm:
   path: '/user/ban'
   defaults:
     _form: '\Drupal\living_spaces_intranet\Form\LivingSpacesIntranetBanForm'
-    _title: 'Ban user'
+    _title: 'Ban/unban user(s)'
   requirements:
     _permission: 'administer ban'
 living_spaces_intranet.send_message:

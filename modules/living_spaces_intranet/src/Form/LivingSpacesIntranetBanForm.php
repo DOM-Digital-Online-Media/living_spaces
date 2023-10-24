@@ -81,6 +81,17 @@ class LivingSpacesIntranetBanForm extends FormBase {
       return $form;
     }
 
+    $form['type'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Type'),
+      '#options' => [
+        'ban' => $this->t('Ban'),
+        'unban' => $this->t('Unban'),
+      ],
+      '#required' => TRUE,
+      '#default_value' => 'ban',
+    ];
+
     $ban_storage = $this->entityTypeManager->getStorage('living_spaces_ban_type');
 
     $options = [];
@@ -89,7 +100,7 @@ class LivingSpacesIntranetBanForm extends FormBase {
       $options[$ban_type->id()] = $ban_type->label();
     }
 
-    $form['type'] = [
+    $form['bundle'] = [
       '#type' => 'radios',
       '#title' => $this->t('Type'),
       '#options' => $options,
@@ -113,15 +124,24 @@ class LivingSpacesIntranetBanForm extends FormBase {
       ->get('living_spaces_intranet_ban_user')
       ->get($this->currentUser()->id());
 
-    if (!empty($temp['users']) && $bundle = $form_state->getValue('type')) {
-      $data = ['bundle' => $bundle];
+    if (!empty($temp['users'])) {
+      $unban = 'unban' == $form_state->getValue('type');
+      $bundle = $form_state->getValue('bundle');
 
       /** @var \Drupal\user\UserInterface $user */
       foreach ($temp['users'] as $user) {
-        $this->banManager->setUserBan($user, $data);
+        if ($unban) {
+          $this->banManager->deleteUserBans($user, [$bundle]);
+        }
+        else {
+          $data = ['bundle' => $bundle];
+          $this->banManager->setUserBan($user, $data);
+        }
       }
 
-      $this->messenger()->addStatus($this->t('Selected user(s) were banned.'));
+      $this->messenger()->addStatus($this->t('Selected user(s) were @action.', [
+        '@action' => $unban ? $this->t('Unbanned') : $this->t('Banned'),
+      ]));
     }
   }
 

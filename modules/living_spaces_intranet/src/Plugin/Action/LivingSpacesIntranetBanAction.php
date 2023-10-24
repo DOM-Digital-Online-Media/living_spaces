@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Action(
  *   id = "living_spaces_intranet_ban_action",
- *   label = @Translation("Ban user"),
+ *   label = @Translation("Ban/Unban user"),
  *   type = "user",
  *   confirm_form_route_name = "living_spaces_intranet.ban_user_confirm"
  * )
