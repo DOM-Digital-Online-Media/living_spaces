@@ -140,7 +140,7 @@ class LivingSpacesIntranetBanForm extends FormBase {
       }
 
       $this->messenger()->addStatus($this->t('Selected user(s) were @action.', [
-        '@action' => $unban ? $this->t('Unbanned') : $this->t('Banned'),
+        '@action' => $unban ? $this->t('unbanned') : $this->t('banned'),
       ]));
     }
   }
