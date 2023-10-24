@@ -5,6 +5,7 @@ namespace Drupal\living_spaces_intranet\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\living_spaces_intranet\LivingSpacesBansManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
@@ -12,6 +13,13 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
  * Form handler for ban user action.
  */
 class LivingSpacesIntranetBanForm extends FormBase {
+
+  /**
+   * Returns the living_spaces_bans.manager service.
+   *
+   * @var \Drupal\living_spaces_intranet\LivingSpacesBansManagerInterface
+   */
+  protected $banManager;
 
   /**
    * Returns the entity_type.manager service.
@@ -30,12 +38,15 @@ class LivingSpacesIntranetBanForm extends FormBase {
   /**
    * Constructs a LivingSpacesIntranetBanForm form.
    *
+   * @param \Drupal\living_spaces_intranet\LivingSpacesBansManagerInterface $ban_manager
+   *   Interface for ban manager service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Provides an interface for entity type managers.
    * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
    *   Creates a PrivateTempStore object for a given collection.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, PrivateTempStoreFactory $temp_store_factory) {
+  public function __construct(LivingSpacesBansManagerInterface $ban_manager, EntityTypeManagerInterface $entity_type_manager, PrivateTempStoreFactory $temp_store_factory) {
+    $this->banManager = $ban_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->tempStoreFactory = $temp_store_factory;
   }
@@ -45,6 +56,7 @@ class LivingSpacesIntranetBanForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('living_spaces_bans.manager'),
       $container->get('entity_type.manager'),
       $container->get('tempstore.private')
     );
@@ -61,16 +73,20 @@ class LivingSpacesIntranetBanForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $temp = $this->tempStoreFactory
-      ->get('living_spaces_intranet_ban_user')
-      ->get($this->currentUser()->id());
+    $ban_storage = $this->entityTypeManager->getStorage('living_spaces_ban_type');
 
     $options = [];
+    /** @var \Drupal\living_spaces_intranet\Entity\LivingSpacesBanTypeInterface $ban_type */
+    foreach ($ban_storage->loadMultiple() as $ban_type) {
+      $options[$ban_type->id()] = $ban_type->label();
+    }
 
     $form['type'] = [
-      '#type' => 'checkboxes',
+      '#type' => 'radios',
       '#title' => $this->t('Type'),
       '#options' => $options,
+      '#required' => TRUE,
+      '#default_value' => isset($options['global']) ? 'global' : '',
     ];
 
     $form['submit'] = [
@@ -85,6 +101,19 @@ class LivingSpacesIntranetBanForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $temp = $this->tempStoreFactory
+      ->get('living_spaces_intranet_ban_user')
+      ->get($this->currentUser()->id());
+
+    if (!empty($temp['users'])) {
+      /** @var \Drupal\user\UserInterface $user */
+      foreach ($temp['users'] as $user) {
+        $data = [
+          'bundle' => $form_state->getValue('type'),
+        ];
+        $this->banManager->setUserBan($user, $data);
+      }
+    }
   }
 
 }
