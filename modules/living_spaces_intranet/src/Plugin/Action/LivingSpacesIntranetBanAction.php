@@ -13,10 +13,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides LivingSpacesIntranetBanAction action.
  *
  * @Action(
- *   id = "dip_counseling_ban_action",
+ *   id = "living_spaces_intranet_ban_action",
  *   label = @Translation("Ban user"),
  *   type = "user",
- *   confirm_form_route_name = "dip_counseling.ban_user_confirm"
+ *   confirm_form_route_name = "living_spaces_intranet.ban_user_confirm"
  * )
  */
 class LivingSpacesIntranetBanAction extends ActionBase implements ContainerFactoryPluginInterface {
