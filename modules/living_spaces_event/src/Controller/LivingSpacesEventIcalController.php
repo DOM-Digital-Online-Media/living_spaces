@@ -2,7 +2,6 @@
 
 namespace Drupal\living_spaces_event\Controller;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -102,14 +101,12 @@ class LivingSpacesEventIcalController extends ControllerBase {
 
       if ($results = $query->execute()->fetchAllAssoc('id')) {
         foreach ($results as $result) {
-          $location = is_string($result->location__value) ? Html::escape($result->location__value) : '';
-
           $event = new Event();
           $event->setDtStart(new \DateTime($result->field_start_date_value, new \DateTimeZone('UTC')));
           $event->setDtEnd(new \DateTime($result->field_end_date_value, new \DateTimeZone('UTC')));
           $event->setSummary($result->label);
           $event->setDescription($result->description__value);
-          $event->setLocation($location);
+          $event->setLocation(strip_tags($result->location__value));
           $event->setUrl( "{$host}/living-spaces-event/{$result->id}");
           $calendar->addComponent($event);
         }
