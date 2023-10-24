@@ -73,6 +73,14 @@ class LivingSpacesIntranetBanForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $temp = $this->tempStoreFactory
+      ->get('living_spaces_intranet_ban_user')
+      ->get($this->currentUser()->id());
+
+    if (empty($temp['users'])) {
+      return $form;
+    }
+
     $ban_storage = $this->entityTypeManager->getStorage('living_spaces_ban_type');
 
     $options = [];
@@ -105,12 +113,11 @@ class LivingSpacesIntranetBanForm extends FormBase {
       ->get('living_spaces_intranet_ban_user')
       ->get($this->currentUser()->id());
 
-    if (!empty($temp['users'])) {
+    if (!empty($temp['users']) && $bundle = $form_state->getValue('type')) {
+      $data = ['bundle' => $bundle];
+
       /** @var \Drupal\user\UserInterface $user */
       foreach ($temp['users'] as $user) {
-        $data = [
-          'bundle' => $form_state->getValue('type'),
-        ];
         $this->banManager->setUserBan($user, $data);
       }
 
