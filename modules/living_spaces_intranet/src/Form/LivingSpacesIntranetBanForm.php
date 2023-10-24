@@ -83,7 +83,7 @@ class LivingSpacesIntranetBanForm extends FormBase {
 
     $form['type'] = [
       '#type' => 'radios',
-      '#title' => $this->t('Type'),
+      '#title' => $this->t('Operation'),
       '#options' => [
         'ban' => $this->t('Ban'),
         'unban' => $this->t('Unban'),
