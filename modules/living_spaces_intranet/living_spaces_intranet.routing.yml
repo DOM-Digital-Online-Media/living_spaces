@@ -27,6 +27,13 @@ living_spaces_intranet.unban:
     parameters:
       user:
         type: entity:user
+living_spaces_intranet.ban_user_confirm:
+  path: '/user/ban'
+  defaults:
+    _form: '\Drupal\living_spaces_intranet\Form\LivingSpacesIntranetBanForm'
+    _title: 'Ban user'
+  requirements:
+    _permission: 'administer ban'
 living_spaces_intranet.send_message:
   path: '/send-websocket-message/{message}'
   defaults:
