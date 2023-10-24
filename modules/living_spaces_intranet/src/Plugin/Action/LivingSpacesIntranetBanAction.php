@@ -5,7 +5,6 @@ namespace Drupal\living_spaces_intranet\Plugin\Action;
 use Drupal\Core\Action\ActionBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -36,13 +35,6 @@ class LivingSpacesIntranetBanAction extends ActionBase implements ContainerFacto
   protected $currentUser;
 
   /**
-   * Returns the current_route_match service.
-   *
-   * @var \Drupal\Core\Routing\RouteMatchInterface
-   */
-  protected $route;
-
-  /**
    * Constructs a LivingSpacesIntranetBanAction object.
    *
    * @param array $configuration
@@ -55,15 +47,12 @@ class LivingSpacesIntranetBanAction extends ActionBase implements ContainerFacto
    *   Creates a PrivateTempStore object for a given collection.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   Defines an account interface which represents the current user.
-   * @param \Drupal\Core\Routing\RouteMatchInterface $route
-   *   Provides an interface for classes representing the result of routing.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, PrivateTempStoreFactory $temp_store_factory, AccountInterface $current_user, RouteMatchInterface $route) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, PrivateTempStoreFactory $temp_store_factory, AccountInterface $current_user) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->currentUser = $current_user;
     $this->tempStoreFactory = $temp_store_factory;
-    $this->route = $route;
   }
 
   /**
@@ -75,8 +64,7 @@ class LivingSpacesIntranetBanAction extends ActionBase implements ContainerFacto
       $plugin_id,
       $plugin_definition,
       $container->get('tempstore.private'),
-      $container->get('current_user'),
-      $container->get('current_route_match')
+      $container->get('current_user')
     );
   }
 
