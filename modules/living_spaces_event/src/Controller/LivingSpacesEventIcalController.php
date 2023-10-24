@@ -125,6 +125,7 @@ class LivingSpacesEventIcalController extends ControllerBase {
     }
     catch (\Exception $e) {
       $this->messenger()->addWarning($this->t('There was an error with ics file generation. Try again later.'));
+      $this->loggerFactory->get('living_spaces_event')->error($e->getMessage());
       throw new NotFoundHttpException();
     }
 
