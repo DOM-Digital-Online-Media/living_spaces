@@ -228,7 +228,7 @@ display:
           action_title: Action
           include_exclude: include
           selected_actions:
-            - living_spaces_group_remove_user_action
+            - living_spaces_intranet_ban_action
             - living_spaces_users_employee_export_action
             - user_block_user_action
             - user_cancel_user_action
