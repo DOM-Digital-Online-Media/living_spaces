@@ -113,6 +113,8 @@ class LivingSpacesIntranetBanForm extends FormBase {
         ];
         $this->banManager->setUserBan($user, $data);
       }
+
+      $this->messenger()->addStatus($this->t('Selected user(s) were banned.'));
     }
   }
 
