@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: living_spaces_intranet_ban_action
+label: 'Ban/unban user(s)'
+type: user
+plugin: living_spaces_intranet_ban_action
+configuration: {  }

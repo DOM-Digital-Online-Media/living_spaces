@@ -1,0 +1,7 @@
+display:
+  employee:
+    display_options:
+      fields:
+        search_api_bulk_form:
+          selected_actions:
+            - living_spaces_intranet_ban_action
