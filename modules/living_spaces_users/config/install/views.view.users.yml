@@ -9,8 +9,10 @@ dependencies:
     - search_api.index.space_users
   module:
     - csv_serialization
+    - image
     - rest
     - search_api
+    - serialization
     - user
     - views_data_export
 id: users
@@ -22,65 +24,11 @@ base_table: search_api_index_space_users
 base_field: search_api_id
 display:
   default:
-    display_plugin: default
     id: default
     display_title: Default
+    display_plugin: default
     position: 0
     display_options:
-      access:
-        type: none
-        options: {  }
-      cache:
-        type: none
-        options: {  }
-      query:
-        type: views_query
-        options:
-          bypass_access: false
-          skip_access: false
-          preserve_facet_query_args: false
-      exposed_form:
-        type: basic
-        options:
-          submit_button: Apply
-          reset_button: true
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
-          expose_sort_order: true
-          sort_asc_label: Asc
-          sort_desc_label: Desc
-      pager:
-        type: mini
-        options:
-          items_per_page: 10
-          offset: 0
-          id: 0
-          total_pages: null
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
-          tags:
-            previous: ‹‹
-            next: ››
-      style:
-        type: default
-        options:
-          grouping: {  }
-          row_class: ''
-          default_row_class: true
-          uses_fields: false
-      row:
-        type: fields
-        options:
-          inline: {  }
-          separator: ''
-          hide_empty: false
-          default_field_elements: true
       fields:
         name:
           id: name
@@ -89,6 +37,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_field
           label: ''
           exclude: false
           alter:
@@ -151,14 +100,67 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-          plugin_id: search_api_field
-      filters: {  }
+      pager:
+        type: mini
+        options:
+          offset: 0
+          items_per_page: 10
+          total_pages: null
+          id: 0
+          tags:
+            next: ››
+            previous: ‹‹
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: true
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      access:
+        type: none
+        options: {  }
+      cache:
+        type: none
+        options: {  }
+      empty: {  }
       sorts: {  }
+      arguments: {  }
+      filters: {  }
+      style:
+        type: default
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          uses_fields: false
+      row:
+        type: fields
+        options:
+          default_field_elements: true
+          inline: {  }
+          separator: ''
+          hide_empty: false
+      query:
+        type: search_api_query
+        options:
+          bypass_access: false
+          skip_access: false
+          preserve_facet_query_args: false
+      relationships: {  }
       header: {  }
       footer: {  }
-      empty: {  }
-      relationships: {  }
-      arguments: {  }
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -168,6 +170,7 @@ display:
         - url.query_args
       tags:
         - 'config:search_api.index.space_users'
+        - 'search_api_list:space_users'
   employee:
     id: employee
     display_title: Employee
@@ -228,6 +231,7 @@ display:
           action_title: Action
           include_exclude: include
           selected_actions:
+            - living_spaces_intranet_ban_action
             - living_spaces_users_employee_export_action
             - user_block_user_action
             - user_cancel_user_action
@@ -314,6 +318,10 @@ display:
             multi_type: separator
             multi_separator: ', '
             format_plural_values:
+              - '1'
+              - '@count'
+              - '1'
+              - '@count'
               - '1'
               - '@count'
               - '1'
@@ -874,6 +882,15 @@ display:
             date_format: short
             custom_date_format: ''
             timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -949,6 +966,15 @@ display:
             date_format: short
             custom_date_format: ''
             timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -1016,77 +1042,6 @@ display:
           empty_zero: false
           hide_alter_empty: true
           destination: true
-        joined_spaces:
-          id: joined_spaces
-          table: search_api_index_space_users
-          field: joined_spaces
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_field
-          label: Spaces
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: target_id
-          type: entity_reference_label
-          settings:
-            link: true
-          group_column: target_id
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          field_rendering: true
-          fallback_handler: search_api_entity
-          fallback_options:
-            link_to_item: false
-            use_highlighting: false
-            multi_type: separator
-            multi_separator: ', '
-            display_methods: {  }
       pager:
         type: full
         options:
@@ -1138,41 +1093,7 @@ display:
             label: ''
             field_identifier: ''
           exposed: false
-      arguments:
-        joined_spaces_ids:
-          id: joined_spaces_ids
-          table: search_api_index_space_users
-          field: joined_spaces_ids
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api
-          default_action: default
-          exception:
-            value: all
-            title_enable: false
-            title: All
-          title_enable: false
-          title: ''
-          default_argument_type: living_spaces_group_joined_spaces
-          default_argument_options: {  }
-          default_argument_skip_url: false
-          summary_options: {  }
-          summary:
-            sort_order: asc
-            number_of_records: 0
-            format: default_summary
-          specify_validation: true
-          validate:
-            type: 'entity:group'
-            fail: empty
-          validate_options:
-            bundles: {  }
-            access: false
-            operation: view
-            multiple: 1
-          break_phrase: true
-          not: false
+      arguments: {  }
       filters:
         status:
           id: status
@@ -1539,6 +1460,8 @@ display:
         groups:
           - AND
           - AND
+          - AND
+          - AND
       style:
         type: table
         options:
@@ -1555,7 +1478,6 @@ display:
             field_first_name: field_first_name
             field_last_name: field_last_name
             roles: roles
-            joined_spaces: joined_spaces
             created: created
             access: access
             search_api_operations: search_api_operations
@@ -1612,13 +1534,6 @@ display:
               empty_column: false
               responsive: ''
             roles:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            joined_spaces:
               sortable: false
               default_sort_order: asc
               align: ''
@@ -1697,88 +1612,12 @@ display:
         - 'config:search_api.index.space_users'
         - 'search_api_list:space_users'
   employee_export:
-    display_plugin: data_export
     id: employee_export
     display_title: 'Employee export'
+    display_plugin: data_export
     position: 2
     display_options:
-      display_extenders: {  }
-      display_description: ''
-      path: admin/people/employee/export
-      access:
-        type: perm
-        options:
-          perm: 'access employees overview'
-      defaults:
-        access: false
-        style: false
-        row: false
-        title: false
-        pager: false
-        empty: false
-        fields: false
-        sorts: false
-        filters: false
-        filter_groups: false
-      style:
-        type: data_export
-        options:
-          formats:
-            csv: csv
-          csv_settings:
-            delimiter: ','
-            enclosure: '"'
-            escape_char: \
-            strip_tags: true
-            trim: true
-            encoding: utf8
-            utf8_bom: '0'
-            use_serializer_encode_only: false
-      row:
-        type: data_field
-        options:
-          field_options:
-            uid:
-              alias: ''
-              raw_output: false
-            status:
-              alias: ''
-              raw_output: false
-            name:
-              alias: ''
-              raw_output: false
-            field_first_name:
-              alias: ''
-              raw_output: false
-            field_last_name:
-              alias: ''
-              raw_output: false
-            roles:
-              alias: ''
-              raw_output: false
-            created:
-              alias: ''
-              raw_output: false
-            access:
-              alias: ''
-              raw_output: false
       title: Employees
-      pager:
-        type: none
-        options:
-          offset: 0
-      empty:
-        area_text_custom:
-          id: area_text_custom
-          table: views
-          field: area_text_custom
-          relationship: none
-          group_type: group
-          admin_label: ''
-          empty: true
-          tokenize: false
-          content: 'No people available.'
-          plugin_id: text_custom
       fields:
         uid:
           id: uid
@@ -1787,6 +1626,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_field
           label: 'User ID'
           exclude: false
           alter:
@@ -1861,7 +1701,8 @@ display:
             format_plural_values:
               - '1'
               - '@count'
-          plugin_id: search_api_field
+              - '1'
+              - '@count'
         status:
           id: status
           table: search_api_index_space_users
@@ -1869,6 +1710,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_field
           label: Status
           exclude: false
           alter:
@@ -1914,8 +1756,8 @@ display:
           type: boolean
           settings:
             format: custom
-            format_custom_true: Active
             format_custom_false: Blocked
+            format_custom_true: Active
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -1937,7 +1779,6 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-          plugin_id: search_api_field
         mail:
           id: mail
           table: search_api_datasource_space_users_entity_user
@@ -1945,6 +1786,8 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: user
+          plugin_id: search_api_field
           label: ''
           exclude: true
           alter:
@@ -2006,8 +1849,6 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-          entity_type: user
-          plugin_id: search_api_field
         name:
           id: name
           table: search_api_index_space_users
@@ -2015,6 +1856,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_field
           label: Username
           exclude: false
           alter:
@@ -2077,7 +1919,6 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-          plugin_id: search_api_field
         field_first_name:
           id: field_first_name
           table: search_api_index_space_users
@@ -2085,6 +1926,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_field
           label: 'First name'
           exclude: false
           alter:
@@ -2147,7 +1989,6 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-          plugin_id: search_api_field
         field_last_name:
           id: field_last_name
           table: search_api_index_space_users
@@ -2155,6 +1996,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_field
           label: 'Last name'
           exclude: false
           alter:
@@ -2217,7 +2059,6 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-          plugin_id: search_api_field
         roles:
           id: roles
           table: search_api_index_space_users
@@ -2225,6 +2066,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_field
           label: Roles
           exclude: false
           alter:
@@ -2290,7 +2132,6 @@ display:
             display_methods:
               user_role:
                 display_method: label
-          plugin_id: search_api_field
         created:
           id: created
           table: search_api_index_space_users
@@ -2298,6 +2139,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_field
           label: 'Created at'
           exclude: false
           alter:
@@ -2345,6 +2187,15 @@ display:
             date_format: short
             custom_date_format: ''
             timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -2365,7 +2216,6 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-          plugin_id: search_api_field
         access:
           id: access
           table: search_api_index_space_users
@@ -2373,6 +2223,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_field
           label: 'Last login'
           exclude: false
           alter:
@@ -2420,6 +2271,15 @@ display:
             date_format: short
             custom_date_format: ''
             timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -2437,7 +2297,26 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-          plugin_id: search_api_field
+      pager:
+        type: none
+        options:
+          offset: 0
+      access:
+        type: perm
+        options:
+          perm: 'access employees overview'
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text_custom
+          empty: true
+          content: 'No people available.'
+          tokenize: false
       sorts:
         created:
           id: created
@@ -2446,12 +2325,46 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api
           order: DESC
-          exposed: false
           expose:
             label: ''
             field_identifier: ''
+          exposed: false
+      arguments:
+        uid:
+          id: uid
+          table: search_api_index_space_users
+          field: uid
+          relationship: none
+          group_type: group
+          admin_label: ''
           plugin_id: search_api
+          default_action: default
+          exception:
+            value: all
+            title_enable: false
+            title: All
+          title_enable: false
+          title: ''
+          default_argument_type: query_parameter
+          default_argument_options:
+            query_param: uids
+            fallback: all
+            multiple: and
+          default_argument_skip_url: true
+          summary_options: {  }
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: false
+          validate:
+            type: none
+            fail: 'not found'
+          validate_options: {  }
+          break_phrase: true
+          not: false
       filters:
         status:
           id: status
@@ -2460,6 +2373,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_boolean
           operator: '='
           value: ''
           group: 1
@@ -2490,15 +2404,14 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items:
-              1:
+              -
                 title: Active
                 operator: '='
                 value: '1'
-              2:
+              -
                 title: Blocked
                 operator: '='
                 value: '0'
-          plugin_id: search_api_boolean
         ngram_label:
           id: ngram_label
           table: search_api_index_space_users
@@ -2506,6 +2419,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_text
           operator: '='
           value:
             min: ''
@@ -2527,9 +2441,9 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            placeholder: ''
             min_placeholder: ''
             max_placeholder: ''
+            placeholder: ''
           is_grouped: false
           group_info:
             label: ''
@@ -2542,7 +2456,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: search_api_text
         roles:
           id: roles
           table: search_api_index_space_users
@@ -2550,8 +2463,19 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_options
           operator: or
-          value: {  }
+          value:
+            administrator: administrator
+            client_admin: client_admin
+            full_time_employee: full_time_employee
+            volunteer: volunteer
+            external_employee: external_employee
+            former_employee: former_employee
+            trainer_mentor: trainer_mentor
+            trainee_intern: trainee_intern
+            office_manager: office_manager
+            assistant_to_the_office_manager: assistant_to_the_office_manager
           group: 1
           exposed: true
           expose:
@@ -2582,7 +2506,6 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          plugin_id: search_api_options
         ngram_name:
           id: ngram_name
           table: search_api_index_space_users
@@ -2590,6 +2513,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_text
           operator: '='
           value:
             min: ''
@@ -2611,9 +2535,9 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            placeholder: ''
             min_placeholder: ''
             max_placeholder: ''
+            placeholder: ''
           is_grouped: false
           group_info:
             label: ''
@@ -2626,7 +2550,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: search_api_text
         ngram_field_first_name:
           id: ngram_field_first_name
           table: search_api_index_space_users
@@ -2634,6 +2557,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_text
           operator: '='
           value:
             min: ''
@@ -2655,9 +2579,9 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            placeholder: ''
             min_placeholder: ''
             max_placeholder: ''
+            placeholder: ''
           is_grouped: false
           group_info:
             label: ''
@@ -2670,7 +2594,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: search_api_text
         ngram_field_last_name:
           id: ngram_field_last_name
           table: search_api_index_space_users
@@ -2678,6 +2601,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_text
           operator: '='
           value:
             min: ''
@@ -2699,9 +2623,9 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            placeholder: ''
             min_placeholder: ''
             max_placeholder: ''
+            placeholder: ''
           is_grouped: false
           group_info:
             label: ''
@@ -2714,7 +2638,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: search_api_text
         ngram_mail:
           id: ngram_mail
           table: search_api_index_space_users
@@ -2722,6 +2645,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_text
           operator: '='
           value:
             min: ''
@@ -2743,9 +2667,9 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            placeholder: ''
             min_placeholder: ''
             max_placeholder: ''
+            placeholder: ''
           is_grouped: false
           group_info:
             label: ''
@@ -2758,20 +2682,118 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: search_api_text
+        roles_1:
+          id: roles_1
+          table: search_api_index_space_users
+          field: roles
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_options
+          operator: not
+          value:
+            counselee: counselee
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
       filter_groups:
         operator: AND
         groups:
-          1: AND
-      filename: employee-export.csv
-      automatic_download: true
-      store_in_public_file_directory: null
-      redirect_to_display: employee
-      custom_redirect_path: false
-      include_query_params: false
+          - AND
+          - AND
+      style:
+        type: data_export
+        options:
+          formats:
+            csv: csv
+          csv_settings:
+            delimiter: ','
+            enclosure: '"'
+            escape_char: \
+            strip_tags: true
+            trim: true
+            encoding: utf8
+            utf8_bom: '0'
+            use_serializer_encode_only: false
+      row:
+        type: data_field
+        options:
+          field_options:
+            uid:
+              alias: ''
+              raw_output: false
+            status:
+              alias: ''
+              raw_output: false
+            name:
+              alias: ''
+              raw_output: false
+            field_first_name:
+              alias: ''
+              raw_output: false
+            field_last_name:
+              alias: ''
+              raw_output: false
+            roles:
+              alias: ''
+              raw_output: false
+            created:
+              alias: ''
+              raw_output: false
+            access:
+              alias: ''
+              raw_output: false
+      defaults:
+        empty: false
+        access: false
+        title: false
+        pager: false
+        style: false
+        row: false
+        fields: false
+        sorts: false
+        arguments: false
+        filters: false
+        filter_groups: false
+      display_description: ''
+      display_extenders: {  }
+      path: admin/people/employee/export
       displays:
         employee: employee
         default: '0'
+      filename: employee-export.csv
+      automatic_download: true
+      store_in_public_file_directory: null
+      custom_redirect_path: false
+      redirect_to_display: employee
+      include_query_params: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -2784,3 +2806,4 @@ display:
         - 'config:field.storage.profile.field_first_name'
         - 'config:field.storage.profile.field_last_name'
         - 'config:search_api.index.space_users'
+        - 'search_api_list:space_users'
