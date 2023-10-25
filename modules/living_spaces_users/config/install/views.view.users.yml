@@ -1423,8 +1423,7 @@ display:
           admin_label: ''
           plugin_id: search_api_options
           operator: not
-          value:
-            counselee: counselee
+          value: {  }
           group: 1
           exposed: false
           expose:
@@ -2691,8 +2690,7 @@ display:
           admin_label: ''
           plugin_id: search_api_options
           operator: not
-          value:
-            counselee: counselee
+          value: {  }
           group: 1
           exposed: false
           expose:
