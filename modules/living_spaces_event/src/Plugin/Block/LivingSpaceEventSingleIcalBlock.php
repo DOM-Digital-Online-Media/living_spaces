@@ -43,6 +43,9 @@ class LivingSpaceEventSingleIcalBlock extends BlockBase {
         ],
       ])->toString(),
       '#prefix' => '<h2>' . $this->t('Include an appointment in your own calendar') . '</h2>',
+      '#cache' => [
+        'tags' => $event->getCacheTags(),
+      ],
     ];
   }
 

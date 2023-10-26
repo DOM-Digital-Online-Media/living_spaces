@@ -24,7 +24,7 @@ living_spaces_event.invite_autocomplete:
   requirements:
     _access: 'TRUE'
 living_spaces_event.ical_event:
-  path: '/living-spaces-event/{living_spaces_event}'
+  path: '/living-spaces-event-single-ical/{living_spaces_event}'
   defaults:
     _controller: '\Drupal\living_spaces_event\Controller\LivingSpacesEventIcalController::downloadEvent'
   requirements:

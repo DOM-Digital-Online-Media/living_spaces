@@ -80,7 +80,7 @@ third_party_settings:
                 third_party_settings:
                   empty_fields:
                     handler: ''
-            weight: 7
+            weight: 8
             additional: {  }
           cbfacc80-6368-436c-9f7c-a1537b6fb145:
             uuid: cbfacc80-6368-436c-9f7c-a1537b6fb145
@@ -104,7 +104,7 @@ third_party_settings:
               provider: living_spaces_event
               context_mapping:
                 living_spaces_event: layout_builder.entity
-            weight: 5
+            weight: 6
             additional: {  }
           829743b2-e0f8-4fb2-bced-55635cba13bc:
             uuid: 829743b2-e0f8-4fb2-bced-55635cba13bc
@@ -124,7 +124,7 @@ third_party_settings:
                 third_party_settings:
                   empty_fields:
                     handler: ''
-            weight: 6
+            weight: 7
             additional: {  }
           6b31d6c3-94fd-474e-a796-b006155e8094:
             uuid: 6b31d6c3-94fd-474e-a796-b006155e8094
@@ -146,7 +146,7 @@ third_party_settings:
                 third_party_settings:
                   empty_fields:
                     handler: ''
-            weight: 8
+            weight: 9
             additional: {  }
           7175bfec-73d9-4df3-b15c-4c72af6984a5:
             uuid: 7175bfec-73d9-4df3-b15c-4c72af6984a5
@@ -221,6 +221,18 @@ third_party_settings:
               context_mapping:
                 living_spaces_event: layout_builder.entity
             weight: 0
+            additional: {  }
+          f2ed3b9d-81b5-47b1-b44d-383078a354de:
+            uuid: f2ed3b9d-81b5-47b1-b44d-383078a354de
+            region: first
+            configuration:
+              id: living_spaces_event_single_ical_block
+              label: 'Single iCal'
+              label_display: '0'
+              provider: living_spaces_event
+              context_mapping:
+                living_spaces_event: layout_builder.entity
+            weight: 5
             additional: {  }
         third_party_settings: {  }
 id: living_spaces_event.general.default
