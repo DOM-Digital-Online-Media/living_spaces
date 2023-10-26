@@ -8,6 +8,9 @@ administer living spaces event invite:
   title: 'Administer spaces event invite entities'
   description: 'Gain full control over all spaces event invite configuration.'
   restrict access: TRUE
+access event invite export:
+  title: 'Access event invite export'
+  description: 'Allow access to export space event invites'
 access ical event export:
   title: 'Access iCal event export'
   description: 'Allow access to export space events to iCal'

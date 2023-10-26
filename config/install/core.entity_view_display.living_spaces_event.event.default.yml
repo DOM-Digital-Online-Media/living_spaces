@@ -80,7 +80,7 @@ third_party_settings:
                 third_party_settings:
                   empty_fields:
                     handler: ''
-            weight: 9
+            weight: 10
             additional: {  }
           909dd2cb-960c-49e8-b5c1-3b28a8af4748:
             uuid: 909dd2cb-960c-49e8-b5c1-3b28a8af4748
@@ -104,7 +104,7 @@ third_party_settings:
               provider: living_spaces_event
               context_mapping:
                 living_spaces_event: layout_builder.entity
-            weight: 7
+            weight: 8
             additional: {  }
           3e0c81b6-884c-410a-b778-a059a5ee90b7:
             uuid: 3e0c81b6-884c-410a-b778-a059a5ee90b7
@@ -124,7 +124,7 @@ third_party_settings:
                 third_party_settings:
                   empty_fields:
                     handler: ''
-            weight: 8
+            weight: 9
             additional: {  }
           1dc64a48-ef76-4073-a046-4711416622c6:
             uuid: 1dc64a48-ef76-4073-a046-4711416622c6
@@ -146,7 +146,7 @@ third_party_settings:
                 third_party_settings:
                   empty_fields:
                     handler: ''
-            weight: 10
+            weight: 11
             additional: {  }
           78b27e8a-c106-46d1-92ac-4de864508222:
             uuid: 78b27e8a-c106-46d1-92ac-4de864508222
@@ -233,6 +233,18 @@ third_party_settings:
               context_mapping:
                 living_spaces_event: layout_builder.entity
             weight: 6
+            additional: {  }
+          3313cfe7-9061-412f-a239-811d01444e44:
+            uuid: 3313cfe7-9061-412f-a239-811d01444e44
+            region: first
+            configuration:
+              id: living_spaces_event_invite_export_block
+              label: 'Event Invite export'
+              label_display: '0'
+              provider: living_spaces_event
+              context_mapping:
+                living_spaces_event: layout_builder.entity
+            weight: 7
             additional: {  }
         third_party_settings: {  }
 id: living_spaces_event.event.default
