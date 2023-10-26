@@ -6,6 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\group\Entity\GroupInterface;
+use Drupal\living_spaces_event\Entity\LivingSpaceEventInterface;
 use Drupal\Core\Access\AccessResult;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\File\FileSystemInterface;
@@ -159,6 +160,93 @@ class LivingSpacesEventIcalController extends ControllerBase {
   public function access(GroupInterface $group) {
     $access = $this->currentUser()->hasPermission('access ical event export') ||
       $group->hasPermission('access ical event export', $this->currentUser());
+
+    return $access ? AccessResult::allowed() : AccessResult::forbidden();
+  }
+
+  /**
+   * Callback for 'iCal Event' route.
+   */
+  public function downloadEvent(LivingSpaceEventInterface $living_spaces_event) {
+    $host = $this->request->getCurrentRequest()->getHost();
+    $calendar = new Calendar($host);
+
+    $event = new Event();
+    $event->setSummary($living_spaces_event->label());
+
+    if (!$living_spaces_event->get('field_start_date')->isEmpty()) {
+      $start_date = $living_spaces_event->get('field_start_date')->getValue();
+      $event->setDtStart(new \DateTime($start_date[0]['value'], new \DateTimeZone('UTC')));
+    }
+
+    if (!$living_spaces_event->get('field_end_date')->isEmpty()) {
+      $end_date = $living_spaces_event->get('field_end_date')->getValue();
+      $event->setDtEnd(new \DateTime($end_date[0]['value'], new \DateTimeZone('UTC')));
+    }
+
+    if (!$living_spaces_event->get('description')->isEmpty()) {
+      $description = $living_spaces_event->get('description')->getValue();
+      $event->setDescription($description[0]['value']);
+    }
+
+    if (!$living_spaces_event->get('location')->isEmpty()) {
+      $location = $living_spaces_event->get('location')->getValue();
+      $event->setLocation(strip_tags($location[0]['value']));
+    }
+
+    $event->setUrl($living_spaces_event->toUrl('canonical', ['absolute' => TRUE])->toString());
+    $calendar->addComponent($event);
+
+    $directory = 'public://ical';
+    $this->fileSystem->prepareDirectory($directory, FileSystemInterface:: CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
+
+    $filename = "iCal {$living_spaces_event->label()}.ics";
+    $uri = "{$directory}/{$filename}";
+
+    $content = $calendar->render();
+    try {
+      $file = $this->fileRepository->writeData($content, $uri, FileSystemInterface::EXISTS_REPLACE);
+    }
+    catch (\Exception $e) {
+      $this->messenger()->addWarning($this->t('There was an error with ics file generation. Try again later.'));
+      $this->loggerFactory->get('living_spaces_event')->error($e->getMessage());
+      throw new NotFoundHttpException();
+    }
+
+    $parts = explode('://', $uri);
+    $filepath = $this->fileSystem->realpath('public://') . '/' . $parts[1];
+
+    if (!file_exists($filepath)) {
+      $this->messenger()->addWarning($this->t('There was an error with ics file generation. Try again later.'));
+      $this->loggerFactory->get('living_spaces_event')->error('Caanot find iCal file for @event', [
+        '@event' => $living_spaces_event->label(),
+      ]);
+      throw new NotFoundHttpException();
+    }
+
+    $headers = [
+      'Content-Type' => 'text/calendar',
+      'Content-Disposition' => 'attachment; filename="' . $file->getFilename() . '"',
+      'Content-Length' => $file->getSize(),
+      'Content-Transfer-Encoding' => 'binary',
+      'Pragma' => 'no-cache',
+      'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+      'Expires' => '0',
+      'Accept-Ranges' => 'bytes',
+    ];
+
+    return new BinaryFileResponse($uri, 200, $headers);
+  }
+
+  /**
+   * Access callback for 'iCal Event' route.
+   */
+  public function accessEvent(LivingSpaceEventInterface $living_spaces_event) {
+    $access = $this->currentUser()->hasPermission('access ical event export');
+
+    if (!$access && !$living_spaces_event->get('space')->isEmpty()) {
+      $living_spaces_event->space->entity->hasPermission('access ical event export', $this->currentUser());
+    }
 
     return $access ? AccessResult::allowed() : AccessResult::forbidden();
   }
