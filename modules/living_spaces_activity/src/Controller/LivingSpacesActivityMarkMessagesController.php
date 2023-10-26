@@ -101,7 +101,8 @@ class LivingSpacesActivityMarkMessagesController extends ControllerBase {
     $response->addCommand(new ReplaceCommand('.notification-counter', $counter));
 
     $response->addCommand(new InvokeCommand('#space-activity-notifications .dropdown-toggle', 'dropdown', ['dispose']));
-    $response->addCommand(new InvokeCommand('#space-activity-notifications .dropdown-toggle', 'dropdown', ['update']));
+    $response->addCommand(new InvokeCommand('#space-activity-notifications .dropdown-toggle', 'dropdown', ['hide']));
+    $response->addCommand(new InvokeCommand('#space-activity-notifications .dropdown-toggle', 'dropdown', ['show']));
 
     return $response;
   }

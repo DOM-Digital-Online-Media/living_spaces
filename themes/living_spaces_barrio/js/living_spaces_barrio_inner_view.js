@@ -42,14 +42,16 @@
             beforeSerialize: function (element, options) {
               options.data.view_name = $element.attr('data-view-name');
               options.data.view_display_id = $element.attr('data-view-display');
+              $element.find('> .dropdown-toggle').dropdown('dispose');
             },
             success: function (response) {
               if (!$('.js-view-dom-id-' + $element.attr('data-view-name') + '-' + $element.attr('data-view-display')).length && response[3] !== undefined) {
                 $('#' + base + ' .dropdown-menu').replaceWith(response[3].data);
 
                 $('.use-ajax').attachAjaxToDynamicLink();
-                $element.off('click').children('.dropdown-toggle').dropdown('dispose');
-                $element.children('.dropdown-toggle').dropdown('update');
+                $element.off('click');
+                $element.find('> .dropdown-toggle').dropdown('hide');
+                $element.find('> .dropdown-toggle').dropdown('show');
               }
             }
           };
