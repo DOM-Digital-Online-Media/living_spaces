@@ -4,6 +4,7 @@ dependencies:
   config:
     - comment.type.discussion_post
     - field.storage.comment.comment_body
+    - filter.format.plain_text
   module:
     - text
 id: comment.discussion_post.comment_body
@@ -16,5 +17,7 @@ required: true
 translatable: true
 default_value: {  }
 default_value_callback: ''
-settings: {  }
+settings:
+  allowed_formats:
+    - plain_text
 field_type: text_long
