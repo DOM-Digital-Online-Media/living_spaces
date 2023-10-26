@@ -15,6 +15,7 @@
 {%
   set classes = [
   'dropdown-menu',
+  'dropdown-menu-end',
   options.class
 ]
 %}
@@ -22,5 +23,8 @@
 <ul {{ attributes.addClass(classes) }} aria-labelledby="{{ id }}">
   {% for link in links %}
     <li>{{ link }}</li>
+    {% if not loop.last %}
+      <li><hr class="dropdown-divider"></li>
+    {% endif %}
   {% endfor %}
 </ul>

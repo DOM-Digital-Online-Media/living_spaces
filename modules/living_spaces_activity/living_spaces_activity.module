@@ -331,7 +331,7 @@ function living_spaces_activity_living_spaces_users_notification_menu_item_info(
       'class' => ['nav-link', 'dropdown-toggle'],
     ],
     '#cache' => ['max-age' => 0],
-    '#suffix' => '<ul class="dropdown-menu"></ul>',
+    '#suffix' => '<ul class="dropdown-menu dropdown-menu-end"></ul>',
   ];
 
   return [
