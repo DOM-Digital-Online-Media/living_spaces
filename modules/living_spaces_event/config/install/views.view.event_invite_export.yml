@@ -433,13 +433,9 @@ display:
   rest_export:
     id: rest_export
     display_title: 'Event invites'
-    display_plugin: rest_export
-    position: 1
+    display_plugin: data_export
+    position: 3
     display_options:
-      pager:
-        type: none
-        options:
-          offset: 0
       style:
         type: data_export
         options:
@@ -454,18 +450,17 @@ display:
             encoding: utf8
             utf8_bom: '0'
             use_serializer_encode_only: false
-      row:
-        type: data_field
-        options:
-          field_options:
-            rendered_entity:
-              alias: ''
-              raw_output: false
       display_description: ''
       display_extenders: {  }
       path: living-spaces-event-single-export/%living_spaces_event
       auth:
         - cookie
+      filename: 'Event participant.csv'
+      automatic_download: true
+      store_in_public_file_directory: null
+      custom_redirect_path: false
+      redirect_to_display: none
+      include_query_params: false
     cache_metadata:
       max-age: -1
       contexts:
