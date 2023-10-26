@@ -49,6 +49,7 @@
         "drupal/flood_control": "^2.2.2",
         "drupal/fullcalendar_view": "5.1.8",
         "drupal/group": "^3.0",
+        "drupal/image_effects": "^3.4",
         "drupal/inline_entity_form": "^1.0@RC",
         "drupal/languagefield": "^1.6",
         "drupal/linkit": "^6.1",
