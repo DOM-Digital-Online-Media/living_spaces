@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - imagick
+name: round_thumbnail
+label: 'Round Thumbnail (30×30)'
+effects:
+  3a7f2829-424a-4cc4-aad5-5f22e27e059f:
+    uuid: 3a7f2829-424a-4cc4-aad5-5f22e27e059f
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 30
+      height: 30
+      anchor: center-center
+  36b32dba-139a-4733-937e-9cb49219d0ef:
+    uuid: 36b32dba-139a-4733-937e-9cb49219d0ef
+    id: image_rounded_corners
+    weight: 2
+    data:
+      x_rounding: '50'
+      y_rounding: '50'
+      stroke_width: '10'
+      displace: '5'
+      size_correction: '-6'

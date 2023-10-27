@@ -4,7 +4,7 @@ dependencies:
   config:
     - field.storage.node.body
     - field.storage.user.user_picture
-    - image.style.small_thumbnail
+    - image.style.round_thumbnail
     - node.type.discussion_post
   module:
     - group
@@ -81,7 +81,7 @@ display:
           type: image
           settings:
             image_link: ''
-            image_style: small_thumbnail
+            image_style: round_thumbnail
             image_loading:
               attribute: lazy
           group_column: ''
