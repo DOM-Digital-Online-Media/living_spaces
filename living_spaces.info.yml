@@ -62,7 +62,7 @@ install:
   - masquerade
   - role_delegation
   - easy_breadcrumb
-  - image_effects
+  - imagick
   - material_icons
   - message
   - message_ui
