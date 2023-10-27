@@ -4,3 +4,15 @@
   right: 10px;
   font-size: 1rem;
 }
+.js-view-dom-id-message-user_notifications {
+  min-width: 20rem;
+}
+.js-view-dom-id-message-user_notifications .views-field-get-text {
+  font-size: 0.9rem;
+}
+.js-view-dom-id-message-user_notifications .views-field-get-text p {
+  margin-bottom: 10px;
+}
+.js-view-dom-id-message-user_notifications .views-field-created {
+  font-size: 0.7rem;
+}
