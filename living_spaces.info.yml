@@ -60,6 +60,7 @@ install:
   - views_bulk_operations
   - universal_device_detection
   - masquerade
+  - filefield_paths
   - role_delegation
   - easy_breadcrumb
   - imagick
