@@ -46,6 +46,7 @@
         "drupal/empty_fields": "^1.0@beta",
         "drupal/entity_clone": "^2.0@beta",
         "drupal/field_ipaddress": "^2.0",
+        "drupal/filefield_paths": "^1.0@beta",
         "drupal/flood_control": "^2.2.2",
         "drupal/fullcalendar_view": "5.1.8",
         "drupal/group": "^3.0",
