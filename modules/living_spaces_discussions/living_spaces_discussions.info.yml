@@ -16,3 +16,5 @@ dependencies:
   - language
   - node
   - views
+  - imagick
+  - filefield_paths
