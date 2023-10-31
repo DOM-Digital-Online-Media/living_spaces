@@ -490,7 +490,7 @@ function living_spaces_sections_living_spaces_breadcrumbs_info(RouteMatchInterfa
       $breadcrumb->addLink($section->toLink($section->getTabLabel()));
       $breadcrumb->addCacheableDependency($section);
 
-      $breadcrumb->addLink(Link::createFromRoute($section->getTabLabel(), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute($sub_section->getTabLabel(), '<none>'));
       $breadcrumb->addCacheableDependency($sub_section);
     }
   }
