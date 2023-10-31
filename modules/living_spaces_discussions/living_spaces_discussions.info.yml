@@ -16,3 +16,4 @@ dependencies:
   - language
   - node
   - views
+  - filefield_paths
