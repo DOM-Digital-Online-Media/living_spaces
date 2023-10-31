@@ -10,3 +10,6 @@ change any passwords:
 change member passwords:
   title: 'Access to change member passwords'
   description: 'Allow access to change member passwords'
+access send email action:
+  title: 'Access to use Send E-mail action on multiple users'
+  description: 'Allow sending E-mail to multiple users on view lists where available'

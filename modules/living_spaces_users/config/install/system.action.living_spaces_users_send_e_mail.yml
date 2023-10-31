@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: living_spaces_users_send_e_mail
+label: 'Export data'
+type: user
+plugin: living_spaces_users_send_e_mail
+configuration: {  }
