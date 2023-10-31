@@ -43,3 +43,6 @@ msgstr "Termin(e) in eigenen kalender einbinden"
 
 msgid "Export calendar file"
 msgstr "Kalenderdatei exportieren"
+
+msgid "Include an appointment in your own calendar"
+msgstr "Termin in eigenen kalender einbinden"
