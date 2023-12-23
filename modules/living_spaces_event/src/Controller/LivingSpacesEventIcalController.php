@@ -106,7 +106,7 @@ class LivingSpacesEventIcalController extends ControllerBase {
           $event->setDtEnd(new \DateTime($result->field_end_date_value, new \DateTimeZone('UTC')));
           $event->setSummary($result->label);
           $event->setDescription($result->description__value);
-          $event->setLocation($result->location__value);
+          $event->setLocation(strip_tags($result->location__value));
           $event->setUrl( "{$host}/living-spaces-event/{$result->id}");
           $calendar->addComponent($event);
         }
@@ -124,7 +124,8 @@ class LivingSpacesEventIcalController extends ControllerBase {
       $file = $this->fileRepository->writeData($content, $uri, FileSystemInterface::EXISTS_REPLACE);
     }
     catch (\Exception $e) {
-      $this->messenger()->addWarning($e->getMessage());
+      $this->messenger()->addWarning($this->t('There was an error with ics file generation. Try again later.'));
+      $this->loggerFactory->get('living_spaces_event')->error($e->getMessage());
       throw new NotFoundHttpException();
     }
 
@@ -132,7 +133,7 @@ class LivingSpacesEventIcalController extends ControllerBase {
     $filepath = $this->fileSystem->realpath('public://') . '/' . $parts[1];
 
     if (!file_exists($filepath)) {
-      $this->messenger()->addWarning($this->t('Cannot find iCal file.'));
+      $this->messenger()->addWarning($this->t('There was an error with ics file generation. Try again later.'));
       $this->loggerFactory->get('living_spaces_event')->error('Caanot find iCal file for @space', [
         '@space' => $group->label(),
       ]);
